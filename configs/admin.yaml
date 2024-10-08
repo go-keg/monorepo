@@ -1,0 +1,31 @@
+key: "${APP_KEY}"
+name: "${ADMIN_APP_NAME}"
+trace:
+  endpoint: ""
+server:
+  http:
+    network: tcp
+    addr: 0.0.0.0:8081
+    timeout: 30s
+data:
+  database:
+    driver: "mysql"
+    dsn: "${EXAMPLE_DB_DSN}"
+  kafka:
+    addrs: "${KAFKA_ADDRS}"
+kafkaConsumerGroup:
+  groupId: golang-admin
+  topics:
+    - test
+email:
+  host: "${EMAIL_HOST}"
+  port: "${EMAIL_PORT}"
+  username: "${EMAIL_USERNAME}"
+  password: "${EMAIL_PASSWORD}"
+  from: "${EMAIL_FROM}"
+  
+log:
+  dir: "./logs/"
+  level: "debug"
+  maxAge: 30       # day
+  rotationTime: 1  # day

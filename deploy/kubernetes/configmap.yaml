@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: monorepo-env
+  namespace: ${NAMESPACE}
+data:
+  TRACE_ENDPOINT: "${TRACE_ENDPOINT}"
+  EXAMPLE_DB_DSN: "${EXAMPLE_DB_DSN}"
+  REDIS_ADDR: "${REDIS_ADDR}"
+  REDIS_DB: "${REDIS_DB}"
+  REDIS_PASSWORD: "${REDIS_PASSWORD}"

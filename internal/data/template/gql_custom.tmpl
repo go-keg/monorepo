@@ -1,0 +1,86 @@
+{{/*
+Copyright 2019-present Facebook Inc. All rights reserved.
+This source code is licensed under the Apache 2.0 license found
+in the LICENSE file in the root directory of this source tree.
+*/}}
+
+{{/* gotype: entgo.io/ent/entc/gen.Graph */}}
+
+{{ define "gql_collection_custom" }}
+{{ template "header" $ }}
+
+{{ template "import" $ }}
+
+import (
+    "github.com/99designs/gqlgen/graphql"
+    "golang.org/x/exp/slices"
+    "context"
+)
+
+const (
+{{- range $field := list "items" "count" }}
+    {{ $field }}Field = "{{ $field }}"
+{{- end }}
+)
+
+func containsField(ctx context.Context, field string) bool {
+    return slices.Contains(graphql.CollectAllFields(ctx), field)
+}
+func offsetLimit(page *int, size *int) (int, int) {
+    var offset, limit = 0, 10
+    if size != nil {
+        limit = *size
+    }
+    if page != nil && *page > 1 {
+        offset = (*page - 1) * limit
+    }
+    return offset, limit
+}
+
+{{ range $node := $.Nodes }}
+{{ $receiver := $node.Receiver }}
+{{ $query := $node.QueryName }}
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func ({{ $receiver }} *{{ $query }}) CustomCollectFields(ctx context.Context, path ...string) (*{{ $query }}, error) {
+    fc := graphql.GetFieldContext(ctx)
+    if fc == nil {
+        return {{ $receiver }}, nil
+    }
+    if field := collectedField(ctx, path...); field != nil {
+        if err := {{ $receiver }}.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, path); err != nil {
+            return nil, err
+        }
+    }
+    return {{ $receiver }}, nil
+}
+
+// List executes the query and returns count and []*{{ $node.Name }}.
+func ({{ $receiver }} *{{ $query }}) List(ctx context.Context, page *int, size *int, orderBy *{{$node.Name}}Order) (items []*{{$node.Name}}, count int, err error) {
+    if orderBy != nil {
+        o := Asc(orderBy.Field.column)
+        if orderBy.Direction.String() == "DESC" {
+            o = Desc(orderBy.Field.column)
+        }
+        {{ $receiver }}.Order(o)
+    }
+    if containsField(ctx, countField) {
+        count, err = {{ $receiver }}.Count(ctx)
+        if err != nil {
+            return
+        }
+    }
+    if containsField(ctx, itemsField) {
+        {{ $receiver }}, err = {{ $receiver }}.CustomCollectFields(ctx, itemsField)
+        if err != nil {
+            return
+        }
+        offset, limit := offsetLimit(page, size)
+        items, err = {{ $receiver }}.Offset(offset).Limit(limit).All(ctx)
+        if err != nil {
+            return
+        }
+    }
+    return
+}
+{{ end }}
+{{ end }}

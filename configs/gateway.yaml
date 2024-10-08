@@ -1,0 +1,55 @@
+# This is a gateway config.
+name: gateway
+version: v1
+hosts:
+  - localhost
+  - 127.0.0.1
+  - 0.0.0.0
+middlewares:
+  - name: logging
+  - name: transcoder
+  - name: cors
+    options:
+      '@type': type.googleapis.com/gateway.middleware.cors.v1.Cors
+      allowCredentials: true
+      allowOrigins:
+        - 127.0.0.1
+        - localhost
+      allowMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      allowHeaders:
+        - DNT
+        - Authorization
+  - name: tracing
+    options:
+      '@type': type.googleapis.com/gateway.middleware.tracing.v1.Tracing
+      http_endpoint: ${TRACE_ENDPOINT}
+      timeout: 10s
+endpoints:
+  - path: /api/admin/*
+    timeout: 60s
+    protocol: HTTP
+    backends:
+      - target: 127.0.0.1:8081 # golang-admin-svc
+    middlewares:
+      - name: rewrite
+        options:
+          '@type': type.googleapis.com/gateway.middleware.rewrite.v1.Rewrite
+          stripPrefix: /api/admin
+      - name: monorepo-auth
+        options:
+          '@type': type.googleapis.com/apis.gateway.middleware.v1.Auth
+  - path: /api/*
+    timeout: 60s
+    protocol: HTTP
+    backends:
+      - target: 127.0.0.1:8082 # golang-api-svc
+    middlewares:
+      - name: rewrite
+        options:
+          '@type': type.googleapis.com/gateway.middleware.rewrite.v1.Rewrite
+          stripPrefix: /api

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: golang-gateway
+    lang: golang
+  name: golang-gateway
+  namespace: ${NAMESPACE}
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+  selector:
+    matchLabels:
+      app: golang-gateway
+      lang: golang
+  template:
+    metadata:
+      labels:
+        app: golang-gateway
+        lang: golang
+    spec:
+      containers:
+        - image: ${GATEWAY_IMAGE}
+          imagePullPolicy: ${IMAGE_PULL_POLICY}
+          name: golang-gateway
+          resources:
+            requests:
+              cpu: ${RESOURCES_REQUESTS_CPU}
+              memory: ${RESOURCES_REQUESTS_MEMORY}
+          envFrom:
+            - configMapRef:
+                name: monorepo-env
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: gateway-svc
+    lang: golang
+  name: golang-gateway-svc
+  namespace: ${NAMESPACE}
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8081
+  selector:
+    app: golang-gateway
+    lang: golang
+  type: ClusterIP

@@ -1,5 +1,5 @@
 GIT_VERSION=$(shell git describe --tags --always | sed "s|refs/tags/||g")
-GIT_BRANCH=$(shell git branch | sed -n '/\* /s///p' | sed "s/-master//g")
+GIT_BRANCH=$(shell git branch | sed -n '/\* /s///p' | sed "s/-main//g")
 
 # Includes
 include .env

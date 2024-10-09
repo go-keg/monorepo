@@ -28,7 +28,7 @@ func (OperationLog) Annotations() []schema.Annotation {
 		entsql.WithComments(true),
 		entgql.QueryField().Directives().Description("操作日志"),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
+		entgql.Mutations(),
 	}
 }
 

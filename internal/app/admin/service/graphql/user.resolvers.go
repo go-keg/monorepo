@@ -7,11 +7,13 @@ package graphql
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/go-keg/example/internal/app/admin/server/auth"
+	"github.com/go-keg/example/internal/app/admin/service/graphql/dataloader"
 	"github.com/go-keg/example/internal/app/admin/service/graphql/model"
 	"github.com/go-keg/example/internal/data/example/ent"
+	"github.com/go-keg/example/internal/data/example/ent/permission"
+	"github.com/go-keg/example/internal/data/example/ent/role"
 	"github.com/go-keg/example/internal/data/example/ent/user"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -135,12 +137,15 @@ func (r *queryResolver) Captcha(ctx context.Context) (*model.CaptchaReply, error
 
 // RoleCount is the resolver for the roleCount field.
 func (r *userResolver) RoleCount(ctx context.Context, obj *ent.User) (int, error) {
-	panic(fmt.Errorf("not implemented: RoleCount - roleCount"))
+	return dataloader.For(ctx).GetUserRoleCount(ctx, obj.ID)
 }
 
 // Permissions is the resolver for the permissions field.
 func (r *userResolver) Permissions(ctx context.Context, obj *ent.User) ([]*ent.Permission, error) {
-	panic(fmt.Errorf("not implemented: Permissions - permissions"))
+	if obj.IsAdmin {
+		return r.db.Permission(ctx).Query().Where().All(ctx)
+	}
+	return r.db.Permission(ctx).Query().Where(permission.HasRolesWith(role.HasUsersWith(user.ID(obj.ID)))).All(ctx)
 }
 
 // Mutation returns MutationResolver implementation.

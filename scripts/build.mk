@@ -2,10 +2,12 @@
 admin.build: admin.build
 admin.image: admin.image
 admin.publish: admin.publish
+admin.deploy: admin.deploy
 
 api.build: api.build
 api.image: api.image
 api.publish: api.publish
+api.deploy: api.deploy
 
 .PHONY: generate
 generate:
@@ -40,4 +42,7 @@ test:
 	docker push $(IMAGE_REGISTRY)/$(SERVICE):$(GIT_VERSION)-$(GIT_BRANCH)
 
 %.deploy:
+	$(eval SERVICE:= $*)
+	@$(MAKE) $(SERVICE).publish
+	@echo "deploy $(SERVICE)"
 	@echo "TODO deploy to k8s"

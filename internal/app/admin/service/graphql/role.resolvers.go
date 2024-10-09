@@ -6,8 +6,8 @@ package graphql
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/go-keg/example/internal/app/admin/service/graphql/dataloader"
 	"github.com/go-keg/example/internal/data/example/ent"
 )
 
@@ -66,5 +66,5 @@ func (r *mutationResolver) DeletePermission(ctx context.Context, id int) (bool, 
 
 // ChildrenCount is the resolver for the childrenCount field.
 func (r *permissionResolver) ChildrenCount(ctx context.Context, obj *ent.Permission) (int, error) {
-	panic(fmt.Errorf("not implemented: ChildrenCount - childrenCount"))
+	return dataloader.For(ctx).GetPermissionChildrenCount(ctx, obj.ID)
 }

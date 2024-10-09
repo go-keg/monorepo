@@ -2,7 +2,6 @@ package schema
 
 import (
 	"entgo.io/contrib/entgql"
-	"entgo.io/contrib/entproto"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -36,15 +35,15 @@ func (Role) Annotations() []schema.Annotation {
 // Fields of the Role.
 func (Role) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name").Annotations(entproto.Field(2)),
-		field.Int("sort").Default(1000).Annotations(entproto.Field(3)),
+		field.String("name"),
+		field.Int("sort").Default(1000),
 	}
 }
 
 // Edges of the Role.
 func (Role) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("permissions", Permission.Type).Annotations(entproto.Skip()),
-		edge.From("users", User.Type).Ref("roles").Annotations(entgql.Skip(), entproto.Field(4)),
+		edge.To("permissions", Permission.Type),
+		edge.From("users", User.Type).Ref("roles").Annotations(entgql.Skip()),
 	}
 }

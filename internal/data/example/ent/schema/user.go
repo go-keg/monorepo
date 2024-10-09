@@ -2,7 +2,6 @@ package schema
 
 import (
 	"entgo.io/contrib/entgql"
-	"entgo.io/contrib/entproto"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -31,32 +30,29 @@ func (User) Annotations() []schema.Annotation {
 		entsql.WithComments(true),
 		entgql.QueryField().Directives().Description("用户"),
 		entgql.RelayConnection(),
-		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()),
+		entgql.Mutations(),
 	}
 }
 
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("email").Unique().Annotations(entgql.OrderField("EMAIL"), entproto.Field(2)),
-		field.String("nickname").Annotations(entproto.Field(3)),
-		field.String("avatar").Optional().Annotations(entproto.Field(4)),
-		field.String("password").Sensitive().Annotations(entproto.Skip()),
+		field.String("email").Unique().Annotations(entgql.OrderField("EMAIL")),
+		field.String("nickname"),
+		field.String("avatar").Optional(),
+		field.String("password").Sensitive(),
 		field.Enum("status").Values("normal", "freeze").Comment("状态").Annotations(annotations.Enums{
 			"normal": "正常",
 			"freeze": "冻结",
-		}, entproto.Field(5), entproto.Enum(map[string]int32{
-			"normal": 1,
-			"freeze": 2,
-		})),
-		field.Bool("is_admin").Default(false).Annotations(entproto.Field(6)),
+		}),
+		field.Bool("is_admin").Default(false),
 	}
 }
 
 // Edges of the User.
 func (User) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("roles", Role.Type).Annotations(entproto.Field(7)),
-		edge.To("operation_logs", OperationLog.Type).Annotations(entgql.Skip(), entproto.Skip()),
+		edge.To("roles", Role.Type),
+		edge.To("operation_logs", OperationLog.Type).Annotations(entgql.Skip()),
 	}
 }

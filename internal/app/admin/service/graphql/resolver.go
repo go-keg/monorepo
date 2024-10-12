@@ -44,7 +44,7 @@ func NewSchema(logger log.Logger, db *ent.Database, accountUseCase *biz.AccountU
 				return nil, gql.ErrDisabled
 			},
 			Login: func(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {
-				if id := auth.GetUserId(ctx); id != 0 {
+				if auth.GetUser(ctx) != nil {
 					return next(ctx)
 				}
 				return nil, gql.ErrUnauthorized

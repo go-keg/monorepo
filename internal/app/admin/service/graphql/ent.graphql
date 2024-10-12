@@ -132,6 +132,10 @@ type OperationLogConnection {
   """
   edges: [OperationLogEdge]
   """
+  A list of nodes.
+  """
+  nodes: [OperationLog]
+  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -305,6 +309,10 @@ type PermissionConnection {
   A list of edges.
   """
   edges: [PermissionEdge]
+  """
+  A list of nodes.
+  """
+  nodes: [Permission]
   """
   Information to aid in pagination.
   """
@@ -681,6 +689,10 @@ type RoleConnection {
   """
   edges: [RoleEdge]
   """
+  A list of nodes.
+  """
+  nodes: [Role]
+  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -890,6 +902,10 @@ type UserConnection {
   A list of edges.
   """
   edges: [UserEdge]
+  """
+  A list of nodes.
+  """
+  nodes: [User]
   """
   Information to aid in pagination.
   """

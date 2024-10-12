@@ -6,7 +6,7 @@ package graphql
 
 import (
 	"context"
-	"errors"
+	"github.com/go-keg/keg/contrib/gql"
 
 	"github.com/go-keg/example/internal/app/admin/server/auth"
 	"github.com/go-keg/example/internal/app/admin/service/graphql/dataloader"
@@ -20,7 +20,7 @@ import (
 
 // ResetPassword is the resolver for the resetPassword field.
 func (r *mutationResolver) ResetPassword(ctx context.Context, oldPassword string, password string) (bool, error) {
-	u, err := r.db.User(ctx).Get(ctx, auth.GetUserId(ctx))
+	u, err := r.db.User(ctx).Get(ctx, auth.GetUserID(ctx))
 	if err != nil {
 		return false, err
 	}
@@ -29,7 +29,7 @@ func (r *mutationResolver) ResetPassword(ctx context.Context, oldPassword string
 	}
 	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	if err != nil {
-		return false, errors.New("bcrypt: GenerateFromPassword Error")
+		return false, gql.Error("bcrypt: GenerateFromPassword Error")
 	}
 	err = u.Update().SetPassword(string(hashed)).Exec(ctx)
 	if err != nil {
@@ -59,7 +59,7 @@ func (r *mutationResolver) ForgetPassword(ctx context.Context, email string, cod
 
 // UpdateProfile is the resolver for the updateProfile field.
 func (r *mutationResolver) UpdateProfile(ctx context.Context, input model.UpdateProfileInput) (*ent.User, error) {
-	return r.db.User(ctx).UpdateOneID(auth.GetUserId(ctx)).
+	return r.db.User(ctx).UpdateOneID(auth.GetUserID(ctx)).
 		SetNillableAvatar(input.Avatar).
 		SetNillableNickname(input.Nickname).Save(ctx)
 }
@@ -69,7 +69,7 @@ func (r *queryResolver) Login(ctx context.Context, email string, password string
 	if captchaID != nil && captchaValue != nil {
 		matched := r.captcha.Verify(*captchaID, *captchaValue, true)
 		if *captchaID == "" || *captchaValue == "" || !matched {
-			return nil, errors.New("captcha verify failed")
+			return nil, gql.Error("captcha verify failed")
 		}
 	}
 	first, err := r.db.User(ctx).Query().Where(user.Email(email)).First(ctx)
@@ -94,12 +94,12 @@ func (r *queryResolver) Login(ctx context.Context, email string, password string
 
 // Profile is the resolver for the profile field.
 func (r *queryResolver) Profile(ctx context.Context) (*ent.User, error) {
-	return r.db.User(ctx).Get(ctx, auth.GetUserId(ctx))
+	return r.db.User(ctx).Get(ctx, auth.GetUserID(ctx))
 }
 
 // Refresh is the resolver for the refresh field.
 func (r *queryResolver) Refresh(ctx context.Context) (*model.LoginReply, error) {
-	first, err := r.db.User(ctx).Get(ctx, auth.GetUserId(ctx))
+	first, err := r.db.User(ctx).Get(ctx, auth.GetUserID(ctx))
 	if err != nil {
 		return nil, err
 	}

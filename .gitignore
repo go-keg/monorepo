@@ -16,7 +16,6 @@
 # vendor/
 .idea
 .vscode
-bin
 
 # google wire gen file
 #wire_gen.go

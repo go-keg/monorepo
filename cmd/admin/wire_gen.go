@@ -18,6 +18,10 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+import (
+	_ "github.com/go-keg/example/internal/data/example/ent/runtime"
+)
+
 // Injectors from wire.go:
 
 func initApp(logger log.Logger, config *conf.Config) (*kratos.App, func(), error) {
@@ -32,20 +36,14 @@ func initApp(logger log.Logger, config *conf.Config) (*kratos.App, func(), error
 	accountUseCase := biz.NewAccountUseCase(config)
 	executableSchema := graphql.NewSchema(logger, database, accountUseCase)
 	httpServer := server.NewHTTPServer(config, logger, client, executableSchema)
-	dataData, cleanup, err := data.NewData(client, database, logger)
-	if err != nil {
-		return nil, nil, err
-	}
-	jobJob := job.NewJob(logger, config, dataData)
+	jobJob := job.NewJob(logger, client, config)
 	syncProducer, err := data.NewKafkaProducer(config)
 	if err != nil {
-		cleanup()
 		return nil, nil, err
 	}
 	daily := schedule.NewDaily(database, syncProducer)
 	scheduleSchedule := schedule.NewSchedule(logger, client, daily)
 	app := newApp(logger, httpServer, jobJob, scheduleSchedule)
 	return app, func() {
-		cleanup()
 	}, nil
 }

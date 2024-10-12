@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
 	"github.com/go-keg/keg/contrib/ent/annotations"
+	enttemp "github.com/go-keg/keg/contrib/ent/template"
 	gqltemp "github.com/go-keg/keg/contrib/gql/template"
 	"log"
 	"runtime"
@@ -20,7 +21,7 @@ func main() {
 		entgql.WithSchemaGenerator(),
 		entgql.WithSchemaPath("./ent.graphql"),
 		entgql.WithWhereInputs(true),
-		entgql.WithNodeDescriptor(false),
+		entgql.WithNodeDescriptor(true),
 		entgql.WithSchemaHook(annotations.EnumsGQLSchemaHook),
 		entgql.WithTemplates(gqltemp.Template()),
 	)
@@ -28,17 +29,18 @@ func main() {
 		log.Fatalf("creating entgql extension: %v", err)
 	}
 	_, filename, _, _ := runtime.Caller(0)
-	entPath := strings.TrimSuffix(filename, "ent/entc.go")
-	if err = entc.Generate(entPath+"ent/schema", &gen.Config{
+	entPath := strings.TrimSuffix(filename, "entc.go")
+	if err = entc.Generate(entPath+"schema", &gen.Config{
 		Features: []gen.Feature{
 			gen.FeatureIntercept,
 			gen.FeatureSnapshot,
 			gen.FeatureModifier,
 			gen.FeatureExecQuery,
+			gen.FeatureUpsert,
 		},
 	},
 		entc.Extensions(ex),
-		entc.TemplateDir(entPath+"../template"),
+		enttemp.Template(),
 	); err != nil {
 		log.Fatalf("running ent codegen: %v", err)
 	}

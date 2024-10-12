@@ -6,7 +6,6 @@ import (
 	"github.com/go-keg/example/internal/app/api/conf"
 	"github.com/go-keg/example/internal/app/api/data"
 	"github.com/go-keg/example/internal/data/example/ent"
-	"github.com/go-keg/keg/contrib/config"
 	"github.com/spf13/cobra"
 	"log"
 )
@@ -15,7 +14,7 @@ var Cmd = &cobra.Command{
 	Use: "migrate",
 	Run: func(cmd *cobra.Command, args []string) {
 		path, _ := cmd.Flags().GetString("conf")
-		cfg, err := config.Load[conf.Config](path)
+		cfg, err := conf.Load(path)
 		if err != nil {
 			panic(err)
 		}

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/go-keg/example/internal/data/example/ent/operationlog"
@@ -19,6 +20,7 @@ type OperationLogCreate struct {
 	config
 	mutation *OperationLogMutation
 	hooks    []Hook
+	conflict []sql.ConflictOption
 }
 
 // SetCreatedAt sets the "created_at" field.
@@ -157,6 +159,7 @@ func (olc *OperationLogCreate) createSpec() (*OperationLog, *sqlgraph.CreateSpec
 		_node = &OperationLog{config: olc.config}
 		_spec = sqlgraph.NewCreateSpec(operationlog.Table, sqlgraph.NewFieldSpec(operationlog.FieldID, field.TypeInt))
 	)
+	_spec.OnConflict = olc.conflict
 	if value, ok := olc.mutation.CreatedAt(); ok {
 		_spec.SetField(operationlog.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
@@ -193,11 +196,256 @@ func (olc *OperationLogCreate) createSpec() (*OperationLog, *sqlgraph.CreateSpec
 	return _node, _spec
 }
 
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.OperationLog.Create().
+//		SetCreatedAt(v).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.OperationLogUpsert) {
+//			SetCreatedAt(v+v).
+//		}).
+//		Exec(ctx)
+func (olc *OperationLogCreate) OnConflict(opts ...sql.ConflictOption) *OperationLogUpsertOne {
+	olc.conflict = opts
+	return &OperationLogUpsertOne{
+		create: olc,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.OperationLog.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (olc *OperationLogCreate) OnConflictColumns(columns ...string) *OperationLogUpsertOne {
+	olc.conflict = append(olc.conflict, sql.ConflictColumns(columns...))
+	return &OperationLogUpsertOne{
+		create: olc,
+	}
+}
+
+type (
+	// OperationLogUpsertOne is the builder for "upsert"-ing
+	//  one OperationLog node.
+	OperationLogUpsertOne struct {
+		create *OperationLogCreate
+	}
+
+	// OperationLogUpsert is the "OnConflict" setter.
+	OperationLogUpsert struct {
+		*sql.UpdateSet
+	}
+)
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *OperationLogUpsert) SetUpdatedAt(v time.Time) *OperationLogUpsert {
+	u.Set(operationlog.FieldUpdatedAt, v)
+	return u
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *OperationLogUpsert) UpdateUpdatedAt() *OperationLogUpsert {
+	u.SetExcluded(operationlog.FieldUpdatedAt)
+	return u
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (u *OperationLogUpsert) ClearUpdatedAt() *OperationLogUpsert {
+	u.SetNull(operationlog.FieldUpdatedAt)
+	return u
+}
+
+// SetUserID sets the "user_id" field.
+func (u *OperationLogUpsert) SetUserID(v int) *OperationLogUpsert {
+	u.Set(operationlog.FieldUserID, v)
+	return u
+}
+
+// UpdateUserID sets the "user_id" field to the value that was provided on create.
+func (u *OperationLogUpsert) UpdateUserID() *OperationLogUpsert {
+	u.SetExcluded(operationlog.FieldUserID)
+	return u
+}
+
+// SetType sets the "type" field.
+func (u *OperationLogUpsert) SetType(v string) *OperationLogUpsert {
+	u.Set(operationlog.FieldType, v)
+	return u
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *OperationLogUpsert) UpdateType() *OperationLogUpsert {
+	u.SetExcluded(operationlog.FieldType)
+	return u
+}
+
+// SetContext sets the "context" field.
+func (u *OperationLogUpsert) SetContext(v map[string]interface{}) *OperationLogUpsert {
+	u.Set(operationlog.FieldContext, v)
+	return u
+}
+
+// UpdateContext sets the "context" field to the value that was provided on create.
+func (u *OperationLogUpsert) UpdateContext() *OperationLogUpsert {
+	u.SetExcluded(operationlog.FieldContext)
+	return u
+}
+
+// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// Using this option is equivalent to using:
+//
+//	client.OperationLog.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *OperationLogUpsertOne) UpdateNewValues() *OperationLogUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		if _, exists := u.create.mutation.CreatedAt(); exists {
+			s.SetIgnore(operationlog.FieldCreatedAt)
+		}
+	}))
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.OperationLog.Create().
+//	    OnConflict(sql.ResolveWithIgnore()).
+//	    Exec(ctx)
+func (u *OperationLogUpsertOne) Ignore() *OperationLogUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *OperationLogUpsertOne) DoNothing() *OperationLogUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the OperationLogCreate.OnConflict
+// documentation for more info.
+func (u *OperationLogUpsertOne) Update(set func(*OperationLogUpsert)) *OperationLogUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&OperationLogUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *OperationLogUpsertOne) SetUpdatedAt(v time.Time) *OperationLogUpsertOne {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.SetUpdatedAt(v)
+	})
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *OperationLogUpsertOne) UpdateUpdatedAt() *OperationLogUpsertOne {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.UpdateUpdatedAt()
+	})
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (u *OperationLogUpsertOne) ClearUpdatedAt() *OperationLogUpsertOne {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.ClearUpdatedAt()
+	})
+}
+
+// SetUserID sets the "user_id" field.
+func (u *OperationLogUpsertOne) SetUserID(v int) *OperationLogUpsertOne {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.SetUserID(v)
+	})
+}
+
+// UpdateUserID sets the "user_id" field to the value that was provided on create.
+func (u *OperationLogUpsertOne) UpdateUserID() *OperationLogUpsertOne {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.UpdateUserID()
+	})
+}
+
+// SetType sets the "type" field.
+func (u *OperationLogUpsertOne) SetType(v string) *OperationLogUpsertOne {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.SetType(v)
+	})
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *OperationLogUpsertOne) UpdateType() *OperationLogUpsertOne {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.UpdateType()
+	})
+}
+
+// SetContext sets the "context" field.
+func (u *OperationLogUpsertOne) SetContext(v map[string]interface{}) *OperationLogUpsertOne {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.SetContext(v)
+	})
+}
+
+// UpdateContext sets the "context" field to the value that was provided on create.
+func (u *OperationLogUpsertOne) UpdateContext() *OperationLogUpsertOne {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.UpdateContext()
+	})
+}
+
+// Exec executes the query.
+func (u *OperationLogUpsertOne) Exec(ctx context.Context) error {
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for OperationLogCreate.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *OperationLogUpsertOne) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// Exec executes the UPSERT query and returns the inserted/updated ID.
+func (u *OperationLogUpsertOne) ID(ctx context.Context) (id int, err error) {
+	node, err := u.create.Save(ctx)
+	if err != nil {
+		return id, err
+	}
+	return node.ID, nil
+}
+
+// IDX is like ID, but panics if an error occurs.
+func (u *OperationLogUpsertOne) IDX(ctx context.Context) int {
+	id, err := u.ID(ctx)
+	if err != nil {
+		panic(err)
+	}
+	return id
+}
+
 // OperationLogCreateBulk is the builder for creating many OperationLog entities in bulk.
 type OperationLogCreateBulk struct {
 	config
 	err      error
 	builders []*OperationLogCreate
+	conflict []sql.ConflictOption
 }
 
 // Save creates the OperationLog entities in the database.
@@ -227,6 +475,7 @@ func (olcb *OperationLogCreateBulk) Save(ctx context.Context) ([]*OperationLog, 
 					_, err = mutators[i+1].Mutate(root, olcb.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
+					spec.OnConflict = olcb.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
 					if err = sqlgraph.BatchCreate(ctx, olcb.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
@@ -277,6 +526,180 @@ func (olcb *OperationLogCreateBulk) Exec(ctx context.Context) error {
 // ExecX is like Exec, but panics if an error occurs.
 func (olcb *OperationLogCreateBulk) ExecX(ctx context.Context) {
 	if err := olcb.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.OperationLog.CreateBulk(builders...).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.OperationLogUpsert) {
+//			SetCreatedAt(v+v).
+//		}).
+//		Exec(ctx)
+func (olcb *OperationLogCreateBulk) OnConflict(opts ...sql.ConflictOption) *OperationLogUpsertBulk {
+	olcb.conflict = opts
+	return &OperationLogUpsertBulk{
+		create: olcb,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.OperationLog.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (olcb *OperationLogCreateBulk) OnConflictColumns(columns ...string) *OperationLogUpsertBulk {
+	olcb.conflict = append(olcb.conflict, sql.ConflictColumns(columns...))
+	return &OperationLogUpsertBulk{
+		create: olcb,
+	}
+}
+
+// OperationLogUpsertBulk is the builder for "upsert"-ing
+// a bulk of OperationLog nodes.
+type OperationLogUpsertBulk struct {
+	create *OperationLogCreateBulk
+}
+
+// UpdateNewValues updates the mutable fields using the new values that
+// were set on create. Using this option is equivalent to using:
+//
+//	client.OperationLog.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *OperationLogUpsertBulk) UpdateNewValues() *OperationLogUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(s *sql.UpdateSet) {
+		for _, b := range u.create.builders {
+			if _, exists := b.mutation.CreatedAt(); exists {
+				s.SetIgnore(operationlog.FieldCreatedAt)
+			}
+		}
+	}))
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.OperationLog.Create().
+//		OnConflict(sql.ResolveWithIgnore()).
+//		Exec(ctx)
+func (u *OperationLogUpsertBulk) Ignore() *OperationLogUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *OperationLogUpsertBulk) DoNothing() *OperationLogUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the OperationLogCreateBulk.OnConflict
+// documentation for more info.
+func (u *OperationLogUpsertBulk) Update(set func(*OperationLogUpsert)) *OperationLogUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&OperationLogUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (u *OperationLogUpsertBulk) SetUpdatedAt(v time.Time) *OperationLogUpsertBulk {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.SetUpdatedAt(v)
+	})
+}
+
+// UpdateUpdatedAt sets the "updated_at" field to the value that was provided on create.
+func (u *OperationLogUpsertBulk) UpdateUpdatedAt() *OperationLogUpsertBulk {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.UpdateUpdatedAt()
+	})
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (u *OperationLogUpsertBulk) ClearUpdatedAt() *OperationLogUpsertBulk {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.ClearUpdatedAt()
+	})
+}
+
+// SetUserID sets the "user_id" field.
+func (u *OperationLogUpsertBulk) SetUserID(v int) *OperationLogUpsertBulk {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.SetUserID(v)
+	})
+}
+
+// UpdateUserID sets the "user_id" field to the value that was provided on create.
+func (u *OperationLogUpsertBulk) UpdateUserID() *OperationLogUpsertBulk {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.UpdateUserID()
+	})
+}
+
+// SetType sets the "type" field.
+func (u *OperationLogUpsertBulk) SetType(v string) *OperationLogUpsertBulk {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.SetType(v)
+	})
+}
+
+// UpdateType sets the "type" field to the value that was provided on create.
+func (u *OperationLogUpsertBulk) UpdateType() *OperationLogUpsertBulk {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.UpdateType()
+	})
+}
+
+// SetContext sets the "context" field.
+func (u *OperationLogUpsertBulk) SetContext(v map[string]interface{}) *OperationLogUpsertBulk {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.SetContext(v)
+	})
+}
+
+// UpdateContext sets the "context" field to the value that was provided on create.
+func (u *OperationLogUpsertBulk) UpdateContext() *OperationLogUpsertBulk {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.UpdateContext()
+	})
+}
+
+// Exec executes the query.
+func (u *OperationLogUpsertBulk) Exec(ctx context.Context) error {
+	if u.create.err != nil {
+		return u.create.err
+	}
+	for i, b := range u.create.builders {
+		if len(b.conflict) != 0 {
+			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the OperationLogCreateBulk instead", i)
+		}
+	}
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for OperationLogCreateBulk.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *OperationLogUpsertBulk) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

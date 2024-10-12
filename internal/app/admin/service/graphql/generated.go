@@ -94,6 +94,7 @@ type ComplexityRoot struct {
 
 	OperationLogConnection struct {
 		Edges      func(childComplexity int) int
+		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
@@ -129,6 +130,7 @@ type ComplexityRoot struct {
 
 	PermissionConnection struct {
 		Edges      func(childComplexity int) int
+		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
@@ -163,6 +165,7 @@ type ComplexityRoot struct {
 
 	RoleConnection struct {
 		Edges      func(childComplexity int) int
+		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
@@ -188,6 +191,7 @@ type ComplexityRoot struct {
 
 	UserConnection struct {
 		Edges      func(childComplexity int) int
+		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
@@ -479,6 +483,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.OperationLogConnection.Edges(childComplexity), true
 
+	case "OperationLogConnection.nodes":
+		if e.complexity.OperationLogConnection.Nodes == nil {
+			break
+		}
+
+		return e.complexity.OperationLogConnection.Nodes(childComplexity), true
+
 	case "OperationLogConnection.pageInfo":
 		if e.complexity.OperationLogConnection.PageInfo == nil {
 			break
@@ -639,6 +650,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PermissionConnection.Edges(childComplexity), true
+
+	case "PermissionConnection.nodes":
+		if e.complexity.PermissionConnection.Nodes == nil {
+			break
+		}
+
+		return e.complexity.PermissionConnection.Nodes(childComplexity), true
 
 	case "PermissionConnection.pageInfo":
 		if e.complexity.PermissionConnection.PageInfo == nil {
@@ -834,6 +852,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.RoleConnection.Edges(childComplexity), true
 
+	case "RoleConnection.nodes":
+		if e.complexity.RoleConnection.Nodes == nil {
+			break
+		}
+
+		return e.complexity.RoleConnection.Nodes(childComplexity), true
+
 	case "RoleConnection.pageInfo":
 		if e.complexity.RoleConnection.PageInfo == nil {
 			break
@@ -945,6 +970,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserConnection.Edges(childComplexity), true
+
+	case "UserConnection.nodes":
+		if e.complexity.UserConnection.Nodes == nil {
+			break
+		}
+
+		return e.complexity.UserConnection.Nodes(childComplexity), true
 
 	case "UserConnection.pageInfo":
 		if e.complexity.UserConnection.PageInfo == nil {
@@ -4329,6 +4361,63 @@ func (ec *executionContext) fieldContext_OperationLogConnection_edges(_ context.
 	return fc, nil
 }
 
+func (ec *executionContext) _OperationLogConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *ent.OperationLogConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_OperationLogConnection_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.OperationLog)
+	fc.Result = res
+	return ec.marshalOOperationLog2ᚕᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐOperationLog(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_OperationLogConnection_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "OperationLogConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_OperationLog_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_OperationLog_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_OperationLog_updatedAt(ctx, field)
+			case "userID":
+				return ec.fieldContext_OperationLog_userID(ctx, field)
+			case "type":
+				return ec.fieldContext_OperationLog_type(ctx, field)
+			case "context":
+				return ec.fieldContext_OperationLog_context(ctx, field)
+			case "user":
+				return ec.fieldContext_OperationLog_user(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OperationLog", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _OperationLogConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *ent.OperationLogConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_OperationLogConnection_pageInfo(ctx, field)
 	if err != nil {
@@ -5394,6 +5483,77 @@ func (ec *executionContext) fieldContext_PermissionConnection_edges(_ context.Co
 	return fc, nil
 }
 
+func (ec *executionContext) _PermissionConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *ent.PermissionConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PermissionConnection_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Permission)
+	fc.Result = res
+	return ec.marshalOPermission2ᚕᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐPermission(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PermissionConnection_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PermissionConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Permission_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Permission_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Permission_updatedAt(ctx, field)
+			case "parentID":
+				return ec.fieldContext_Permission_parentID(ctx, field)
+			case "name":
+				return ec.fieldContext_Permission_name(ctx, field)
+			case "key":
+				return ec.fieldContext_Permission_key(ctx, field)
+			case "type":
+				return ec.fieldContext_Permission_type(ctx, field)
+			case "path":
+				return ec.fieldContext_Permission_path(ctx, field)
+			case "desc":
+				return ec.fieldContext_Permission_desc(ctx, field)
+			case "sort":
+				return ec.fieldContext_Permission_sort(ctx, field)
+			case "attrs":
+				return ec.fieldContext_Permission_attrs(ctx, field)
+			case "parent":
+				return ec.fieldContext_Permission_parent(ctx, field)
+			case "children":
+				return ec.fieldContext_Permission_children(ctx, field)
+			case "childrenCount":
+				return ec.fieldContext_Permission_childrenCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Permission", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _PermissionConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *ent.PermissionConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_PermissionConnection_pageInfo(ctx, field)
 	if err != nil {
@@ -5755,6 +5915,8 @@ func (ec *executionContext) fieldContext_Query_operationLogs(ctx context.Context
 			switch field.Name {
 			case "edges":
 				return ec.fieldContext_OperationLogConnection_edges(ctx, field)
+			case "nodes":
+				return ec.fieldContext_OperationLogConnection_nodes(ctx, field)
 			case "pageInfo":
 				return ec.fieldContext_OperationLogConnection_pageInfo(ctx, field)
 			case "totalCount":
@@ -5818,6 +5980,8 @@ func (ec *executionContext) fieldContext_Query_permissions(ctx context.Context, 
 			switch field.Name {
 			case "edges":
 				return ec.fieldContext_PermissionConnection_edges(ctx, field)
+			case "nodes":
+				return ec.fieldContext_PermissionConnection_nodes(ctx, field)
 			case "pageInfo":
 				return ec.fieldContext_PermissionConnection_pageInfo(ctx, field)
 			case "totalCount":
@@ -5881,6 +6045,8 @@ func (ec *executionContext) fieldContext_Query_roles(ctx context.Context, field 
 			switch field.Name {
 			case "edges":
 				return ec.fieldContext_RoleConnection_edges(ctx, field)
+			case "nodes":
+				return ec.fieldContext_RoleConnection_nodes(ctx, field)
 			case "pageInfo":
 				return ec.fieldContext_RoleConnection_pageInfo(ctx, field)
 			case "totalCount":
@@ -5944,6 +6110,8 @@ func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field 
 			switch field.Name {
 			case "edges":
 				return ec.fieldContext_UserConnection_edges(ctx, field)
+			case "nodes":
+				return ec.fieldContext_UserConnection_nodes(ctx, field)
 			case "pageInfo":
 				return ec.fieldContext_UserConnection_pageInfo(ctx, field)
 			case "totalCount":
@@ -6759,6 +6927,61 @@ func (ec *executionContext) fieldContext_RoleConnection_edges(_ context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _RoleConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *ent.RoleConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_RoleConnection_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Role)
+	fc.Result = res
+	return ec.marshalORole2ᚕᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐRole(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_RoleConnection_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "RoleConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Role_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Role_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Role_updatedAt(ctx, field)
+			case "name":
+				return ec.fieldContext_Role_name(ctx, field)
+			case "sort":
+				return ec.fieldContext_Role_sort(ctx, field)
+			case "permissions":
+				return ec.fieldContext_Role_permissions(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _RoleConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *ent.RoleConnection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_RoleConnection_pageInfo(ctx, field)
 	if err != nil {
@@ -7511,6 +7734,71 @@ func (ec *executionContext) fieldContext_UserConnection_edges(_ context.Context,
 				return ec.fieldContext_UserEdge_cursor(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type UserEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *ent.UserConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserConnection_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.User)
+	fc.Result = res
+	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserConnection_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_User_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_User_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_User_updatedAt(ctx, field)
+			case "email":
+				return ec.fieldContext_User_email(ctx, field)
+			case "nickname":
+				return ec.fieldContext_User_nickname(ctx, field)
+			case "avatar":
+				return ec.fieldContext_User_avatar(ctx, field)
+			case "status":
+				return ec.fieldContext_User_status(ctx, field)
+			case "isAdmin":
+				return ec.fieldContext_User_isAdmin(ctx, field)
+			case "roles":
+				return ec.fieldContext_User_roles(ctx, field)
+			case "roleCount":
+				return ec.fieldContext_User_roleCount(ctx, field)
+			case "permissions":
+				return ec.fieldContext_User_permissions(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
 	}
 	return fc, nil
@@ -13023,6 +13311,8 @@ func (ec *executionContext) _OperationLogConnection(ctx context.Context, sel ast
 			out.Values[i] = graphql.MarshalString("OperationLogConnection")
 		case "edges":
 			out.Values[i] = ec._OperationLogConnection_edges(ctx, field, obj)
+		case "nodes":
+			out.Values[i] = ec._OperationLogConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._OperationLogConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -13328,6 +13618,8 @@ func (ec *executionContext) _PermissionConnection(ctx context.Context, sel ast.S
 			out.Values[i] = graphql.MarshalString("PermissionConnection")
 		case "edges":
 			out.Values[i] = ec._PermissionConnection_edges(ctx, field, obj)
+		case "nodes":
+			out.Values[i] = ec._PermissionConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._PermissionConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -13790,6 +14082,8 @@ func (ec *executionContext) _RoleConnection(ctx context.Context, sel ast.Selecti
 			out.Values[i] = graphql.MarshalString("RoleConnection")
 		case "edges":
 			out.Values[i] = ec._RoleConnection_edges(ctx, field, obj)
+		case "nodes":
+			out.Values[i] = ec._RoleConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._RoleConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -14044,6 +14338,8 @@ func (ec *executionContext) _UserConnection(ctx context.Context, sel ast.Selecti
 			out.Values[i] = graphql.MarshalString("UserConnection")
 		case "edges":
 			out.Values[i] = ec._UserConnection_edges(ctx, field, obj)
+		case "nodes":
+			out.Values[i] = ec._UserConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._UserConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -15424,6 +15720,47 @@ func (ec *executionContext) marshalONode2githubᚗcomᚋgoᚑkegᚋexampleᚋint
 	return ec._Node(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOOperationLog2ᚕᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐOperationLog(ctx context.Context, sel ast.SelectionSet, v []*ent.OperationLog) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOOperationLog2ᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐOperationLog(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
+}
+
 func (ec *executionContext) marshalOOperationLog2ᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐOperationLog(ctx context.Context, sel ast.SelectionSet, v *ent.OperationLog) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -15513,6 +15850,47 @@ func (ec *executionContext) unmarshalOOperationLogWhereInput2ᚖgithubᚗcomᚋg
 	}
 	res, err := ec.unmarshalInputOperationLogWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOPermission2ᚕᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐPermission(ctx context.Context, sel ast.SelectionSet, v []*ent.Permission) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOPermission2ᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐPermission(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
 }
 
 func (ec *executionContext) marshalOPermission2ᚕᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐPermissionᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Permission) graphql.Marshaler {
@@ -15735,6 +16113,47 @@ func (ec *executionContext) unmarshalOPermissionWhereInput2ᚖgithubᚗcomᚋgo�
 	}
 	res, err := ec.unmarshalInputPermissionWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐRole(ctx context.Context, sel ast.SelectionSet, v []*ent.Role) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalORole2ᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐRole(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
 }
 
 func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.Role) graphql.Marshaler {
@@ -16001,6 +16420,47 @@ func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel
 	}
 	res := graphql.MarshalTime(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐUser(ctx context.Context, sel ast.SelectionSet, v []*ent.User) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐUser(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	return ret
 }
 
 func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋgoᚑkegᚋexampleᚋinternalᚋdataᚋexampleᚋentᚐUser(ctx context.Context, sel ast.SelectionSet, v *ent.User) graphql.Marshaler {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	syslog "log"
+	"github.com/go-kratos/kratos/v2"
 	"net/http"
 	"os"
 	"time"
@@ -13,8 +13,15 @@ import (
 	"github.com/go-kratos/gateway/config"
 	configLoader "github.com/go-kratos/gateway/config/config-loader"
 	"github.com/go-kratos/gateway/discovery"
-	_ "github.com/go-kratos/gateway/discovery/consul"
 	"github.com/go-kratos/gateway/middleware"
+	"github.com/go-kratos/gateway/proxy"
+	"github.com/go-kratos/gateway/proxy/debug"
+	"github.com/go-kratos/gateway/server"
+
+	_ "net/http/pprof"
+
+	_ "github.com/go-keg/example/internal/app/gateway/middleware"
+	_ "github.com/go-kratos/gateway/discovery/consul"
 	_ "github.com/go-kratos/gateway/middleware/bbr"
 	"github.com/go-kratos/gateway/middleware/circuitbreaker"
 	_ "github.com/go-kratos/gateway/middleware/cors"
@@ -22,18 +29,12 @@ import (
 	_ "github.com/go-kratos/gateway/middleware/rewrite"
 	_ "github.com/go-kratos/gateway/middleware/tracing"
 	_ "github.com/go-kratos/gateway/middleware/transcoder"
-	"github.com/go-kratos/gateway/proxy"
-	"github.com/go-kratos/gateway/proxy/debug"
-	"github.com/go-kratos/gateway/server"
-	"github.com/go-kratos/kratos/v2"
+	_ "go.uber.org/automaxprocs"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/transport"
-	"github.com/joho/godotenv"
-	_ "go.uber.org/automaxprocs"
 	"golang.org/x/exp/rand"
-
-	_ "github.com/go-keg/example/internal/app/gateway/middleware"
 )
 
 var (
@@ -54,16 +55,19 @@ type sliceVar struct {
 func newSliceVar(defaultVal ...string) sliceVar {
 	return sliceVar{defaultVal: defaultVal}
 }
+
 func (s *sliceVar) Get() []string {
-	if len(s.val) == 0 {
+	if len(s.val) <= 0 {
 		return s.defaultVal
 	}
 	return s.val
 }
+
 func (s *sliceVar) Set(val string) error {
 	s.val = append(s.val, val)
 	return nil
 }
+
 func (s *sliceVar) String() string { return fmt.Sprintf("%+v", *s) }
 
 func init() {
@@ -71,7 +75,7 @@ func init() {
 
 	flag.BoolVar(&withDebug, "debug", false, "enable debug handlers")
 	flag.Var(&proxyAddrs, "addr", "proxy address, eg: -addr 0.0.0.0:8080")
-	flag.StringVar(&proxyConfig, "conf", "config.yaml", "config path, eg: -conf config.yaml")
+	flag.StringVar(&proxyConfig, "conf", "configs/gateway.yaml", "config path, eg: -conf config.yaml")
 	flag.StringVar(&priorityConfigDir, "conf.priority", "", "priority config directory, eg: -conf.priority ./canary")
 	flag.StringVar(&ctrlName, "ctrl.name", os.Getenv("ADVERTISE_NAME"), "control gateway name, eg: gateway")
 	flag.StringVar(&ctrlService, "ctrl.service", "", "control service host, eg: http://127.0.0.1:8000")
@@ -91,14 +95,12 @@ func makeDiscovery() registry.Discovery {
 
 func main() {
 	flag.Parse()
-	_ = godotenv.Load(".env")
 
 	clientFactory := client.NewFactory(makeDiscovery())
 	p, err := proxy.New(clientFactory, middleware.Create)
 	if err != nil {
 		log.Fatalf("failed to new proxy: %v", err)
 	}
-	circuitbreaker.Init(clientFactory)
 
 	ctx := context.Background()
 	var ctrlLoader *configLoader.CtrlConfigLoader
@@ -121,26 +123,30 @@ func main() {
 	defer confLoader.Close()
 	bc, err := confLoader.Load(context.Background())
 	if err != nil {
-		syslog.Panicf("failed to load config: %v", err)
+		log.Fatalf("failed to load config: %v", err)
 	}
 
-	if err := p.Update(bc); err != nil {
-		syslog.Panicf("failed to update service config: %v", err)
+	buildContext := client.NewBuildContext(bc)
+	circuitbreaker.Init(buildContext, clientFactory)
+	if err := p.Update(buildContext, bc); err != nil {
+		log.Fatalf("failed to update service config: %v", err)
 	}
-	loader := func() error {
+	reloader := func() error {
 		bc, err := confLoader.Load(context.Background())
 		if err != nil {
 			log.Errorf("failed to load config: %v", err)
 			return err
 		}
-		if err := p.Update(bc); err != nil {
+		buildContext := client.NewBuildContext(bc)
+		circuitbreaker.SetBuildContext(buildContext)
+		if err := p.Update(buildContext, bc); err != nil {
 			log.Errorf("failed to update service config: %v", err)
 			return err
 		}
 		log.Infof("config reloaded")
 		return nil
 	}
-	confLoader.Watch(loader)
+	confLoader.Watch(reloader)
 
 	var serverHandler http.Handler = p
 	if withDebug {

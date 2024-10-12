@@ -21,3 +21,7 @@ type Config struct {
 	}
 	Log config.Log
 }
+
+func Load(path string) (*Config, error) {
+	return config.Load[Config](path)
+}

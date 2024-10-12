@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 
+	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/go-keg/example/internal/data/example/ent/account"
@@ -17,6 +18,7 @@ type AccountCreate struct {
 	config
 	mutation *AccountMutation
 	hooks    []Hook
+	conflict []sql.ConflictOption
 }
 
 // SetNickname sets the "nickname" field.
@@ -97,6 +99,7 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 		_node = &Account{config: ac.config}
 		_spec = sqlgraph.NewCreateSpec(account.Table, sqlgraph.NewFieldSpec(account.FieldID, field.TypeInt))
 	)
+	_spec.OnConflict = ac.conflict
 	if value, ok := ac.mutation.Nickname(); ok {
 		_spec.SetField(account.FieldNickname, field.TypeString, value)
 		_node.Nickname = value
@@ -108,11 +111,186 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 	return _node, _spec
 }
 
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.Account.Create().
+//		SetNickname(v).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.AccountUpsert) {
+//			SetNickname(v+v).
+//		}).
+//		Exec(ctx)
+func (ac *AccountCreate) OnConflict(opts ...sql.ConflictOption) *AccountUpsertOne {
+	ac.conflict = opts
+	return &AccountUpsertOne{
+		create: ac,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.Account.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (ac *AccountCreate) OnConflictColumns(columns ...string) *AccountUpsertOne {
+	ac.conflict = append(ac.conflict, sql.ConflictColumns(columns...))
+	return &AccountUpsertOne{
+		create: ac,
+	}
+}
+
+type (
+	// AccountUpsertOne is the builder for "upsert"-ing
+	//  one Account node.
+	AccountUpsertOne struct {
+		create *AccountCreate
+	}
+
+	// AccountUpsert is the "OnConflict" setter.
+	AccountUpsert struct {
+		*sql.UpdateSet
+	}
+)
+
+// SetNickname sets the "nickname" field.
+func (u *AccountUpsert) SetNickname(v string) *AccountUpsert {
+	u.Set(account.FieldNickname, v)
+	return u
+}
+
+// UpdateNickname sets the "nickname" field to the value that was provided on create.
+func (u *AccountUpsert) UpdateNickname() *AccountUpsert {
+	u.SetExcluded(account.FieldNickname)
+	return u
+}
+
+// SetPassword sets the "password" field.
+func (u *AccountUpsert) SetPassword(v string) *AccountUpsert {
+	u.Set(account.FieldPassword, v)
+	return u
+}
+
+// UpdatePassword sets the "password" field to the value that was provided on create.
+func (u *AccountUpsert) UpdatePassword() *AccountUpsert {
+	u.SetExcluded(account.FieldPassword)
+	return u
+}
+
+// UpdateNewValues updates the mutable fields using the new values that were set on create.
+// Using this option is equivalent to using:
+//
+//	client.Account.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *AccountUpsertOne) UpdateNewValues() *AccountUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.Account.Create().
+//	    OnConflict(sql.ResolveWithIgnore()).
+//	    Exec(ctx)
+func (u *AccountUpsertOne) Ignore() *AccountUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *AccountUpsertOne) DoNothing() *AccountUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the AccountCreate.OnConflict
+// documentation for more info.
+func (u *AccountUpsertOne) Update(set func(*AccountUpsert)) *AccountUpsertOne {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&AccountUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetNickname sets the "nickname" field.
+func (u *AccountUpsertOne) SetNickname(v string) *AccountUpsertOne {
+	return u.Update(func(s *AccountUpsert) {
+		s.SetNickname(v)
+	})
+}
+
+// UpdateNickname sets the "nickname" field to the value that was provided on create.
+func (u *AccountUpsertOne) UpdateNickname() *AccountUpsertOne {
+	return u.Update(func(s *AccountUpsert) {
+		s.UpdateNickname()
+	})
+}
+
+// SetPassword sets the "password" field.
+func (u *AccountUpsertOne) SetPassword(v string) *AccountUpsertOne {
+	return u.Update(func(s *AccountUpsert) {
+		s.SetPassword(v)
+	})
+}
+
+// UpdatePassword sets the "password" field to the value that was provided on create.
+func (u *AccountUpsertOne) UpdatePassword() *AccountUpsertOne {
+	return u.Update(func(s *AccountUpsert) {
+		s.UpdatePassword()
+	})
+}
+
+// Exec executes the query.
+func (u *AccountUpsertOne) Exec(ctx context.Context) error {
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for AccountCreate.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *AccountUpsertOne) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// Exec executes the UPSERT query and returns the inserted/updated ID.
+func (u *AccountUpsertOne) ID(ctx context.Context) (id int, err error) {
+	node, err := u.create.Save(ctx)
+	if err != nil {
+		return id, err
+	}
+	return node.ID, nil
+}
+
+// IDX is like ID, but panics if an error occurs.
+func (u *AccountUpsertOne) IDX(ctx context.Context) int {
+	id, err := u.ID(ctx)
+	if err != nil {
+		panic(err)
+	}
+	return id
+}
+
 // AccountCreateBulk is the builder for creating many Account entities in bulk.
 type AccountCreateBulk struct {
 	config
 	err      error
 	builders []*AccountCreate
+	conflict []sql.ConflictOption
 }
 
 // Save creates the Account entities in the database.
@@ -141,6 +319,7 @@ func (acb *AccountCreateBulk) Save(ctx context.Context) ([]*Account, error) {
 					_, err = mutators[i+1].Mutate(root, acb.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
+					spec.OnConflict = acb.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
 					if err = sqlgraph.BatchCreate(ctx, acb.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
@@ -191,6 +370,138 @@ func (acb *AccountCreateBulk) Exec(ctx context.Context) error {
 // ExecX is like Exec, but panics if an error occurs.
 func (acb *AccountCreateBulk) ExecX(ctx context.Context) {
 	if err := acb.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
+// OnConflict allows configuring the `ON CONFLICT` / `ON DUPLICATE KEY` clause
+// of the `INSERT` statement. For example:
+//
+//	client.Account.CreateBulk(builders...).
+//		OnConflict(
+//			// Update the row with the new values
+//			// the was proposed for insertion.
+//			sql.ResolveWithNewValues(),
+//		).
+//		// Override some of the fields with custom
+//		// update values.
+//		Update(func(u *ent.AccountUpsert) {
+//			SetNickname(v+v).
+//		}).
+//		Exec(ctx)
+func (acb *AccountCreateBulk) OnConflict(opts ...sql.ConflictOption) *AccountUpsertBulk {
+	acb.conflict = opts
+	return &AccountUpsertBulk{
+		create: acb,
+	}
+}
+
+// OnConflictColumns calls `OnConflict` and configures the columns
+// as conflict target. Using this option is equivalent to using:
+//
+//	client.Account.Create().
+//		OnConflict(sql.ConflictColumns(columns...)).
+//		Exec(ctx)
+func (acb *AccountCreateBulk) OnConflictColumns(columns ...string) *AccountUpsertBulk {
+	acb.conflict = append(acb.conflict, sql.ConflictColumns(columns...))
+	return &AccountUpsertBulk{
+		create: acb,
+	}
+}
+
+// AccountUpsertBulk is the builder for "upsert"-ing
+// a bulk of Account nodes.
+type AccountUpsertBulk struct {
+	create *AccountCreateBulk
+}
+
+// UpdateNewValues updates the mutable fields using the new values that
+// were set on create. Using this option is equivalent to using:
+//
+//	client.Account.Create().
+//		OnConflict(
+//			sql.ResolveWithNewValues(),
+//		).
+//		Exec(ctx)
+func (u *AccountUpsertBulk) UpdateNewValues() *AccountUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithNewValues())
+	return u
+}
+
+// Ignore sets each column to itself in case of conflict.
+// Using this option is equivalent to using:
+//
+//	client.Account.Create().
+//		OnConflict(sql.ResolveWithIgnore()).
+//		Exec(ctx)
+func (u *AccountUpsertBulk) Ignore() *AccountUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWithIgnore())
+	return u
+}
+
+// DoNothing configures the conflict_action to `DO NOTHING`.
+// Supported only by SQLite and PostgreSQL.
+func (u *AccountUpsertBulk) DoNothing() *AccountUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.DoNothing())
+	return u
+}
+
+// Update allows overriding fields `UPDATE` values. See the AccountCreateBulk.OnConflict
+// documentation for more info.
+func (u *AccountUpsertBulk) Update(set func(*AccountUpsert)) *AccountUpsertBulk {
+	u.create.conflict = append(u.create.conflict, sql.ResolveWith(func(update *sql.UpdateSet) {
+		set(&AccountUpsert{UpdateSet: update})
+	}))
+	return u
+}
+
+// SetNickname sets the "nickname" field.
+func (u *AccountUpsertBulk) SetNickname(v string) *AccountUpsertBulk {
+	return u.Update(func(s *AccountUpsert) {
+		s.SetNickname(v)
+	})
+}
+
+// UpdateNickname sets the "nickname" field to the value that was provided on create.
+func (u *AccountUpsertBulk) UpdateNickname() *AccountUpsertBulk {
+	return u.Update(func(s *AccountUpsert) {
+		s.UpdateNickname()
+	})
+}
+
+// SetPassword sets the "password" field.
+func (u *AccountUpsertBulk) SetPassword(v string) *AccountUpsertBulk {
+	return u.Update(func(s *AccountUpsert) {
+		s.SetPassword(v)
+	})
+}
+
+// UpdatePassword sets the "password" field to the value that was provided on create.
+func (u *AccountUpsertBulk) UpdatePassword() *AccountUpsertBulk {
+	return u.Update(func(s *AccountUpsert) {
+		s.UpdatePassword()
+	})
+}
+
+// Exec executes the query.
+func (u *AccountUpsertBulk) Exec(ctx context.Context) error {
+	if u.create.err != nil {
+		return u.create.err
+	}
+	for i, b := range u.create.builders {
+		if len(b.conflict) != 0 {
+			return fmt.Errorf("ent: OnConflict was set for builder %d. Set it on the AccountCreateBulk instead", i)
+		}
+	}
+	if len(u.create.conflict) == 0 {
+		return errors.New("ent: missing options for AccountCreateBulk.OnConflict")
+	}
+	return u.create.Exec(ctx)
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (u *AccountUpsertBulk) ExecX(ctx context.Context) {
+	if err := u.create.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

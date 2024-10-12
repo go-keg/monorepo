@@ -5,12 +5,14 @@ package main
 import (
 	"github.com/go-keg/example/internal/app/api/cmd/migrate"
 	"github.com/go-keg/example/internal/app/api/conf"
-	"github.com/go-keg/keg/contrib/config"
+	_ "github.com/go-keg/example/internal/data/example/ent/runtime"
 	"github.com/go-keg/keg/contrib/log"
+	"github.com/go-keg/keg/contrib/tracing"
 	"github.com/go-kratos/kratos/v2"
 	klog "github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/spf13/cobra"
+	semconv "go.opentelemetry.io/otel/semconv/v1.25.0"
 	"os"
 )
 
@@ -35,15 +37,22 @@ func init() {
 
 func main() {
 	rootCmd.Run = func(cmd *cobra.Command, args []string) {
-		confPath, _ := cmd.Flags().GetString("conf")
-		cfg, err := config.Load[conf.Config](confPath)
+		path, _ := cmd.Flags().GetString("conf")
+		cfg, err := conf.Load(path)
 		if err != nil {
 			panic(err)
 		}
 		logger := log.NewLoggerFromConfig(cfg.Log, Name,
-			log.ServiceID(id),
 			log.ServiceName(Name),
 			log.ServiceVersion(Version),
+			log.ServiceInstanceID(id),
+			log.DeploymentEnvironment(os.Getenv("APP_ENV")),
+		)
+		tracing.SetTracerProvider(cfg.Trace.Endpoint,
+			semconv.ServiceName(Name),
+			semconv.ServiceVersion(Version),
+			semconv.ServiceInstanceID(id),
+			semconv.DeploymentEnvironment(os.Getenv("APP_ENV")),
 		)
 		app, cleanup, err := initApp(logger, cfg)
 		if err != nil {
@@ -63,7 +72,6 @@ func main() {
 
 func newApp(logger klog.Logger, hs *http.Server) *kratos.App {
 	return kratos.New(
-		kratos.ID(id),
 		kratos.Name(Name),
 		kratos.Version(Version),
 		kratos.Logger(logger),

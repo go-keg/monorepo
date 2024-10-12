@@ -14,12 +14,12 @@ import (
 
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {
-	panic(fmt.Errorf("not implemented"))
+	return nil, fmt.Errorf("not implemented")
 }
 
 // Nodes is the resolver for the nodes field.
 func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, error) {
-	panic(fmt.Errorf("not implemented"))
+	return nil, fmt.Errorf("not implemented")
 }
 
 // OperationLogs is the resolver for the operationLogs field.

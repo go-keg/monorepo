@@ -34,7 +34,7 @@ endpoints:
     timeout: 60s
     protocol: HTTP
     backends:
-      - target: 127.0.0.1:8081 # golang-admin-svc
+      - target: localhost:8081 # golang-admin-svc
     middlewares:
       - name: rewrite
         options:
@@ -47,7 +47,7 @@ endpoints:
     timeout: 60s
     protocol: HTTP
     backends:
-      - target: 127.0.0.1:8082 # golang-api-svc
+      - target: localhost:8082 # golang-api-svc
     middlewares:
       - name: rewrite
         options:

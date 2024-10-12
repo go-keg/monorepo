@@ -12,11 +12,11 @@ import (
 
 type ctxKey string
 
-const userId ctxKey = "userId"
+const userID ctxKey = "userID"
 const userKey ctxKey = "user"
 
-func GetUserId(ctx context.Context) int {
-	return cast.ToInt(ctx.Value(userId))
+func GetUserID(ctx context.Context) int {
+	return cast.ToInt(ctx.Value(userID))
 }
 
 func GetUser(ctx context.Context) *ent.User {
@@ -41,9 +41,9 @@ func Middleware(key string, client *ent.Client, next http.Handler) http.Handler 
 				if err != nil {
 					return
 				}
-				nextCtx := context.WithValue(r.Context(), userId, u.ID)
-				nextCtx = context.WithValue(nextCtx, userKey, u)
-				r = r.WithContext(nextCtx)
+				ctx := context.WithValue(r.Context(), userID, u.ID)
+				ctx = context.WithValue(ctx, userKey, u)
+				r = r.WithContext(ctx)
 			}
 		}
 		next.ServeHTTP(w, r)

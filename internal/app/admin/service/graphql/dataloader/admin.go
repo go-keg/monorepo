@@ -2,13 +2,13 @@ package dataloader
 
 import (
 	"context"
-	"fmt"
+	"entgo.io/ent/dialect/sql"
 	"github.com/go-keg/example/internal/data/example/ent"
 	"github.com/go-keg/example/internal/data/example/ent/permission"
+	"github.com/go-keg/example/internal/data/example/ent/user"
 	"github.com/go-keg/keg/contrib/gql"
 	"github.com/graph-gophers/dataloader"
 	"github.com/samber/lo"
-	"strings"
 )
 
 type AdminLoader struct {
@@ -34,21 +34,23 @@ func (r AdminLoader) permissionChildrenCount() gql.LoaderFunc {
 }
 
 func (r AdminLoader) userRoleCount() gql.LoaderFunc {
+	type item struct {
+		ID    int64 `json:"id"`
+		Count int   `json:"count"`
+	}
 	return func(ctx context.Context, keys dataloader.Keys) (map[dataloader.Key]any, error) {
-		placeholder := strings.TrimSuffix(strings.Repeat("?,", len(keys)), ",")
-		var rows, err = r.client.QueryContext(ctx, fmt.Sprintf(`SELECT user_id, COUNT(role_id) FROM users LEFT JOIN user_roles ON users.id = user_roles.user_id WHERE user_id IN (%s) GROUP BY user_id`, placeholder), gql.ToAnySlice(keys)...)
+		var items []item
+		err := r.client.User.Query().Where(user.IDIn(gql.ToInts(keys)...)).Modify(func(s *sql.Selector) {
+			t1 := sql.Table("user_roles").As("t1")
+			s.Select(s.C(user.FieldID), sql.As(sql.Count(t1.C("role_id")), "count")).
+				From(s).LeftJoin(t1).On(s.C(user.FieldID), t1.C("user_id")).
+				GroupBy(s.C(user.FieldID))
+		}).Scan(ctx, &items)
 		if err != nil {
 			return nil, err
 		}
-		var result = make(map[dataloader.Key]any)
-		for rows.Next() {
-			var userId, count int
-			err = rows.Scan(&userId, &count)
-			if err != nil {
-				return nil, err
-			}
-			result[gql.ToStringKey(userId)] = count
-		}
-		return result, nil
+		return lo.SliceToMap(items, func(item item) (dataloader.Key, any) {
+			return gql.ToStringKey(item.ID), item.Count
+		}), nil
 	}
 }

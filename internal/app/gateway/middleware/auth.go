@@ -11,8 +11,7 @@ import (
 
 func AuthMiddleware(c *config.Middleware) (middleware.Middleware, error) {
 	options := &v1.Auth{
-		DiscoveryDSN: "",
-		Domains:      map[string]*v1.AuthOption{},
+		Domains: map[string]*v1.AuthOption{},
 	}
 	if c.Options != nil {
 		if err := anypb.UnmarshalTo(c.Options, options, proto.UnmarshalOptions{Merge: true}); err != nil {

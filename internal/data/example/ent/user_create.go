@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/go-keg/example/internal/data/example/ent/operationlog"
-	"github.com/go-keg/example/internal/data/example/ent/role"
-	"github.com/go-keg/example/internal/data/example/ent/user"
+	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
+	"github.com/go-keg/monorepo/internal/data/example/ent/role"
+	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
 
 // UserCreate is the builder for creating a User entity.

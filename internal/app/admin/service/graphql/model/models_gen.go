@@ -7,7 +7,7 @@ import (
 	"io"
 	"strconv"
 
-	"github.com/go-keg/example/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
 )
 
 type LoginReply struct {

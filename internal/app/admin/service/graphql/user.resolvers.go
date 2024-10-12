@@ -8,13 +8,13 @@ import (
 	"context"
 	"github.com/go-keg/keg/contrib/gql"
 
-	"github.com/go-keg/example/internal/app/admin/server/auth"
-	"github.com/go-keg/example/internal/app/admin/service/graphql/dataloader"
-	"github.com/go-keg/example/internal/app/admin/service/graphql/model"
-	"github.com/go-keg/example/internal/data/example/ent"
-	"github.com/go-keg/example/internal/data/example/ent/permission"
-	"github.com/go-keg/example/internal/data/example/ent/role"
-	"github.com/go-keg/example/internal/data/example/ent/user"
+	"github.com/go-keg/monorepo/internal/app/admin/server/auth"
+	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/dataloader"
+	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/model"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
+	"github.com/go-keg/monorepo/internal/data/example/ent/role"
+	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 	"golang.org/x/crypto/bcrypt"
 )
 

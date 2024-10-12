@@ -3,9 +3,9 @@ package migrate
 import (
 	"context"
 	"fmt"
-	"github.com/go-keg/example/internal/app/api/conf"
-	"github.com/go-keg/example/internal/app/api/data"
-	"github.com/go-keg/example/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/app/api/conf"
+	"github.com/go-keg/monorepo/internal/app/api/data"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/spf13/cobra"
 	"log"
 )

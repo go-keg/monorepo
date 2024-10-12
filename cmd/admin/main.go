@@ -3,13 +3,13 @@
 package main
 
 import (
-	"github.com/go-keg/example/internal/app/admin/cmd/migrate"
-	"github.com/go-keg/example/internal/app/admin/conf"
-	"github.com/go-keg/example/internal/app/admin/job"
-	"github.com/go-keg/example/internal/app/admin/schedule"
-	_ "github.com/go-keg/example/internal/data/example/ent/runtime"
 	"github.com/go-keg/keg/contrib/log"
 	"github.com/go-keg/keg/contrib/tracing"
+	"github.com/go-keg/monorepo/internal/app/admin/cmd/migrate"
+	"github.com/go-keg/monorepo/internal/app/admin/conf"
+	"github.com/go-keg/monorepo/internal/app/admin/job"
+	"github.com/go-keg/monorepo/internal/app/admin/schedule"
+	_ "github.com/go-keg/monorepo/internal/data/example/ent/runtime"
 	"github.com/go-kratos/kratos/v2"
 	klog "github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"

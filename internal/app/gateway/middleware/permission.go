@@ -6,7 +6,7 @@ import (
 	accountv1 "github.com/go-keg/apis/api/account/v1"
 	"github.com/go-keg/apis/api/common"
 	v1 "github.com/go-keg/apis/api/gateway/middleware/v1"
-	"github.com/go-keg/example/internal/pkg/auth"
+	"github.com/go-keg/monorepo/internal/pkg/auth"
 	"github.com/go-keg/keg/contrib/cache"
 	config "github.com/go-kratos/gateway/api/gateway/config/v1"
 	"github.com/go-kratos/gateway/middleware"

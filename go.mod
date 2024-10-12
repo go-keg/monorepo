@@ -1,4 +1,4 @@
-module github.com/go-keg/example
+module github.com/go-keg/monorepo
 
 go 1.23.1
 
@@ -12,7 +12,7 @@ require (
 	github.com/go-keg/keg v0.1.0
 	github.com/go-kratos/gateway v0.0.0-20240722084848-1331810c0e37
 	github.com/go-kratos/kratos/v2 v2.8.0
-	github.com/golang-jwt/jwt/v5 v5.1.0
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/wire v0.6.0
 	github.com/graph-gophers/dataloader v5.0.0+incompatible
 	github.com/hashicorp/go-multierror v1.1.1

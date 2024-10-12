@@ -3,9 +3,8 @@ package schedule
 import (
 	"context"
 	"fmt"
-	"github.com/go-keg/example/internal/data/example/ent"
 	"github.com/go-keg/keg/contrib/schedule"
-
+	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 )

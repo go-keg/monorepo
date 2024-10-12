@@ -1,8 +1,8 @@
 package data
 
 import (
-	"github.com/go-keg/example/internal/app/api/conf"
-	"github.com/go-keg/example/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/app/api/conf"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
 	ent2 "github.com/go-keg/keg/contrib/ent"
 
 	"github.com/google/wire"

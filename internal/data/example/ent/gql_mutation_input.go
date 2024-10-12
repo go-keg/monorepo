@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"github.com/go-keg/example/internal/data/example/ent/permission"
-	"github.com/go-keg/example/internal/data/example/ent/user"
+	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
+	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
 
 // CreateOperationLogInput represents a mutation input for creating operationlogs.

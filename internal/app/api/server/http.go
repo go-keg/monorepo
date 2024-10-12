@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/go-keg/example/internal/app/api/conf"
-	"github.com/go-keg/example/internal/app/api/service"
+	"github.com/go-keg/monorepo/internal/app/api/conf"
+	"github.com/go-keg/monorepo/internal/app/api/service"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
 )

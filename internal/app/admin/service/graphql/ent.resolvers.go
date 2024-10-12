@@ -9,7 +9,7 @@ import (
 	"fmt"
 
 	"entgo.io/contrib/entgql"
-	"github.com/go-keg/example/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
 )
 
 // Node is the resolver for the node field.

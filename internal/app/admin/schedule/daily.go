@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/IBM/sarama"
-	"github.com/go-keg/example/internal/data/example/ent"
-	"github.com/go-keg/example/internal/data/example/ent/account"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/data/example/ent/account"
 )
 
 type Daily struct {

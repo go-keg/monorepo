@@ -2,11 +2,10 @@ package data
 
 import (
 	"github.com/IBM/sarama"
-	"github.com/go-keg/example/internal/app/admin/conf"
-	"github.com/go-keg/example/internal/data/example/ent"
 	ent2 "github.com/go-keg/keg/contrib/ent"
 	"github.com/go-keg/keg/contrib/kafka"
-
+	"github.com/go-keg/monorepo/internal/app/admin/conf"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/google/wire"
 )
 

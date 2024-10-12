@@ -3,8 +3,8 @@ package job
 import (
 	"context"
 	"github.com/IBM/sarama"
-	"github.com/go-keg/example/internal/app/admin/conf"
 	"github.com/go-keg/keg/contrib/kafka"
+	"github.com/go-keg/monorepo/internal/app/admin/conf"
 	"github.com/go-kratos/kratos/v2/log"
 )
 

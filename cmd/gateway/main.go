@@ -20,7 +20,7 @@ import (
 
 	_ "net/http/pprof"
 
-	_ "github.com/go-keg/example/internal/app/gateway/middleware"
+	_ "github.com/go-keg/monorepo/internal/app/gateway/middleware"
 	_ "github.com/go-kratos/gateway/discovery/consul"
 	_ "github.com/go-kratos/gateway/middleware/bbr"
 	"github.com/go-kratos/gateway/middleware/circuitbreaker"

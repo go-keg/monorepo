@@ -3,9 +3,9 @@ package biz
 import (
 	"context"
 	"fmt"
-	"github.com/go-keg/example/internal/app/admin/conf"
-	"github.com/go-keg/example/internal/app/admin/service/graphql/model"
-	"github.com/go-keg/example/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/app/admin/conf"
+	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/model"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/go-keg/keg/contrib/cache"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/samber/lo"

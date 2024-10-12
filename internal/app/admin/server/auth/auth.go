@@ -2,9 +2,8 @@ package auth
 
 import (
 	"context"
-	"github.com/go-keg/example/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/golang-jwt/jwt/v5"
-
 	"github.com/spf13/cast"
 	"net/http"
 	"strings"

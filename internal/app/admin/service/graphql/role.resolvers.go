@@ -7,8 +7,8 @@ package graphql
 import (
 	"context"
 
-	"github.com/go-keg/example/internal/app/admin/service/graphql/dataloader"
-	"github.com/go-keg/example/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/dataloader"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
 )
 
 // CreateUser is the resolver for the createUser field.

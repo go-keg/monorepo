@@ -23,7 +23,7 @@ func main() {
 		entgql.WithWhereInputs(true),
 		entgql.WithNodeDescriptor(true),
 		entgql.WithSchemaHook(annotations.EnumsGQLSchemaHook),
-		entgql.WithTemplates(gqltemp.Template()),
+		entgql.WithTemplates(append(entgql.AllTemplates, entgql.WhereTemplate, gqltemp.Template())...),
 	)
 	if err != nil {
 		log.Fatalf("creating entgql extension: %v", err)

@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/go-kratos/kratos/v2"
+	"github.com/joho/godotenv"
 	"net/http"
 	"os"
 	"time"
@@ -95,6 +96,7 @@ func makeDiscovery() registry.Discovery {
 
 func main() {
 	flag.Parse()
+	_ = godotenv.Load(".env")
 
 	clientFactory := client.NewFactory(makeDiscovery())
 	p, err := proxy.New(clientFactory, middleware.Create)

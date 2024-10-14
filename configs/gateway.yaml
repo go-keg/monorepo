@@ -27,7 +27,7 @@ middlewares:
   - name: tracing
     options:
       '@type': type.googleapis.com/gateway.middleware.tracing.v1.Tracing
-      http_endpoint: ${TRACE_ENDPOINT}
+      http_endpoint_url: ${TRACE_ENDPOINT_URL}
       timeout: 10s
 endpoints:
   - path: /api/admin/*

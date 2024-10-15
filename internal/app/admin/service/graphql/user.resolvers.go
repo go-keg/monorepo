@@ -6,8 +6,8 @@ package graphql
 
 import (
 	"context"
-	"github.com/go-keg/keg/contrib/gql"
 
+	"github.com/go-keg/keg/contrib/gql"
 	"github.com/go-keg/monorepo/internal/app/admin/server/auth"
 	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/dataloader"
 	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/model"

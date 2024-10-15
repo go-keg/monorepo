@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/go-keg/example/internal/data/example/ent/operationlog"
-	"github.com/go-keg/example/internal/data/example/ent/predicate"
-	"github.com/go-keg/example/internal/data/example/ent/user"
+	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
+	"github.com/go-keg/monorepo/internal/data/example/ent/predicate"
+	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
 
 // OperationLogQuery is the builder for querying OperationLog entities.
@@ -24,6 +24,7 @@ type OperationLogQuery struct {
 	inters     []Interceptor
 	predicates []predicate.OperationLog
 	withUser   *UserQuery
+	loadTotal  []func(context.Context, []*OperationLog) error
 	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -400,6 +401,11 @@ func (olq *OperationLogQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 	if query := olq.withUser; query != nil {
 		if err := olq.loadUser(ctx, query, nodes, nil,
 			func(n *OperationLog, e *User) { n.Edges.User = e }); err != nil {
+			return nil, err
+		}
+	}
+	for i := range olq.loadTotal {
+		if err := olq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}

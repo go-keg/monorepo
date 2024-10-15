@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/go-keg/example/internal/data/example/ent/account"
-	"github.com/go-keg/example/internal/data/example/ent/predicate"
+	"github.com/go-keg/monorepo/internal/data/example/ent/account"
+	"github.com/go-keg/monorepo/internal/data/example/ent/predicate"
 )
 
 // AccountQuery is the builder for querying Account entities.
@@ -22,6 +22,7 @@ type AccountQuery struct {
 	order      []account.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Account
+	loadTotal  []func(context.Context, []*Account) error
 	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -356,6 +357,11 @@ func (aq *AccountQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Acco
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
+	}
+	for i := range aq.loadTotal {
+		if err := aq.loadTotal[i](ctx, nodes); err != nil {
+			return nil, err
+		}
 	}
 	return nodes, nil
 }

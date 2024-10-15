@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/go-keg/example/internal/data/example/ent/permission"
+	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 )
 
 // 权限
@@ -54,7 +54,10 @@ type PermissionEdges struct {
 	Children []*Permission `json:"children,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes   [3]bool
+	loadedTypes [3]bool
+	// totalCount holds the count of the edges above.
+	totalCount [2]map[string]int
+
 	namedRoles    map[string][]*Role
 	namedChildren map[string][]*Permission
 }

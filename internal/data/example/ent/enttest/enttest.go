@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/go-keg/example/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
 	// required by schema hooks.
-	_ "github.com/go-keg/example/internal/data/example/ent/runtime"
+	_ "github.com/go-keg/monorepo/internal/data/example/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/go-keg/example/internal/data/example/ent/migrate"
+	"github.com/go-keg/monorepo/internal/data/example/ent/migrate"
 )
 
 type (

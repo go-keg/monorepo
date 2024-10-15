@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/go-keg/example/internal/data/example/ent/permission"
-	"github.com/go-keg/example/internal/data/example/ent/predicate"
-	"github.com/go-keg/example/internal/data/example/ent/role"
+	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
+	"github.com/go-keg/monorepo/internal/data/example/ent/predicate"
+	"github.com/go-keg/monorepo/internal/data/example/ent/role"
 )
 
 // PermissionUpdate is the builder for updating Permission entities.

@@ -105,7 +105,7 @@ scalar Map
 An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
-interface Node @goModel(model: "github.com/go-keg/example/internal/data/example/ent.Noder") {
+interface Node @goModel(model: "github.com/go-keg/monorepo/internal/data/example/ent.Noder") {
   """
   The id of the object.
   """
@@ -358,7 +358,7 @@ enum PermissionOrderField {
 """
 PermissionType is enum for the field type
 """
-enum PermissionType @goModel(model: "github.com/go-keg/example/internal/data/example/ent/permission.Type") {
+enum PermissionType @goModel(model: "github.com/go-keg/monorepo/internal/data/example/ent/permission.Type") {
   menu
   page
   element
@@ -952,7 +952,7 @@ enum UserOrderField {
 """
 UserStatus is enum for the field status
 """
-enum UserStatus @goModel(model: "github.com/go-keg/example/internal/data/example/ent/user.Status") {
+enum UserStatus @goModel(model: "github.com/go-keg/monorepo/internal/data/example/ent/user.Status") {
   """
   正常
   """

@@ -8,7 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/go-keg/example/internal/data/example/ent/account"
+	"github.com/go-keg/monorepo/internal/data/example/ent/account"
 )
 
 // Account is the model entity for the Account schema.

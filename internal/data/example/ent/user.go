@@ -9,7 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/go-keg/example/internal/data/example/ent/user"
+	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
 
 // 用户
@@ -49,7 +49,10 @@ type UserEdges struct {
 	OperationLogs []*OperationLog `json:"operation_logs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes        [2]bool
+	loadedTypes [2]bool
+	// totalCount holds the count of the edges above.
+	totalCount [1]map[string]int
+
 	namedRoles         map[string][]*Role
 	namedOperationLogs map[string][]*OperationLog
 }

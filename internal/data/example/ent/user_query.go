@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/go-keg/example/internal/data/example/ent/operationlog"
-	"github.com/go-keg/example/internal/data/example/ent/predicate"
-	"github.com/go-keg/example/internal/data/example/ent/role"
-	"github.com/go-keg/example/internal/data/example/ent/user"
+	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
+	"github.com/go-keg/monorepo/internal/data/example/ent/predicate"
+	"github.com/go-keg/monorepo/internal/data/example/ent/role"
+	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
 
 // UserQuery is the builder for querying User entities.
@@ -27,6 +27,7 @@ type UserQuery struct {
 	predicates             []predicate.User
 	withRoles              *RoleQuery
 	withOperationLogs      *OperationLogQuery
+	loadTotal              []func(context.Context, []*User) error
 	modifiers              []func(*sql.Selector)
 	withNamedRoles         map[string]*RoleQuery
 	withNamedOperationLogs map[string]*OperationLogQuery
@@ -462,6 +463,11 @@ func (uq *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := uq.loadOperationLogs(ctx, query, nodes,
 			func(n *User) { n.appendNamedOperationLogs(name) },
 			func(n *User, e *OperationLog) { n.appendNamedOperationLogs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for i := range uq.loadTotal {
+		if err := uq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}

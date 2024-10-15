@@ -24,7 +24,6 @@ import (
 
 // Noder wraps the basic Node method.
 type Noder interface {
-	Node(context.Context) (*Node, error)
 	IsNode()
 }
 
@@ -78,6 +77,18 @@ type nodeOptions struct {
 	nodeType func(context.Context, int) (string, error)
 }
 
+func (c *Client) newNodeOpts(opts []NodeOption) *nodeOptions {
+	nopts := &nodeOptions{}
+	for _, opt := range opts {
+		opt(nopts)
+	}
+	if nopts.nodeType == nil {
+		nopts.nodeType = func(ctx context.Context, id int) (string, error) {
+			return c.tables.nodeType(ctx, c.driver, id)
+		}
+	}
+	return nopts
+}
 
 // Noder returns a Node by its id. If the NodeType was not provided, it will
 // be derived from the id value according to the universal-id configuration.
@@ -90,8 +101,11 @@ func (c *Client) Noder(ctx context.Context, id int, opts ...NodeOption) (_ Noder
 			err = multierror.Append(err, entgql.ErrNodeNotFound(id))
 		}
 	}()
-
-	return c.noder(ctx, "table", id)
+	table, err := c.newNodeOpts(opts).nodeType(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return c.noder(ctx, table, id)
 }
 
 func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error) {
@@ -162,6 +176,16 @@ func (c *Client) Noders(ctx context.Context, ids []int, opts ...NodeOption) ([]N
 	errors := make([]error, len(ids))
 	tables := make(map[string][]int)
 	id2idx := make(map[int][]int, len(ids))
+	nopts := c.newNodeOpts(opts)
+	for i, id := range ids {
+		table, err := nopts.nodeType(ctx, id)
+		if err != nil {
+			errors[i] = err
+			continue
+		}
+		tables[table] = append(tables[table], id)
+		id2idx[id] = append(id2idx[id], i)
+	}
 
 	for table, ids := range tables {
 		nodes, err := c.noders(ctx, table, ids)

@@ -5,11 +5,11 @@ package runtime
 import (
 	"time"
 
-	"github.com/go-keg/example/internal/data/example/ent/operationlog"
-	"github.com/go-keg/example/internal/data/example/ent/permission"
-	"github.com/go-keg/example/internal/data/example/ent/role"
-	"github.com/go-keg/example/internal/data/example/ent/schema"
-	"github.com/go-keg/example/internal/data/example/ent/user"
+	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
+	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
+	"github.com/go-keg/monorepo/internal/data/example/ent/role"
+	"github.com/go-keg/monorepo/internal/data/example/ent/schema"
+	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
 
 // The init function reads all schema descriptors with runtime code

@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/go-keg/example/internal/data/example/ent/permission"
-	"github.com/go-keg/example/internal/data/example/ent/predicate"
-	"github.com/go-keg/example/internal/data/example/ent/role"
-	"github.com/go-keg/example/internal/data/example/ent/user"
+	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
+	"github.com/go-keg/monorepo/internal/data/example/ent/predicate"
+	"github.com/go-keg/monorepo/internal/data/example/ent/role"
+	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
 
 // RoleQuery is the builder for querying Role entities.
@@ -27,6 +27,7 @@ type RoleQuery struct {
 	predicates           []predicate.Role
 	withPermissions      *PermissionQuery
 	withUsers            *UserQuery
+	loadTotal            []func(context.Context, []*Role) error
 	modifiers            []func(*sql.Selector)
 	withNamedPermissions map[string]*PermissionQuery
 	withNamedUsers       map[string]*UserQuery
@@ -462,6 +463,11 @@ func (rq *RoleQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Role, e
 		if err := rq.loadUsers(ctx, query, nodes,
 			func(n *Role) { n.appendNamedUsers(name) },
 			func(n *Role, e *User) { n.appendNamedUsers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for i := range rq.loadTotal {
+		if err := rq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}

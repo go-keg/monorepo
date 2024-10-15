@@ -21,7 +21,7 @@ func main() {
 		entgql.WithSchemaGenerator(),
 		entgql.WithSchemaPath("./ent.graphql"),
 		entgql.WithWhereInputs(true),
-		entgql.WithNodeDescriptor(true),
+		//entgql.WithNodeDescriptor(false),
 		entgql.WithSchemaHook(annotations.EnumsGQLSchemaHook),
 		entgql.WithTemplates(append(entgql.AllTemplates, entgql.WhereTemplate, gqltemp.Template())...),
 	)

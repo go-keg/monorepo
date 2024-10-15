@@ -83,9 +83,25 @@ func (db *Database) Account(ctx context.Context) *AccountClient {
 	return db.loadClient(ctx).Account
 }
 
+// WhereP appends storage-level predicates to the query builder. Using this method, users
+// can use type-assertion to append predicates that do not depend on any generated package.
+func (q *AccountQuery) WhereP(ps ...func(*sql.Selector)) {
+	for i := range ps {
+		q.predicates = append(q.predicates, ps[i])
+	}
+}
+
 // OperationLog is the client for interacting with the OperationLog builders.
 func (db *Database) OperationLog(ctx context.Context) *OperationLogClient {
 	return db.loadClient(ctx).OperationLog
+}
+
+// WhereP appends storage-level predicates to the query builder. Using this method, users
+// can use type-assertion to append predicates that do not depend on any generated package.
+func (q *OperationLogQuery) WhereP(ps ...func(*sql.Selector)) {
+	for i := range ps {
+		q.predicates = append(q.predicates, ps[i])
+	}
 }
 
 // Permission is the client for interacting with the Permission builders.
@@ -93,12 +109,56 @@ func (db *Database) Permission(ctx context.Context) *PermissionClient {
 	return db.loadClient(ctx).Permission
 }
 
+// WhereP appends storage-level predicates to the query builder. Using this method, users
+// can use type-assertion to append predicates that do not depend on any generated package.
+func (q *PermissionQuery) WhereP(ps ...func(*sql.Selector)) {
+	for i := range ps {
+		q.predicates = append(q.predicates, ps[i])
+	}
+}
+
 // Role is the client for interacting with the Role builders.
 func (db *Database) Role(ctx context.Context) *RoleClient {
 	return db.loadClient(ctx).Role
 }
 
+// WhereP appends storage-level predicates to the query builder. Using this method, users
+// can use type-assertion to append predicates that do not depend on any generated package.
+func (q *RoleQuery) WhereP(ps ...func(*sql.Selector)) {
+	for i := range ps {
+		q.predicates = append(q.predicates, ps[i])
+	}
+}
+
 // User is the client for interacting with the User builders.
 func (db *Database) User(ctx context.Context) *UserClient {
 	return db.loadClient(ctx).User
+}
+
+// WhereP appends storage-level predicates to the query builder. Using this method, users
+// can use type-assertion to append predicates that do not depend on any generated package.
+func (q *UserQuery) WhereP(ps ...func(*sql.Selector)) {
+	for i := range ps {
+		q.predicates = append(q.predicates, ps[i])
+	}
+}
+
+func (m AccountMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
+	return m.Client().Mutate(ctx, mu)
+}
+
+func (m OperationLogMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
+	return m.Client().Mutate(ctx, mu)
+}
+
+func (m PermissionMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
+	return m.Client().Mutate(ctx, mu)
+}
+
+func (m RoleMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
+	return m.Client().Mutate(ctx, mu)
+}
+
+func (m UserMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
+	return m.Client().Mutate(ctx, mu)
 }

@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/go-keg/example/internal/data/example/ent/permission"
-	"github.com/go-keg/example/internal/data/example/ent/predicate"
-	"github.com/go-keg/example/internal/data/example/ent/role"
+	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
+	"github.com/go-keg/monorepo/internal/data/example/ent/predicate"
+	"github.com/go-keg/monorepo/internal/data/example/ent/role"
 )
 
 // PermissionQuery is the builder for querying Permission entities.
@@ -27,6 +27,7 @@ type PermissionQuery struct {
 	withRoles         *RoleQuery
 	withParent        *PermissionQuery
 	withChildren      *PermissionQuery
+	loadTotal         []func(context.Context, []*Permission) error
 	modifiers         []func(*sql.Selector)
 	withNamedRoles    map[string]*RoleQuery
 	withNamedChildren map[string]*PermissionQuery
@@ -503,6 +504,11 @@ func (pq *PermissionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*P
 		if err := pq.loadChildren(ctx, query, nodes,
 			func(n *Permission) { n.appendNamedChildren(name) },
 			func(n *Permission, e *Permission) { n.appendNamedChildren(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for i := range pq.loadTotal {
+		if err := pq.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}

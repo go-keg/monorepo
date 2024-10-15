@@ -2,4 +2,4 @@
 
 package ent
 
-// The schema-stitching logic is generated in github.com/go-keg/example/internal/data/example/ent/runtime/runtime.go
+// The schema-stitching logic is generated in github.com/go-keg/monorepo/internal/data/example/ent/runtime/runtime.go

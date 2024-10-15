@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/go-keg/example/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/data/example/ent"
 )
 
 // The AccountFunc type is an adapter to allow the use of ordinary

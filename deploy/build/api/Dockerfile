@@ -1,7 +1,5 @@
-FROM ubuntu
-MAINTAINER eiixy <eiixyw@gmail.com>
-
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl vim
+ARG IMAGE=ubuntu:latest
+FROM ${IMAGE}
 
 WORKDIR /app
 COPY bin/api /app/api

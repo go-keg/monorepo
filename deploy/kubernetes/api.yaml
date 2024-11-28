@@ -19,7 +19,7 @@ spec:
         lang: golang
     spec:
       containers:
-        - image: ${API_IMAGE}
+        - image: ${IMAGE_REGISTRY}/golang-api:${IMAGE_VERSION}
           imagePullPolicy: ${IMAGE_PULL_POLICY}
           name: golang-api
           resources:

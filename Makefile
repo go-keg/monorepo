@@ -4,13 +4,22 @@ GIT_BRANCH=$(shell git branch | sed -n '/\* /s///p' | sed "s/-main//g")
 # Includes
 include .env
 include .env.k8s
-include scripts/build.mk
+include scripts/base.mk
 include scripts/compose.mk
 include scripts/init.mk
-include scripts/k8s.mk
 
 version:
 	@echo $(GIT_VERSION) $(GIT_BRANCH)
+
+%.lint:
+	$(eval SERVICE:= $*)
+	@clear
+	@echo "lint: $(SERVICE)"
+	golangci-lint run -c .golangci.yml --fix ./cmd/$(SERVICE)/... ./internal/app/$(SERVICE)/...
+
+lint:
+	@clear
+	golangci-lint run -c .golangci.yml --fix ./...
 
 # show help
 help:

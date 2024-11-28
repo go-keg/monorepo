@@ -2,11 +2,12 @@ package dataloader
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/go-keg/keg/contrib/gql"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/graph-gophers/dataloader"
 	"github.com/spf13/cast"
-	"net/http"
 )
 
 type ctxKey string

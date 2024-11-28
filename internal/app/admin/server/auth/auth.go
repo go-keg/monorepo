@@ -2,11 +2,12 @@ package auth
 
 import (
 	"context"
+	"net/http"
+	"strings"
+
 	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/spf13/cast"
-	"net/http"
-	"strings"
 )
 
 type ctxKey string
@@ -32,7 +33,7 @@ func Middleware(key string, client *ent.Client, next http.Handler) http.Handler 
 		auths := strings.SplitN(token, " ", 2)
 		if len(auths) == 2 && auths[0] == "Bearer" {
 			claims := jwt.RegisteredClaims{}
-			_, err := jwt.ParseWithClaims(auths[1], &claims, func(token *jwt.Token) (interface{}, error) {
+			_, err := jwt.ParseWithClaims(auths[1], &claims, func(token *jwt.Token) (any, error) {
 				return []byte(key), nil
 			})
 			if err == nil {

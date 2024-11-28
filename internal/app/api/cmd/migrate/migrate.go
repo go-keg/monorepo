@@ -3,11 +3,12 @@ package migrate
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"github.com/go-keg/monorepo/internal/app/api/conf"
 	"github.com/go-keg/monorepo/internal/app/api/data"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 var Cmd = &cobra.Command{

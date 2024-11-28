@@ -2,14 +2,15 @@ package job
 
 import (
 	"context"
+	"os"
+	"time"
+
 	"github.com/eiixy/go-job"
 	"github.com/eiixy/go-job/report/qyweixin"
 	"github.com/go-keg/monorepo/internal/app/admin/conf"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
-	"os"
-	"time"
 )
 
 var ProviderSet = wire.NewSet(NewJob)
@@ -40,6 +41,7 @@ func (j Job) Start(ctx context.Context) error {
 }
 
 func (j Job) Stop(ctx context.Context) error {
+	j.job.Stop()
 	return nil
 }
 

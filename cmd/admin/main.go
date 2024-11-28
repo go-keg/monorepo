@@ -3,6 +3,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/go-keg/keg/contrib/log"
 	"github.com/go-keg/keg/contrib/tracing"
 	"github.com/go-keg/monorepo/internal/app/admin/cmd/migrate"
@@ -15,7 +17,6 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/spf13/cobra"
 	semconv "go.opentelemetry.io/otel/semconv/v1.25.0"
-	"os"
 )
 
 var (

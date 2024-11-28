@@ -2,6 +2,7 @@ package dataloader
 
 import (
 	"context"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/go-keg/keg/contrib/gql"
 	"github.com/go-keg/monorepo/internal/data/example/ent"

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	v1 "github.com/go-keg/apis/api/account/v1"
 	"github.com/go-keg/apis/api/common"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
@@ -22,7 +23,7 @@ func NewAuthService(ent *ent.Client) *AuthService {
 func (r AuthService) Permissions(ctx context.Context, req *common.ID) (*v1.PermissionsReply, error) {
 	permissionKeys, err := r.ent.Permission.Query().Where(
 		permission.HasRolesWith(
-			role.HasUsersWith(user.ID(int(req.Id))),
+			role.HasUsersWith(user.ID(int(req.GetId()))),
 		),
 	).Select(permission.FieldKey).Strings(ctx)
 	if err != nil {

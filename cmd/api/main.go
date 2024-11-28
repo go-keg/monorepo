@@ -1,8 +1,10 @@
-//go:generate go run -mod=mod github.com/google/wire/cmd/wire
+//go:generate go run -mod=readonly github.com/google/wire/cmd/wire
 
 package main
 
 import (
+	"os"
+
 	"github.com/go-keg/keg/contrib/log"
 	"github.com/go-keg/keg/contrib/tracing"
 	"github.com/go-keg/monorepo/internal/app/api/cmd/migrate"
@@ -13,7 +15,6 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/spf13/cobra"
 	semconv "go.opentelemetry.io/otel/semconv/v1.25.0"
-	"os"
 )
 
 var (

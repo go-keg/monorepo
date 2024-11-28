@@ -11,8 +11,7 @@ install.dependents:
 	go install github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v2@latest
 	go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
 	go install github.com/envoyproxy/protoc-gen-validate@latest
-	go install github.com/go-keg/keg/cmd/codegen@latest
-	go install github.com/go-keg/keg/cmd/deploy@latest
+	go install github.com/go-keg/keg/cmd/keg@latest
 	go install github.com/go-keg/keg/cmd/protoc-gen-go-keg-error@latest
 
 # init env
@@ -23,4 +22,4 @@ init:
 	go mod download
 	cp .env.example .env
 	cp .env.k8s.example .env.k8s
-	cp deploy/components/.env.example deploy/components/.env
+	cp deploy/_components/.env.example deploy/_components/.env

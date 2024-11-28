@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	v1 "github.com/go-keg/apis/api/account/v1"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/go-keg/monorepo/internal/pkg/auth"

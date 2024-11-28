@@ -1,0 +1,47 @@
+# go module 名称
+go_module: github.com/go-keg/monorepo
+
+# 服务
+apps:
+  - name: admin
+    db: example
+    job: false
+    schedule: false
+    useGraphQL: false
+    useGRPC: false
+  - name: api
+    db: example
+    job: false
+    schedule: false
+    useGraphQL: false
+    useGRPC: false
+
+# 镜像仓库地址
+image_registry: registry.xxx.aliyuncs.com/keg-monorepo
+
+# 分支打包发布策略
+branches:
+  - branch: master
+    namespace: monorepo # 命名空间
+    kubeConfig: ~/.kube/config # (可选)集群凭证配置地址 默认：~/.kube/config
+    # tag生成策略:
+    #   version=v0.1.0-0-ge8d26a0d
+    #   branch=latest-dev
+    #   version-branch=v0.1.0-1-g09525a39-dev
+    tagPolicy: version
+
+  - branch: preview
+    namespace: monorepo-preview
+    kubeConfig: ~/.kube/config
+    tagPolicy: branch
+
+  - branch: dev
+    namespace: monorepo-dev
+    kubeConfig: ~/.kube/config
+    tagPolicy: branch
+
+# 默认分支策略
+default:
+  namespace: monorepo-dev
+  kubeConfig: ~/.kube/config
+  tagPolicy: version-branch

@@ -1,9 +1,6 @@
 # schema tells gqlgen when the GraphQL schema is located.
 schema:
-  - ent.graphql
-  - user.graphql
-  - role.graphql
-  - directives.graphql
+  - ./*.graphql
 
 # Where should any generated models go?
 model:

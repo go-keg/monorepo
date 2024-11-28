@@ -2,6 +2,7 @@ package job
 
 import (
 	"context"
+
 	"github.com/IBM/sarama"
 	"github.com/go-keg/keg/contrib/kafka"
 	"github.com/go-keg/monorepo/internal/app/admin/conf"
@@ -24,7 +25,7 @@ func (r kafkaConsumer) Run(ctx context.Context) error {
 	return r.cg.Run(ctx, func(message *sarama.ConsumerMessage) error {
 		switch message.Topic {
 		case "test-topic":
-			//TODO
+			// TODO
 		default:
 			r.log.Infow("topic", message.Topic, "partition", message.Partition, "offset", message.Partition)
 		}

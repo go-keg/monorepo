@@ -1,6 +1,8 @@
 package server
 
 import (
+	nethttp "net/http"
+
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -12,7 +14,6 @@ import (
 	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
-	nethttp "net/http"
 )
 
 func NewHTTPServer(cfg *conf.Config, logger log.Logger, client *ent.Client, schema graphql.ExecutableSchema) *http.Server {

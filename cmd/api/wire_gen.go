@@ -15,6 +15,10 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 )
 
+import (
+	_ "github.com/go-keg/monorepo/internal/data/example/ent/runtime"
+)
+
 // Injectors from wire.go:
 
 func initApp(logger log.Logger, config *conf.Config) (*kratos.App, func(), error) {

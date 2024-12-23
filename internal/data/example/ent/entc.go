@@ -21,9 +21,9 @@ func main() {
 		entgql.WithSchemaGenerator(),
 		entgql.WithSchemaPath("./ent.graphql"),
 		entgql.WithWhereInputs(true),
-		//entgql.WithNodeDescriptor(false),
+		entgql.WithNodeDescriptor(true),
 		entgql.WithSchemaHook(annotations.EnumsGQLSchemaHook),
-		entgql.WithTemplates(append(entgql.AllTemplates, entgql.WhereTemplate, gqltemp.Template())...),
+		entgql.WithTemplates(append(entgql.AllTemplates, entgql.WhereTemplate, entgql.NodeDescriptorTemplate, gqltemp.Template())...),
 	)
 	if err != nil {
 		log.Fatalf("creating entgql extension: %v", err)

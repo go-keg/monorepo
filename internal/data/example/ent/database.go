@@ -91,6 +91,10 @@ func (q *AccountQuery) WhereP(ps ...func(*sql.Selector)) {
 	}
 }
 
+func (m AccountMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
+	return m.Client().Mutate(ctx, mu)
+}
+
 // OperationLog is the client for interacting with the OperationLog builders.
 func (db *Database) OperationLog(ctx context.Context) *OperationLogClient {
 	return db.loadClient(ctx).OperationLog
@@ -102,6 +106,10 @@ func (q *OperationLogQuery) WhereP(ps ...func(*sql.Selector)) {
 	for i := range ps {
 		q.predicates = append(q.predicates, ps[i])
 	}
+}
+
+func (m OperationLogMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
+	return m.Client().Mutate(ctx, mu)
 }
 
 // Permission is the client for interacting with the Permission builders.
@@ -117,6 +125,10 @@ func (q *PermissionQuery) WhereP(ps ...func(*sql.Selector)) {
 	}
 }
 
+func (m PermissionMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
+	return m.Client().Mutate(ctx, mu)
+}
+
 // Role is the client for interacting with the Role builders.
 func (db *Database) Role(ctx context.Context) *RoleClient {
 	return db.loadClient(ctx).Role
@@ -130,6 +142,10 @@ func (q *RoleQuery) WhereP(ps ...func(*sql.Selector)) {
 	}
 }
 
+func (m RoleMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
+	return m.Client().Mutate(ctx, mu)
+}
+
 // User is the client for interacting with the User builders.
 func (db *Database) User(ctx context.Context) *UserClient {
 	return db.loadClient(ctx).User
@@ -141,22 +157,6 @@ func (q *UserQuery) WhereP(ps ...func(*sql.Selector)) {
 	for i := range ps {
 		q.predicates = append(q.predicates, ps[i])
 	}
-}
-
-func (m AccountMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
-	return m.Client().Mutate(ctx, mu)
-}
-
-func (m OperationLogMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
-	return m.Client().Mutate(ctx, mu)
-}
-
-func (m PermissionMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
-	return m.Client().Mutate(ctx, mu)
-}
-
-func (m RoleMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
-	return m.Client().Mutate(ctx, mu)
 }
 
 func (m UserMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {

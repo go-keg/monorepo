@@ -32,7 +32,7 @@ func NewSchedule(logger log.Logger, client *ent.Client, daily *Daily) *Schedule 
 func (s Schedule) Start(ctx context.Context) error {
 	_, _ = s.Add("example", "* * * * *", s.example)
 	_, _ = s.Add("test", "* * * * *", test)
-	_, _ = s.Add("daily", "* * * * *", func() error {
+	_, _ = s.Add("daily", "0 0 * * *", func() error {
 		return s.daily.Run(ctx)
 	})
 	return s.Schedule.Start()

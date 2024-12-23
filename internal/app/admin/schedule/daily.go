@@ -18,7 +18,7 @@ func NewDaily(db *ent.Database, producer sarama.SyncProducer) *Daily {
 	return &Daily{db: db, producer: producer}
 }
 
-// Run mock daily send stat data to accounts
+// Run mock daily send statistic data to accounts
 func (r Daily) Run(ctx context.Context) error {
 	startID := 0
 	for {
@@ -32,9 +32,9 @@ func (r Daily) Run(ctx context.Context) error {
 		var messages []*sarama.ProducerMessage
 		for i := range accounts {
 			messages = append(messages, &sarama.ProducerMessage{
-				Topic: "send_daily_stat",
+				Topic: "send_daily_statistic",
 				Key:   sarama.StringEncoder(fmt.Sprintf("account:%d", accounts[i].ID)),
-				Value: sarama.StringEncoder("stat data..."),
+				Value: sarama.StringEncoder("statistic data..."),
 			})
 		}
 		err = r.producer.SendMessages(messages)

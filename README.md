@@ -7,10 +7,10 @@
 keg (short for Kratos, Ent, and GraphQL) is a highly modular monorepo structure that provides a robust foundation for developing backend services in Go. By combining the best practices of Kratos (a Go microservices framework), Ent (an ORM for Go), and GraphQL, this monorepo streamlines the process of building and scaling backend applications.
 
 ## 🎯 Features
-•	Kratos Integration: Use Kratos for building efficient and scalable microservices with advanced features like service discovery, logging, and configuration management.
-•	Ent ORM: A powerful, type-safe ORM that simplifies database schema management and querying.
-•	GraphQL Support: First-class GraphQL support for defining, querying, and mutating data.
-•	Monorepo Structure: Centralized codebase for better dependency management and shared utilities across services.
+* Kratos Integration: Use Kratos for building efficient and scalable microservices with advanced features like service discovery, logging, and configuration management.
+* Ent ORM: A powerful, type-safe ORM that simplifies database schema management and querying.
+* GraphQL Support: First-class GraphQL support for defining, querying, and mutating data.
+* Monorepo Structure: Centralized codebase for better dependency management and shared utilities across services.
 
 ## 📂 Project Structure
 ```

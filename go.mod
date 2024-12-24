@@ -7,8 +7,8 @@ require (
 	entgo.io/ent v0.14.1
 	github.com/99designs/gqlgen v0.17.61
 	github.com/IBM/sarama v1.43.3
-	github.com/eiixy/go-job v0.3.1
-	github.com/eiixy/swagger-api v0.1.4
+	github.com/go-keg/go-job v0.3.2
+	github.com/go-keg/swagger-api v0.1.5
 	github.com/go-keg/apis v0.1.1
 	github.com/go-keg/keg v0.1.0
 	github.com/go-kratos/gateway v0.0.0-20240722084848-1331810c0e37

@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/eiixy/go-job"
-	"github.com/eiixy/go-job/report/qyweixin"
+	"github.com/go-keg/go-job"
+	"github.com/go-keg/go-job/report/qyweixin"
 	"github.com/go-keg/monorepo/internal/app/admin/conf"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/go-kratos/kratos/v2/log"

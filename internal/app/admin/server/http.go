@@ -6,12 +6,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/eiixy/swagger-api"
 	"github.com/go-keg/apis/api"
 	"github.com/go-keg/monorepo/internal/app/admin/conf"
 	"github.com/go-keg/monorepo/internal/app/admin/server/auth"
 	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/dataloader"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
+	"github.com/go-keg/swagger-api"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
 )

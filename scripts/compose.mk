@@ -1,22 +1,22 @@
 run.%:
 	$(eval COMPONENT:= $*)
-	docker compose -f ./deploy/_components/docker-compose.yaml up -d --remove-orphans $(COMPONENT)
+	docker compose -f ./deploy/ components/docker-compose.yaml up -d --remove-orphans $(COMPONENT)
 
 start.%:
 	$(eval COMPONENT:= $*)
-	docker compose -f ./deploy/_components/docker-compose.yaml start $(COMPONENT)
+	docker compose -f ./deploy/ components/docker-compose.yaml start $(COMPONENT)
 
 stop.%:
 	$(eval COMPONENT:= $*)
-	docker compose -f ./deploy/_components/docker-compose.yaml stop $(COMPONENT)
+	docker compose -f ./deploy/ components/docker-compose.yaml stop $(COMPONENT)
 
 restart.%:
 	$(eval COMPONENT:= $*)
-	docker compose -f ./deploy/_components/docker-compose.yaml restart $(COMPONENT)
+	docker compose -f ./deploy/ components/docker-compose.yaml restart $(COMPONENT)
 
 recreate.%:
 	$(eval COMPONENT:= $*)
-	docker compose -f ./deploy/_components/docker-compose.yaml up -d --build --force-recreate --remove-orphans $(COMPONENT)
+	docker compose -f ./deploy/ components/docker-compose.yaml up -d --build --force-recreate --remove-orphans $(COMPONENT)
 
 # start all components
 start.all:
@@ -37,14 +37,14 @@ stop.all:
 	@$(MAKE) stop.grafana --no-print-directory
 
 ps:
-	docker compose -f ./deploy/_components/docker-compose.yaml ps
+	docker compose -f ./deploy/ components/docker-compose.yaml ps
 
 logs:
-	docker compose -f ./deploy/_components/docker-compose.yaml logs
+	docker compose -f ./deploy/ components/docker-compose.yaml logs
 
 logs.%:
 	$(eval COMPONENT:= $*)
-	@sudo docker compose -f ./deploy/_components/docker-compose.yaml logs $(COMPONENT)
+	@sudo docker compose -f ./deploy/ components/docker-compose.yaml logs $(COMPONENT)
 
 kafka.recreate:
 	$(MAKE) recreate.zookeeper

@@ -1,4 +1,7 @@
 # Monorepo
+[![Go Report Card](https://goreportcard.com/badge/github.com/go-keg/monorepo)](https://goreportcard.com/report/github.com/go-keg/monorepo)
+[![Go Reference](https://pkg.go.dev/badge/github.com/go-keg/monorepo.svg)](https://pkg.go.dev/github.com/go-keg/monorepo)
+[![License](https://img.shields.io/github/license/go-keg/monorepo)](./LICENSE)
 
 > A monorepo integrating Kratos, Ent, and GraphQL for building modern, scalable, and maintainable backend services.
 

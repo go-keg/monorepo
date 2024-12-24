@@ -3,11 +3,14 @@ package middleware
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"os"
+
 	accountv1 "github.com/go-keg/apis/api/account/v1"
 	"github.com/go-keg/apis/api/common"
 	v1 "github.com/go-keg/apis/api/gateway/middleware/v1"
-	"github.com/go-keg/monorepo/internal/pkg/auth"
 	"github.com/go-keg/keg/contrib/cache"
+	"github.com/go-keg/monorepo/internal/pkg/auth"
 	config "github.com/go-kratos/gateway/api/gateway/config/v1"
 	"github.com/go-kratos/gateway/middleware"
 	"github.com/go-kratos/kratos/v2/log"
@@ -16,8 +19,6 @@ import (
 	"github.com/spf13/cast"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
-	"net/http"
-	"os"
 )
 
 type PermissionReader func(req *http.Request) []string

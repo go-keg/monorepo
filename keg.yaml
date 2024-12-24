@@ -21,7 +21,7 @@ image_registry: registry.xxx.aliyuncs.com/keg-monorepo
 
 # 分支打包发布策略
 branches:
-  - branch: master
+  - branch: main
     namespace: monorepo # 命名空间
     kubeConfig: ~/.kube/config # (可选)集群凭证配置地址 默认：~/.kube/config
     # tag生成策略:

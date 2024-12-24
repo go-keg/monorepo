@@ -3,13 +3,9 @@ GIT_BRANCH=$(shell git branch | sed -n '/\* /s///p' | sed "s/-main//g")
 
 # Includes
 include .env
-include .env.k8s
 include scripts/base.mk
 include scripts/compose.mk
 include scripts/init.mk
-
-version:
-	@echo $(GIT_VERSION) $(GIT_BRANCH)
 
 %.lint:
 	$(eval SERVICE:= $*)

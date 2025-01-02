@@ -53,11 +53,11 @@ generate:
 %.deploy:
 	$(eval SERVICE:= $*)
 	@$(MAKE) $(SERVICE).publish
-	@keg k8s deployment update-image -n $(SERVICE)
+	@keg k8s deployment update-image -n $(SERVICE) -t $(BUILD_TAG)
 
 %.deploy.only:
 	$(eval SERVICE:= $*)
-	@keg k8s deployment update-image -n $(SERVICE)
+	@keg k8s deployment update-image -n $(SERVICE) -t $(BUILD_TAG)
 
 %.deploy_all_in_one:
 	$(eval SERVICE:= $*)

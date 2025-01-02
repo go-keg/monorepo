@@ -58,8 +58,10 @@ func NewSchema(logger log.Logger, db *ent.Database, client *ent.Client, accountU
 					return nil, gql.ErrUnauthorized
 				}
 				if !u.IsAdmin {
-					keys, err := cache.LocalRemember(fmt.Sprintf("user:%d:permissions", u.ID), time.Minute*5, func() ([]string, error) {
-						return client.Permission.Query().Where(permission.HasRolesWith(role.HasUsersWith(user.ID(u.ID)))).Select(permission.FieldKey).Strings(ctx)
+					keys, err := cache.LocalRemember(fmt.Sprintf("user:%d:permissions", u.ID), time.Minute*10, func() ([]string, error) {
+						return client.Permission.Query().
+							Where(permission.HasRolesWith(role.HasUsersWith(user.ID(u.ID)))).
+							Select(permission.FieldKey).Strings(ctx)
 					})
 					if err != nil {
 						return nil, err

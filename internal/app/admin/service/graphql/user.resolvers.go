@@ -6,6 +6,8 @@ package graphql
 
 import (
 	"context"
+	"fmt"
+	"github.com/go-keg/keg/contrib/cache"
 
 	"github.com/go-keg/keg/contrib/gql"
 	"github.com/go-keg/monorepo/internal/app/admin/server/auth"
@@ -19,7 +21,7 @@ import (
 
 // ResetPassword is the resolver for the resetPassword field.
 func (r *mutationResolver) ResetPassword(ctx context.Context, oldPassword string, password string) (bool, error) {
-	u, err := r.db.User(ctx).Get(ctx, auth.GetUserID(ctx))
+	u, err := r.ent.User.Get(ctx, auth.GetUserID(ctx))
 	if err != nil {
 		return false, err
 	}
@@ -40,7 +42,7 @@ func (r *mutationResolver) ForgetPassword(ctx context.Context, email string, cod
 	if !ok {
 		return false, ErrVerifyCodeInvalid
 	}
-	first, err := r.db.User(ctx).Query().Where(user.Email(email)).First(ctx)
+	first, err := r.ent.User.Query().Where(user.Email(email)).First(ctx)
 	if ent.IsNotFound(err) {
 		return false, ErrAccountOrPasswordInvalid
 	} else if err != nil {
@@ -56,7 +58,7 @@ func (r *mutationResolver) ForgetPassword(ctx context.Context, email string, cod
 
 // UpdateProfile is the resolver for the updateProfile field.
 func (r *mutationResolver) UpdateProfile(ctx context.Context, input model.UpdateProfileInput) (*ent.User, error) {
-	return r.db.User(ctx).UpdateOneID(auth.GetUserID(ctx)).
+	return r.ent.User.UpdateOneID(auth.GetUserID(ctx)).
 		SetNillableAvatar(input.Avatar).
 		SetNillableNickname(input.Nickname).Save(ctx)
 }
@@ -69,7 +71,7 @@ func (r *queryResolver) Login(ctx context.Context, email string, password string
 			return nil, gql.Error("captcha verify failed")
 		}
 	}
-	first, err := r.db.User(ctx).Query().Where(user.Email(email)).First(ctx)
+	first, err := r.ent.User.Query().Where(user.Email(email)).First(ctx)
 	if ent.IsNotFound(err) {
 		return nil, ErrAccountOrPasswordInvalid
 	} else if err != nil {
@@ -82,6 +84,10 @@ func (r *queryResolver) Login(ctx context.Context, email string, password string
 	if err != nil {
 		return nil, err
 	}
+
+	// Clear Permission cache
+	cache.LocalClear(fmt.Sprintf("user:%d:permissions", first.ID))
+
 	return &model.LoginReply{
 		Token: token,
 		Exp:   int(exp),
@@ -91,12 +97,12 @@ func (r *queryResolver) Login(ctx context.Context, email string, password string
 
 // Profile is the resolver for the profile field.
 func (r *queryResolver) Profile(ctx context.Context) (*ent.User, error) {
-	return r.db.User(ctx).Get(ctx, auth.GetUserID(ctx))
+	return r.ent.User.Get(ctx, auth.GetUserID(ctx))
 }
 
 // Refresh is the resolver for the refresh field.
 func (r *queryResolver) Refresh(ctx context.Context) (*model.LoginReply, error) {
-	first, err := r.db.User(ctx).Get(ctx, auth.GetUserID(ctx))
+	first, err := r.ent.User.Get(ctx, auth.GetUserID(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -140,9 +146,9 @@ func (r *userResolver) RoleCount(ctx context.Context, obj *ent.User) (int, error
 // Permissions is the resolver for the permissions field.
 func (r *userResolver) Permissions(ctx context.Context, obj *ent.User) ([]*ent.Permission, error) {
 	if obj.IsAdmin {
-		return r.db.Permission(ctx).Query().All(ctx)
+		return r.ent.Permission.Query().All(ctx)
 	}
-	return r.db.Permission(ctx).Query().Where(permission.HasRolesWith(role.HasUsersWith(user.ID(obj.ID)))).All(ctx)
+	return r.ent.Permission.Query().Where(permission.HasRolesWith(role.HasUsersWith(user.ID(obj.ID)))).All(ctx)
 }
 
 // Mutation returns MutationResolver implementation.

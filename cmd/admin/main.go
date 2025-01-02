@@ -36,12 +36,14 @@ var (
 func init() {
 	rootCmd.AddCommand(migrate.Cmd)
 	rootCmd.PersistentFlags().String("conf", "./configs/admin.yaml", "config path, eg: -conf config.yaml")
+	rootCmd.PersistentFlags().String("env", "", "environment, eg: -env prod")
 }
 
 func main() {
 	rootCmd.Run = func(cmd *cobra.Command, args []string) {
 		path, _ := cmd.Flags().GetString("conf")
-		cfg, err := conf.Load(path)
+		env, _ := cmd.Flags().GetString("env")
+		cfg, err := conf.Load(path, env)
 		if err != nil {
 			panic(err)
 		}

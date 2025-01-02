@@ -24,22 +24,22 @@ func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, erro
 
 // OperationLogs is the resolver for the operationLogs field.
 func (r *queryResolver) OperationLogs(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.OperationLogOrder, where *ent.OperationLogWhereInput) (*ent.OperationLogConnection, error) {
-	return r.db.OperationLog(ctx).Query().Paginate(ctx, after, first, before, last, ent.WithOperationLogFilter(where.Filter), ent.WithOperationLogOrder(orderBy))
+	return r.ent.OperationLog.Query().Paginate(ctx, after, first, before, last, ent.WithOperationLogFilter(where.Filter), ent.WithOperationLogOrder(orderBy))
 }
 
 // Permissions is the resolver for the permissions field.
 func (r *queryResolver) Permissions(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) (*ent.PermissionConnection, error) {
-	return r.db.Permission(ctx).Query().Paginate(ctx, after, first, before, last, ent.WithPermissionFilter(where.Filter), ent.WithPermissionOrder(orderBy))
+	return r.ent.Permission.Query().Paginate(ctx, after, first, before, last, ent.WithPermissionFilter(where.Filter), ent.WithPermissionOrder(orderBy))
 }
 
 // Roles is the resolver for the roles field.
 func (r *queryResolver) Roles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.RoleOrder, where *ent.RoleWhereInput) (*ent.RoleConnection, error) {
-	return r.db.Role(ctx).Query().Paginate(ctx, after, first, before, last, ent.WithRoleFilter(where.Filter), ent.WithRoleOrder(orderBy))
+	return r.ent.Role.Query().Paginate(ctx, after, first, before, last, ent.WithRoleFilter(where.Filter), ent.WithRoleOrder(orderBy))
 }
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.UserOrder, where *ent.UserWhereInput) (*ent.UserConnection, error) {
-	return r.db.User(ctx).Query().Paginate(ctx, after, first, before, last, ent.WithUserFilter(where.Filter), ent.WithUserOrder(orderBy))
+	return r.ent.User.Query().Paginate(ctx, after, first, before, last, ent.WithUserFilter(where.Filter), ent.WithUserOrder(orderBy))
 }
 
 // Permission returns PermissionResolver implementation.

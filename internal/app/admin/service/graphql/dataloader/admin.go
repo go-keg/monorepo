@@ -42,9 +42,9 @@ func (r AdminLoader) userRoleCount() gql.LoaderFunc {
 	return func(ctx context.Context, keys dataloader.Keys) (map[dataloader.Key]any, error) {
 		var items []item
 		err := r.client.User.Query().Where(user.IDIn(gql.ToInts(keys)...)).Modify(func(s *sql.Selector) {
-			t1 := sql.Table("user_roles").As("t1")
-			s.Select(s.C(user.FieldID), sql.As(sql.Count(t1.C("role_id")), "count")).
-				From(s).LeftJoin(t1).On(s.C(user.FieldID), t1.C("user_id")).
+			ur := sql.Table(user.RolesTable).As("ur")
+			s.Select(s.C(user.FieldID), sql.As(sql.Count(ur.C("role_id")), "count")).
+				LeftJoin(ur).On(s.C(user.FieldID), ur.C("user_id")).
 				GroupBy(s.C(user.FieldID))
 		}).Scan(ctx, &items)
 		if err != nil {

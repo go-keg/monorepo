@@ -4,15 +4,17 @@
 package main
 
 import (
+	"log"
+	"runtime"
+	"strings"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
 	"github.com/go-keg/keg/contrib/ent/annotations"
 	enttemp "github.com/go-keg/keg/contrib/ent/template"
+	"github.com/go-keg/keg/contrib/gql/hooks"
 	gqltemp "github.com/go-keg/keg/contrib/gql/template"
-	"log"
-	"runtime"
-	"strings"
 )
 
 func main() {
@@ -24,6 +26,7 @@ func main() {
 		entgql.WithNodeDescriptor(true),
 		entgql.WithSchemaHook(annotations.EnumsGQLSchemaHook),
 		entgql.WithTemplates(append(entgql.AllTemplates, entgql.WhereTemplate, entgql.NodeDescriptorTemplate, gqltemp.Template())...),
+		entgql.WithSchemaHook(hooks.GenerateList),
 	)
 	if err != nil {
 		log.Fatalf("creating entgql extension: %v", err)

@@ -1,8 +1,6 @@
 package server
 
 import (
-	nethttp "net/http"
-
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -23,8 +21,6 @@ func NewHTTPServer(cfg *conf.Config, logger log.Logger, client *ent.Client, sche
 	loader := dataloader.NewDataLoader(client)
 	srv.Handle("/query", auth.Middleware(cfg.Key, client, dataloader.Middleware(loader, gqlSrv)))
 	srv.HandleFunc("/graphql-ui", playground.Handler("Admin", "/query"))
-	srv.HandlePrefix("/swagger/", swagger.Handler(nethttp.FS(api.FS), []swagger.OpenapiURL{
-		{Name: "Account Service", URL: "/account/v1/account.openapi.yaml"},
-	}))
+	srv.HandlePrefix("/swagger/", swagger.Handler(api.FS))
 	return srv
 }

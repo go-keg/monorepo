@@ -724,10 +724,6 @@ github.com/eapache/go-xerial-snappy v0.0.0-20230731223053-c322873962e3 h1:Oy0F4A
 github.com/eapache/go-xerial-snappy v0.0.0-20230731223053-c322873962e3/go.mod h1:YvSRo5mw33fLEx1+DlK6L2VV43tJt5Eyel9n9XBcR+0=
 github.com/eapache/queue v1.1.0 h1:YOEu7KNc61ntiQlcEeUIoDTJ2o8mQznoNvUhiigpIqc=
 github.com/eapache/queue v1.1.0/go.mod h1:6eCeP0CKFpHLu8blIFXhExK/dRa7WDZfr6jVFPTqq+I=
-github.com/eiixy/go-job v0.3.1 h1:FE/ezVifwtvZdW6X1NZie4ilf7MufcyWSgXdWxQG9s8=
-github.com/eiixy/go-job v0.3.1/go.mod h1:3ccoM52jc+ApgrpSQD8ZU1WpCbbGrDaZMxbpKyqZ4bQ=
-github.com/eiixy/swagger-api v0.1.4 h1:aGVnzcugRGI7Td0DNVglppRJA3uVMs3wIA/KFSE651g=
-github.com/eiixy/swagger-api v0.1.4/go.mod h1:BtS/z7Qs2W4cMLdYFvioN/C+HXXeErD0eVYXtqKGZYg=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=
@@ -777,8 +773,12 @@ github.com/go-gl/glfw/v3.3/glfw v0.0.0-20191125211704-12ad95a8df72/go.mod h1:tQ2
 github.com/go-gl/glfw/v3.3/glfw v0.0.0-20200222043503-6f7a984d4dc4/go.mod h1:tQ2UAYgL5IevRw8kRxooKSPJfGvJ9fJQFa0TUsXzTg8=
 github.com/go-keg/apis v0.1.1 h1:JU4DRCuEh4uB99KNEjl2b70a7HyDmWiRODOkw7WD3iM=
 github.com/go-keg/apis v0.1.1/go.mod h1:C1hCFnPkAF2z6Y/0iUDV5TDKOe4P/EUY0hkbj3jqseQ=
+github.com/go-keg/go-job v0.3.2 h1:1r0yskVubkV8O+2KvHHViUC3a8jPFxe14WcmDo2OnRs=
+github.com/go-keg/go-job v0.3.2/go.mod h1:jEIi244xf5nf7V9vh9NfsXqQsf9vnHMt2QUbQxbuBec=
 github.com/go-keg/keg v0.1.0 h1:0Myo6GY+g8M/wmOCHPVo2hjmmb29FcgHHznSCkdjDN4=
 github.com/go-keg/keg v0.1.0/go.mod h1:KBi+6AHLam/JymRA0rUY1AvXSdG2EOw+9v9V8QJoLeg=
+github.com/go-keg/swagger-api v0.1.5 h1:nXw+Awx+6gsGAeeZVvKM137/mt0ibADeUfl7BrU1vSM=
+github.com/go-keg/swagger-api v0.1.5/go.mod h1:0lQC03IZtjgqGJ69bpQpISoa8gg5QTayVHixiqDGUog=
 github.com/go-kit/kit v0.8.0/go.mod h1:xBxKIO96dXMWWy0MnWVtmwkA9/13aqxPnvrjFYMA2as=
 github.com/go-kit/kit v0.9.0/go.mod h1:xBxKIO96dXMWWy0MnWVtmwkA9/13aqxPnvrjFYMA2as=
 github.com/go-kit/log v0.1.0/go.mod h1:zbhenjAZHb184qTLMA9ZjW7ThYL0H2mk7Q6pNt4vbaY=

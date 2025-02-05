@@ -2,7 +2,6 @@ package schedule
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/go-keg/keg/contrib/schedule"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
@@ -48,6 +47,6 @@ func (s Schedule) example() error {
 }
 
 func test() error {
-	fmt.Println("test")
+	// fmt.Println("test")
 	return nil
 }

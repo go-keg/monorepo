@@ -141,17 +141,21 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Captcha        func(childComplexity int) int
-		Login          func(childComplexity int, email string, password string, captchaID *string, captchaValue *string) int
-		Node           func(childComplexity int, id int) int
-		Nodes          func(childComplexity int, ids []int) int
-		OperationLogs  func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.OperationLogOrder, where *ent.OperationLogWhereInput) int
-		Permissions    func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) int
-		Profile        func(childComplexity int) int
-		Refresh        func(childComplexity int) int
-		Roles          func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.RoleOrder, where *ent.RoleWhereInput) int
-		SendVerifyCode func(childComplexity int, email string, verifyType model.VerifyCodeType) int
-		Users          func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.UserOrder, where *ent.UserWhereInput) int
+		Captcha          func(childComplexity int) int
+		Login            func(childComplexity int, email string, password string, captchaID *string, captchaValue *string) int
+		Node             func(childComplexity int, id int) int
+		Nodes            func(childComplexity int, ids []int) int
+		OperationLogList func(childComplexity int, offset int, limit int, orderBy *ent.OperationLogOrder, where *ent.OperationLogWhereInput) int
+		OperationLogs    func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.OperationLogOrder, where *ent.OperationLogWhereInput) int
+		PermissionList   func(childComplexity int, offset int, limit int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) int
+		Permissions      func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) int
+		Profile          func(childComplexity int) int
+		Refresh          func(childComplexity int) int
+		RoleList         func(childComplexity int, offset int, limit int, orderBy *ent.RoleOrder, where *ent.RoleWhereInput) int
+		Roles            func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.RoleOrder, where *ent.RoleWhereInput) int
+		SendVerifyCode   func(childComplexity int, email string, verifyType model.VerifyCodeType) int
+		UserList         func(childComplexity int, offset int, limit int, orderBy *ent.UserOrder, where *ent.UserWhereInput) int
+		Users            func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.UserOrder, where *ent.UserWhereInput) int
 	}
 
 	Role struct {
@@ -230,6 +234,10 @@ type QueryResolver interface {
 	Permissions(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) (*ent.PermissionConnection, error)
 	Roles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.RoleOrder, where *ent.RoleWhereInput) (*ent.RoleConnection, error)
 	Users(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.UserOrder, where *ent.UserWhereInput) (*ent.UserConnection, error)
+	OperationLogList(ctx context.Context, offset int, limit int, orderBy *ent.OperationLogOrder, where *ent.OperationLogWhereInput) (*ent.OperationLogConnection, error)
+	PermissionList(ctx context.Context, offset int, limit int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) (*ent.PermissionConnection, error)
+	RoleList(ctx context.Context, offset int, limit int, orderBy *ent.RoleOrder, where *ent.RoleWhereInput) (*ent.RoleConnection, error)
+	UserList(ctx context.Context, offset int, limit int, orderBy *ent.UserOrder, where *ent.UserWhereInput) (*ent.UserConnection, error)
 	Login(ctx context.Context, email string, password string, captchaID *string, captchaValue *string) (*model.LoginReply, error)
 	Profile(ctx context.Context) (*ent.User, error)
 	Refresh(ctx context.Context) (*model.LoginReply, error)
@@ -729,6 +737,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Nodes(childComplexity, args["ids"].([]int)), true
 
+	case "Query.operationLogList":
+		if e.complexity.Query.OperationLogList == nil {
+			break
+		}
+
+		args, err := ec.field_Query_operationLogList_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.OperationLogList(childComplexity, args["offset"].(int), args["limit"].(int), args["orderBy"].(*ent.OperationLogOrder), args["where"].(*ent.OperationLogWhereInput)), true
+
 	case "Query.operationLogs":
 		if e.complexity.Query.OperationLogs == nil {
 			break
@@ -740,6 +760,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.OperationLogs(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].(*ent.OperationLogOrder), args["where"].(*ent.OperationLogWhereInput)), true
+
+	case "Query.permissionList":
+		if e.complexity.Query.PermissionList == nil {
+			break
+		}
+
+		args, err := ec.field_Query_permissionList_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.PermissionList(childComplexity, args["offset"].(int), args["limit"].(int), args["orderBy"].(*ent.PermissionOrder), args["where"].(*ent.PermissionWhereInput)), true
 
 	case "Query.permissions":
 		if e.complexity.Query.Permissions == nil {
@@ -767,6 +799,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Refresh(childComplexity), true
 
+	case "Query.roleList":
+		if e.complexity.Query.RoleList == nil {
+			break
+		}
+
+		args, err := ec.field_Query_roleList_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.RoleList(childComplexity, args["offset"].(int), args["limit"].(int), args["orderBy"].(*ent.RoleOrder), args["where"].(*ent.RoleWhereInput)), true
+
 	case "Query.roles":
 		if e.complexity.Query.Roles == nil {
 			break
@@ -790,6 +834,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.SendVerifyCode(childComplexity, args["email"].(string), args["verifyType"].(model.VerifyCodeType)), true
+
+	case "Query.userList":
+		if e.complexity.Query.UserList == nil {
+			break
+		}
+
+		args, err := ec.field_Query_userList_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.UserList(childComplexity, args["offset"].(int), args["limit"].(int), args["orderBy"].(*ent.UserOrder), args["where"].(*ent.UserWhereInput)), true
 
 	case "Query.users":
 		if e.complexity.Query.Users == nil {
@@ -1920,6 +1976,119 @@ func (ec *executionContext) field_Query_nodes_argsIds(
 	return zeroVal, nil
 }
 
+func (ec *executionContext) field_Query_operationLogList_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Query_operationLogList_argsOffset(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["offset"] = arg0
+	arg1, err := ec.field_Query_operationLogList_argsLimit(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["limit"] = arg1
+	arg2, err := ec.field_Query_operationLogList_argsOrderBy(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg2
+	arg3, err := ec.field_Query_operationLogList_argsWhere(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg3
+	return args, nil
+}
+func (ec *executionContext) field_Query_operationLogList_argsOffset(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (int, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["offset"]
+	if !ok {
+		var zeroVal int
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+	if tmp, ok := rawArgs["offset"]; ok {
+		return ec.unmarshalNInt2int(ctx, tmp)
+	}
+
+	var zeroVal int
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_operationLogList_argsLimit(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (int, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["limit"]
+	if !ok {
+		var zeroVal int
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+	if tmp, ok := rawArgs["limit"]; ok {
+		return ec.unmarshalNInt2int(ctx, tmp)
+	}
+
+	var zeroVal int
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_operationLogList_argsOrderBy(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*ent.OperationLogOrder, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["orderBy"]
+	if !ok {
+		var zeroVal *ent.OperationLogOrder
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		return ec.unmarshalOOperationLogOrder2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐOperationLogOrder(ctx, tmp)
+	}
+
+	var zeroVal *ent.OperationLogOrder
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_operationLogList_argsWhere(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*ent.OperationLogWhereInput, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["where"]
+	if !ok {
+		var zeroVal *ent.OperationLogWhereInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+	if tmp, ok := rawArgs["where"]; ok {
+		return ec.unmarshalOOperationLogWhereInput2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐOperationLogWhereInput(ctx, tmp)
+	}
+
+	var zeroVal *ent.OperationLogWhereInput
+	return zeroVal, nil
+}
+
 func (ec *executionContext) field_Query_operationLogs_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2087,6 +2256,119 @@ func (ec *executionContext) field_Query_operationLogs_argsWhere(
 	return zeroVal, nil
 }
 
+func (ec *executionContext) field_Query_permissionList_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Query_permissionList_argsOffset(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["offset"] = arg0
+	arg1, err := ec.field_Query_permissionList_argsLimit(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["limit"] = arg1
+	arg2, err := ec.field_Query_permissionList_argsOrderBy(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg2
+	arg3, err := ec.field_Query_permissionList_argsWhere(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg3
+	return args, nil
+}
+func (ec *executionContext) field_Query_permissionList_argsOffset(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (int, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["offset"]
+	if !ok {
+		var zeroVal int
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+	if tmp, ok := rawArgs["offset"]; ok {
+		return ec.unmarshalNInt2int(ctx, tmp)
+	}
+
+	var zeroVal int
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_permissionList_argsLimit(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (int, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["limit"]
+	if !ok {
+		var zeroVal int
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+	if tmp, ok := rawArgs["limit"]; ok {
+		return ec.unmarshalNInt2int(ctx, tmp)
+	}
+
+	var zeroVal int
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_permissionList_argsOrderBy(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*ent.PermissionOrder, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["orderBy"]
+	if !ok {
+		var zeroVal *ent.PermissionOrder
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		return ec.unmarshalOPermissionOrder2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐPermissionOrder(ctx, tmp)
+	}
+
+	var zeroVal *ent.PermissionOrder
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_permissionList_argsWhere(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*ent.PermissionWhereInput, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["where"]
+	if !ok {
+		var zeroVal *ent.PermissionWhereInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+	if tmp, ok := rawArgs["where"]; ok {
+		return ec.unmarshalOPermissionWhereInput2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐPermissionWhereInput(ctx, tmp)
+	}
+
+	var zeroVal *ent.PermissionWhereInput
+	return zeroVal, nil
+}
+
 func (ec *executionContext) field_Query_permissions_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2251,6 +2533,119 @@ func (ec *executionContext) field_Query_permissions_argsWhere(
 	}
 
 	var zeroVal *ent.PermissionWhereInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_roleList_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Query_roleList_argsOffset(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["offset"] = arg0
+	arg1, err := ec.field_Query_roleList_argsLimit(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["limit"] = arg1
+	arg2, err := ec.field_Query_roleList_argsOrderBy(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg2
+	arg3, err := ec.field_Query_roleList_argsWhere(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg3
+	return args, nil
+}
+func (ec *executionContext) field_Query_roleList_argsOffset(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (int, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["offset"]
+	if !ok {
+		var zeroVal int
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+	if tmp, ok := rawArgs["offset"]; ok {
+		return ec.unmarshalNInt2int(ctx, tmp)
+	}
+
+	var zeroVal int
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_roleList_argsLimit(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (int, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["limit"]
+	if !ok {
+		var zeroVal int
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+	if tmp, ok := rawArgs["limit"]; ok {
+		return ec.unmarshalNInt2int(ctx, tmp)
+	}
+
+	var zeroVal int
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_roleList_argsOrderBy(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*ent.RoleOrder, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["orderBy"]
+	if !ok {
+		var zeroVal *ent.RoleOrder
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		return ec.unmarshalORoleOrder2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐRoleOrder(ctx, tmp)
+	}
+
+	var zeroVal *ent.RoleOrder
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_roleList_argsWhere(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*ent.RoleWhereInput, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["where"]
+	if !ok {
+		var zeroVal *ent.RoleWhereInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+	if tmp, ok := rawArgs["where"]; ok {
+		return ec.unmarshalORoleWhereInput2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐRoleWhereInput(ctx, tmp)
+	}
+
+	var zeroVal *ent.RoleWhereInput
 	return zeroVal, nil
 }
 
@@ -2477,6 +2872,119 @@ func (ec *executionContext) field_Query_sendVerifyCode_argsVerifyType(
 	}
 
 	var zeroVal model.VerifyCodeType
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_userList_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := ec.field_Query_userList_argsOffset(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["offset"] = arg0
+	arg1, err := ec.field_Query_userList_argsLimit(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["limit"] = arg1
+	arg2, err := ec.field_Query_userList_argsOrderBy(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg2
+	arg3, err := ec.field_Query_userList_argsWhere(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg3
+	return args, nil
+}
+func (ec *executionContext) field_Query_userList_argsOffset(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (int, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["offset"]
+	if !ok {
+		var zeroVal int
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("offset"))
+	if tmp, ok := rawArgs["offset"]; ok {
+		return ec.unmarshalNInt2int(ctx, tmp)
+	}
+
+	var zeroVal int
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_userList_argsLimit(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (int, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["limit"]
+	if !ok {
+		var zeroVal int
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+	if tmp, ok := rawArgs["limit"]; ok {
+		return ec.unmarshalNInt2int(ctx, tmp)
+	}
+
+	var zeroVal int
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_userList_argsOrderBy(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*ent.UserOrder, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["orderBy"]
+	if !ok {
+		var zeroVal *ent.UserOrder
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("orderBy"))
+	if tmp, ok := rawArgs["orderBy"]; ok {
+		return ec.unmarshalOUserOrder2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐUserOrder(ctx, tmp)
+	}
+
+	var zeroVal *ent.UserOrder
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_userList_argsWhere(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*ent.UserWhereInput, error) {
+	// We won't call the directive if the argument is null.
+	// Set call_argument_directives_with_null to true to call directives
+	// even if the argument is null.
+	_, ok := rawArgs["where"]
+	if !ok {
+		var zeroVal *ent.UserWhereInput
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+	if tmp, ok := rawArgs["where"]; ok {
+		return ec.unmarshalOUserWhereInput2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐUserWhereInput(ctx, tmp)
+	}
+
+	var zeroVal *ent.UserWhereInput
 	return zeroVal, nil
 }
 
@@ -6128,6 +6636,266 @@ func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field 
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_users_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_operationLogList(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_operationLogList(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().OperationLogList(rctx, fc.Args["offset"].(int), fc.Args["limit"].(int), fc.Args["orderBy"].(*ent.OperationLogOrder), fc.Args["where"].(*ent.OperationLogWhereInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.OperationLogConnection)
+	fc.Result = res
+	return ec.marshalNOperationLogConnection2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐOperationLogConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_operationLogList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_OperationLogConnection_edges(ctx, field)
+			case "nodes":
+				return ec.fieldContext_OperationLogConnection_nodes(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_OperationLogConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_OperationLogConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type OperationLogConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_operationLogList_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_permissionList(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_permissionList(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().PermissionList(rctx, fc.Args["offset"].(int), fc.Args["limit"].(int), fc.Args["orderBy"].(*ent.PermissionOrder), fc.Args["where"].(*ent.PermissionWhereInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.PermissionConnection)
+	fc.Result = res
+	return ec.marshalNPermissionConnection2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐPermissionConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_permissionList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_PermissionConnection_edges(ctx, field)
+			case "nodes":
+				return ec.fieldContext_PermissionConnection_nodes(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_PermissionConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_PermissionConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PermissionConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_permissionList_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_roleList(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_roleList(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().RoleList(rctx, fc.Args["offset"].(int), fc.Args["limit"].(int), fc.Args["orderBy"].(*ent.RoleOrder), fc.Args["where"].(*ent.RoleWhereInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.RoleConnection)
+	fc.Result = res
+	return ec.marshalNRoleConnection2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐRoleConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_roleList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_RoleConnection_edges(ctx, field)
+			case "nodes":
+				return ec.fieldContext_RoleConnection_nodes(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_RoleConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_RoleConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type RoleConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_roleList_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_userList(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_userList(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().UserList(rctx, fc.Args["offset"].(int), fc.Args["limit"].(int), fc.Args["orderBy"].(*ent.UserOrder), fc.Args["where"].(*ent.UserWhereInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*ent.UserConnection)
+	fc.Result = res
+	return ec.marshalNUserConnection2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐUserConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_userList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "edges":
+				return ec.fieldContext_UserConnection_edges(ctx, field)
+			case "nodes":
+				return ec.fieldContext_UserConnection_nodes(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_UserConnection_pageInfo(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_UserConnection_totalCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type UserConnection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_userList_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -13830,6 +14598,94 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_users(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "operationLogList":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_operationLogList(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "permissionList":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_permissionList(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "roleList":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_roleList(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "userList":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_userList(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}

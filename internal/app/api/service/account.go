@@ -19,7 +19,7 @@ func NewAccountService(ent *ent.Client) *AccountService {
 }
 
 func (r AccountService) Profile(ctx context.Context, _ *emptypb.Empty) (*v1.Account, error) {
-	account, err := r.ent.Account.Get(ctx, auth.GetAccountID(ctx))
+	account, err := r.ent.User.Get(ctx, auth.GetAccountID(ctx))
 	if err != nil {
 		return nil, err
 	}

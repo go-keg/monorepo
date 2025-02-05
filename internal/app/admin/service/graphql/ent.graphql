@@ -671,6 +671,102 @@ type Query {
     """
     where: UserWhereInput
   ): UserConnection!
+  """
+  操作日志
+  """
+  operationLogList(
+    """
+    The number of elements to skip from the start of the list.
+    """
+    offset: Int! = 0
+
+    """
+    The maximum number of elements to return. This value cannot be negative.
+    """
+    limit: Int! = 10
+
+    """
+    Ordering options for operationLog returned from the connection.
+    """
+    orderBy: OperationLogOrder
+
+    """
+    Filtering options for operationLog returned from the connection.
+    """
+    where: OperationLogWhereInput
+  ): OperationLogConnection!
+  """
+  权限
+  """
+  permissionList(
+    """
+    The number of elements to skip from the start of the list.
+    """
+    offset: Int! = 0
+
+    """
+    The maximum number of elements to return. This value cannot be negative.
+    """
+    limit: Int! = 10
+
+    """
+    Ordering options for permission returned from the connection.
+    """
+    orderBy: PermissionOrder
+
+    """
+    Filtering options for permission returned from the connection.
+    """
+    where: PermissionWhereInput
+  ): PermissionConnection!
+  """
+  角色
+  """
+  roleList(
+    """
+    The number of elements to skip from the start of the list.
+    """
+    offset: Int! = 0
+
+    """
+    The maximum number of elements to return. This value cannot be negative.
+    """
+    limit: Int! = 10
+
+    """
+    Ordering options for role returned from the connection.
+    """
+    orderBy: RoleOrder
+
+    """
+    Filtering options for role returned from the connection.
+    """
+    where: RoleWhereInput
+  ): RoleConnection!
+  """
+  用户
+  """
+  userList(
+    """
+    The number of elements to skip from the start of the list.
+    """
+    offset: Int! = 0
+
+    """
+    The maximum number of elements to return. This value cannot be negative.
+    """
+    limit: Int! = 10
+
+    """
+    Ordering options for user returned from the connection.
+    """
+    orderBy: UserOrder
+
+    """
+    Filtering options for user returned from the connection.
+    """
+    where: UserWhereInput
+  ): UserConnection!
 }
 type Role implements Node {
   id: ID!

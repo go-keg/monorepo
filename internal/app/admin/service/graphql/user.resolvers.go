@@ -7,8 +7,8 @@ package graphql
 import (
 	"context"
 	"fmt"
-	"github.com/go-keg/keg/contrib/cache"
 
+	"github.com/go-keg/keg/contrib/cache"
 	"github.com/go-keg/keg/contrib/gql"
 	"github.com/go-keg/monorepo/internal/app/admin/server/auth"
 	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/dataloader"

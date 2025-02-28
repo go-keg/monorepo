@@ -32,7 +32,7 @@ func (a *AccountQuery) List(ctx context.Context, offset, limit int, opts ...Acco
 		return nil, err
 	}
 	conn := &AccountConnection{}
-	ignoredNodes := !hasCollectedField(ctx, nodesField)
+	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
 	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := limit != 0
 		if hasPagination || ignoredNodes {
@@ -49,6 +49,11 @@ func (a *AccountQuery) List(ctx context.Context, offset, limit int, opts ...Acco
 	a.Offset(offset).Limit(limit)
 	if field := collectedField(ctx, nodesField); field != nil {
 		if err = a.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+			return nil, err
+		}
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := a.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
@@ -83,7 +88,7 @@ func (ol *OperationLogQuery) List(ctx context.Context, offset, limit int, opts .
 		return nil, err
 	}
 	conn := &OperationLogConnection{}
-	ignoredNodes := !hasCollectedField(ctx, nodesField)
+	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
 	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := limit != 0
 		if hasPagination || ignoredNodes {
@@ -100,6 +105,11 @@ func (ol *OperationLogQuery) List(ctx context.Context, offset, limit int, opts .
 	ol.Offset(offset).Limit(limit)
 	if field := collectedField(ctx, nodesField); field != nil {
 		if err = ol.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+			return nil, err
+		}
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := ol.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
@@ -134,7 +144,7 @@ func (pe *PermissionQuery) List(ctx context.Context, offset, limit int, opts ...
 		return nil, err
 	}
 	conn := &PermissionConnection{}
-	ignoredNodes := !hasCollectedField(ctx, nodesField)
+	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
 	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := limit != 0
 		if hasPagination || ignoredNodes {
@@ -151,6 +161,11 @@ func (pe *PermissionQuery) List(ctx context.Context, offset, limit int, opts ...
 	pe.Offset(offset).Limit(limit)
 	if field := collectedField(ctx, nodesField); field != nil {
 		if err = pe.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+			return nil, err
+		}
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := pe.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
@@ -185,7 +200,7 @@ func (r *RoleQuery) List(ctx context.Context, offset, limit int, opts ...RolePag
 		return nil, err
 	}
 	conn := &RoleConnection{}
-	ignoredNodes := !hasCollectedField(ctx, nodesField)
+	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
 	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := limit != 0
 		if hasPagination || ignoredNodes {
@@ -202,6 +217,11 @@ func (r *RoleQuery) List(ctx context.Context, offset, limit int, opts ...RolePag
 	r.Offset(offset).Limit(limit)
 	if field := collectedField(ctx, nodesField); field != nil {
 		if err = r.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+			return nil, err
+		}
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := r.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
@@ -236,7 +256,7 @@ func (u *UserQuery) List(ctx context.Context, offset, limit int, opts ...UserPag
 		return nil, err
 	}
 	conn := &UserConnection{}
-	ignoredNodes := !hasCollectedField(ctx, nodesField)
+	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
 	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := limit != 0
 		if hasPagination || ignoredNodes {
@@ -253,6 +273,11 @@ func (u *UserQuery) List(ctx context.Context, offset, limit int, opts ...UserPag
 	u.Offset(offset).Limit(limit)
 	if field := collectedField(ctx, nodesField); field != nil {
 		if err = u.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+			return nil, err
+		}
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := u.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}

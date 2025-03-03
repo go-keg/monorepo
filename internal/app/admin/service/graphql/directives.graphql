@@ -4,4 +4,4 @@ directive @disabled on FIELD_DEFINITION | OBJECT
 directive @login on FIELD_DEFINITION | OBJECT
 
 """是否拥有权限"""
-directive @hasPermission(key: String!) on FIELD_DEFINITION | OBJECT
+directive @permission(key: String!) on FIELD_DEFINITION | OBJECT

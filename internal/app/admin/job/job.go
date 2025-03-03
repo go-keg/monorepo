@@ -23,7 +23,7 @@ type Job struct {
 
 func NewJob(logger log.Logger, ent *ent.Client, cfg *conf.Config) *Job {
 	j := job.NewJob(logger,
-		job.NewWorker("customer", newKafkaConsumer(cfg, logger).Run),
+		// job.NewWorker("customer", newKafkaConsumer(cfg, logger).Run),
 		job.NewWorker("example", exampleJob,
 			job.WithLimiterDuration(time.Minute),
 			job.WithReport(qyweixin.NewReport(os.Getenv("QY_WECHAT_TOKEN"))),

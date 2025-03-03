@@ -6,23 +6,29 @@ import (
 
 	"github.com/IBM/sarama"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
-	"github.com/go-keg/monorepo/internal/data/example/ent/account"
+	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
 
 type Daily struct {
-	db       *ent.Database
-	producer sarama.SyncProducer
+	db *ent.Client
+	// producer sarama.SyncProducer
 }
 
-func NewDaily(db *ent.Database, producer sarama.SyncProducer) *Daily {
-	return &Daily{db: db, producer: producer}
+func NewDaily(
+	db *ent.Client,
+	// producer sarama.SyncProducer,
+) *Daily {
+	return &Daily{
+		db: db,
+		// producer: producer,
+	}
 }
 
 // Run mock daily send statistic data to accounts
 func (r Daily) Run(ctx context.Context) error {
 	startID := 0
 	for {
-		accounts, err := r.db.Account(ctx).Query().Where(account.IDGT(startID)).Limit(200).All(ctx)
+		accounts, err := r.db.User.Query().Where(user.IDGT(startID)).Limit(200).All(ctx)
 		if err != nil {
 			return err
 		}
@@ -37,10 +43,11 @@ func (r Daily) Run(ctx context.Context) error {
 				Value: sarama.StringEncoder("statistic data..."),
 			})
 		}
-		err = r.producer.SendMessages(messages)
-		if err != nil {
-			return err
-		}
+		// err = r.producer.SendMessages(messages)
+		// if err != nil {
+		// 	return err
+		// }
+		fmt.Println(messages)
 		startID = accounts[len(accounts)-1].ID
 	}
 	return nil

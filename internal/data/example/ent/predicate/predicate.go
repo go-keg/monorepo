@@ -6,9 +6,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// Account is the predicate function for account builders.
-type Account func(*sql.Selector)
-
 // OperationLog is the predicate function for operationlog builders.
 type OperationLog func(*sql.Selector)
 

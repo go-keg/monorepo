@@ -1,9 +1,7 @@
 package data
 
 import (
-	"github.com/IBM/sarama"
 	ent2 "github.com/go-keg/keg/contrib/ent"
-	"github.com/go-keg/keg/contrib/kafka"
 	"github.com/go-keg/monorepo/internal/app/admin/conf"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/google/wire"
@@ -12,7 +10,7 @@ import (
 var ProviderSet = wire.NewSet(
 	NewEntClient,
 	NewEntDatabase,
-	NewKafkaProducer,
+	// NewKafkaProducer,
 )
 
 func NewEntClient(cfg *conf.Config) (*ent.Client, error) {
@@ -31,6 +29,6 @@ func NewEntDatabase(cfg *conf.Config) (*ent.Database, error) {
 	return ent.NewDatabase(ent.Driver(drv)), nil
 }
 
-func NewKafkaProducer(cfg *conf.Config) (sarama.SyncProducer, error) {
-	return kafka.NewSyncProducerFromConfig(cfg.Data.Kafka)
-}
+// func NewKafkaProducer(cfg *conf.Config) (sarama.SyncProducer, error) {
+// 	return kafka.NewSyncProducerFromConfig(cfg.Data.Kafka)
+// }

@@ -52,7 +52,7 @@ func NewSchema(logger log.Logger, db *ent.Database, client *ent.Client, accountU
 				}
 				return nil, gql.ErrUnauthorized
 			},
-			HasPermission: func(ctx context.Context, obj any, next graphql.Resolver, key string) (res any, err error) {
+			Permission: func(ctx context.Context, obj any, next graphql.Resolver, key string) (res any, err error) {
 				u := auth.GetUser(ctx)
 				if u == nil {
 					return nil, gql.ErrUnauthorized

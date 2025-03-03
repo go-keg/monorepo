@@ -7,79 +7,11 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/go-keg/monorepo/internal/data/example/ent/account"
 	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/role"
 	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
-
-// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (a *AccountQuery) CollectFields(ctx context.Context, satisfies ...string) (*AccountQuery, error) {
-	fc := graphql.GetFieldContext(ctx)
-	if fc == nil {
-		return a, nil
-	}
-	if err := a.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
-		return nil, err
-	}
-	return a, nil
-}
-
-func (a *AccountQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
-	path = append([]string(nil), path...)
-	var (
-		unknownSeen    bool
-		fieldSeen      = make(map[string]struct{}, len(account.Columns))
-		selectedFields = []string{account.FieldID}
-	)
-	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
-		switch field.Name {
-		case "nickname":
-			if _, ok := fieldSeen[account.FieldNickname]; !ok {
-				selectedFields = append(selectedFields, account.FieldNickname)
-				fieldSeen[account.FieldNickname] = struct{}{}
-			}
-		case "id":
-		case "__typename":
-		default:
-			unknownSeen = true
-		}
-	}
-	if !unknownSeen {
-		a.Select(selectedFields...)
-	}
-	return nil
-}
-
-type accountPaginateArgs struct {
-	first, last   *int
-	after, before *Cursor
-	opts          []AccountPaginateOption
-}
-
-func newAccountPaginateArgs(rv map[string]any) *accountPaginateArgs {
-	args := &accountPaginateArgs{}
-	if rv == nil {
-		return args
-	}
-	if v := rv[firstField]; v != nil {
-		args.first = v.(*int)
-	}
-	if v := rv[lastField]; v != nil {
-		args.last = v.(*int)
-	}
-	if v := rv[afterField]; v != nil {
-		args.after = v.(*Cursor)
-	}
-	if v := rv[beforeField]; v != nil {
-		args.before = v.(*Cursor)
-	}
-	if v, ok := rv[whereField].(*AccountWhereInput); ok {
-		args.opts = append(args.opts, WithAccountFilter(v.Filter))
-	}
-	return args
-}
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (ol *OperationLogQuery) CollectFields(ctx context.Context, satisfies ...string) (*OperationLogQuery, error) {

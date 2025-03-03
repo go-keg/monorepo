@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
-	_ "net/http/pprof"
 	"os"
 	"time"
 
@@ -55,7 +54,7 @@ func newSliceVar(defaultVal ...string) sliceVar {
 }
 
 func (s *sliceVar) Get() []string {
-	if len(s.val) <= 0 {
+	if len(s.val) == 0 {
 		return s.defaultVal
 	}
 	return s.val
@@ -161,7 +160,7 @@ func main() {
 		servers = append(servers, server.NewProxy(serverHandler, addr))
 	}
 	app := kratos.New(
-		kratos.Name(bc.Name),
+		kratos.Name(bc.GetName()),
 		kratos.Context(ctx),
 		kratos.Server(
 			servers...,

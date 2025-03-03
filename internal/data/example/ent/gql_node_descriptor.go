@@ -34,34 +34,6 @@ type Edge struct {
 }
 
 // Node implements Noder interface
-func (a *Account) Node(ctx context.Context) (node *Node, err error) {
-	node = &Node{
-		ID:     a.ID,
-		Type:   "Account",
-		Fields: make([]*Field, 2),
-		Edges:  make([]*Edge, 0),
-	}
-	var buf []byte
-	if buf, err = json.Marshal(a.Nickname); err != nil {
-		return nil, err
-	}
-	node.Fields[0] = &Field{
-		Type:  "string",
-		Name:  "nickname",
-		Value: string(buf),
-	}
-	if buf, err = json.Marshal(a.Password); err != nil {
-		return nil, err
-	}
-	node.Fields[1] = &Field{
-		Type:  "string",
-		Name:  "password",
-		Value: string(buf),
-	}
-	return node, nil
-}
-
-// Node implements Noder interface
 func (ol *OperationLog) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
 		ID:     ol.ID,

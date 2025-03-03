@@ -78,23 +78,6 @@ func (db *Database) Close() error {
 	return db.client.Close()
 }
 
-// Account is the client for interacting with the Account builders.
-func (db *Database) Account(ctx context.Context) *AccountClient {
-	return db.loadClient(ctx).Account
-}
-
-// WhereP appends storage-level predicates to the query builder. Using this method, users
-// can use type-assertion to append predicates that do not depend on any generated package.
-func (q *AccountQuery) WhereP(ps ...func(*sql.Selector)) {
-	for i := range ps {
-		q.predicates = append(q.predicates, ps[i])
-	}
-}
-
-func (m AccountMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
-	return m.Client().Mutate(ctx, mu)
-}
-
 // OperationLog is the client for interacting with the OperationLog builders.
 func (db *Database) OperationLog(ctx context.Context) *OperationLogClient {
 	return db.loadClient(ctx).OperationLog

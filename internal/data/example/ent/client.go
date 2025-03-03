@@ -15,7 +15,6 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/go-keg/monorepo/internal/data/example/ent/account"
 	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/role"
@@ -29,8 +28,6 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// Account is the client for interacting with the Account builders.
-	Account *AccountClient
 	// OperationLog is the client for interacting with the OperationLog builders.
 	OperationLog *OperationLogClient
 	// Permission is the client for interacting with the Permission builders.
@@ -52,7 +49,6 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.Account = NewAccountClient(c.config)
 	c.OperationLog = NewOperationLogClient(c.config)
 	c.Permission = NewPermissionClient(c.config)
 	c.Role = NewRoleClient(c.config)
@@ -149,7 +145,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:          ctx,
 		config:       cfg,
-		Account:      NewAccountClient(cfg),
 		OperationLog: NewOperationLogClient(cfg),
 		Permission:   NewPermissionClient(cfg),
 		Role:         NewRoleClient(cfg),
@@ -173,7 +168,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:          ctx,
 		config:       cfg,
-		Account:      NewAccountClient(cfg),
 		OperationLog: NewOperationLogClient(cfg),
 		Permission:   NewPermissionClient(cfg),
 		Role:         NewRoleClient(cfg),
@@ -184,7 +178,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Account.
+//		OperationLog.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -206,7 +200,6 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.Account.Use(hooks...)
 	c.OperationLog.Use(hooks...)
 	c.Permission.Use(hooks...)
 	c.Role.Use(hooks...)
@@ -216,7 +209,6 @@ func (c *Client) Use(hooks ...Hook) {
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.Account.Intercept(interceptors...)
 	c.OperationLog.Intercept(interceptors...)
 	c.Permission.Intercept(interceptors...)
 	c.Role.Intercept(interceptors...)
@@ -226,8 +218,6 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
-	case *AccountMutation:
-		return c.Account.mutate(ctx, m)
 	case *OperationLogMutation:
 		return c.OperationLog.mutate(ctx, m)
 	case *PermissionMutation:
@@ -238,139 +228,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.User.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
-	}
-}
-
-// AccountClient is a client for the Account schema.
-type AccountClient struct {
-	config
-}
-
-// NewAccountClient returns a client for the Account from the given config.
-func NewAccountClient(c config) *AccountClient {
-	return &AccountClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `account.Hooks(f(g(h())))`.
-func (c *AccountClient) Use(hooks ...Hook) {
-	c.hooks.Account = append(c.hooks.Account, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `account.Intercept(f(g(h())))`.
-func (c *AccountClient) Intercept(interceptors ...Interceptor) {
-	c.inters.Account = append(c.inters.Account, interceptors...)
-}
-
-// Create returns a builder for creating a Account entity.
-func (c *AccountClient) Create() *AccountCreate {
-	mutation := newAccountMutation(c.config, OpCreate)
-	return &AccountCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of Account entities.
-func (c *AccountClient) CreateBulk(builders ...*AccountCreate) *AccountCreateBulk {
-	return &AccountCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *AccountClient) MapCreateBulk(slice any, setFunc func(*AccountCreate, int)) *AccountCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &AccountCreateBulk{err: fmt.Errorf("calling to AccountClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*AccountCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &AccountCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for Account.
-func (c *AccountClient) Update() *AccountUpdate {
-	mutation := newAccountMutation(c.config, OpUpdate)
-	return &AccountUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *AccountClient) UpdateOne(a *Account) *AccountUpdateOne {
-	mutation := newAccountMutation(c.config, OpUpdateOne, withAccount(a))
-	return &AccountUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *AccountClient) UpdateOneID(id int) *AccountUpdateOne {
-	mutation := newAccountMutation(c.config, OpUpdateOne, withAccountID(id))
-	return &AccountUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for Account.
-func (c *AccountClient) Delete() *AccountDelete {
-	mutation := newAccountMutation(c.config, OpDelete)
-	return &AccountDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *AccountClient) DeleteOne(a *Account) *AccountDeleteOne {
-	return c.DeleteOneID(a.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *AccountClient) DeleteOneID(id int) *AccountDeleteOne {
-	builder := c.Delete().Where(account.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &AccountDeleteOne{builder}
-}
-
-// Query returns a query builder for Account.
-func (c *AccountClient) Query() *AccountQuery {
-	return &AccountQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeAccount},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a Account entity by its id.
-func (c *AccountClient) Get(ctx context.Context, id int) (*Account, error) {
-	return c.Query().Where(account.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *AccountClient) GetX(ctx context.Context, id int) *Account {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *AccountClient) Hooks() []Hook {
-	return c.hooks.Account
-}
-
-// Interceptors returns the client interceptors.
-func (c *AccountClient) Interceptors() []Interceptor {
-	return c.inters.Account
-}
-
-func (c *AccountClient) mutate(ctx context.Context, m *AccountMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&AccountCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&AccountUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&AccountUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&AccountDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("ent: unknown Account mutation op: %q", m.Op())
 	}
 }
 
@@ -1039,10 +896,10 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Account, OperationLog, Permission, Role, User []ent.Hook
+		OperationLog, Permission, Role, User []ent.Hook
 	}
 	inters struct {
-		Account, OperationLog, Permission, Role, User []ent.Interceptor
+		OperationLog, Permission, Role, User []ent.Interceptor
 	}
 )
 

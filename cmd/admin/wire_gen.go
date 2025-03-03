@@ -37,11 +37,7 @@ func initApp(logger log.Logger, config *conf.Config) (*kratos.App, func(), error
 	executableSchema := graphql.NewSchema(logger, database, client, accountUseCase)
 	httpServer := server.NewHTTPServer(config, logger, client, executableSchema)
 	jobJob := job.NewJob(logger, client, config)
-	syncProducer, err := data.NewKafkaProducer(config)
-	if err != nil {
-		return nil, nil, err
-	}
-	daily := schedule.NewDaily(database, syncProducer)
+	daily := schedule.NewDaily(client)
 	scheduleSchedule := schedule.NewSchedule(logger, client, daily)
 	app := newApp(logger, httpServer, jobJob, scheduleSchedule)
 	return app, func() {

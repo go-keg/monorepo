@@ -1,22 +1,22 @@
 extend type Mutation {
     """创建用户"""
-    createUser(input: CreateUserInput!): User! @hasPermission(key: "create_user")
+    createUser(input: CreateUserInput!): User! @permission(key: "create_user")
     """修改用户"""
-    updateUser(id: ID!, input: UpdateUserInput!): User! @hasPermission(key: "update_user")
+    updateUser(id: ID!, input: UpdateUserInput!): User! @permission(key: "update_user")
 
     """创建角色"""
-    createRole(input: CreateRoleInput!): Role! @hasPermission(key: "create_role")
+    createRole(input: CreateRoleInput!): Role! @permission(key: "create_role")
     """修改角色"""
-    updateRole(id: ID!, input: UpdateRoleInput!): Role! @hasPermission(key: "update_role")
+    updateRole(id: ID!, input: UpdateRoleInput!): Role! @permission(key: "update_role")
     """删除角色"""
-    deleteRole(id: ID!): Boolean! @hasPermission(key: "delete_role")
+    deleteRole(id: ID!): Boolean! @permission(key: "delete_role")
 
     """创建权限"""
-    createPermission(input: CreatePermissionInput!): Permission! @hasPermission(key: "create_permission")
+    createPermission(input: CreatePermissionInput!): Permission! @permission(key: "create_permission")
     """修改权限"""
-    updatePermission(id: ID!, input: UpdatePermissionInput!): Permission! @hasPermission(key: "update_permission")
+    updatePermission(id: ID!, input: UpdatePermissionInput!): Permission! @permission(key: "update_permission")
     """删除权限"""
-    deletePermission(id: ID!): Boolean! @hasPermission(key: "delete_permission")
+    deletePermission(id: ID!): Boolean! @permission(key: "delete_permission")
 }
 
 extend type Permission {

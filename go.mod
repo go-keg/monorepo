@@ -1,17 +1,24 @@
 module github.com/go-keg/monorepo
 
-go 1.23.1
+go 1.23.4
+
+toolchain go1.23.7
+
+replace (
+	entgo.io/contrib v0.6.0 => ./third_party/ent-contrib
+	github.com/go-kratos/gateway v0.1.0 => ./third_party/gateway
+)
 
 require (
 	entgo.io/contrib v0.6.0
-	entgo.io/ent v0.14.1
-	github.com/99designs/gqlgen v0.17.61
+	entgo.io/ent v0.14.2-0.20250116103911-b91f8daf0e32
+	github.com/99designs/gqlgen v0.17.63
 	github.com/IBM/sarama v1.43.3
 	github.com/go-keg/apis v0.1.1
 	github.com/go-keg/go-job v0.3.2
 	github.com/go-keg/keg v0.1.0
 	github.com/go-keg/swagger-api v0.1.5
-	github.com/go-kratos/gateway v0.0.0-20240722084848-1331810c0e37
+	github.com/go-kratos/gateway v0.1.0
 	github.com/go-kratos/kratos/v2 v2.8.2
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/wire v0.6.0
@@ -22,18 +29,18 @@ require (
 	github.com/samber/lo v1.47.0
 	github.com/spf13/cast v1.7.0
 	github.com/spf13/cobra v1.8.1
-	github.com/vektah/gqlparser/v2 v2.5.20
+	github.com/vektah/gqlparser/v2 v2.5.21
 	go.opentelemetry.io/otel v1.30.0
 	go.uber.org/automaxprocs v1.6.0
 	golang.org/x/crypto v0.31.0
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 	golang.org/x/sync v0.10.0
-	google.golang.org/protobuf v1.35.2
+	google.golang.org/protobuf v1.36.1
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )
 
 require (
-	ariga.io/atlas v0.25.1-0.20240717145915-af51d3945208 // indirect
+	ariga.io/atlas v0.27.1-0.20240912191503-92195304dbe1 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/XSAM/otelsql v0.34.0 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect

@@ -1,0 +1,6 @@
+[submodule "third_party/ent-contrib"]
+	path = third_party/ent-contrib
+	url = https://github.com/go-keg/ent-contrib.git
+[submodule "third_party/gateway"]
+	path = third_party/gateway
+	url = https://github.com/go-keg/gateway.git

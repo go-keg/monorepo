@@ -30,7 +30,6 @@ func NewSchedule(logger log.Logger, client *ent.Client, daily *Daily) *Schedule 
 
 func (s Schedule) Start(ctx context.Context) error {
 	_, _ = s.Add("example", "* * * * *", s.example)
-	_, _ = s.Add("test", "* * * * *", test)
 	_, _ = s.Add("daily", "0 0 * * *", func() error {
 		return s.daily.Run(ctx)
 	})
@@ -43,10 +42,5 @@ func (s Schedule) Stop(ctx context.Context) error {
 
 func (s Schedule) example() error {
 	s.log.Info("todo")
-	return nil
-}
-
-func test() error {
-	// fmt.Println("test")
 	return nil
 }

@@ -26,6 +26,15 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id int, input ent.Upd
 	return r.ent.User.UpdateOneID(id).SetInput(input).Save(ctx)
 }
 
+// DeleteUser is the resolver for the deleteUser field.
+func (r *mutationResolver) DeleteUser(ctx context.Context, id int) (bool, error) {
+	err := r.ent.User.DeleteOneID(id).Exec(ctx)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
 // CreateRole is the resolver for the createRole field.
 func (r *mutationResolver) CreateRole(ctx context.Context, input ent.CreateRoleInput) (*ent.Role, error) {
 	return r.ent.Role.Create().SetInput(input).Save(ctx)

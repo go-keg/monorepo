@@ -3,6 +3,8 @@ extend type Mutation {
     createUser(input: CreateUserInput!): User! @permission(key: "create_user")
     """修改用户"""
     updateUser(id: ID!, input: UpdateUserInput!): User! @permission(key: "update_user")
+    """删除用户"""
+    deleteUser(id: ID!): Boolean! @permission(key: "delete_user")
 
     """创建角色"""
     createRole(input: CreateRoleInput!): Role! @permission(key: "create_role")

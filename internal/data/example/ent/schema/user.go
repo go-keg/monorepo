@@ -37,7 +37,8 @@ func (User) Annotations() []schema.Annotation {
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("email").Unique().Annotations(entgql.OrderField("EMAIL")),
+		field.Int("id").Annotations(entgql.OrderField("id")),
+		field.String("email").Unique().Annotations(entgql.OrderField("email")),
 		field.String("nickname"),
 		field.String("avatar").Optional(),
 		field.String("password").Sensitive(),

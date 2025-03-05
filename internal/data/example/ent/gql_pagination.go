@@ -353,9 +353,9 @@ func (f OperationLogOrderField) String() string {
 	var str string
 	switch f.column {
 	case OperationLogOrderFieldCreatedAt.column:
-		str = "created_at"
+		str = "createdAt"
 	case OperationLogOrderFieldUpdatedAt.column:
-		str = "updated_at"
+		str = "updatedAt"
 	}
 	return str
 }
@@ -372,9 +372,9 @@ func (f *OperationLogOrderField) UnmarshalGQL(v interface{}) error {
 		return fmt.Errorf("OperationLogOrderField %T must be a string", v)
 	}
 	switch str {
-	case "created_at":
+	case "createdAt":
 		*f = *OperationLogOrderFieldCreatedAt
-	case "updated_at":
+	case "updatedAt":
 		*f = *OperationLogOrderFieldUpdatedAt
 	default:
 		return fmt.Errorf("%s is not a valid OperationLogOrderField", str)
@@ -674,9 +674,9 @@ func (f PermissionOrderField) String() string {
 	var str string
 	switch f.column {
 	case PermissionOrderFieldCreatedAt.column:
-		str = "created_at"
+		str = "createdAt"
 	case PermissionOrderFieldUpdatedAt.column:
-		str = "updated_at"
+		str = "updatedAt"
 	}
 	return str
 }
@@ -693,9 +693,9 @@ func (f *PermissionOrderField) UnmarshalGQL(v interface{}) error {
 		return fmt.Errorf("PermissionOrderField %T must be a string", v)
 	}
 	switch str {
-	case "created_at":
+	case "createdAt":
 		*f = *PermissionOrderFieldCreatedAt
-	case "updated_at":
+	case "updatedAt":
 		*f = *PermissionOrderFieldUpdatedAt
 	default:
 		return fmt.Errorf("%s is not a valid PermissionOrderField", str)
@@ -995,9 +995,9 @@ func (f RoleOrderField) String() string {
 	var str string
 	switch f.column {
 	case RoleOrderFieldCreatedAt.column:
-		str = "created_at"
+		str = "createdAt"
 	case RoleOrderFieldUpdatedAt.column:
-		str = "updated_at"
+		str = "updatedAt"
 	}
 	return str
 }
@@ -1014,9 +1014,9 @@ func (f *RoleOrderField) UnmarshalGQL(v interface{}) error {
 		return fmt.Errorf("RoleOrderField %T must be a string", v)
 	}
 	switch str {
-	case "created_at":
+	case "createdAt":
 		*f = *RoleOrderFieldCreatedAt
-	case "updated_at":
+	case "updatedAt":
 		*f = *RoleOrderFieldUpdatedAt
 	default:
 		return fmt.Errorf("%s is not a valid RoleOrderField", str)
@@ -1281,6 +1281,20 @@ func (u *UserQuery) Paginate(
 }
 
 var (
+	// UserOrderFieldID orders User by id.
+	UserOrderFieldID = &UserOrderField{
+		Value: func(u *User) (ent.Value, error) {
+			return u.ID, nil
+		},
+		column: user.FieldID,
+		toTerm: user.ByID,
+		toCursor: func(u *User) Cursor {
+			return Cursor{
+				ID:    u.ID,
+				Value: u.ID,
+			}
+		},
+	}
 	// UserOrderFieldCreatedAt orders User by created_at.
 	UserOrderFieldCreatedAt = &UserOrderField{
 		Value: func(u *User) (ent.Value, error) {
@@ -1329,12 +1343,14 @@ var (
 func (f UserOrderField) String() string {
 	var str string
 	switch f.column {
+	case UserOrderFieldID.column:
+		str = "id"
 	case UserOrderFieldCreatedAt.column:
-		str = "created_at"
+		str = "createdAt"
 	case UserOrderFieldUpdatedAt.column:
-		str = "updated_at"
+		str = "updatedAt"
 	case UserOrderFieldEmail.column:
-		str = "EMAIL"
+		str = "email"
 	}
 	return str
 }
@@ -1351,11 +1367,13 @@ func (f *UserOrderField) UnmarshalGQL(v interface{}) error {
 		return fmt.Errorf("UserOrderField %T must be a string", v)
 	}
 	switch str {
-	case "created_at":
+	case "id":
+		*f = *UserOrderFieldID
+	case "createdAt":
 		*f = *UserOrderFieldCreatedAt
-	case "updated_at":
+	case "updatedAt":
 		*f = *UserOrderFieldUpdatedAt
-	case "EMAIL":
+	case "email":
 		*f = *UserOrderFieldEmail
 	default:
 		return fmt.Errorf("%s is not a valid UserOrderField", str)

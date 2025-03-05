@@ -134,8 +134,8 @@ input OperationLogOrder {
 Properties by which OperationLog connections can be ordered.
 """
 enum OperationLogOrderField {
-  created_at
-  updated_at
+  createdAt
+  updatedAt
 }
 """
 OperationLogWhereInput is used for filtering OperationLog objects.
@@ -312,8 +312,8 @@ input PermissionOrder {
 Properties by which Permission connections can be ordered.
 """
 enum PermissionOrderField {
-  created_at
-  updated_at
+  createdAt
+  updatedAt
 }
 """
 PermissionType is enum for the field type
@@ -787,8 +787,8 @@ input RoleOrder {
 Properties by which Role connections can be ordered.
 """
 enum RoleOrderField {
-  created_at
-  updated_at
+  createdAt
+  updatedAt
 }
 """
 RoleWhereInput is used for filtering Role objects.
@@ -1001,9 +1001,10 @@ input UserOrder {
 Properties by which User connections can be ordered.
 """
 enum UserOrderField {
-  created_at
-  updated_at
-  EMAIL
+  id
+  createdAt
+  updatedAt
+  email
 }
 """
 UserStatus is enum for the field status

@@ -3,7 +3,6 @@
 package migrate
 
 import (
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
@@ -193,11 +192,7 @@ var (
 
 func init() {
 	OperationLogsTable.ForeignKeys[0].RefTable = UsersTable
-	OperationLogsTable.Annotation = &entsql.Annotation{}
 	PermissionsTable.ForeignKeys[0].RefTable = PermissionsTable
-	PermissionsTable.Annotation = &entsql.Annotation{}
-	RolesTable.Annotation = &entsql.Annotation{}
-	UsersTable.Annotation = &entsql.Annotation{}
 	RolePermissionsTable.ForeignKeys[0].RefTable = RolesTable
 	RolePermissionsTable.ForeignKeys[1].RefTable = PermissionsTable
 	UserRolesTable.ForeignKeys[0].RefTable = UsersTable

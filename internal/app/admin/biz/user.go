@@ -16,20 +16,23 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-type AccountUseCase struct {
+type UserRepo interface {
+	GetUserPermissionKeys(ctx context.Context, userID int) ([]string, error)
+}
+type UserUseCase struct {
 	cfg    *conf.Config
 	dialer *gomail.Dialer
 }
 
-func NewAccountUseCase(cfg *conf.Config) *AccountUseCase {
-	return &AccountUseCase{
+func NewUserUseCase(cfg *conf.Config) *UserUseCase {
+	return &UserUseCase{
 		cfg:    cfg,
 		dialer: gomail.NewDialer(cfg.Email.Host, cast.ToInt(cfg.Email.Port), cfg.Email.Username, cfg.Email.Password),
 	}
 }
 
-func (r AccountUseCase) GenerateToken(_ context.Context, userId int) (string, int64, error) {
-	exp := time.Now().Add(time.Hour * 24 * 7).Unix()
+func (r UserUseCase) GenerateToken(_ context.Context, userId int) (string, int64, error) {
+	exp := time.Now().Add(time.Minute * 2).Unix()
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": cast.ToString(userId),
 		"exp": exp,               // Expiration Time
@@ -41,16 +44,16 @@ func (r AccountUseCase) GenerateToken(_ context.Context, userId int) (string, in
 	return token, exp, nil
 }
 
-func (r AccountUseCase) VerifyPassword(account *ent.User, password string) bool {
+func (r UserUseCase) VerifyPassword(account *ent.User, password string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(account.Password), []byte(password)) == nil
 }
 
-func (r AccountUseCase) GeneratePassword(password string) string {
+func (r UserUseCase) GeneratePassword(password string) string {
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
 	return string(hashed)
 }
 
-func (r AccountUseCase) SendEmail(email string, emailType model.VerifyCodeType) error {
+func (r UserUseCase) SendEmail(email string, emailType model.VerifyCodeType) error {
 	code := lo.RandomString(6, lo.NumbersCharset)
 	cache.LocalSet(fmt.Sprintf("send_email:%s:%s", emailType, email), code, time.Minute*15)
 	m := gomail.NewMessage()
@@ -67,7 +70,7 @@ func (r AccountUseCase) SendEmail(email string, emailType model.VerifyCodeType) 
 	return r.dialer.DialAndSend(m)
 }
 
-func (r AccountUseCase) CheckEmailVerifyCode(email string, emailType model.VerifyCodeType, code string) bool {
+func (r UserUseCase) CheckEmailVerifyCode(email string, emailType model.VerifyCodeType, code string) bool {
 	v, ok := cache.LocalGet(fmt.Sprintf("send_email:%s:%s", emailType, email))
 	if !ok {
 		return false

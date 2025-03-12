@@ -22,6 +22,24 @@ func (ol *OperationLogQuery) CustomCollectFields(ctx context.Context, path ...st
 	return ol, nil
 }
 
+// AllCollectFields
+func (ol *OperationLogQuery) AllCollectFields(ctx context.Context, path ...string) ([]*OperationLog, error) {
+	_query, err := ol.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.All(ctx)
+}
+
+// FirstCollectFields
+func (ol *OperationLogQuery) FirstCollectFields(ctx context.Context, path ...string) (*OperationLog, error) {
+	_query, err := ol.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.First(ctx)
+}
+
 // List executes the query and returns totalCount and nodes []*OperationLog.
 func (ol *OperationLogQuery) List(ctx context.Context, offset, limit int, opts ...OperationLogPaginateOption) (*OperationLogConnection, error) {
 	pager, err := newOperationLogPager(opts, false)
@@ -76,6 +94,24 @@ func (pe *PermissionQuery) CustomCollectFields(ctx context.Context, path ...stri
 		}
 	}
 	return pe, nil
+}
+
+// AllCollectFields
+func (pe *PermissionQuery) AllCollectFields(ctx context.Context, path ...string) ([]*Permission, error) {
+	_query, err := pe.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.All(ctx)
+}
+
+// FirstCollectFields
+func (pe *PermissionQuery) FirstCollectFields(ctx context.Context, path ...string) (*Permission, error) {
+	_query, err := pe.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.First(ctx)
 }
 
 // List executes the query and returns totalCount and nodes []*Permission.
@@ -134,6 +170,24 @@ func (r *RoleQuery) CustomCollectFields(ctx context.Context, path ...string) (*R
 	return r, nil
 }
 
+// AllCollectFields
+func (r *RoleQuery) AllCollectFields(ctx context.Context, path ...string) ([]*Role, error) {
+	_query, err := r.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.All(ctx)
+}
+
+// FirstCollectFields
+func (r *RoleQuery) FirstCollectFields(ctx context.Context, path ...string) (*Role, error) {
+	_query, err := r.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.First(ctx)
+}
+
 // List executes the query and returns totalCount and nodes []*Role.
 func (r *RoleQuery) List(ctx context.Context, offset, limit int, opts ...RolePaginateOption) (*RoleConnection, error) {
 	pager, err := newRolePager(opts, false)
@@ -188,6 +242,24 @@ func (u *UserQuery) CustomCollectFields(ctx context.Context, path ...string) (*U
 		}
 	}
 	return u, nil
+}
+
+// AllCollectFields
+func (u *UserQuery) AllCollectFields(ctx context.Context, path ...string) ([]*User, error) {
+	_query, err := u.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.All(ctx)
+}
+
+// FirstCollectFields
+func (u *UserQuery) FirstCollectFields(ctx context.Context, path ...string) (*User, error) {
+	_query, err := u.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.First(ctx)
 }
 
 // List executes the query and returns totalCount and nodes []*User.

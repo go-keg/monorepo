@@ -9,6 +9,18 @@ import (
 	"github.com/go-keg/monorepo/internal/data/example/ent"
 )
 
+// The AppFunc type is an adapter to allow the use of ordinary
+// function as App mutator.
+type AppFunc func(context.Context, *ent.AppMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AppFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.AppMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AppMutation", m)
+}
+
 // The OperationLogFunc type is an adapter to allow the use of ordinary
 // function as OperationLog mutator.
 type OperationLogFunc func(context.Context, *ent.OperationLogMutation) (ent.Value, error)

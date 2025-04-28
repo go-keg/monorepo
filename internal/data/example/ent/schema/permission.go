@@ -17,7 +17,7 @@ type Permission struct {
 
 func (Permission) Mixin() []ent.Mixin {
 	return []ent.Mixin{
-		mixin.TimeMixin{},
+		mixin.TimeMixin{SortFieldCaseStyle: mixin.NamingStyleCamelCase},
 	}
 }
 

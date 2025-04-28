@@ -2,11 +2,9 @@ package server
 
 import (
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/handler/extension"
-	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-keg/apis/api"
+	"github.com/go-keg/keg/contrib/gql"
 	"github.com/go-keg/monorepo/internal/app/admin/conf"
 	"github.com/go-keg/monorepo/internal/app/admin/server/auth"
 	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/dataloader"
@@ -19,12 +17,13 @@ import (
 func NewHTTPServer(cfg *conf.Config, logger log.Logger, client *ent.Client, schema graphql.ExecutableSchema) *http.Server {
 	srv := http.NewServer(cfg.Server.Http.HttpOptions(logger)...)
 	// graphql
-	gqlSrv := handler.New(schema)
-	gqlSrv.AddTransport(transport.POST{})
-	gqlSrv.Use(extension.Introspection{})
+	gqlSrv := gql.NewServer(schema)
 	loader := dataloader.NewDataLoader(client)
 	srv.Handle("/query", auth.Middleware(cfg.Key, client, dataloader.Middleware(loader, gqlSrv)))
-	srv.HandleFunc("/graphql-ui", playground.Handler("Admin", "/query"))
+	srv.HandleFunc("/graphql-ui", playground.Handler("Admin", "/query",
+		playground.WithStoragePrefix("keg_"),
+		playground.WithGraphiqlEnablePluginExplorer(true),
+	))
 	srv.HandlePrefix("/swagger/", swagger.Handler(api.FS))
 	return srv
 }

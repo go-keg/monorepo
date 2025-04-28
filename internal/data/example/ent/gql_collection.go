@@ -7,11 +7,131 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/go-keg/monorepo/internal/data/example/ent/app"
 	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/role"
 	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (a *AppQuery) CollectFields(ctx context.Context, satisfies ...string) (*AppQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return a, nil
+	}
+	if err := a.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return a, nil
+}
+
+func (a *AppQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(app.Columns))
+		selectedFields = []string{app.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "createdAt":
+			if _, ok := fieldSeen[app.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, app.FieldCreatedAt)
+				fieldSeen[app.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[app.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, app.FieldUpdatedAt)
+				fieldSeen[app.FieldUpdatedAt] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[app.FieldName]; !ok {
+				selectedFields = append(selectedFields, app.FieldName)
+				fieldSeen[app.FieldName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[app.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, app.FieldDescription)
+				fieldSeen[app.FieldDescription] = struct{}{}
+			}
+		case "token":
+			if _, ok := fieldSeen[app.FieldToken]; !ok {
+				selectedFields = append(selectedFields, app.FieldToken)
+				fieldSeen[app.FieldToken] = struct{}{}
+			}
+		case "type":
+			if _, ok := fieldSeen[app.FieldType]; !ok {
+				selectedFields = append(selectedFields, app.FieldType)
+				fieldSeen[app.FieldType] = struct{}{}
+			}
+		case "usable":
+			if _, ok := fieldSeen[app.FieldUsable]; !ok {
+				selectedFields = append(selectedFields, app.FieldUsable)
+				fieldSeen[app.FieldUsable] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		a.Select(selectedFields...)
+	}
+	return nil
+}
+
+type appPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []AppPaginateOption
+}
+
+func newAppPaginateArgs(rv map[string]any) *appPaginateArgs {
+	args := &appPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &AppOrder{Field: &AppOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithAppOrder(order))
+			}
+		case *AppOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithAppOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*AppWhereInput); ok {
+		args.opts = append(args.opts, WithAppFilter(v.Filter))
+	}
+	return args
+}
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (ol *OperationLogQuery) CollectFields(ctx context.Context, satisfies ...string) (*OperationLogQuery, error) {

@@ -78,6 +78,23 @@ func (db *Database) Close() error {
 	return db.client.Close()
 }
 
+// App is the client for interacting with the App builders.
+func (db *Database) App(ctx context.Context) *AppClient {
+	return db.loadClient(ctx).App
+}
+
+// WhereP appends storage-level predicates to the query builder. Using this method, users
+// can use type-assertion to append predicates that do not depend on any generated package.
+func (q *AppQuery) WhereP(ps ...func(*sql.Selector)) {
+	for i := range ps {
+		q.predicates = append(q.predicates, ps[i])
+	}
+}
+
+func (m AppMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
+	return m.Client().Mutate(ctx, mu)
+}
+
 // OperationLog is the client for interacting with the OperationLog builders.
 func (db *Database) OperationLog(ctx context.Context) *OperationLogClient {
 	return db.loadClient(ctx).OperationLog

@@ -33,8 +33,9 @@ func initApp(logger log.Logger, config *conf.Config) (*kratos.App, func(), error
 	if err != nil {
 		return nil, nil, err
 	}
-	accountUseCase := biz.NewAccountUseCase(config)
-	executableSchema := graphql.NewSchema(logger, database, client, accountUseCase)
+	userUseCase := biz.NewUserUseCase(config)
+	userRepo := data.NewUserRepo(client)
+	executableSchema := graphql.NewSchema(logger, database, client, userUseCase, userRepo)
 	httpServer := server.NewHTTPServer(config, logger, client, executableSchema)
 	jobJob := job.NewJob(logger, client, config)
 	daily := schedule.NewDaily(client)

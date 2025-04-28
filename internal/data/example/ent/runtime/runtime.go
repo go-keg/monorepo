@@ -5,6 +5,7 @@ package runtime
 import (
 	"time"
 
+	"github.com/go-keg/monorepo/internal/data/example/ent/app"
 	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/role"
@@ -16,6 +17,25 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	appMixin := schema.App{}.Mixin()
+	appMixinFields0 := appMixin[0].Fields()
+	_ = appMixinFields0
+	appFields := schema.App{}.Fields()
+	_ = appFields
+	// appDescCreatedAt is the schema descriptor for created_at field.
+	appDescCreatedAt := appMixinFields0[0].Descriptor()
+	// app.DefaultCreatedAt holds the default value on creation for the created_at field.
+	app.DefaultCreatedAt = appDescCreatedAt.Default.(func() time.Time)
+	// appDescUpdatedAt is the schema descriptor for updated_at field.
+	appDescUpdatedAt := appMixinFields0[1].Descriptor()
+	// app.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	app.DefaultUpdatedAt = appDescUpdatedAt.Default.(func() time.Time)
+	// app.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	app.UpdateDefaultUpdatedAt = appDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// appDescUsable is the schema descriptor for usable field.
+	appDescUsable := appFields[4].Descriptor()
+	// app.DefaultUsable holds the default value on creation for the usable field.
+	app.DefaultUsable = appDescUsable.Default.(bool)
 	operationlogMixin := schema.OperationLog{}.Mixin()
 	operationlogMixinFields0 := operationlogMixin[0].Fields()
 	_ = operationlogMixinFields0

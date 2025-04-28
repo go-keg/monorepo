@@ -9,6 +9,80 @@ import (
 )
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (a *AppQuery) CustomCollectFields(ctx context.Context, path ...string) (*AppQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return a, nil
+	}
+	if field := collectedField(ctx, path...); field != nil {
+		if err := a.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, path); err != nil {
+			return nil, err
+		}
+	}
+	return a, nil
+}
+
+// AllCollectFields
+func (a *AppQuery) AllCollectFields(ctx context.Context, path ...string) ([]*App, error) {
+	_query, err := a.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.All(ctx)
+}
+
+// FirstCollectFields
+func (a *AppQuery) FirstCollectFields(ctx context.Context, path ...string) (*App, error) {
+	_query, err := a.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.First(ctx)
+}
+
+// List executes the query and returns totalCount and nodes []*App.
+func (a *AppQuery) List(ctx context.Context, offset, limit int, opts ...AppPaginateOption) (*AppConnection, error) {
+	pager, err := newAppPager(opts, false)
+	if err != nil {
+		return nil, err
+	}
+	if _, err = pager.applyFilter(a); err != nil {
+		return nil, err
+	}
+	conn := &AppConnection{}
+	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
+	if hasCollectedField(ctx, totalCountField) {
+		hasPagination := limit != 0
+		if hasPagination || ignoredNodes {
+			c := a.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+		}
+	}
+	if ignoredNodes || (limit == 0) {
+		return conn, nil
+	}
+	a.Offset(offset).Limit(limit)
+	if field := collectedField(ctx, nodesField); field != nil {
+		if err = a.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+			return nil, err
+		}
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := a.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	conn.Nodes, err = pager.applyOrder(a).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return conn, nil
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (ol *OperationLogQuery) CustomCollectFields(ctx context.Context, path ...string) (*OperationLogQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {

@@ -3,9 +3,88 @@
 package ent
 
 import (
+	"github.com/go-keg/monorepo/internal/data/example/ent/app"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
+
+// CreateAppInput represents a mutation input for creating apps.
+type CreateAppInput struct {
+	Name        string
+	Description *string
+	Token       *string
+	Type        app.Type
+	Usable      *bool
+}
+
+// Mutate applies the CreateAppInput on the AppMutation builder.
+func (i *CreateAppInput) Mutate(m *AppMutation) {
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Token; v != nil {
+		m.SetToken(*v)
+	}
+	m.SetType(i.Type)
+	if v := i.Usable; v != nil {
+		m.SetUsable(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateAppInput on the AppCreate builder.
+func (c *AppCreate) SetInput(i CreateAppInput) *AppCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateAppInput represents a mutation input for updating apps.
+type UpdateAppInput struct {
+	Name             *string
+	ClearDescription bool
+	Description      *string
+	ClearToken       bool
+	Token            *string
+	Type             *app.Type
+	Usable           *bool
+}
+
+// Mutate applies the UpdateAppInput on the AppMutation builder.
+func (i *UpdateAppInput) Mutate(m *AppMutation) {
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if i.ClearToken {
+		m.ClearToken()
+	}
+	if v := i.Token; v != nil {
+		m.SetToken(*v)
+	}
+	if v := i.Type; v != nil {
+		m.SetType(*v)
+	}
+	if v := i.Usable; v != nil {
+		m.SetUsable(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateAppInput on the AppUpdate builder.
+func (c *AppUpdate) SetInput(i UpdateAppInput) *AppUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateAppInput on the AppUpdateOne builder.
+func (c *AppUpdateOne) SetInput(i UpdateAppInput) *AppUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
 
 // CreateOperationLogInput represents a mutation input for creating operationlogs.
 type CreateOperationLogInput struct {

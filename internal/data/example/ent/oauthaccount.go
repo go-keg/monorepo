@@ -14,7 +14,7 @@ import (
 	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 )
 
-// OAuthAccount is the model entity for the OAuthAccount schema.
+// 用户关联OAuth账号
 type OAuthAccount struct {
 	config `json:"-"`
 	// ID of the ent.

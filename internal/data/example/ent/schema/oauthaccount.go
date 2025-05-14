@@ -2,6 +2,8 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -15,6 +17,14 @@ type OAuthAccount struct {
 func (OAuthAccount) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("provider", "provider_user_id").Unique(),
+	}
+}
+
+// Annotations of the Permission.
+func (OAuthAccount) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		schema.Comment("用户关联OAuth账号"),
+		entsql.WithComments(true),
 	}
 }
 

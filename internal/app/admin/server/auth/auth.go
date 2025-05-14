@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -10,17 +11,15 @@ import (
 	"github.com/spf13/cast"
 )
 
-type ctxKey string
-
-const userID ctxKey = "userID"
-const userKey ctxKey = "user"
+type userIDKey struct{}
+type userKey struct{}
 
 func GetUserID(ctx context.Context) int {
-	return cast.ToInt(ctx.Value(userID))
+	return cast.ToInt(ctx.Value(userIDKey{}))
 }
 
 func GetUser(ctx context.Context) *ent.User {
-	v := ctx.Value(userKey)
+	v := ctx.Value(userKey{})
 	if v == nil {
 		return nil
 	}
@@ -32,17 +31,26 @@ func Middleware(key string, client *ent.Client, next http.Handler) http.Handler 
 		token := r.Header.Get("Authorization")
 		auths := strings.SplitN(token, " ", 2)
 		if len(auths) == 2 && auths[0] == "Bearer" {
-			claims := jwt.RegisteredClaims{}
-			_, err := jwt.ParseWithClaims(auths[1], &claims, func(token *jwt.Token) (any, error) {
+			parse, err := jwt.Parse(token, func(token *jwt.Token) (any, error) {
+				if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+					return nil, fmt.Errorf("unexpected signing method")
+				}
 				return []byte(key), nil
 			})
+			if err != nil {
+				return
+			}
+			subject, err := parse.Claims.GetSubject()
+			if err != nil {
+				return
+			}
 			if err == nil {
-				u, err := client.User.Get(r.Context(), cast.ToInt(claims.Subject))
+				user, err := client.User.Get(r.Context(), cast.ToInt(subject))
 				if err != nil {
 					return
 				}
-				ctx := context.WithValue(r.Context(), userID, u.ID)
-				ctx = context.WithValue(ctx, userKey, u)
+				ctx := context.WithValue(r.Context(), userIDKey{}, user.ID)
+				ctx = context.WithValue(ctx, userKey{}, user)
 				r = r.WithContext(ctx)
 			}
 		}

@@ -20,9 +20,8 @@ func (r *mutationResolver) LinkGoogleAccount(ctx context.Context, code string) (
 	if err != nil {
 		return false, err
 	}
-	u := auth.GetUser(ctx)
 	err = r.userRepo.BindOAuthAccount(ctx, &ent.OAuthAccount{
-		UserID:         u.ID,
+		UserID:         auth.GetUserID(ctx),
 		Provider:       oauthaccount.ProviderGoogle,
 		ProviderUserID: info.ID,
 		Profile:        info.Map(),
@@ -35,8 +34,7 @@ func (r *mutationResolver) LinkGoogleAccount(ctx context.Context, code string) (
 
 // UnlinkGoogleAccount is the resolver for the unlinkGoogleAccount field.
 func (r *mutationResolver) UnlinkGoogleAccount(ctx context.Context) (bool, error) {
-	u := auth.GetUser(ctx)
-	err := r.userRepo.UnBindOAuthAccount(ctx, u.ID, oauthaccount.ProviderGoogle)
+	err := r.userRepo.UnBindOAuthAccount(ctx, auth.GetUserID(ctx), oauthaccount.ProviderGoogle)
 	if err != nil {
 		return false, err
 	}

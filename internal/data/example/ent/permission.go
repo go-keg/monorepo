@@ -36,7 +36,7 @@ type Permission struct {
 	Description string `json:"description,omitempty"`
 	// Sort holds the value of the "sort" field.
 	Sort int `json:"sort,omitempty"`
-	// Attrs holds the value of the "attrs" field.
+	// 自定义属性
 	Attrs map[string]interface{} `json:"attrs,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PermissionQuery when eager-loading is set.

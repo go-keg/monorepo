@@ -1246,6 +1246,34 @@ var (
 			}
 		},
 	}
+	// PermissionOrderFieldName orders Permission by name.
+	PermissionOrderFieldName = &PermissionOrderField{
+		Value: func(pe *Permission) (ent.Value, error) {
+			return pe.Name, nil
+		},
+		column: permission.FieldName,
+		toTerm: permission.ByName,
+		toCursor: func(pe *Permission) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.Name,
+			}
+		},
+	}
+	// PermissionOrderFieldSort orders Permission by sort.
+	PermissionOrderFieldSort = &PermissionOrderField{
+		Value: func(pe *Permission) (ent.Value, error) {
+			return pe.Sort, nil
+		},
+		column: permission.FieldSort,
+		toTerm: permission.BySort,
+		toCursor: func(pe *Permission) Cursor {
+			return Cursor{
+				ID:    pe.ID,
+				Value: pe.Sort,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -1256,6 +1284,10 @@ func (f PermissionOrderField) String() string {
 		str = "createdAt"
 	case PermissionOrderFieldUpdatedAt.column:
 		str = "updatedAt"
+	case PermissionOrderFieldName.column:
+		str = "name"
+	case PermissionOrderFieldSort.column:
+		str = "sort"
 	}
 	return str
 }
@@ -1276,6 +1308,10 @@ func (f *PermissionOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *PermissionOrderFieldCreatedAt
 	case "updatedAt":
 		*f = *PermissionOrderFieldUpdatedAt
+	case "name":
+		*f = *PermissionOrderFieldName
+	case "sort":
+		*f = *PermissionOrderFieldSort
 	default:
 		return fmt.Errorf("%s is not a valid PermissionOrderField", str)
 	}
@@ -1567,6 +1603,34 @@ var (
 			}
 		},
 	}
+	// RoleOrderFieldName orders Role by name.
+	RoleOrderFieldName = &RoleOrderField{
+		Value: func(r *Role) (ent.Value, error) {
+			return r.Name, nil
+		},
+		column: role.FieldName,
+		toTerm: role.ByName,
+		toCursor: func(r *Role) Cursor {
+			return Cursor{
+				ID:    r.ID,
+				Value: r.Name,
+			}
+		},
+	}
+	// RoleOrderFieldSort orders Role by sort.
+	RoleOrderFieldSort = &RoleOrderField{
+		Value: func(r *Role) (ent.Value, error) {
+			return r.Sort, nil
+		},
+		column: role.FieldSort,
+		toTerm: role.BySort,
+		toCursor: func(r *Role) Cursor {
+			return Cursor{
+				ID:    r.ID,
+				Value: r.Sort,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -1577,6 +1641,10 @@ func (f RoleOrderField) String() string {
 		str = "createdAt"
 	case RoleOrderFieldUpdatedAt.column:
 		str = "updatedAt"
+	case RoleOrderFieldName.column:
+		str = "name"
+	case RoleOrderFieldSort.column:
+		str = "sort"
 	}
 	return str
 }
@@ -1597,6 +1665,10 @@ func (f *RoleOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RoleOrderFieldCreatedAt
 	case "updatedAt":
 		*f = *RoleOrderFieldUpdatedAt
+	case "name":
+		*f = *RoleOrderFieldName
+	case "sort":
+		*f = *RoleOrderFieldSort
 	default:
 		return fmt.Errorf("%s is not a valid RoleOrderField", str)
 	}
@@ -1860,20 +1932,6 @@ func (u *UserQuery) Paginate(
 }
 
 var (
-	// UserOrderFieldID orders User by id.
-	UserOrderFieldID = &UserOrderField{
-		Value: func(u *User) (ent.Value, error) {
-			return u.ID, nil
-		},
-		column: user.FieldID,
-		toTerm: user.ByID,
-		toCursor: func(u *User) Cursor {
-			return Cursor{
-				ID:    u.ID,
-				Value: u.ID,
-			}
-		},
-	}
 	// UserOrderFieldCreatedAt orders User by created_at.
 	UserOrderFieldCreatedAt = &UserOrderField{
 		Value: func(u *User) (ent.Value, error) {
@@ -1922,8 +1980,6 @@ var (
 func (f UserOrderField) String() string {
 	var str string
 	switch f.column {
-	case UserOrderFieldID.column:
-		str = "id"
 	case UserOrderFieldCreatedAt.column:
 		str = "createdAt"
 	case UserOrderFieldUpdatedAt.column:
@@ -1946,8 +2002,6 @@ func (f *UserOrderField) UnmarshalGQL(v interface{}) error {
 		return fmt.Errorf("UserOrderField %T must be a string", v)
 	}
 	switch str {
-	case "id":
-		*f = *UserOrderFieldID
 	case "createdAt":
 		*f = *UserOrderFieldCreatedAt
 	case "updatedAt":

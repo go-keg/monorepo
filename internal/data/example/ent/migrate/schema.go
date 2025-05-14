@@ -48,6 +48,7 @@ var (
 	// OauthAccountsTable holds the schema information for the "oauth_accounts" table.
 	OauthAccountsTable = &schema.Table{
 		Name:       "oauth_accounts",
+		Comment:    "用户关联OAuth账号",
 		Columns:    OauthAccountsColumns,
 		PrimaryKey: []*schema.Column{OauthAccountsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
@@ -109,7 +110,7 @@ var (
 		{Name: "path", Type: field.TypeString, Nullable: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "sort", Type: field.TypeInt, Default: 1000},
-		{Name: "attrs", Type: field.TypeJSON, Nullable: true},
+		{Name: "attrs", Type: field.TypeJSON, Nullable: true, Comment: "自定义属性"},
 		{Name: "parent_id", Type: field.TypeInt, Nullable: true},
 	}
 	// PermissionsTable holds the schema information for the "permissions" table.

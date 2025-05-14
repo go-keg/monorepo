@@ -37,7 +37,7 @@ func (Permission) Annotations() []schema.Annotation {
 func (Permission) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("parent_id").Optional().Nillable().Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
-		field.String("name"),
+		field.String("name").Annotations(entgql.OrderField("name")),
 		field.String("key").Optional().Unique(),
 		field.Enum("type").Values("menu", "page", "element").Annotations(annotations.Enums{
 			"menu":    "目录",
@@ -46,8 +46,8 @@ func (Permission) Fields() []ent.Field {
 		}).Comment("权限类型"),
 		field.String("path").Optional(),
 		field.String("description").Optional(),
-		field.Int("sort").Default(1000),
-		field.JSON("attrs", map[string]any{}).Optional(),
+		field.Int("sort").Default(1000).Annotations(entgql.OrderField("sort")),
+		field.JSON("attrs", map[string]any{}).Optional().Comment("自定义属性"),
 	}
 }
 

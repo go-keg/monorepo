@@ -35,9 +35,9 @@ func (Role) Annotations() []schema.Annotation {
 // Fields of the Role.
 func (Role) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("name"),
+		field.String("name").NotEmpty().Annotations(entgql.OrderField("name")),
 		field.String("description").Optional(),
-		field.Int("sort").Default(1000),
+		field.Int("sort").Default(1000).Annotations(entgql.OrderField("sort")),
 	}
 }
 

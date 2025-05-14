@@ -259,6 +259,9 @@ input CreatePermissionInput {
   path: String
   description: String
   sort: Int
+  """
+  自定义属性
+  """
   attrs: Map
   parentID: ID
   childIDs: [ID!]
@@ -645,6 +648,9 @@ type Permission implements Node {
   path: String
   description: String
   sort: Int!
+  """
+  自定义属性
+  """
   attrs: Map
   parent: Permission
   children: [Permission!]
@@ -702,6 +708,8 @@ Properties by which Permission connections can be ordered.
 enum PermissionOrderField {
   createdAt
   updatedAt
+  name
+  sort
 }
 """
 PermissionType is enum for the field type
@@ -1245,6 +1253,8 @@ Properties by which Role connections can be ordered.
 enum RoleOrderField {
   createdAt
   updatedAt
+  name
+  sort
 }
 """
 RoleWhereInput is used for filtering Role objects.
@@ -1406,6 +1416,9 @@ input UpdatePermissionInput {
   description: String
   clearDescription: Boolean
   sort: Int
+  """
+  自定义属性
+  """
   attrs: Map
   clearAttrs: Boolean
   parentID: ID
@@ -1516,7 +1529,6 @@ input UserOrder {
 Properties by which User connections can be ordered.
 """
 enum UserOrderField {
-  id
   createdAt
   updatedAt
   email

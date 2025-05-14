@@ -29,14 +29,15 @@ func initApp(logger log.Logger, config *conf.Config) (*kratos.App, func(), error
 	if err != nil {
 		return nil, nil, err
 	}
+	oauth2Config := data.NewGoogleOAuthConfig(config)
 	database, err := data.NewEntDatabase(config)
 	if err != nil {
 		return nil, nil, err
 	}
 	userUseCase := biz.NewUserUseCase(config)
 	userRepo := data.NewUserRepo(client)
-	executableSchema := graphql.NewSchema(logger, database, client, userUseCase, userRepo)
-	httpServer := server.NewHTTPServer(config, logger, client, executableSchema)
+	executableSchema := graphql.NewSchema(oauth2Config, logger, database, client, userUseCase, userRepo)
+	httpServer := server.NewHTTPServer(config, logger, client, executableSchema, oauth2Config)
 	jobJob := job.NewJob(logger, client, config)
 	daily := schedule.NewDaily(client)
 	scheduleSchedule := schedule.NewSchedule(logger, client, daily)

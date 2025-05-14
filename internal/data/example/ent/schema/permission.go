@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/go-keg/keg/contrib/ent/annotations"
 	"github.com/go-keg/keg/contrib/ent/mixin"
 )
 
@@ -38,9 +39,13 @@ func (Permission) Fields() []ent.Field {
 		field.Int("parent_id").Optional().Nillable().Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.String("name"),
 		field.String("key").Optional().Unique(),
-		field.Enum("type").Values("menu", "page", "element"),
+		field.Enum("type").Values("menu", "page", "element").Annotations(annotations.Enums{
+			"menu":    "目录",
+			"page":    "页面",
+			"element": "元素",
+		}).Comment("权限类型"),
 		field.String("path").Optional(),
-		field.String("desc").Optional(),
+		field.String("description").Optional(),
 		field.Int("sort").Default(1000),
 		field.JSON("attrs", map[string]any{}).Optional(),
 	}

@@ -40,11 +40,11 @@ func (j Job) Start(ctx context.Context) error {
 	return j.job.Start(ctx)
 }
 
-func (j Job) Stop(ctx context.Context) error {
+func (j Job) Stop(_ context.Context) error {
 	j.job.Stop()
 	return nil
 }
 
-func exampleJob(ctx context.Context) error {
+func exampleJob(_ context.Context) error {
 	panic("todo")
 }

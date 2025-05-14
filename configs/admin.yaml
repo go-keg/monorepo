@@ -5,7 +5,7 @@ trace:
 server:
   http:
     network: tcp
-    addr: 0.0.0.0:8081
+    addr: 0.0.0.0:8080
     timeout: 30s
 data:
   database:
@@ -13,6 +13,13 @@ data:
     dsn: "${EXAMPLE_DB_DSN}"
   kafka:
     addrs: "${KAFKA_ADDRS}"
+
+oAuth:
+  google:
+    redirectURL: "${GOOGLE_OAUTH_REDIRECT_URL}"
+    clientID: "${GOOGLE_OAUTH_CLIENT_ID}"
+    clientSecret: "${GOOGLE_OAUTH_CLIENT_SECRET}"
+
 kafkaConsumerGroup:
   groupId: golang-admin
   topics:

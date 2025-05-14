@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/schema"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/go-keg/monorepo/internal/data/example/ent/app"
+	"github.com/go-keg/monorepo/internal/data/example/ent/oauthaccount"
 	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/role"
@@ -32,6 +33,11 @@ var appImplementors = []string{"App", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*App) IsNode() {}
+
+var oauthaccountImplementors = []string{"OAuthAccount", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*OAuthAccount) IsNode() {}
 
 var operationlogImplementors = []string{"OperationLog", "Node"}
 
@@ -116,6 +122,15 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 			Where(app.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, appImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case oauthaccount.Table:
+		query := c.OAuthAccount.Query().
+			Where(oauthaccount.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, oauthaccountImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -233,6 +248,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		query := c.App.Query().
 			Where(app.IDIn(ids...))
 		query, err := query.CollectFields(ctx, appImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case oauthaccount.Table:
+		query := c.OAuthAccount.Query().
+			Where(oauthaccount.IDIn(ids...))
+		query, err := query.CollectFields(ctx, oauthaccountImplementors...)
 		if err != nil {
 			return nil, err
 		}

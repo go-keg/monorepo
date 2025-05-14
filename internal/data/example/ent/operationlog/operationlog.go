@@ -22,8 +22,10 @@ const (
 	FieldUserID = "user_id"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
-	// FieldContext holds the string denoting the context field in the database.
-	FieldContext = "context"
+	// FieldContent holds the string denoting the content field in the database.
+	FieldContent = "content"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
 	// Table holds the table name of the operationlog in the database.
@@ -44,7 +46,8 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldUserID,
 	FieldType,
-	FieldContext,
+	FieldContent,
+	FieldMetadata,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -92,6 +95,11 @@ func ByUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByType orders the results by the type field.
 func ByType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldType, opts...).ToFunc()
+}
+
+// ByContent orders the results by the content field.
+func ByContent(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContent, opts...).ToFunc()
 }
 
 // ByUserField orders the results by user field.

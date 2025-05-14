@@ -505,6 +505,16 @@ func PasswordHasSuffix(v string) predicate.User {
 	return predicate.User(sql.FieldHasSuffix(FieldPassword, v))
 }
 
+// PasswordIsNil applies the IsNil predicate on the "password" field.
+func PasswordIsNil() predicate.User {
+	return predicate.User(sql.FieldIsNull(FieldPassword))
+}
+
+// PasswordNotNil applies the NotNil predicate on the "password" field.
+func PasswordNotNil() predicate.User {
+	return predicate.User(sql.FieldNotNull(FieldPassword))
+}
+
 // PasswordEqualFold applies the EqualFold predicate on the "password" field.
 func PasswordEqualFold(v string) predicate.User {
 	return predicate.User(sql.FieldEqualFold(FieldPassword, v))
@@ -583,6 +593,29 @@ func HasOperationLogs() predicate.User {
 func HasOperationLogsWith(preds ...predicate.OperationLog) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := newOperationLogsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasOauthAccounts applies the HasEdge predicate on the "oauth_accounts" edge.
+func HasOauthAccounts() predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, OauthAccountsTable, OauthAccountsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOauthAccountsWith applies the HasEdge predicate on the "oauth_accounts" edge with a given conditions (other predicates).
+func HasOauthAccountsWith(preds ...predicate.OAuthAccount) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		step := newOauthAccountsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -8,6 +8,14 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
+func (oa *OAuthAccount) User(ctx context.Context) (*User, error) {
+	result, err := oa.Edges.UserOrErr()
+	if IsNotLoaded(err) {
+		result, err = oa.QueryUser().Only(ctx)
+	}
+	return result, err
+}
+
 func (ol *OperationLog) User(ctx context.Context) (*User, error) {
 	result, err := ol.Edges.UserOrErr()
 	if IsNotLoaded(err) {
@@ -56,6 +64,18 @@ func (u *User) Roles(ctx context.Context) (result []*Role, err error) {
 	}
 	if IsNotLoaded(err) {
 		result, err = u.QueryRoles().All(ctx)
+	}
+	return result, err
+}
+
+func (u *User) OauthAccounts(ctx context.Context) (result []*OAuthAccount, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = u.NamedOauthAccounts(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = u.Edges.OauthAccountsOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = u.QueryOauthAccounts().All(ctx)
 	}
 	return result, err
 }

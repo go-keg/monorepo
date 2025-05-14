@@ -75,6 +75,11 @@ func Type(v string) predicate.OperationLog {
 	return predicate.OperationLog(sql.FieldEQ(FieldType, v))
 }
 
+// Content applies equality check predicate on the "content" field. It's identical to ContentEQ.
+func Content(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldEQ(FieldContent, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.OperationLog {
 	return predicate.OperationLog(sql.FieldEQ(FieldCreatedAt, v))
@@ -258,6 +263,71 @@ func TypeEqualFold(v string) predicate.OperationLog {
 // TypeContainsFold applies the ContainsFold predicate on the "type" field.
 func TypeContainsFold(v string) predicate.OperationLog {
 	return predicate.OperationLog(sql.FieldContainsFold(FieldType, v))
+}
+
+// ContentEQ applies the EQ predicate on the "content" field.
+func ContentEQ(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldEQ(FieldContent, v))
+}
+
+// ContentNEQ applies the NEQ predicate on the "content" field.
+func ContentNEQ(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldNEQ(FieldContent, v))
+}
+
+// ContentIn applies the In predicate on the "content" field.
+func ContentIn(vs ...string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldIn(FieldContent, vs...))
+}
+
+// ContentNotIn applies the NotIn predicate on the "content" field.
+func ContentNotIn(vs ...string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldNotIn(FieldContent, vs...))
+}
+
+// ContentGT applies the GT predicate on the "content" field.
+func ContentGT(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldGT(FieldContent, v))
+}
+
+// ContentGTE applies the GTE predicate on the "content" field.
+func ContentGTE(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldGTE(FieldContent, v))
+}
+
+// ContentLT applies the LT predicate on the "content" field.
+func ContentLT(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldLT(FieldContent, v))
+}
+
+// ContentLTE applies the LTE predicate on the "content" field.
+func ContentLTE(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldLTE(FieldContent, v))
+}
+
+// ContentContains applies the Contains predicate on the "content" field.
+func ContentContains(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldContains(FieldContent, v))
+}
+
+// ContentHasPrefix applies the HasPrefix predicate on the "content" field.
+func ContentHasPrefix(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldHasPrefix(FieldContent, v))
+}
+
+// ContentHasSuffix applies the HasSuffix predicate on the "content" field.
+func ContentHasSuffix(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldHasSuffix(FieldContent, v))
+}
+
+// ContentEqualFold applies the EqualFold predicate on the "content" field.
+func ContentEqualFold(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldEqualFold(FieldContent, v))
+}
+
+// ContentContainsFold applies the ContainsFold predicate on the "content" field.
+func ContentContainsFold(v string) predicate.OperationLog {
+	return predicate.OperationLog(sql.FieldContainsFold(FieldContent, v))
 }
 
 // HasUser applies the HasEdge predicate on the "user" edge.

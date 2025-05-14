@@ -49,7 +49,7 @@ func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[int], fi
 
 // AppList is the resolver for the appList field.
 func (r *queryResolver) AppList(ctx context.Context, offset int, limit int, orderBy *ent.AppOrder, where *ent.AppWhereInput) (*ent.AppConnection, error) {
-	return r.ent.App.Query().List(ctx,offset,limit, ent.WithAppFilter(where.Filter), ent.WithAppOrder(orderBy))
+	return r.ent.App.Query().List(ctx, offset, limit, ent.WithAppFilter(where.Filter), ent.WithAppOrder(orderBy))
 }
 
 // OperationLogList is the resolver for the operationLogList field.

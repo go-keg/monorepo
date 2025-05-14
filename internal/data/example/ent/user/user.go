@@ -40,6 +40,8 @@ const (
 	EdgeRoles = "roles"
 	// EdgeOperationLogs holds the string denoting the operation_logs edge name in mutations.
 	EdgeOperationLogs = "operation_logs"
+	// EdgeOauthAccounts holds the string denoting the oauth_accounts edge name in mutations.
+	EdgeOauthAccounts = "oauth_accounts"
 	// Table holds the table name of the user in the database.
 	Table = "users"
 	// RolesTable is the table that holds the roles relation/edge. The primary key declared below.
@@ -54,6 +56,13 @@ const (
 	OperationLogsInverseTable = "operation_logs"
 	// OperationLogsColumn is the table column denoting the operation_logs relation/edge.
 	OperationLogsColumn = "user_id"
+	// OauthAccountsTable is the table that holds the oauth_accounts relation/edge.
+	OauthAccountsTable = "oauth_accounts"
+	// OauthAccountsInverseTable is the table name for the OAuthAccount entity.
+	// It exists in this package in order to avoid circular dependency with the "oauthaccount" package.
+	OauthAccountsInverseTable = "oauth_accounts"
+	// OauthAccountsColumn is the table column denoting the oauth_accounts relation/edge.
+	OauthAccountsColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.
@@ -106,6 +115,9 @@ var (
 
 // Status defines the type for the "status" enum field.
 type Status string
+
+// StatusNormal is the default value of the Status enum.
+const DefaultStatus = StatusNormal
 
 // Status values.
 const (
@@ -207,6 +219,20 @@ func ByOperationLogs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newOperationLogsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByOauthAccountsCount orders the results by oauth_accounts count.
+func ByOauthAccountsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOauthAccountsStep(), opts...)
+	}
+}
+
+// ByOauthAccounts orders the results by oauth_accounts terms.
+func ByOauthAccounts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOauthAccountsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newRolesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -219,6 +245,13 @@ func newOperationLogsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OperationLogsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, OperationLogsTable, OperationLogsColumn),
+	)
+}
+func newOauthAccountsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OauthAccountsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, OauthAccountsTable, OauthAccountsColumn),
 	)
 }
 

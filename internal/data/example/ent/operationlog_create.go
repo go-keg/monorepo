@@ -63,9 +63,15 @@ func (olc *OperationLogCreate) SetType(s string) *OperationLogCreate {
 	return olc
 }
 
-// SetContext sets the "context" field.
-func (olc *OperationLogCreate) SetContext(m map[string]interface{}) *OperationLogCreate {
-	olc.mutation.SetContext(m)
+// SetContent sets the "content" field.
+func (olc *OperationLogCreate) SetContent(s string) *OperationLogCreate {
+	olc.mutation.SetContent(s)
+	return olc
+}
+
+// SetMetadata sets the "metadata" field.
+func (olc *OperationLogCreate) SetMetadata(m map[string]interface{}) *OperationLogCreate {
+	olc.mutation.SetMetadata(m)
 	return olc
 }
 
@@ -127,8 +133,11 @@ func (olc *OperationLogCreate) check() error {
 	if _, ok := olc.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "OperationLog.type"`)}
 	}
-	if _, ok := olc.mutation.Context(); !ok {
-		return &ValidationError{Name: "context", err: errors.New(`ent: missing required field "OperationLog.context"`)}
+	if _, ok := olc.mutation.Content(); !ok {
+		return &ValidationError{Name: "content", err: errors.New(`ent: missing required field "OperationLog.content"`)}
+	}
+	if _, ok := olc.mutation.Metadata(); !ok {
+		return &ValidationError{Name: "metadata", err: errors.New(`ent: missing required field "OperationLog.metadata"`)}
 	}
 	if len(olc.mutation.UserIDs()) == 0 {
 		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "OperationLog.user"`)}
@@ -172,9 +181,13 @@ func (olc *OperationLogCreate) createSpec() (*OperationLog, *sqlgraph.CreateSpec
 		_spec.SetField(operationlog.FieldType, field.TypeString, value)
 		_node.Type = value
 	}
-	if value, ok := olc.mutation.Context(); ok {
-		_spec.SetField(operationlog.FieldContext, field.TypeJSON, value)
-		_node.Context = value
+	if value, ok := olc.mutation.Content(); ok {
+		_spec.SetField(operationlog.FieldContent, field.TypeString, value)
+		_node.Content = value
+	}
+	if value, ok := olc.mutation.Metadata(); ok {
+		_spec.SetField(operationlog.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
 	}
 	if nodes := olc.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -287,15 +300,27 @@ func (u *OperationLogUpsert) UpdateType() *OperationLogUpsert {
 	return u
 }
 
-// SetContext sets the "context" field.
-func (u *OperationLogUpsert) SetContext(v map[string]interface{}) *OperationLogUpsert {
-	u.Set(operationlog.FieldContext, v)
+// SetContent sets the "content" field.
+func (u *OperationLogUpsert) SetContent(v string) *OperationLogUpsert {
+	u.Set(operationlog.FieldContent, v)
 	return u
 }
 
-// UpdateContext sets the "context" field to the value that was provided on create.
-func (u *OperationLogUpsert) UpdateContext() *OperationLogUpsert {
-	u.SetExcluded(operationlog.FieldContext)
+// UpdateContent sets the "content" field to the value that was provided on create.
+func (u *OperationLogUpsert) UpdateContent() *OperationLogUpsert {
+	u.SetExcluded(operationlog.FieldContent)
+	return u
+}
+
+// SetMetadata sets the "metadata" field.
+func (u *OperationLogUpsert) SetMetadata(v map[string]interface{}) *OperationLogUpsert {
+	u.Set(operationlog.FieldMetadata, v)
+	return u
+}
+
+// UpdateMetadata sets the "metadata" field to the value that was provided on create.
+func (u *OperationLogUpsert) UpdateMetadata() *OperationLogUpsert {
+	u.SetExcluded(operationlog.FieldMetadata)
 	return u
 }
 
@@ -393,17 +418,31 @@ func (u *OperationLogUpsertOne) UpdateType() *OperationLogUpsertOne {
 	})
 }
 
-// SetContext sets the "context" field.
-func (u *OperationLogUpsertOne) SetContext(v map[string]interface{}) *OperationLogUpsertOne {
+// SetContent sets the "content" field.
+func (u *OperationLogUpsertOne) SetContent(v string) *OperationLogUpsertOne {
 	return u.Update(func(s *OperationLogUpsert) {
-		s.SetContext(v)
+		s.SetContent(v)
 	})
 }
 
-// UpdateContext sets the "context" field to the value that was provided on create.
-func (u *OperationLogUpsertOne) UpdateContext() *OperationLogUpsertOne {
+// UpdateContent sets the "content" field to the value that was provided on create.
+func (u *OperationLogUpsertOne) UpdateContent() *OperationLogUpsertOne {
 	return u.Update(func(s *OperationLogUpsert) {
-		s.UpdateContext()
+		s.UpdateContent()
+	})
+}
+
+// SetMetadata sets the "metadata" field.
+func (u *OperationLogUpsertOne) SetMetadata(v map[string]interface{}) *OperationLogUpsertOne {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.SetMetadata(v)
+	})
+}
+
+// UpdateMetadata sets the "metadata" field to the value that was provided on create.
+func (u *OperationLogUpsertOne) UpdateMetadata() *OperationLogUpsertOne {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.UpdateMetadata()
 	})
 }
 
@@ -667,17 +706,31 @@ func (u *OperationLogUpsertBulk) UpdateType() *OperationLogUpsertBulk {
 	})
 }
 
-// SetContext sets the "context" field.
-func (u *OperationLogUpsertBulk) SetContext(v map[string]interface{}) *OperationLogUpsertBulk {
+// SetContent sets the "content" field.
+func (u *OperationLogUpsertBulk) SetContent(v string) *OperationLogUpsertBulk {
 	return u.Update(func(s *OperationLogUpsert) {
-		s.SetContext(v)
+		s.SetContent(v)
 	})
 }
 
-// UpdateContext sets the "context" field to the value that was provided on create.
-func (u *OperationLogUpsertBulk) UpdateContext() *OperationLogUpsertBulk {
+// UpdateContent sets the "content" field to the value that was provided on create.
+func (u *OperationLogUpsertBulk) UpdateContent() *OperationLogUpsertBulk {
 	return u.Update(func(s *OperationLogUpsert) {
-		s.UpdateContext()
+		s.UpdateContent()
+	})
+}
+
+// SetMetadata sets the "metadata" field.
+func (u *OperationLogUpsertBulk) SetMetadata(v map[string]interface{}) *OperationLogUpsertBulk {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.SetMetadata(v)
+	})
+}
+
+// UpdateMetadata sets the "metadata" field to the value that was provided on create.
+func (u *OperationLogUpsertBulk) UpdateMetadata() *OperationLogUpsertBulk {
+	return u.Update(func(s *OperationLogUpsert) {
+		s.UpdateMetadata()
 	})
 }
 

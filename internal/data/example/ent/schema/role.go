@@ -36,6 +36,7 @@ func (Role) Annotations() []schema.Annotation {
 func (Role) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name"),
+		field.String("description").Optional(),
 		field.Int("sort").Default(1000),
 	}
 }

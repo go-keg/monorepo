@@ -23,6 +23,8 @@ type Role struct {
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 	// Name holds the value of the "name" field.
 	Name string `json:"name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
 	// Sort holds the value of the "sort" field.
 	Sort int `json:"sort,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -72,7 +74,7 @@ func (*Role) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case role.FieldID, role.FieldSort:
 			values[i] = new(sql.NullInt64)
-		case role.FieldName:
+		case role.FieldName, role.FieldDescription:
 			values[i] = new(sql.NullString)
 		case role.FieldCreatedAt, role.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -114,6 +116,12 @@ func (r *Role) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
 				r.Name = value.String
+			}
+		case role.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				r.Description = value.String
 			}
 		case role.FieldSort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -175,6 +183,9 @@ func (r *Role) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(r.Name)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(r.Description)
 	builder.WriteString(", ")
 	builder.WriteString("sort=")
 	builder.WriteString(fmt.Sprintf("%v", r.Sort))

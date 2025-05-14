@@ -18,6 +18,11 @@ import (
 
 type UserRepo interface {
 	GetUserPermissionKeys(ctx context.Context, userID int) ([]string, error)
+	FindUserByOAuth(ctx context.Context, provider, providerUserID string) (*ent.User, error)
+	FindUserByEmail(ctx context.Context, email string) (*ent.User, error)
+	BindOAuthAccount(ctx context.Context, data *ent.OAuthAccount) error
+	UnBindOAuthAccount(ctx context.Context, userID int, provider string) error
+	CreateUser(ctx context.Context, user *ent.User) (*ent.User, error)
 }
 type UserUseCase struct {
 	cfg    *conf.Config
@@ -31,10 +36,10 @@ func NewUserUseCase(cfg *conf.Config) *UserUseCase {
 	}
 }
 
-func (r UserUseCase) GenerateToken(_ context.Context, userId int) (string, int64, error) {
+func (r UserUseCase) GenerateToken(userID int) (string, int64, error) {
 	exp := time.Now().Add(time.Minute * 2).Unix()
 	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": cast.ToString(userId),
+		"sub": cast.ToString(userID),
 		"exp": exp,               // Expiration Time
 		"iat": time.Now().Unix(), // Issued At OPTIONAL
 	}).SignedString([]byte(r.cfg.Key))

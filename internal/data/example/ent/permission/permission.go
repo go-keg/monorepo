@@ -31,8 +31,8 @@ const (
 	FieldType = "type"
 	// FieldPath holds the string denoting the path field in the database.
 	FieldPath = "path"
-	// FieldDesc holds the string denoting the desc field in the database.
-	FieldDesc = "desc"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
 	// FieldSort holds the string denoting the sort field in the database.
 	FieldSort = "sort"
 	// FieldAttrs holds the string denoting the attrs field in the database.
@@ -70,7 +70,7 @@ var Columns = []string{
 	FieldKey,
 	FieldType,
 	FieldPath,
-	FieldDesc,
+	FieldDescription,
 	FieldSort,
 	FieldAttrs,
 }
@@ -169,9 +169,9 @@ func ByPath(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPath, opts...).ToFunc()
 }
 
-// ByDesc orders the results by the desc field.
-func ByDesc(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDesc, opts...).ToFunc()
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
 }
 
 // BySort orders the results by the sort field.

@@ -105,16 +105,16 @@ func (pc *PermissionCreate) SetNillablePath(s *string) *PermissionCreate {
 	return pc
 }
 
-// SetDesc sets the "desc" field.
-func (pc *PermissionCreate) SetDesc(s string) *PermissionCreate {
-	pc.mutation.SetDesc(s)
+// SetDescription sets the "description" field.
+func (pc *PermissionCreate) SetDescription(s string) *PermissionCreate {
+	pc.mutation.SetDescription(s)
 	return pc
 }
 
-// SetNillableDesc sets the "desc" field if the given value is not nil.
-func (pc *PermissionCreate) SetNillableDesc(s *string) *PermissionCreate {
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pc *PermissionCreate) SetNillableDescription(s *string) *PermissionCreate {
 	if s != nil {
-		pc.SetDesc(*s)
+		pc.SetDescription(*s)
 	}
 	return pc
 }
@@ -290,9 +290,9 @@ func (pc *PermissionCreate) createSpec() (*Permission, *sqlgraph.CreateSpec) {
 		_spec.SetField(permission.FieldPath, field.TypeString, value)
 		_node.Path = value
 	}
-	if value, ok := pc.mutation.Desc(); ok {
-		_spec.SetField(permission.FieldDesc, field.TypeString, value)
-		_node.Desc = value
+	if value, ok := pc.mutation.Description(); ok {
+		_spec.SetField(permission.FieldDescription, field.TypeString, value)
+		_node.Description = value
 	}
 	if value, ok := pc.mutation.Sort(); ok {
 		_spec.SetField(permission.FieldSort, field.TypeInt, value)
@@ -499,21 +499,21 @@ func (u *PermissionUpsert) ClearPath() *PermissionUpsert {
 	return u
 }
 
-// SetDesc sets the "desc" field.
-func (u *PermissionUpsert) SetDesc(v string) *PermissionUpsert {
-	u.Set(permission.FieldDesc, v)
+// SetDescription sets the "description" field.
+func (u *PermissionUpsert) SetDescription(v string) *PermissionUpsert {
+	u.Set(permission.FieldDescription, v)
 	return u
 }
 
-// UpdateDesc sets the "desc" field to the value that was provided on create.
-func (u *PermissionUpsert) UpdateDesc() *PermissionUpsert {
-	u.SetExcluded(permission.FieldDesc)
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *PermissionUpsert) UpdateDescription() *PermissionUpsert {
+	u.SetExcluded(permission.FieldDescription)
 	return u
 }
 
-// ClearDesc clears the value of the "desc" field.
-func (u *PermissionUpsert) ClearDesc() *PermissionUpsert {
-	u.SetNull(permission.FieldDesc)
+// ClearDescription clears the value of the "description" field.
+func (u *PermissionUpsert) ClearDescription() *PermissionUpsert {
+	u.SetNull(permission.FieldDescription)
 	return u
 }
 
@@ -710,24 +710,24 @@ func (u *PermissionUpsertOne) ClearPath() *PermissionUpsertOne {
 	})
 }
 
-// SetDesc sets the "desc" field.
-func (u *PermissionUpsertOne) SetDesc(v string) *PermissionUpsertOne {
+// SetDescription sets the "description" field.
+func (u *PermissionUpsertOne) SetDescription(v string) *PermissionUpsertOne {
 	return u.Update(func(s *PermissionUpsert) {
-		s.SetDesc(v)
+		s.SetDescription(v)
 	})
 }
 
-// UpdateDesc sets the "desc" field to the value that was provided on create.
-func (u *PermissionUpsertOne) UpdateDesc() *PermissionUpsertOne {
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *PermissionUpsertOne) UpdateDescription() *PermissionUpsertOne {
 	return u.Update(func(s *PermissionUpsert) {
-		s.UpdateDesc()
+		s.UpdateDescription()
 	})
 }
 
-// ClearDesc clears the value of the "desc" field.
-func (u *PermissionUpsertOne) ClearDesc() *PermissionUpsertOne {
+// ClearDescription clears the value of the "description" field.
+func (u *PermissionUpsertOne) ClearDescription() *PermissionUpsertOne {
 	return u.Update(func(s *PermissionUpsert) {
-		s.ClearDesc()
+		s.ClearDescription()
 	})
 }
 
@@ -1096,24 +1096,24 @@ func (u *PermissionUpsertBulk) ClearPath() *PermissionUpsertBulk {
 	})
 }
 
-// SetDesc sets the "desc" field.
-func (u *PermissionUpsertBulk) SetDesc(v string) *PermissionUpsertBulk {
+// SetDescription sets the "description" field.
+func (u *PermissionUpsertBulk) SetDescription(v string) *PermissionUpsertBulk {
 	return u.Update(func(s *PermissionUpsert) {
-		s.SetDesc(v)
+		s.SetDescription(v)
 	})
 }
 
-// UpdateDesc sets the "desc" field to the value that was provided on create.
-func (u *PermissionUpsertBulk) UpdateDesc() *PermissionUpsertBulk {
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *PermissionUpsertBulk) UpdateDescription() *PermissionUpsertBulk {
 	return u.Update(func(s *PermissionUpsert) {
-		s.UpdateDesc()
+		s.UpdateDescription()
 	})
 }
 
-// ClearDesc clears the value of the "desc" field.
-func (u *PermissionUpsertBulk) ClearDesc() *PermissionUpsertBulk {
+// ClearDescription clears the value of the "description" field.
+func (u *PermissionUpsertBulk) ClearDescription() *PermissionUpsertBulk {
 	return u.Update(func(s *PermissionUpsert) {
-		s.ClearDesc()
+		s.ClearDescription()
 	})
 }
 

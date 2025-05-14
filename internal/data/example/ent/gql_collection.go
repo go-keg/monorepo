@@ -8,6 +8,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/go-keg/monorepo/internal/data/example/ent/app"
+	"github.com/go-keg/monorepo/internal/data/example/ent/oauthaccount"
 	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/role"
@@ -69,6 +70,11 @@ func (a *AppQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphq
 			if _, ok := fieldSeen[app.FieldUsable]; !ok {
 				selectedFields = append(selectedFields, app.FieldUsable)
 				fieldSeen[app.FieldUsable] = struct{}{}
+			}
+		case "expiresAt":
+			if _, ok := fieldSeen[app.FieldExpiresAt]; !ok {
+				selectedFields = append(selectedFields, app.FieldExpiresAt)
+				fieldSeen[app.FieldExpiresAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -134,6 +140,118 @@ func newAppPaginateArgs(rv map[string]any) *appPaginateArgs {
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (oa *OAuthAccountQuery) CollectFields(ctx context.Context, satisfies ...string) (*OAuthAccountQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return oa, nil
+	}
+	if err := oa.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return oa, nil
+}
+
+func (oa *OAuthAccountQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(oauthaccount.Columns))
+		selectedFields = []string{oauthaccount.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "user":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&UserClient{config: oa.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+				return err
+			}
+			oa.withUser = query
+			if _, ok := fieldSeen[oauthaccount.FieldUserID]; !ok {
+				selectedFields = append(selectedFields, oauthaccount.FieldUserID)
+				fieldSeen[oauthaccount.FieldUserID] = struct{}{}
+			}
+		case "userID":
+			if _, ok := fieldSeen[oauthaccount.FieldUserID]; !ok {
+				selectedFields = append(selectedFields, oauthaccount.FieldUserID)
+				fieldSeen[oauthaccount.FieldUserID] = struct{}{}
+			}
+		case "provider":
+			if _, ok := fieldSeen[oauthaccount.FieldProvider]; !ok {
+				selectedFields = append(selectedFields, oauthaccount.FieldProvider)
+				fieldSeen[oauthaccount.FieldProvider] = struct{}{}
+			}
+		case "providerUserID":
+			if _, ok := fieldSeen[oauthaccount.FieldProviderUserID]; !ok {
+				selectedFields = append(selectedFields, oauthaccount.FieldProviderUserID)
+				fieldSeen[oauthaccount.FieldProviderUserID] = struct{}{}
+			}
+		case "accessToken":
+			if _, ok := fieldSeen[oauthaccount.FieldAccessToken]; !ok {
+				selectedFields = append(selectedFields, oauthaccount.FieldAccessToken)
+				fieldSeen[oauthaccount.FieldAccessToken] = struct{}{}
+			}
+		case "refreshToken":
+			if _, ok := fieldSeen[oauthaccount.FieldRefreshToken]; !ok {
+				selectedFields = append(selectedFields, oauthaccount.FieldRefreshToken)
+				fieldSeen[oauthaccount.FieldRefreshToken] = struct{}{}
+			}
+		case "tokenExpiry":
+			if _, ok := fieldSeen[oauthaccount.FieldTokenExpiry]; !ok {
+				selectedFields = append(selectedFields, oauthaccount.FieldTokenExpiry)
+				fieldSeen[oauthaccount.FieldTokenExpiry] = struct{}{}
+			}
+		case "profile":
+			if _, ok := fieldSeen[oauthaccount.FieldProfile]; !ok {
+				selectedFields = append(selectedFields, oauthaccount.FieldProfile)
+				fieldSeen[oauthaccount.FieldProfile] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		oa.Select(selectedFields...)
+	}
+	return nil
+}
+
+type oauthaccountPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []OAuthAccountPaginateOption
+}
+
+func newOAuthAccountPaginateArgs(rv map[string]any) *oauthaccountPaginateArgs {
+	args := &oauthaccountPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[whereField].(*OAuthAccountWhereInput); ok {
+		args.opts = append(args.opts, WithOAuthAccountFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (ol *OperationLogQuery) CollectFields(ctx context.Context, satisfies ...string) (*OperationLogQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -189,10 +307,15 @@ func (ol *OperationLogQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, operationlog.FieldType)
 				fieldSeen[operationlog.FieldType] = struct{}{}
 			}
-		case "context":
-			if _, ok := fieldSeen[operationlog.FieldContext]; !ok {
-				selectedFields = append(selectedFields, operationlog.FieldContext)
-				fieldSeen[operationlog.FieldContext] = struct{}{}
+		case "content":
+			if _, ok := fieldSeen[operationlog.FieldContent]; !ok {
+				selectedFields = append(selectedFields, operationlog.FieldContent)
+				fieldSeen[operationlog.FieldContent] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[operationlog.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, operationlog.FieldMetadata)
+				fieldSeen[operationlog.FieldMetadata] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -341,10 +464,10 @@ func (pe *PermissionQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, permission.FieldPath)
 				fieldSeen[permission.FieldPath] = struct{}{}
 			}
-		case "desc":
-			if _, ok := fieldSeen[permission.FieldDesc]; !ok {
-				selectedFields = append(selectedFields, permission.FieldDesc)
-				fieldSeen[permission.FieldDesc] = struct{}{}
+		case "description":
+			if _, ok := fieldSeen[permission.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, permission.FieldDescription)
+				fieldSeen[permission.FieldDescription] = struct{}{}
 			}
 		case "sort":
 			if _, ok := fieldSeen[permission.FieldSort]; !ok {
@@ -468,6 +591,11 @@ func (r *RoleQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				selectedFields = append(selectedFields, role.FieldName)
 				fieldSeen[role.FieldName] = struct{}{}
 			}
+		case "description":
+			if _, ok := fieldSeen[role.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, role.FieldDescription)
+				fieldSeen[role.FieldDescription] = struct{}{}
+			}
 		case "sort":
 			if _, ok := fieldSeen[role.FieldSort]; !ok {
 				selectedFields = append(selectedFields, role.FieldSort)
@@ -568,6 +696,19 @@ func (u *UserQuery) collectField(ctx context.Context, oneNode bool, opCtx *graph
 				return err
 			}
 			u.WithNamedRoles(alias, func(wq *RoleQuery) {
+				*wq = *query
+			})
+
+		case "oauthAccounts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OAuthAccountClient{config: u.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, oauthaccountImplementors)...); err != nil {
+				return err
+			}
+			u.WithNamedOauthAccounts(alias, func(wq *OAuthAccountQuery) {
 				*wq = *query
 			})
 		case "createdAt":

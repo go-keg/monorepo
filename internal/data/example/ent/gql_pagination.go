@@ -15,6 +15,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/errcode"
 	"github.com/go-keg/monorepo/internal/data/example/ent/app"
+	"github.com/go-keg/monorepo/internal/data/example/ent/oauthaccount"
 	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/role"
@@ -421,6 +422,262 @@ func (a *App) ToEdge(order *AppOrder) *AppEdge {
 	return &AppEdge{
 		Node:   a,
 		Cursor: order.Field.toCursor(a),
+	}
+}
+
+// OAuthAccountEdge is the edge representation of OAuthAccount.
+type OAuthAccountEdge struct {
+	Node   *OAuthAccount `json:"node"`
+	Cursor Cursor        `json:"cursor"`
+}
+
+// OAuthAccountConnection is the connection containing edges to OAuthAccount.
+type OAuthAccountConnection struct {
+	Edges      []*OAuthAccountEdge `json:"edges"`
+	Nodes      []*OAuthAccount     `json:"nodes"`
+	PageInfo   PageInfo            `json:"pageInfo"`
+	TotalCount int                 `json:"totalCount"`
+}
+
+func (c *OAuthAccountConnection) build(nodes []*OAuthAccount, pager *oauthaccountPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && *first+1 == len(nodes) {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:len(nodes)-1]
+	} else if last != nil && *last+1 == len(nodes) {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:len(nodes)-1]
+	}
+	var nodeAt func(int) *OAuthAccount
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *OAuthAccount {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *OAuthAccount {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*OAuthAccountEdge, len(nodes))
+	c.Nodes = nodes
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &OAuthAccountEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// OAuthAccountPaginateOption enables pagination customization.
+type OAuthAccountPaginateOption func(*oauthaccountPager) error
+
+// WithOAuthAccountOrder configures pagination ordering.
+func WithOAuthAccountOrder(order *OAuthAccountOrder) OAuthAccountPaginateOption {
+	if order == nil {
+		order = DefaultOAuthAccountOrder
+	}
+	o := *order
+	return func(pager *oauthaccountPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultOAuthAccountOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithOAuthAccountFilter configures pagination filter.
+func WithOAuthAccountFilter(filter func(*OAuthAccountQuery) (*OAuthAccountQuery, error)) OAuthAccountPaginateOption {
+	return func(pager *oauthaccountPager) error {
+		if filter == nil {
+			return errors.New("OAuthAccountQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type oauthaccountPager struct {
+	reverse bool
+	order   *OAuthAccountOrder
+	filter  func(*OAuthAccountQuery) (*OAuthAccountQuery, error)
+}
+
+func newOAuthAccountPager(opts []OAuthAccountPaginateOption, reverse bool) (*oauthaccountPager, error) {
+	pager := &oauthaccountPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultOAuthAccountOrder
+	}
+	return pager, nil
+}
+
+func (p *oauthaccountPager) applyFilter(query *OAuthAccountQuery) (*OAuthAccountQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *oauthaccountPager) toCursor(oa *OAuthAccount) Cursor {
+	return p.order.Field.toCursor(oa)
+}
+
+func (p *oauthaccountPager) applyCursors(query *OAuthAccountQuery, after, before *Cursor) (*OAuthAccountQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultOAuthAccountOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *oauthaccountPager) applyOrder(query *OAuthAccountQuery) *OAuthAccountQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultOAuthAccountOrder.Field {
+		query = query.Order(DefaultOAuthAccountOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *oauthaccountPager) orderExpr(query *OAuthAccountQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultOAuthAccountOrder.Field {
+			b.Comma().Ident(DefaultOAuthAccountOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to OAuthAccount.
+func (oa *OAuthAccountQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...OAuthAccountPaginateOption,
+) (*OAuthAccountConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newOAuthAccountPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if oa, err = pager.applyFilter(oa); err != nil {
+		return nil, err
+	}
+	conn := &OAuthAccountConnection{Edges: []*OAuthAccountEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField) && !hasCollectedField(ctx, nodesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := oa.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if oa, err = pager.applyCursors(oa, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		oa.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := oa.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	if field := collectedField(ctx, nodesField); field != nil {
+		if err := oa.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+			return nil, err
+		}
+	}
+	oa = pager.applyOrder(oa)
+	nodes, err := oa.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+// OAuthAccountOrderField defines the ordering field of OAuthAccount.
+type OAuthAccountOrderField struct {
+	// Value extracts the ordering value from the given OAuthAccount.
+	Value    func(*OAuthAccount) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) oauthaccount.OrderOption
+	toCursor func(*OAuthAccount) Cursor
+}
+
+// OAuthAccountOrder defines the ordering of OAuthAccount.
+type OAuthAccountOrder struct {
+	Direction OrderDirection          `json:"direction"`
+	Field     *OAuthAccountOrderField `json:"field"`
+}
+
+// DefaultOAuthAccountOrder is the default ordering of OAuthAccount.
+var DefaultOAuthAccountOrder = &OAuthAccountOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &OAuthAccountOrderField{
+		Value: func(oa *OAuthAccount) (ent.Value, error) {
+			return oa.ID, nil
+		},
+		column: oauthaccount.FieldID,
+		toTerm: oauthaccount.ByID,
+		toCursor: func(oa *OAuthAccount) Cursor {
+			return Cursor{ID: oa.ID}
+		},
+	},
+}
+
+// ToEdge converts OAuthAccount into OAuthAccountEdge.
+func (oa *OAuthAccount) ToEdge(order *OAuthAccountOrder) *OAuthAccountEdge {
+	if order == nil {
+		order = DefaultOAuthAccountOrder
+	}
+	return &OAuthAccountEdge{
+		Node:   oa,
+		Cursor: order.Field.toCursor(oa),
 	}
 }
 

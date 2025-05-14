@@ -15,10 +15,7 @@ var Cmd = &cobra.Command{
 	Use: "migrate",
 	Run: func(cmd *cobra.Command, args []string) {
 		path, _ := cmd.Flags().GetString("conf")
-		cfg, err := conf.Load(path)
-		if err != nil {
-			panic(err)
-		}
+		cfg := conf.MustLoad(path)
 		client, err := data.NewEntClient(cfg)
 		if err != nil {
 			panic(err)

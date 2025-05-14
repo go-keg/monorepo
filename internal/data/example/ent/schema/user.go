@@ -41,11 +41,12 @@ func (User) Fields() []ent.Field {
 		field.String("email").Unique().Annotations(entgql.OrderField("email")),
 		field.String("nickname"),
 		field.String("avatar").Optional(),
-		field.String("password").Sensitive(),
-		field.Enum("status").Values("normal", "freeze").Comment("状态").Annotations(annotations.Enums{
-			"normal": "正常",
-			"freeze": "冻结",
-		}),
+		field.String("password").Sensitive().Optional(),
+		field.Enum("status").Values("normal", "freeze").Default("normal").
+			Annotations(annotations.Enums{
+				"normal": "正常",
+				"freeze": "冻结",
+			}).Comment("状态"),
 		field.Bool("is_admin").Default(false),
 	}
 }
@@ -55,5 +56,6 @@ func (User) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("roles", Role.Type),
 		edge.To("operation_logs", OperationLog.Type).Annotations(entgql.Skip()),
+		edge.To("oauth_accounts", OAuthAccount.Type),
 	}
 }

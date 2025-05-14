@@ -21,6 +21,18 @@ func (f AppFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AppMutation", m)
 }
 
+// The OAuthAccountFunc type is an adapter to allow the use of ordinary
+// function as OAuthAccount mutator.
+type OAuthAccountFunc func(context.Context, *ent.OAuthAccountMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f OAuthAccountFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.OAuthAccountMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.OAuthAccountMutation", m)
+}
+
 // The OperationLogFunc type is an adapter to allow the use of ordinary
 // function as OperationLog mutator.
 type OperationLogFunc func(context.Context, *ent.OperationLogMutation) (ent.Value, error)

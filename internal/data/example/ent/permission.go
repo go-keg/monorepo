@@ -28,12 +28,12 @@ type Permission struct {
 	Name string `json:"name,omitempty"`
 	// Key holds the value of the "key" field.
 	Key string `json:"key,omitempty"`
-	// Type holds the value of the "type" field.
+	// 权限类型
 	Type permission.Type `json:"type,omitempty"`
 	// Path holds the value of the "path" field.
 	Path string `json:"path,omitempty"`
-	// Desc holds the value of the "desc" field.
-	Desc string `json:"desc,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
 	// Sort holds the value of the "sort" field.
 	Sort int `json:"sort,omitempty"`
 	// Attrs holds the value of the "attrs" field.
@@ -100,7 +100,7 @@ func (*Permission) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case permission.FieldID, permission.FieldParentID, permission.FieldSort:
 			values[i] = new(sql.NullInt64)
-		case permission.FieldName, permission.FieldKey, permission.FieldType, permission.FieldPath, permission.FieldDesc:
+		case permission.FieldName, permission.FieldKey, permission.FieldType, permission.FieldPath, permission.FieldDescription:
 			values[i] = new(sql.NullString)
 		case permission.FieldCreatedAt, permission.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -168,11 +168,11 @@ func (pe *Permission) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pe.Path = value.String
 			}
-		case permission.FieldDesc:
+		case permission.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field desc", values[i])
+				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				pe.Desc = value.String
+				pe.Description = value.String
 			}
 		case permission.FieldSort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -262,8 +262,8 @@ func (pe *Permission) String() string {
 	builder.WriteString("path=")
 	builder.WriteString(pe.Path)
 	builder.WriteString(", ")
-	builder.WriteString("desc=")
-	builder.WriteString(pe.Desc)
+	builder.WriteString("description=")
+	builder.WriteString(pe.Description)
 	builder.WriteString(", ")
 	builder.WriteString("sort=")
 	builder.WriteString(fmt.Sprintf("%v", pe.Sort))

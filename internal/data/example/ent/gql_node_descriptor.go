@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/go-keg/monorepo/internal/data/example/ent/oauthaccount"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/role"
 	"github.com/go-keg/monorepo/internal/data/example/ent/user"
@@ -38,7 +39,7 @@ func (a *App) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
 		ID:     a.ID,
 		Type:   "App",
-		Fields: make([]*Field, 7),
+		Fields: make([]*Field, 8),
 		Edges:  make([]*Edge, 0),
 	}
 	var buf []byte
@@ -98,6 +99,92 @@ func (a *App) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "usable",
 		Value: string(buf),
 	}
+	if buf, err = json.Marshal(a.ExpiresAt); err != nil {
+		return nil, err
+	}
+	node.Fields[7] = &Field{
+		Type:  "time.Time",
+		Name:  "expires_at",
+		Value: string(buf),
+	}
+	return node, nil
+}
+
+// Node implements Noder interface
+func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
+	node = &Node{
+		ID:     oa.ID,
+		Type:   "OAuthAccount",
+		Fields: make([]*Field, 7),
+		Edges:  make([]*Edge, 1),
+	}
+	var buf []byte
+	if buf, err = json.Marshal(oa.UserID); err != nil {
+		return nil, err
+	}
+	node.Fields[0] = &Field{
+		Type:  "int",
+		Name:  "user_id",
+		Value: string(buf),
+	}
+	if buf, err = json.Marshal(oa.Provider); err != nil {
+		return nil, err
+	}
+	node.Fields[1] = &Field{
+		Type:  "string",
+		Name:  "provider",
+		Value: string(buf),
+	}
+	if buf, err = json.Marshal(oa.ProviderUserID); err != nil {
+		return nil, err
+	}
+	node.Fields[2] = &Field{
+		Type:  "string",
+		Name:  "provider_user_id",
+		Value: string(buf),
+	}
+	if buf, err = json.Marshal(oa.AccessToken); err != nil {
+		return nil, err
+	}
+	node.Fields[3] = &Field{
+		Type:  "string",
+		Name:  "access_token",
+		Value: string(buf),
+	}
+	if buf, err = json.Marshal(oa.RefreshToken); err != nil {
+		return nil, err
+	}
+	node.Fields[4] = &Field{
+		Type:  "string",
+		Name:  "refresh_token",
+		Value: string(buf),
+	}
+	if buf, err = json.Marshal(oa.TokenExpiry); err != nil {
+		return nil, err
+	}
+	node.Fields[5] = &Field{
+		Type:  "time.Time",
+		Name:  "token_expiry",
+		Value: string(buf),
+	}
+	if buf, err = json.Marshal(oa.Profile); err != nil {
+		return nil, err
+	}
+	node.Fields[6] = &Field{
+		Type:  "map[string]interface {}",
+		Name:  "profile",
+		Value: string(buf),
+	}
+	node.Edges[0] = &Edge{
+		Type: "User",
+		Name: "user",
+	}
+	err = oa.QueryUser().
+		Select(user.FieldID).
+		Scan(ctx, &node.Edges[0].IDs)
+	if err != nil {
+		return nil, err
+	}
 	return node, nil
 }
 
@@ -106,7 +193,7 @@ func (ol *OperationLog) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
 		ID:     ol.ID,
 		Type:   "OperationLog",
-		Fields: make([]*Field, 5),
+		Fields: make([]*Field, 6),
 		Edges:  make([]*Edge, 1),
 	}
 	var buf []byte
@@ -142,12 +229,20 @@ func (ol *OperationLog) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "type",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(ol.Context); err != nil {
+	if buf, err = json.Marshal(ol.Content); err != nil {
 		return nil, err
 	}
 	node.Fields[4] = &Field{
+		Type:  "string",
+		Name:  "content",
+		Value: string(buf),
+	}
+	if buf, err = json.Marshal(ol.Metadata); err != nil {
+		return nil, err
+	}
+	node.Fields[5] = &Field{
 		Type:  "map[string]interface {}",
-		Name:  "context",
+		Name:  "metadata",
 		Value: string(buf),
 	}
 	node.Edges[0] = &Edge{
@@ -228,12 +323,12 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "path",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(pe.Desc); err != nil {
+	if buf, err = json.Marshal(pe.Description); err != nil {
 		return nil, err
 	}
 	node.Fields[7] = &Field{
 		Type:  "string",
-		Name:  "desc",
+		Name:  "description",
 		Value: string(buf),
 	}
 	if buf, err = json.Marshal(pe.Sort); err != nil {
@@ -280,7 +375,7 @@ func (r *Role) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
 		ID:     r.ID,
 		Type:   "Role",
-		Fields: make([]*Field, 4),
+		Fields: make([]*Field, 5),
 		Edges:  make([]*Edge, 1),
 	}
 	var buf []byte
@@ -308,10 +403,18 @@ func (r *Role) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "name",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(r.Sort); err != nil {
+	if buf, err = json.Marshal(r.Description); err != nil {
 		return nil, err
 	}
 	node.Fields[3] = &Field{
+		Type:  "string",
+		Name:  "description",
+		Value: string(buf),
+	}
+	if buf, err = json.Marshal(r.Sort); err != nil {
+		return nil, err
+	}
+	node.Fields[4] = &Field{
 		Type:  "int",
 		Name:  "sort",
 		Value: string(buf),
@@ -335,7 +438,7 @@ func (u *User) Node(ctx context.Context) (node *Node, err error) {
 		ID:     u.ID,
 		Type:   "User",
 		Fields: make([]*Field, 8),
-		Edges:  make([]*Edge, 1),
+		Edges:  make([]*Edge, 2),
 	}
 	var buf []byte
 	if buf, err = json.Marshal(u.CreatedAt); err != nil {
@@ -409,6 +512,16 @@ func (u *User) Node(ctx context.Context) (node *Node, err error) {
 	err = u.QueryRoles().
 		Select(role.FieldID).
 		Scan(ctx, &node.Edges[0].IDs)
+	if err != nil {
+		return nil, err
+	}
+	node.Edges[1] = &Edge{
+		Type: "OAuthAccount",
+		Name: "oauth_accounts",
+	}
+	err = u.QueryOauthAccounts().
+		Select(oauthaccount.FieldID).
+		Scan(ctx, &node.Edges[1].IDs)
 	if err != nil {
 		return nil, err
 	}

@@ -23,12 +23,14 @@ type OperationLog struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// UserID holds the value of the "user_id" field.
+	// 操作人
 	UserID int `json:"user_id,omitempty"`
 	// 操作类型
 	Type string `json:"type,omitempty"`
-	// Context holds the value of the "context" field.
-	Context map[string]interface{} `json:"context,omitempty"`
+	// 操作内容
+	Content string `json:"content,omitempty"`
+	// 元数据
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OperationLogQuery when eager-loading is set.
 	Edges        OperationLogEdges `json:"edges"`
@@ -62,11 +64,11 @@ func (*OperationLog) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case operationlog.FieldContext:
+		case operationlog.FieldMetadata:
 			values[i] = new([]byte)
 		case operationlog.FieldID, operationlog.FieldUserID:
 			values[i] = new(sql.NullInt64)
-		case operationlog.FieldType:
+		case operationlog.FieldType, operationlog.FieldContent:
 			values[i] = new(sql.NullString)
 		case operationlog.FieldCreatedAt, operationlog.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -115,12 +117,18 @@ func (ol *OperationLog) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				ol.Type = value.String
 			}
-		case operationlog.FieldContext:
+		case operationlog.FieldContent:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field content", values[i])
+			} else if value.Valid {
+				ol.Content = value.String
+			}
+		case operationlog.FieldMetadata:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field context", values[i])
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &ol.Context); err != nil {
-					return fmt.Errorf("unmarshal field context: %w", err)
+				if err := json.Unmarshal(*value, &ol.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
 		default:
@@ -176,8 +184,11 @@ func (ol *OperationLog) String() string {
 	builder.WriteString("type=")
 	builder.WriteString(ol.Type)
 	builder.WriteString(", ")
-	builder.WriteString("context=")
-	builder.WriteString(fmt.Sprintf("%v", ol.Context))
+	builder.WriteString("content=")
+	builder.WriteString(ol.Content)
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", ol.Metadata))
 	builder.WriteByte(')')
 	return builder.String()
 }

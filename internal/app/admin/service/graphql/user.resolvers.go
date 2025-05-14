@@ -6,9 +6,7 @@ package graphql
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/go-keg/keg/contrib/cache"
 	"github.com/go-keg/keg/contrib/gql"
 	"github.com/go-keg/monorepo/internal/app/admin/server/auth"
 	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/dataloader"
@@ -80,19 +78,8 @@ func (r *queryResolver) Login(ctx context.Context, email string, password string
 	if !r.userUseCase.VerifyPassword(first, password) {
 		return nil, ErrAccountOrPasswordInvalid
 	}
-	token, exp, err := r.userUseCase.GenerateToken(ctx, first.ID)
-	if err != nil {
-		return nil, err
-	}
 
-	// Clear Permission cache
-	cache.LocalClear(fmt.Sprintf("user:%d:permissions", first.ID))
-
-	return &model.LoginReply{
-		Token: token,
-		Exp:   int(exp),
-		User:  first,
-	}, nil
+	return r.LoginReply(ctx, first)
 }
 
 // Profile is the resolver for the profile field.
@@ -108,15 +95,7 @@ func (r *queryResolver) Refresh(ctx context.Context) (*model.LoginReply, error) 
 	if err != nil {
 		return nil, err
 	}
-	token, exp, err := r.userUseCase.GenerateToken(ctx, first.ID)
-	if err != nil {
-		return nil, err
-	}
-	return &model.LoginReply{
-		Token: token,
-		Exp:   int(exp),
-		User:  first,
-	}, nil
+	return r.LoginReply(ctx, first)
 }
 
 // SendVerifyCode is the resolver for the sendVerifyCode field.

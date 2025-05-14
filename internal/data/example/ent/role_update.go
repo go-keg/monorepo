@@ -57,6 +57,26 @@ func (ru *RoleUpdate) SetNillableName(s *string) *RoleUpdate {
 	return ru
 }
 
+// SetDescription sets the "description" field.
+func (ru *RoleUpdate) SetDescription(s string) *RoleUpdate {
+	ru.mutation.SetDescription(s)
+	return ru
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (ru *RoleUpdate) SetNillableDescription(s *string) *RoleUpdate {
+	if s != nil {
+		ru.SetDescription(*s)
+	}
+	return ru
+}
+
+// ClearDescription clears the value of the "description" field.
+func (ru *RoleUpdate) ClearDescription() *RoleUpdate {
+	ru.mutation.ClearDescription()
+	return ru
+}
+
 // SetSort sets the "sort" field.
 func (ru *RoleUpdate) SetSort(i int) *RoleUpdate {
 	ru.mutation.ResetSort()
@@ -218,6 +238,12 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ru.mutation.Name(); ok {
 		_spec.SetField(role.FieldName, field.TypeString, value)
 	}
+	if value, ok := ru.mutation.Description(); ok {
+		_spec.SetField(role.FieldDescription, field.TypeString, value)
+	}
+	if ru.mutation.DescriptionCleared() {
+		_spec.ClearField(role.FieldDescription, field.TypeString)
+	}
 	if value, ok := ru.mutation.Sort(); ok {
 		_spec.SetField(role.FieldSort, field.TypeInt, value)
 	}
@@ -359,6 +385,26 @@ func (ruo *RoleUpdateOne) SetNillableName(s *string) *RoleUpdateOne {
 	if s != nil {
 		ruo.SetName(*s)
 	}
+	return ruo
+}
+
+// SetDescription sets the "description" field.
+func (ruo *RoleUpdateOne) SetDescription(s string) *RoleUpdateOne {
+	ruo.mutation.SetDescription(s)
+	return ruo
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (ruo *RoleUpdateOne) SetNillableDescription(s *string) *RoleUpdateOne {
+	if s != nil {
+		ruo.SetDescription(*s)
+	}
+	return ruo
+}
+
+// ClearDescription clears the value of the "description" field.
+func (ruo *RoleUpdateOne) ClearDescription() *RoleUpdateOne {
+	ruo.mutation.ClearDescription()
 	return ruo
 }
 
@@ -552,6 +598,12 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 	}
 	if value, ok := ruo.mutation.Name(); ok {
 		_spec.SetField(role.FieldName, field.TypeString, value)
+	}
+	if value, ok := ruo.mutation.Description(); ok {
+		_spec.SetField(role.FieldDescription, field.TypeString, value)
+	}
+	if ruo.mutation.DescriptionCleared() {
+		_spec.ClearField(role.FieldDescription, field.TypeString)
 	}
 	if value, ok := ruo.mutation.Sort(); ok {
 		_spec.SetField(role.FieldSort, field.TypeInt, value)

@@ -9,11 +9,14 @@ import (
 
 	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/dataloader"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
+	"github.com/samber/lo"
 )
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input ent.CreateUserInput) (*ent.User, error) {
-	input.Password = r.userUseCase.GeneratePassword(input.Password)
+	if input.Password != nil {
+		input.Password = lo.ToPtr(r.userUseCase.GeneratePassword(*input.Password))
+	}
 	return r.ent.User.Create().SetInput(input).Save(ctx)
 }
 

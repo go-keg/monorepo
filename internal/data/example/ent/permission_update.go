@@ -130,23 +130,23 @@ func (pu *PermissionUpdate) ClearPath() *PermissionUpdate {
 	return pu
 }
 
-// SetDesc sets the "desc" field.
-func (pu *PermissionUpdate) SetDesc(s string) *PermissionUpdate {
-	pu.mutation.SetDesc(s)
+// SetDescription sets the "description" field.
+func (pu *PermissionUpdate) SetDescription(s string) *PermissionUpdate {
+	pu.mutation.SetDescription(s)
 	return pu
 }
 
-// SetNillableDesc sets the "desc" field if the given value is not nil.
-func (pu *PermissionUpdate) SetNillableDesc(s *string) *PermissionUpdate {
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (pu *PermissionUpdate) SetNillableDescription(s *string) *PermissionUpdate {
 	if s != nil {
-		pu.SetDesc(*s)
+		pu.SetDescription(*s)
 	}
 	return pu
 }
 
-// ClearDesc clears the value of the "desc" field.
-func (pu *PermissionUpdate) ClearDesc() *PermissionUpdate {
-	pu.mutation.ClearDesc()
+// ClearDescription clears the value of the "description" field.
+func (pu *PermissionUpdate) ClearDescription() *PermissionUpdate {
+	pu.mutation.ClearDescription()
 	return pu
 }
 
@@ -362,11 +362,11 @@ func (pu *PermissionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.PathCleared() {
 		_spec.ClearField(permission.FieldPath, field.TypeString)
 	}
-	if value, ok := pu.mutation.Desc(); ok {
-		_spec.SetField(permission.FieldDesc, field.TypeString, value)
+	if value, ok := pu.mutation.Description(); ok {
+		_spec.SetField(permission.FieldDescription, field.TypeString, value)
 	}
-	if pu.mutation.DescCleared() {
-		_spec.ClearField(permission.FieldDesc, field.TypeString)
+	if pu.mutation.DescriptionCleared() {
+		_spec.ClearField(permission.FieldDescription, field.TypeString)
 	}
 	if value, ok := pu.mutation.Sort(); ok {
 		_spec.SetField(permission.FieldSort, field.TypeInt, value)
@@ -621,23 +621,23 @@ func (puo *PermissionUpdateOne) ClearPath() *PermissionUpdateOne {
 	return puo
 }
 
-// SetDesc sets the "desc" field.
-func (puo *PermissionUpdateOne) SetDesc(s string) *PermissionUpdateOne {
-	puo.mutation.SetDesc(s)
+// SetDescription sets the "description" field.
+func (puo *PermissionUpdateOne) SetDescription(s string) *PermissionUpdateOne {
+	puo.mutation.SetDescription(s)
 	return puo
 }
 
-// SetNillableDesc sets the "desc" field if the given value is not nil.
-func (puo *PermissionUpdateOne) SetNillableDesc(s *string) *PermissionUpdateOne {
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (puo *PermissionUpdateOne) SetNillableDescription(s *string) *PermissionUpdateOne {
 	if s != nil {
-		puo.SetDesc(*s)
+		puo.SetDescription(*s)
 	}
 	return puo
 }
 
-// ClearDesc clears the value of the "desc" field.
-func (puo *PermissionUpdateOne) ClearDesc() *PermissionUpdateOne {
-	puo.mutation.ClearDesc()
+// ClearDescription clears the value of the "description" field.
+func (puo *PermissionUpdateOne) ClearDescription() *PermissionUpdateOne {
+	puo.mutation.ClearDescription()
 	return puo
 }
 
@@ -883,11 +883,11 @@ func (puo *PermissionUpdateOne) sqlSave(ctx context.Context) (_node *Permission,
 	if puo.mutation.PathCleared() {
 		_spec.ClearField(permission.FieldPath, field.TypeString)
 	}
-	if value, ok := puo.mutation.Desc(); ok {
-		_spec.SetField(permission.FieldDesc, field.TypeString, value)
+	if value, ok := puo.mutation.Description(); ok {
+		_spec.SetField(permission.FieldDescription, field.TypeString, value)
 	}
-	if puo.mutation.DescCleared() {
-		_spec.ClearField(permission.FieldDesc, field.TypeString)
+	if puo.mutation.DescriptionCleared() {
+		_spec.ClearField(permission.FieldDescription, field.TypeString)
 	}
 	if value, ok := puo.mutation.Sort(); ok {
 		_spec.SetField(permission.FieldSort, field.TypeInt, value)

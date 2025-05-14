@@ -86,7 +86,7 @@ func init() {
 	// role.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	role.UpdateDefaultUpdatedAt = roleDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// roleDescSort is the schema descriptor for sort field.
-	roleDescSort := roleFields[1].Descriptor()
+	roleDescSort := roleFields[2].Descriptor()
 	// role.DefaultSort holds the default value on creation for the sort field.
 	role.DefaultSort = roleDescSort.Default.(int)
 	userMixin := schema.User{}.Mixin()
@@ -115,6 +115,6 @@ func init() {
 }
 
 const (
-	Version = "v0.14.3"                                         // Version of ent codegen.
-	Sum     = "h1:wokAV/kIlH9TeklJWGGS7AYJdVckr0DloWjIcO9iIIQ=" // Sum of ent codegen.
+	Version = "v0.14.4"                                         // Version of ent codegen.
+	Sum     = "h1:/DhDraSLXIkBhyiVoJeSshr4ZYi7femzhj6/TckzZuI=" // Sum of ent codegen.
 )

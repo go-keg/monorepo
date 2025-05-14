@@ -58,6 +58,20 @@ func (rc *RoleCreate) SetName(s string) *RoleCreate {
 	return rc
 }
 
+// SetDescription sets the "description" field.
+func (rc *RoleCreate) SetDescription(s string) *RoleCreate {
+	rc.mutation.SetDescription(s)
+	return rc
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (rc *RoleCreate) SetNillableDescription(s *string) *RoleCreate {
+	if s != nil {
+		rc.SetDescription(*s)
+	}
+	return rc
+}
+
 // SetSort sets the "sort" field.
 func (rc *RoleCreate) SetSort(i int) *RoleCreate {
 	rc.mutation.SetSort(i)
@@ -198,6 +212,10 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 		_spec.SetField(role.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
+	if value, ok := rc.mutation.Description(); ok {
+		_spec.SetField(role.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
 	if value, ok := rc.mutation.Sort(); ok {
 		_spec.SetField(role.FieldSort, field.TypeInt, value)
 		_node.Sort = value
@@ -316,6 +334,24 @@ func (u *RoleUpsert) UpdateName() *RoleUpsert {
 	return u
 }
 
+// SetDescription sets the "description" field.
+func (u *RoleUpsert) SetDescription(v string) *RoleUpsert {
+	u.Set(role.FieldDescription, v)
+	return u
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *RoleUpsert) UpdateDescription() *RoleUpsert {
+	u.SetExcluded(role.FieldDescription)
+	return u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *RoleUpsert) ClearDescription() *RoleUpsert {
+	u.SetNull(role.FieldDescription)
+	return u
+}
+
 // SetSort sets the "sort" field.
 func (u *RoleUpsert) SetSort(v int) *RoleUpsert {
 	u.Set(role.FieldSort, v)
@@ -411,6 +447,27 @@ func (u *RoleUpsertOne) SetName(v string) *RoleUpsertOne {
 func (u *RoleUpsertOne) UpdateName() *RoleUpsertOne {
 	return u.Update(func(s *RoleUpsert) {
 		s.UpdateName()
+	})
+}
+
+// SetDescription sets the "description" field.
+func (u *RoleUpsertOne) SetDescription(v string) *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.SetDescription(v)
+	})
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *RoleUpsertOne) UpdateDescription() *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.UpdateDescription()
+	})
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *RoleUpsertOne) ClearDescription() *RoleUpsertOne {
+	return u.Update(func(s *RoleUpsert) {
+		s.ClearDescription()
 	})
 }
 
@@ -678,6 +735,27 @@ func (u *RoleUpsertBulk) SetName(v string) *RoleUpsertBulk {
 func (u *RoleUpsertBulk) UpdateName() *RoleUpsertBulk {
 	return u.Update(func(s *RoleUpsert) {
 		s.UpdateName()
+	})
+}
+
+// SetDescription sets the "description" field.
+func (u *RoleUpsertBulk) SetDescription(v string) *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.SetDescription(v)
+	})
+}
+
+// UpdateDescription sets the "description" field to the value that was provided on create.
+func (u *RoleUpsertBulk) UpdateDescription() *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.UpdateDescription()
+	})
+}
+
+// ClearDescription clears the value of the "description" field.
+func (u *RoleUpsertBulk) ClearDescription() *RoleUpsertBulk {
+	return u.Update(func(s *RoleUpsert) {
+		s.ClearDescription()
 	})
 }
 

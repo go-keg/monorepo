@@ -83,6 +83,80 @@ func (a *AppQuery) List(ctx context.Context, offset, limit int, opts ...AppPagin
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (oa *OAuthAccountQuery) CustomCollectFields(ctx context.Context, path ...string) (*OAuthAccountQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return oa, nil
+	}
+	if field := collectedField(ctx, path...); field != nil {
+		if err := oa.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, path); err != nil {
+			return nil, err
+		}
+	}
+	return oa, nil
+}
+
+// AllCollectFields
+func (oa *OAuthAccountQuery) AllCollectFields(ctx context.Context, path ...string) ([]*OAuthAccount, error) {
+	_query, err := oa.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.All(ctx)
+}
+
+// FirstCollectFields
+func (oa *OAuthAccountQuery) FirstCollectFields(ctx context.Context, path ...string) (*OAuthAccount, error) {
+	_query, err := oa.CustomCollectFields(ctx, path...)
+	if err != nil {
+		return nil, err
+	}
+	return _query.First(ctx)
+}
+
+// List executes the query and returns totalCount and nodes []*OAuthAccount.
+func (oa *OAuthAccountQuery) List(ctx context.Context, offset, limit int, opts ...OAuthAccountPaginateOption) (*OAuthAccountConnection, error) {
+	pager, err := newOAuthAccountPager(opts, false)
+	if err != nil {
+		return nil, err
+	}
+	if _, err = pager.applyFilter(oa); err != nil {
+		return nil, err
+	}
+	conn := &OAuthAccountConnection{}
+	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
+	if hasCollectedField(ctx, totalCountField) {
+		hasPagination := limit != 0
+		if hasPagination || ignoredNodes {
+			c := oa.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.Count(ctx); err != nil {
+				return nil, err
+			}
+		}
+	}
+	if ignoredNodes || (limit == 0) {
+		return conn, nil
+	}
+	oa.Offset(offset).Limit(limit)
+	if field := collectedField(ctx, nodesField); field != nil {
+		if err = oa.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+			return nil, err
+		}
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := oa.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	conn.Nodes, err = pager.applyOrder(oa).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return conn, nil
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (ol *OperationLogQuery) CustomCollectFields(ctx context.Context, path ...string) (*OperationLogQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {

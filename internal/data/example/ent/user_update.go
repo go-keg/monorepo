@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/go-keg/monorepo/internal/data/example/ent/oauthaccount"
 	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
 	"github.com/go-keg/monorepo/internal/data/example/ent/predicate"
 	"github.com/go-keg/monorepo/internal/data/example/ent/role"
@@ -125,6 +126,12 @@ func (uu *UserUpdate) SetNillablePassword(s *string) *UserUpdate {
 	return uu
 }
 
+// ClearPassword clears the value of the "password" field.
+func (uu *UserUpdate) ClearPassword() *UserUpdate {
+	uu.mutation.ClearPassword()
+	return uu
+}
+
 // SetStatus sets the "status" field.
 func (uu *UserUpdate) SetStatus(u user.Status) *UserUpdate {
 	uu.mutation.SetStatus(u)
@@ -183,6 +190,21 @@ func (uu *UserUpdate) AddOperationLogs(o ...*OperationLog) *UserUpdate {
 	return uu.AddOperationLogIDs(ids...)
 }
 
+// AddOauthAccountIDs adds the "oauth_accounts" edge to the OAuthAccount entity by IDs.
+func (uu *UserUpdate) AddOauthAccountIDs(ids ...int) *UserUpdate {
+	uu.mutation.AddOauthAccountIDs(ids...)
+	return uu
+}
+
+// AddOauthAccounts adds the "oauth_accounts" edges to the OAuthAccount entity.
+func (uu *UserUpdate) AddOauthAccounts(o ...*OAuthAccount) *UserUpdate {
+	ids := make([]int, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return uu.AddOauthAccountIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uu *UserUpdate) Mutation() *UserMutation {
 	return uu.mutation
@@ -228,6 +250,27 @@ func (uu *UserUpdate) RemoveOperationLogs(o ...*OperationLog) *UserUpdate {
 		ids[i] = o[i].ID
 	}
 	return uu.RemoveOperationLogIDs(ids...)
+}
+
+// ClearOauthAccounts clears all "oauth_accounts" edges to the OAuthAccount entity.
+func (uu *UserUpdate) ClearOauthAccounts() *UserUpdate {
+	uu.mutation.ClearOauthAccounts()
+	return uu
+}
+
+// RemoveOauthAccountIDs removes the "oauth_accounts" edge to OAuthAccount entities by IDs.
+func (uu *UserUpdate) RemoveOauthAccountIDs(ids ...int) *UserUpdate {
+	uu.mutation.RemoveOauthAccountIDs(ids...)
+	return uu
+}
+
+// RemoveOauthAccounts removes "oauth_accounts" edges to OAuthAccount entities.
+func (uu *UserUpdate) RemoveOauthAccounts(o ...*OAuthAccount) *UserUpdate {
+	ids := make([]int, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return uu.RemoveOauthAccountIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -330,6 +373,9 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := uu.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
 	}
+	if uu.mutation.PasswordCleared() {
+		_spec.ClearField(user.FieldPassword, field.TypeString)
+	}
 	if value, ok := uu.mutation.Status(); ok {
 		_spec.SetField(user.FieldStatus, field.TypeEnum, value)
 	}
@@ -419,6 +465,51 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(operationlog.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uu.mutation.OauthAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.OauthAccountsTable,
+			Columns: []string{user.OauthAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.RemovedOauthAccountsIDs(); len(nodes) > 0 && !uu.mutation.OauthAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.OauthAccountsTable,
+			Columns: []string{user.OauthAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uu.mutation.OauthAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.OauthAccountsTable,
+			Columns: []string{user.OauthAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -542,6 +633,12 @@ func (uuo *UserUpdateOne) SetNillablePassword(s *string) *UserUpdateOne {
 	return uuo
 }
 
+// ClearPassword clears the value of the "password" field.
+func (uuo *UserUpdateOne) ClearPassword() *UserUpdateOne {
+	uuo.mutation.ClearPassword()
+	return uuo
+}
+
 // SetStatus sets the "status" field.
 func (uuo *UserUpdateOne) SetStatus(u user.Status) *UserUpdateOne {
 	uuo.mutation.SetStatus(u)
@@ -600,6 +697,21 @@ func (uuo *UserUpdateOne) AddOperationLogs(o ...*OperationLog) *UserUpdateOne {
 	return uuo.AddOperationLogIDs(ids...)
 }
 
+// AddOauthAccountIDs adds the "oauth_accounts" edge to the OAuthAccount entity by IDs.
+func (uuo *UserUpdateOne) AddOauthAccountIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.AddOauthAccountIDs(ids...)
+	return uuo
+}
+
+// AddOauthAccounts adds the "oauth_accounts" edges to the OAuthAccount entity.
+func (uuo *UserUpdateOne) AddOauthAccounts(o ...*OAuthAccount) *UserUpdateOne {
+	ids := make([]int, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return uuo.AddOauthAccountIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (uuo *UserUpdateOne) Mutation() *UserMutation {
 	return uuo.mutation
@@ -645,6 +757,27 @@ func (uuo *UserUpdateOne) RemoveOperationLogs(o ...*OperationLog) *UserUpdateOne
 		ids[i] = o[i].ID
 	}
 	return uuo.RemoveOperationLogIDs(ids...)
+}
+
+// ClearOauthAccounts clears all "oauth_accounts" edges to the OAuthAccount entity.
+func (uuo *UserUpdateOne) ClearOauthAccounts() *UserUpdateOne {
+	uuo.mutation.ClearOauthAccounts()
+	return uuo
+}
+
+// RemoveOauthAccountIDs removes the "oauth_accounts" edge to OAuthAccount entities by IDs.
+func (uuo *UserUpdateOne) RemoveOauthAccountIDs(ids ...int) *UserUpdateOne {
+	uuo.mutation.RemoveOauthAccountIDs(ids...)
+	return uuo
+}
+
+// RemoveOauthAccounts removes "oauth_accounts" edges to OAuthAccount entities.
+func (uuo *UserUpdateOne) RemoveOauthAccounts(o ...*OAuthAccount) *UserUpdateOne {
+	ids := make([]int, len(o))
+	for i := range o {
+		ids[i] = o[i].ID
+	}
+	return uuo.RemoveOauthAccountIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -777,6 +910,9 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 	if value, ok := uuo.mutation.Password(); ok {
 		_spec.SetField(user.FieldPassword, field.TypeString, value)
 	}
+	if uuo.mutation.PasswordCleared() {
+		_spec.ClearField(user.FieldPassword, field.TypeString)
+	}
 	if value, ok := uuo.mutation.Status(); ok {
 		_spec.SetField(user.FieldStatus, field.TypeEnum, value)
 	}
@@ -866,6 +1002,51 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(operationlog.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if uuo.mutation.OauthAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.OauthAccountsTable,
+			Columns: []string{user.OauthAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.RemovedOauthAccountsIDs(); len(nodes) > 0 && !uuo.mutation.OauthAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.OauthAccountsTable,
+			Columns: []string{user.OauthAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := uuo.mutation.OauthAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.OauthAccountsTable,
+			Columns: []string{user.OauthAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

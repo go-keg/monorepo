@@ -43,10 +43,7 @@ func main() {
 	rootCmd.Run = func(cmd *cobra.Command, args []string) {
 		path, _ := cmd.Flags().GetString("conf")
 		env, _ := cmd.Flags().GetString("env")
-		cfg, err := conf.Load(path, env)
-		if err != nil {
-			panic(err)
-		}
+		cfg := conf.MustLoad(path, env)
 		logger := log.NewLoggerFromConfig(cfg.Log, Name,
 			log.ServiceName(Name),
 			log.ServiceVersion(Version),

@@ -47,14 +47,17 @@ type UserEdges struct {
 	Roles []*Role `json:"roles,omitempty"`
 	// OperationLogs holds the value of the operation_logs edge.
 	OperationLogs []*OperationLog `json:"operation_logs,omitempty"`
+	// OauthAccounts holds the value of the oauth_accounts edge.
+	OauthAccounts []*OAuthAccount `json:"oauth_accounts,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [1]map[string]int
+	totalCount [2]map[string]int
 
 	namedRoles         map[string][]*Role
 	namedOperationLogs map[string][]*OperationLog
+	namedOauthAccounts map[string][]*OAuthAccount
 }
 
 // RolesOrErr returns the Roles value or an error if the edge
@@ -73,6 +76,15 @@ func (e UserEdges) OperationLogsOrErr() ([]*OperationLog, error) {
 		return e.OperationLogs, nil
 	}
 	return nil, &NotLoadedError{edge: "operation_logs"}
+}
+
+// OauthAccountsOrErr returns the OauthAccounts value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) OauthAccountsOrErr() ([]*OAuthAccount, error) {
+	if e.loadedTypes[2] {
+		return e.OauthAccounts, nil
+	}
+	return nil, &NotLoadedError{edge: "oauth_accounts"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -186,6 +198,11 @@ func (u *User) QueryOperationLogs() *OperationLogQuery {
 	return NewUserClient(u.config).QueryOperationLogs(u)
 }
 
+// QueryOauthAccounts queries the "oauth_accounts" edge of the User entity.
+func (u *User) QueryOauthAccounts() *OAuthAccountQuery {
+	return NewUserClient(u.config).QueryOauthAccounts(u)
+}
+
 // Update returns a builder for updating this User.
 // Note that you need to call User.Unwrap() before calling this method if this User
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -283,6 +300,30 @@ func (u *User) appendNamedOperationLogs(name string, edges ...*OperationLog) {
 		u.Edges.namedOperationLogs[name] = []*OperationLog{}
 	} else {
 		u.Edges.namedOperationLogs[name] = append(u.Edges.namedOperationLogs[name], edges...)
+	}
+}
+
+// NamedOauthAccounts returns the OauthAccounts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (u *User) NamedOauthAccounts(name string) ([]*OAuthAccount, error) {
+	if u.Edges.namedOauthAccounts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := u.Edges.namedOauthAccounts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (u *User) appendNamedOauthAccounts(name string, edges ...*OAuthAccount) {
+	if u.Edges.namedOauthAccounts == nil {
+		u.Edges.namedOauthAccounts = make(map[string][]*OAuthAccount)
+	}
+	if len(edges) == 0 {
+		u.Edges.namedOauthAccounts[name] = []*OAuthAccount{}
+	} else {
+		u.Edges.namedOauthAccounts[name] = append(u.Edges.namedOauthAccounts[name], edges...)
 	}
 }
 

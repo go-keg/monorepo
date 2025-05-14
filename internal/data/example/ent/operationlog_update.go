@@ -70,9 +70,23 @@ func (olu *OperationLogUpdate) SetNillableType(s *string) *OperationLogUpdate {
 	return olu
 }
 
-// SetContext sets the "context" field.
-func (olu *OperationLogUpdate) SetContext(m map[string]interface{}) *OperationLogUpdate {
-	olu.mutation.SetContext(m)
+// SetContent sets the "content" field.
+func (olu *OperationLogUpdate) SetContent(s string) *OperationLogUpdate {
+	olu.mutation.SetContent(s)
+	return olu
+}
+
+// SetNillableContent sets the "content" field if the given value is not nil.
+func (olu *OperationLogUpdate) SetNillableContent(s *string) *OperationLogUpdate {
+	if s != nil {
+		olu.SetContent(*s)
+	}
+	return olu
+}
+
+// SetMetadata sets the "metadata" field.
+func (olu *OperationLogUpdate) SetMetadata(m map[string]interface{}) *OperationLogUpdate {
+	olu.mutation.SetMetadata(m)
 	return olu
 }
 
@@ -166,8 +180,11 @@ func (olu *OperationLogUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := olu.mutation.GetType(); ok {
 		_spec.SetField(operationlog.FieldType, field.TypeString, value)
 	}
-	if value, ok := olu.mutation.Context(); ok {
-		_spec.SetField(operationlog.FieldContext, field.TypeJSON, value)
+	if value, ok := olu.mutation.Content(); ok {
+		_spec.SetField(operationlog.FieldContent, field.TypeString, value)
+	}
+	if value, ok := olu.mutation.Metadata(); ok {
+		_spec.SetField(operationlog.FieldMetadata, field.TypeJSON, value)
 	}
 	if olu.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -260,9 +277,23 @@ func (oluo *OperationLogUpdateOne) SetNillableType(s *string) *OperationLogUpdat
 	return oluo
 }
 
-// SetContext sets the "context" field.
-func (oluo *OperationLogUpdateOne) SetContext(m map[string]interface{}) *OperationLogUpdateOne {
-	oluo.mutation.SetContext(m)
+// SetContent sets the "content" field.
+func (oluo *OperationLogUpdateOne) SetContent(s string) *OperationLogUpdateOne {
+	oluo.mutation.SetContent(s)
+	return oluo
+}
+
+// SetNillableContent sets the "content" field if the given value is not nil.
+func (oluo *OperationLogUpdateOne) SetNillableContent(s *string) *OperationLogUpdateOne {
+	if s != nil {
+		oluo.SetContent(*s)
+	}
+	return oluo
+}
+
+// SetMetadata sets the "metadata" field.
+func (oluo *OperationLogUpdateOne) SetMetadata(m map[string]interface{}) *OperationLogUpdateOne {
+	oluo.mutation.SetMetadata(m)
 	return oluo
 }
 
@@ -386,8 +417,11 @@ func (oluo *OperationLogUpdateOne) sqlSave(ctx context.Context) (_node *Operatio
 	if value, ok := oluo.mutation.GetType(); ok {
 		_spec.SetField(operationlog.FieldType, field.TypeString, value)
 	}
-	if value, ok := oluo.mutation.Context(); ok {
-		_spec.SetField(operationlog.FieldContext, field.TypeJSON, value)
+	if value, ok := oluo.mutation.Content(); ok {
+		_spec.SetField(operationlog.FieldContent, field.TypeString, value)
+	}
+	if value, ok := oluo.mutation.Metadata(); ok {
+		_spec.SetField(operationlog.FieldMetadata, field.TypeJSON, value)
 	}
 	if oluo.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{

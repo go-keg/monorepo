@@ -95,6 +95,23 @@ func (m AppMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
 	return m.Client().Mutate(ctx, mu)
 }
 
+// OAuthAccount is the client for interacting with the OAuthAccount builders.
+func (db *Database) OAuthAccount(ctx context.Context) *OAuthAccountClient {
+	return db.loadClient(ctx).OAuthAccount
+}
+
+// WhereP appends storage-level predicates to the query builder. Using this method, users
+// can use type-assertion to append predicates that do not depend on any generated package.
+func (q *OAuthAccountQuery) WhereP(ps ...func(*sql.Selector)) {
+	for i := range ps {
+		q.predicates = append(q.predicates, ps[i])
+	}
+}
+
+func (m OAuthAccountMutation) Mutate(ctx context.Context, mu Mutation) (Value, error) {
+	return m.Client().Mutate(ctx, mu)
+}
+
 // OperationLog is the client for interacting with the OperationLog builders.
 func (db *Database) OperationLog(ctx context.Context) *OperationLogClient {
 	return db.loadClient(ctx).OperationLog

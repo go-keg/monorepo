@@ -16,6 +16,8 @@ type Tx struct {
 	config
 	// App is the client for interacting with the App builders.
 	App *AppClient
+	// OAuthAccount is the client for interacting with the OAuthAccount builders.
+	OAuthAccount *OAuthAccountClient
 	// OperationLog is the client for interacting with the OperationLog builders.
 	OperationLog *OperationLogClient
 	// Permission is the client for interacting with the Permission builders.
@@ -156,6 +158,7 @@ func (tx *Tx) Client() *Client {
 
 func (tx *Tx) init() {
 	tx.App = NewAppClient(tx.config)
+	tx.OAuthAccount = NewOAuthAccountClient(tx.config)
 	tx.OperationLog = NewOperationLogClient(tx.config)
 	tx.Permission = NewPermissionClient(tx.config)
 	tx.Role = NewRoleClient(tx.config)

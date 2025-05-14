@@ -16,6 +16,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/go-keg/monorepo/internal/data/example/ent/app"
+	"github.com/go-keg/monorepo/internal/data/example/ent/oauthaccount"
 	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/role"
@@ -31,6 +32,8 @@ type Client struct {
 	Schema *migrate.Schema
 	// App is the client for interacting with the App builders.
 	App *AppClient
+	// OAuthAccount is the client for interacting with the OAuthAccount builders.
+	OAuthAccount *OAuthAccountClient
 	// OperationLog is the client for interacting with the OperationLog builders.
 	OperationLog *OperationLogClient
 	// Permission is the client for interacting with the Permission builders.
@@ -53,6 +56,7 @@ func NewClient(opts ...Option) *Client {
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
 	c.App = NewAppClient(c.config)
+	c.OAuthAccount = NewOAuthAccountClient(c.config)
 	c.OperationLog = NewOperationLogClient(c.config)
 	c.Permission = NewPermissionClient(c.config)
 	c.Role = NewRoleClient(c.config)
@@ -150,6 +154,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ctx:          ctx,
 		config:       cfg,
 		App:          NewAppClient(cfg),
+		OAuthAccount: NewOAuthAccountClient(cfg),
 		OperationLog: NewOperationLogClient(cfg),
 		Permission:   NewPermissionClient(cfg),
 		Role:         NewRoleClient(cfg),
@@ -174,6 +179,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ctx:          ctx,
 		config:       cfg,
 		App:          NewAppClient(cfg),
+		OAuthAccount: NewOAuthAccountClient(cfg),
 		OperationLog: NewOperationLogClient(cfg),
 		Permission:   NewPermissionClient(cfg),
 		Role:         NewRoleClient(cfg),
@@ -206,21 +212,21 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.App.Use(hooks...)
-	c.OperationLog.Use(hooks...)
-	c.Permission.Use(hooks...)
-	c.Role.Use(hooks...)
-	c.User.Use(hooks...)
+	for _, n := range []interface{ Use(...Hook) }{
+		c.App, c.OAuthAccount, c.OperationLog, c.Permission, c.Role, c.User,
+	} {
+		n.Use(hooks...)
+	}
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
-	c.App.Intercept(interceptors...)
-	c.OperationLog.Intercept(interceptors...)
-	c.Permission.Intercept(interceptors...)
-	c.Role.Intercept(interceptors...)
-	c.User.Intercept(interceptors...)
+	for _, n := range []interface{ Intercept(...Interceptor) }{
+		c.App, c.OAuthAccount, c.OperationLog, c.Permission, c.Role, c.User,
+	} {
+		n.Intercept(interceptors...)
+	}
 }
 
 // Mutate implements the ent.Mutator interface.
@@ -228,6 +234,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
 	case *AppMutation:
 		return c.App.mutate(ctx, m)
+	case *OAuthAccountMutation:
+		return c.OAuthAccount.mutate(ctx, m)
 	case *OperationLogMutation:
 		return c.OperationLog.mutate(ctx, m)
 	case *PermissionMutation:
@@ -371,6 +379,155 @@ func (c *AppClient) mutate(ctx context.Context, m *AppMutation) (Value, error) {
 		return (&AppDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("ent: unknown App mutation op: %q", m.Op())
+	}
+}
+
+// OAuthAccountClient is a client for the OAuthAccount schema.
+type OAuthAccountClient struct {
+	config
+}
+
+// NewOAuthAccountClient returns a client for the OAuthAccount from the given config.
+func NewOAuthAccountClient(c config) *OAuthAccountClient {
+	return &OAuthAccountClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `oauthaccount.Hooks(f(g(h())))`.
+func (c *OAuthAccountClient) Use(hooks ...Hook) {
+	c.hooks.OAuthAccount = append(c.hooks.OAuthAccount, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `oauthaccount.Intercept(f(g(h())))`.
+func (c *OAuthAccountClient) Intercept(interceptors ...Interceptor) {
+	c.inters.OAuthAccount = append(c.inters.OAuthAccount, interceptors...)
+}
+
+// Create returns a builder for creating a OAuthAccount entity.
+func (c *OAuthAccountClient) Create() *OAuthAccountCreate {
+	mutation := newOAuthAccountMutation(c.config, OpCreate)
+	return &OAuthAccountCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of OAuthAccount entities.
+func (c *OAuthAccountClient) CreateBulk(builders ...*OAuthAccountCreate) *OAuthAccountCreateBulk {
+	return &OAuthAccountCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *OAuthAccountClient) MapCreateBulk(slice any, setFunc func(*OAuthAccountCreate, int)) *OAuthAccountCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &OAuthAccountCreateBulk{err: fmt.Errorf("calling to OAuthAccountClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*OAuthAccountCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &OAuthAccountCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for OAuthAccount.
+func (c *OAuthAccountClient) Update() *OAuthAccountUpdate {
+	mutation := newOAuthAccountMutation(c.config, OpUpdate)
+	return &OAuthAccountUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *OAuthAccountClient) UpdateOne(oa *OAuthAccount) *OAuthAccountUpdateOne {
+	mutation := newOAuthAccountMutation(c.config, OpUpdateOne, withOAuthAccount(oa))
+	return &OAuthAccountUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *OAuthAccountClient) UpdateOneID(id int) *OAuthAccountUpdateOne {
+	mutation := newOAuthAccountMutation(c.config, OpUpdateOne, withOAuthAccountID(id))
+	return &OAuthAccountUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for OAuthAccount.
+func (c *OAuthAccountClient) Delete() *OAuthAccountDelete {
+	mutation := newOAuthAccountMutation(c.config, OpDelete)
+	return &OAuthAccountDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *OAuthAccountClient) DeleteOne(oa *OAuthAccount) *OAuthAccountDeleteOne {
+	return c.DeleteOneID(oa.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *OAuthAccountClient) DeleteOneID(id int) *OAuthAccountDeleteOne {
+	builder := c.Delete().Where(oauthaccount.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &OAuthAccountDeleteOne{builder}
+}
+
+// Query returns a query builder for OAuthAccount.
+func (c *OAuthAccountClient) Query() *OAuthAccountQuery {
+	return &OAuthAccountQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeOAuthAccount},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a OAuthAccount entity by its id.
+func (c *OAuthAccountClient) Get(ctx context.Context, id int) (*OAuthAccount, error) {
+	return c.Query().Where(oauthaccount.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *OAuthAccountClient) GetX(ctx context.Context, id int) *OAuthAccount {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUser queries the user edge of a OAuthAccount.
+func (c *OAuthAccountClient) QueryUser(oa *OAuthAccount) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := oa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(oauthaccount.Table, oauthaccount.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, oauthaccount.UserTable, oauthaccount.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(oa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *OAuthAccountClient) Hooks() []Hook {
+	return c.hooks.OAuthAccount
+}
+
+// Interceptors returns the client interceptors.
+func (c *OAuthAccountClient) Interceptors() []Interceptor {
+	return c.inters.OAuthAccount
+}
+
+func (c *OAuthAccountClient) mutate(ctx context.Context, m *OAuthAccountMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&OAuthAccountCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&OAuthAccountUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&OAuthAccountUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&OAuthAccountDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown OAuthAccount mutation op: %q", m.Op())
 	}
 }
 
@@ -1009,6 +1166,22 @@ func (c *UserClient) QueryOperationLogs(u *User) *OperationLogQuery {
 	return query
 }
 
+// QueryOauthAccounts queries the oauth_accounts edge of a User.
+func (c *UserClient) QueryOauthAccounts(u *User) *OAuthAccountQuery {
+	query := (&OAuthAccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := u.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(oauthaccount.Table, oauthaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.OauthAccountsTable, user.OauthAccountsColumn),
+		)
+		fromV = sqlgraph.Neighbors(u.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *UserClient) Hooks() []Hook {
 	hooks := c.hooks.User
@@ -1039,10 +1212,10 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		App, OperationLog, Permission, Role, User []ent.Hook
+		App, OAuthAccount, OperationLog, Permission, Role, User []ent.Hook
 	}
 	inters struct {
-		App, OperationLog, Permission, Role, User []ent.Interceptor
+		App, OAuthAccount, OperationLog, Permission, Role, User []ent.Interceptor
 	}
 )
 

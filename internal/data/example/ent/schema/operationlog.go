@@ -35,9 +35,10 @@ func (OperationLog) Annotations() []schema.Annotation {
 // Fields of the OperationLog.
 func (OperationLog) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("user_id"),
+		field.Int("user_id").Comment("操作人"),
 		field.String("type").Comment("操作类型"),
-		field.JSON("context", map[string]any{}).Annotations(entgql.Type("Map")),
+		field.String("content").Comment("操作内容"),
+		field.JSON("metadata", map[string]any{}).Annotations(entgql.Type("Map")).Comment("元数据"),
 	}
 }
 

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/go-keg/monorepo/internal/data/example/ent/app"
+	"github.com/go-keg/monorepo/internal/data/example/ent/oauthaccount"
 	"github.com/go-keg/monorepo/internal/data/example/ent/operationlog"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/predicate"
@@ -114,6 +115,18 @@ type AppWhereInput struct {
 	// "usable" field predicates.
 	Usable    *bool `json:"usable,omitempty"`
 	UsableNEQ *bool `json:"usableNEQ,omitempty"`
+
+	// "expires_at" field predicates.
+	ExpiresAt       *time.Time  `json:"expiresAt,omitempty"`
+	ExpiresAtNEQ    *time.Time  `json:"expiresAtNEQ,omitempty"`
+	ExpiresAtIn     []time.Time `json:"expiresAtIn,omitempty"`
+	ExpiresAtNotIn  []time.Time `json:"expiresAtNotIn,omitempty"`
+	ExpiresAtGT     *time.Time  `json:"expiresAtGT,omitempty"`
+	ExpiresAtGTE    *time.Time  `json:"expiresAtGTE,omitempty"`
+	ExpiresAtLT     *time.Time  `json:"expiresAtLT,omitempty"`
+	ExpiresAtLTE    *time.Time  `json:"expiresAtLTE,omitempty"`
+	ExpiresAtIsNil  bool        `json:"expiresAtIsNil,omitempty"`
+	ExpiresAtNotNil bool        `json:"expiresAtNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -418,6 +431,36 @@ func (i *AppWhereInput) P() (predicate.App, error) {
 	if i.UsableNEQ != nil {
 		predicates = append(predicates, app.UsableNEQ(*i.UsableNEQ))
 	}
+	if i.ExpiresAt != nil {
+		predicates = append(predicates, app.ExpiresAtEQ(*i.ExpiresAt))
+	}
+	if i.ExpiresAtNEQ != nil {
+		predicates = append(predicates, app.ExpiresAtNEQ(*i.ExpiresAtNEQ))
+	}
+	if len(i.ExpiresAtIn) > 0 {
+		predicates = append(predicates, app.ExpiresAtIn(i.ExpiresAtIn...))
+	}
+	if len(i.ExpiresAtNotIn) > 0 {
+		predicates = append(predicates, app.ExpiresAtNotIn(i.ExpiresAtNotIn...))
+	}
+	if i.ExpiresAtGT != nil {
+		predicates = append(predicates, app.ExpiresAtGT(*i.ExpiresAtGT))
+	}
+	if i.ExpiresAtGTE != nil {
+		predicates = append(predicates, app.ExpiresAtGTE(*i.ExpiresAtGTE))
+	}
+	if i.ExpiresAtLT != nil {
+		predicates = append(predicates, app.ExpiresAtLT(*i.ExpiresAtLT))
+	}
+	if i.ExpiresAtLTE != nil {
+		predicates = append(predicates, app.ExpiresAtLTE(*i.ExpiresAtLTE))
+	}
+	if i.ExpiresAtIsNil {
+		predicates = append(predicates, app.ExpiresAtIsNil())
+	}
+	if i.ExpiresAtNotNil {
+		predicates = append(predicates, app.ExpiresAtNotNil())
+	}
 
 	switch len(predicates) {
 	case 0:
@@ -426,6 +469,444 @@ func (i *AppWhereInput) P() (predicate.App, error) {
 		return predicates[0], nil
 	default:
 		return app.And(predicates...), nil
+	}
+}
+
+// OAuthAccountWhereInput represents a where input for filtering OAuthAccount queries.
+type OAuthAccountWhereInput struct {
+	Predicates []predicate.OAuthAccount  `json:"-"`
+	Not        *OAuthAccountWhereInput   `json:"not,omitempty"`
+	Or         []*OAuthAccountWhereInput `json:"or,omitempty"`
+	And        []*OAuthAccountWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID      *int  `json:"id,omitempty"`
+	IDNEQ   *int  `json:"idNEQ,omitempty"`
+	IDIn    []int `json:"idIn,omitempty"`
+	IDNotIn []int `json:"idNotIn,omitempty"`
+	IDGT    *int  `json:"idGT,omitempty"`
+	IDGTE   *int  `json:"idGTE,omitempty"`
+	IDLT    *int  `json:"idLT,omitempty"`
+	IDLTE   *int  `json:"idLTE,omitempty"`
+
+	// "user_id" field predicates.
+	UserID      *int  `json:"userID,omitempty"`
+	UserIDNEQ   *int  `json:"userIDNEQ,omitempty"`
+	UserIDIn    []int `json:"userIDIn,omitempty"`
+	UserIDNotIn []int `json:"userIDNotIn,omitempty"`
+
+	// "provider" field predicates.
+	Provider             *string  `json:"provider,omitempty"`
+	ProviderNEQ          *string  `json:"providerNEQ,omitempty"`
+	ProviderIn           []string `json:"providerIn,omitempty"`
+	ProviderNotIn        []string `json:"providerNotIn,omitempty"`
+	ProviderGT           *string  `json:"providerGT,omitempty"`
+	ProviderGTE          *string  `json:"providerGTE,omitempty"`
+	ProviderLT           *string  `json:"providerLT,omitempty"`
+	ProviderLTE          *string  `json:"providerLTE,omitempty"`
+	ProviderContains     *string  `json:"providerContains,omitempty"`
+	ProviderHasPrefix    *string  `json:"providerHasPrefix,omitempty"`
+	ProviderHasSuffix    *string  `json:"providerHasSuffix,omitempty"`
+	ProviderEqualFold    *string  `json:"providerEqualFold,omitempty"`
+	ProviderContainsFold *string  `json:"providerContainsFold,omitempty"`
+
+	// "provider_user_id" field predicates.
+	ProviderUserID             *string  `json:"providerUserID,omitempty"`
+	ProviderUserIDNEQ          *string  `json:"providerUserIDNEQ,omitempty"`
+	ProviderUserIDIn           []string `json:"providerUserIDIn,omitempty"`
+	ProviderUserIDNotIn        []string `json:"providerUserIDNotIn,omitempty"`
+	ProviderUserIDGT           *string  `json:"providerUserIDGT,omitempty"`
+	ProviderUserIDGTE          *string  `json:"providerUserIDGTE,omitempty"`
+	ProviderUserIDLT           *string  `json:"providerUserIDLT,omitempty"`
+	ProviderUserIDLTE          *string  `json:"providerUserIDLTE,omitempty"`
+	ProviderUserIDContains     *string  `json:"providerUserIDContains,omitempty"`
+	ProviderUserIDHasPrefix    *string  `json:"providerUserIDHasPrefix,omitempty"`
+	ProviderUserIDHasSuffix    *string  `json:"providerUserIDHasSuffix,omitempty"`
+	ProviderUserIDEqualFold    *string  `json:"providerUserIDEqualFold,omitempty"`
+	ProviderUserIDContainsFold *string  `json:"providerUserIDContainsFold,omitempty"`
+
+	// "access_token" field predicates.
+	AccessToken             *string  `json:"accessToken,omitempty"`
+	AccessTokenNEQ          *string  `json:"accessTokenNEQ,omitempty"`
+	AccessTokenIn           []string `json:"accessTokenIn,omitempty"`
+	AccessTokenNotIn        []string `json:"accessTokenNotIn,omitempty"`
+	AccessTokenGT           *string  `json:"accessTokenGT,omitempty"`
+	AccessTokenGTE          *string  `json:"accessTokenGTE,omitempty"`
+	AccessTokenLT           *string  `json:"accessTokenLT,omitempty"`
+	AccessTokenLTE          *string  `json:"accessTokenLTE,omitempty"`
+	AccessTokenContains     *string  `json:"accessTokenContains,omitempty"`
+	AccessTokenHasPrefix    *string  `json:"accessTokenHasPrefix,omitempty"`
+	AccessTokenHasSuffix    *string  `json:"accessTokenHasSuffix,omitempty"`
+	AccessTokenIsNil        bool     `json:"accessTokenIsNil,omitempty"`
+	AccessTokenNotNil       bool     `json:"accessTokenNotNil,omitempty"`
+	AccessTokenEqualFold    *string  `json:"accessTokenEqualFold,omitempty"`
+	AccessTokenContainsFold *string  `json:"accessTokenContainsFold,omitempty"`
+
+	// "refresh_token" field predicates.
+	RefreshToken             *string  `json:"refreshToken,omitempty"`
+	RefreshTokenNEQ          *string  `json:"refreshTokenNEQ,omitempty"`
+	RefreshTokenIn           []string `json:"refreshTokenIn,omitempty"`
+	RefreshTokenNotIn        []string `json:"refreshTokenNotIn,omitempty"`
+	RefreshTokenGT           *string  `json:"refreshTokenGT,omitempty"`
+	RefreshTokenGTE          *string  `json:"refreshTokenGTE,omitempty"`
+	RefreshTokenLT           *string  `json:"refreshTokenLT,omitempty"`
+	RefreshTokenLTE          *string  `json:"refreshTokenLTE,omitempty"`
+	RefreshTokenContains     *string  `json:"refreshTokenContains,omitempty"`
+	RefreshTokenHasPrefix    *string  `json:"refreshTokenHasPrefix,omitempty"`
+	RefreshTokenHasSuffix    *string  `json:"refreshTokenHasSuffix,omitempty"`
+	RefreshTokenIsNil        bool     `json:"refreshTokenIsNil,omitempty"`
+	RefreshTokenNotNil       bool     `json:"refreshTokenNotNil,omitempty"`
+	RefreshTokenEqualFold    *string  `json:"refreshTokenEqualFold,omitempty"`
+	RefreshTokenContainsFold *string  `json:"refreshTokenContainsFold,omitempty"`
+
+	// "token_expiry" field predicates.
+	TokenExpiry       *time.Time  `json:"tokenExpiry,omitempty"`
+	TokenExpiryNEQ    *time.Time  `json:"tokenExpiryNEQ,omitempty"`
+	TokenExpiryIn     []time.Time `json:"tokenExpiryIn,omitempty"`
+	TokenExpiryNotIn  []time.Time `json:"tokenExpiryNotIn,omitempty"`
+	TokenExpiryGT     *time.Time  `json:"tokenExpiryGT,omitempty"`
+	TokenExpiryGTE    *time.Time  `json:"tokenExpiryGTE,omitempty"`
+	TokenExpiryLT     *time.Time  `json:"tokenExpiryLT,omitempty"`
+	TokenExpiryLTE    *time.Time  `json:"tokenExpiryLTE,omitempty"`
+	TokenExpiryIsNil  bool        `json:"tokenExpiryIsNil,omitempty"`
+	TokenExpiryNotNil bool        `json:"tokenExpiryNotNil,omitempty"`
+
+	// "user" edge predicates.
+	HasUser     *bool             `json:"hasUser,omitempty"`
+	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *OAuthAccountWhereInput) AddPredicates(predicates ...predicate.OAuthAccount) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the OAuthAccountWhereInput filter on the OAuthAccountQuery builder.
+func (i *OAuthAccountWhereInput) Filter(q *OAuthAccountQuery) (*OAuthAccountQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyOAuthAccountWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyOAuthAccountWhereInput is returned in case the OAuthAccountWhereInput is empty.
+var ErrEmptyOAuthAccountWhereInput = errors.New("ent: empty predicate OAuthAccountWhereInput")
+
+// P returns a predicate for filtering oauthaccounts.
+// An error is returned if the input is empty or invalid.
+func (i *OAuthAccountWhereInput) P() (predicate.OAuthAccount, error) {
+	var predicates []predicate.OAuthAccount
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, oauthaccount.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.OAuthAccount, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, oauthaccount.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.OAuthAccount, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, oauthaccount.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, oauthaccount.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, oauthaccount.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, oauthaccount.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, oauthaccount.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, oauthaccount.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, oauthaccount.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, oauthaccount.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, oauthaccount.IDLTE(*i.IDLTE))
+	}
+	if i.UserID != nil {
+		predicates = append(predicates, oauthaccount.UserIDEQ(*i.UserID))
+	}
+	if i.UserIDNEQ != nil {
+		predicates = append(predicates, oauthaccount.UserIDNEQ(*i.UserIDNEQ))
+	}
+	if len(i.UserIDIn) > 0 {
+		predicates = append(predicates, oauthaccount.UserIDIn(i.UserIDIn...))
+	}
+	if len(i.UserIDNotIn) > 0 {
+		predicates = append(predicates, oauthaccount.UserIDNotIn(i.UserIDNotIn...))
+	}
+	if i.Provider != nil {
+		predicates = append(predicates, oauthaccount.ProviderEQ(*i.Provider))
+	}
+	if i.ProviderNEQ != nil {
+		predicates = append(predicates, oauthaccount.ProviderNEQ(*i.ProviderNEQ))
+	}
+	if len(i.ProviderIn) > 0 {
+		predicates = append(predicates, oauthaccount.ProviderIn(i.ProviderIn...))
+	}
+	if len(i.ProviderNotIn) > 0 {
+		predicates = append(predicates, oauthaccount.ProviderNotIn(i.ProviderNotIn...))
+	}
+	if i.ProviderGT != nil {
+		predicates = append(predicates, oauthaccount.ProviderGT(*i.ProviderGT))
+	}
+	if i.ProviderGTE != nil {
+		predicates = append(predicates, oauthaccount.ProviderGTE(*i.ProviderGTE))
+	}
+	if i.ProviderLT != nil {
+		predicates = append(predicates, oauthaccount.ProviderLT(*i.ProviderLT))
+	}
+	if i.ProviderLTE != nil {
+		predicates = append(predicates, oauthaccount.ProviderLTE(*i.ProviderLTE))
+	}
+	if i.ProviderContains != nil {
+		predicates = append(predicates, oauthaccount.ProviderContains(*i.ProviderContains))
+	}
+	if i.ProviderHasPrefix != nil {
+		predicates = append(predicates, oauthaccount.ProviderHasPrefix(*i.ProviderHasPrefix))
+	}
+	if i.ProviderHasSuffix != nil {
+		predicates = append(predicates, oauthaccount.ProviderHasSuffix(*i.ProviderHasSuffix))
+	}
+	if i.ProviderEqualFold != nil {
+		predicates = append(predicates, oauthaccount.ProviderEqualFold(*i.ProviderEqualFold))
+	}
+	if i.ProviderContainsFold != nil {
+		predicates = append(predicates, oauthaccount.ProviderContainsFold(*i.ProviderContainsFold))
+	}
+	if i.ProviderUserID != nil {
+		predicates = append(predicates, oauthaccount.ProviderUserIDEQ(*i.ProviderUserID))
+	}
+	if i.ProviderUserIDNEQ != nil {
+		predicates = append(predicates, oauthaccount.ProviderUserIDNEQ(*i.ProviderUserIDNEQ))
+	}
+	if len(i.ProviderUserIDIn) > 0 {
+		predicates = append(predicates, oauthaccount.ProviderUserIDIn(i.ProviderUserIDIn...))
+	}
+	if len(i.ProviderUserIDNotIn) > 0 {
+		predicates = append(predicates, oauthaccount.ProviderUserIDNotIn(i.ProviderUserIDNotIn...))
+	}
+	if i.ProviderUserIDGT != nil {
+		predicates = append(predicates, oauthaccount.ProviderUserIDGT(*i.ProviderUserIDGT))
+	}
+	if i.ProviderUserIDGTE != nil {
+		predicates = append(predicates, oauthaccount.ProviderUserIDGTE(*i.ProviderUserIDGTE))
+	}
+	if i.ProviderUserIDLT != nil {
+		predicates = append(predicates, oauthaccount.ProviderUserIDLT(*i.ProviderUserIDLT))
+	}
+	if i.ProviderUserIDLTE != nil {
+		predicates = append(predicates, oauthaccount.ProviderUserIDLTE(*i.ProviderUserIDLTE))
+	}
+	if i.ProviderUserIDContains != nil {
+		predicates = append(predicates, oauthaccount.ProviderUserIDContains(*i.ProviderUserIDContains))
+	}
+	if i.ProviderUserIDHasPrefix != nil {
+		predicates = append(predicates, oauthaccount.ProviderUserIDHasPrefix(*i.ProviderUserIDHasPrefix))
+	}
+	if i.ProviderUserIDHasSuffix != nil {
+		predicates = append(predicates, oauthaccount.ProviderUserIDHasSuffix(*i.ProviderUserIDHasSuffix))
+	}
+	if i.ProviderUserIDEqualFold != nil {
+		predicates = append(predicates, oauthaccount.ProviderUserIDEqualFold(*i.ProviderUserIDEqualFold))
+	}
+	if i.ProviderUserIDContainsFold != nil {
+		predicates = append(predicates, oauthaccount.ProviderUserIDContainsFold(*i.ProviderUserIDContainsFold))
+	}
+	if i.AccessToken != nil {
+		predicates = append(predicates, oauthaccount.AccessTokenEQ(*i.AccessToken))
+	}
+	if i.AccessTokenNEQ != nil {
+		predicates = append(predicates, oauthaccount.AccessTokenNEQ(*i.AccessTokenNEQ))
+	}
+	if len(i.AccessTokenIn) > 0 {
+		predicates = append(predicates, oauthaccount.AccessTokenIn(i.AccessTokenIn...))
+	}
+	if len(i.AccessTokenNotIn) > 0 {
+		predicates = append(predicates, oauthaccount.AccessTokenNotIn(i.AccessTokenNotIn...))
+	}
+	if i.AccessTokenGT != nil {
+		predicates = append(predicates, oauthaccount.AccessTokenGT(*i.AccessTokenGT))
+	}
+	if i.AccessTokenGTE != nil {
+		predicates = append(predicates, oauthaccount.AccessTokenGTE(*i.AccessTokenGTE))
+	}
+	if i.AccessTokenLT != nil {
+		predicates = append(predicates, oauthaccount.AccessTokenLT(*i.AccessTokenLT))
+	}
+	if i.AccessTokenLTE != nil {
+		predicates = append(predicates, oauthaccount.AccessTokenLTE(*i.AccessTokenLTE))
+	}
+	if i.AccessTokenContains != nil {
+		predicates = append(predicates, oauthaccount.AccessTokenContains(*i.AccessTokenContains))
+	}
+	if i.AccessTokenHasPrefix != nil {
+		predicates = append(predicates, oauthaccount.AccessTokenHasPrefix(*i.AccessTokenHasPrefix))
+	}
+	if i.AccessTokenHasSuffix != nil {
+		predicates = append(predicates, oauthaccount.AccessTokenHasSuffix(*i.AccessTokenHasSuffix))
+	}
+	if i.AccessTokenIsNil {
+		predicates = append(predicates, oauthaccount.AccessTokenIsNil())
+	}
+	if i.AccessTokenNotNil {
+		predicates = append(predicates, oauthaccount.AccessTokenNotNil())
+	}
+	if i.AccessTokenEqualFold != nil {
+		predicates = append(predicates, oauthaccount.AccessTokenEqualFold(*i.AccessTokenEqualFold))
+	}
+	if i.AccessTokenContainsFold != nil {
+		predicates = append(predicates, oauthaccount.AccessTokenContainsFold(*i.AccessTokenContainsFold))
+	}
+	if i.RefreshToken != nil {
+		predicates = append(predicates, oauthaccount.RefreshTokenEQ(*i.RefreshToken))
+	}
+	if i.RefreshTokenNEQ != nil {
+		predicates = append(predicates, oauthaccount.RefreshTokenNEQ(*i.RefreshTokenNEQ))
+	}
+	if len(i.RefreshTokenIn) > 0 {
+		predicates = append(predicates, oauthaccount.RefreshTokenIn(i.RefreshTokenIn...))
+	}
+	if len(i.RefreshTokenNotIn) > 0 {
+		predicates = append(predicates, oauthaccount.RefreshTokenNotIn(i.RefreshTokenNotIn...))
+	}
+	if i.RefreshTokenGT != nil {
+		predicates = append(predicates, oauthaccount.RefreshTokenGT(*i.RefreshTokenGT))
+	}
+	if i.RefreshTokenGTE != nil {
+		predicates = append(predicates, oauthaccount.RefreshTokenGTE(*i.RefreshTokenGTE))
+	}
+	if i.RefreshTokenLT != nil {
+		predicates = append(predicates, oauthaccount.RefreshTokenLT(*i.RefreshTokenLT))
+	}
+	if i.RefreshTokenLTE != nil {
+		predicates = append(predicates, oauthaccount.RefreshTokenLTE(*i.RefreshTokenLTE))
+	}
+	if i.RefreshTokenContains != nil {
+		predicates = append(predicates, oauthaccount.RefreshTokenContains(*i.RefreshTokenContains))
+	}
+	if i.RefreshTokenHasPrefix != nil {
+		predicates = append(predicates, oauthaccount.RefreshTokenHasPrefix(*i.RefreshTokenHasPrefix))
+	}
+	if i.RefreshTokenHasSuffix != nil {
+		predicates = append(predicates, oauthaccount.RefreshTokenHasSuffix(*i.RefreshTokenHasSuffix))
+	}
+	if i.RefreshTokenIsNil {
+		predicates = append(predicates, oauthaccount.RefreshTokenIsNil())
+	}
+	if i.RefreshTokenNotNil {
+		predicates = append(predicates, oauthaccount.RefreshTokenNotNil())
+	}
+	if i.RefreshTokenEqualFold != nil {
+		predicates = append(predicates, oauthaccount.RefreshTokenEqualFold(*i.RefreshTokenEqualFold))
+	}
+	if i.RefreshTokenContainsFold != nil {
+		predicates = append(predicates, oauthaccount.RefreshTokenContainsFold(*i.RefreshTokenContainsFold))
+	}
+	if i.TokenExpiry != nil {
+		predicates = append(predicates, oauthaccount.TokenExpiryEQ(*i.TokenExpiry))
+	}
+	if i.TokenExpiryNEQ != nil {
+		predicates = append(predicates, oauthaccount.TokenExpiryNEQ(*i.TokenExpiryNEQ))
+	}
+	if len(i.TokenExpiryIn) > 0 {
+		predicates = append(predicates, oauthaccount.TokenExpiryIn(i.TokenExpiryIn...))
+	}
+	if len(i.TokenExpiryNotIn) > 0 {
+		predicates = append(predicates, oauthaccount.TokenExpiryNotIn(i.TokenExpiryNotIn...))
+	}
+	if i.TokenExpiryGT != nil {
+		predicates = append(predicates, oauthaccount.TokenExpiryGT(*i.TokenExpiryGT))
+	}
+	if i.TokenExpiryGTE != nil {
+		predicates = append(predicates, oauthaccount.TokenExpiryGTE(*i.TokenExpiryGTE))
+	}
+	if i.TokenExpiryLT != nil {
+		predicates = append(predicates, oauthaccount.TokenExpiryLT(*i.TokenExpiryLT))
+	}
+	if i.TokenExpiryLTE != nil {
+		predicates = append(predicates, oauthaccount.TokenExpiryLTE(*i.TokenExpiryLTE))
+	}
+	if i.TokenExpiryIsNil {
+		predicates = append(predicates, oauthaccount.TokenExpiryIsNil())
+	}
+	if i.TokenExpiryNotNil {
+		predicates = append(predicates, oauthaccount.TokenExpiryNotNil())
+	}
+
+	if i.HasUser != nil {
+		p := oauthaccount.HasUser()
+		if !*i.HasUser {
+			p = oauthaccount.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasUserWith))
+		for _, w := range i.HasUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, oauthaccount.HasUserWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyOAuthAccountWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return oauthaccount.And(predicates...), nil
 	}
 }
 
@@ -490,6 +971,21 @@ type OperationLogWhereInput struct {
 	TypeHasSuffix    *string  `json:"typeHasSuffix,omitempty"`
 	TypeEqualFold    *string  `json:"typeEqualFold,omitempty"`
 	TypeContainsFold *string  `json:"typeContainsFold,omitempty"`
+
+	// "content" field predicates.
+	Content             *string  `json:"content,omitempty"`
+	ContentNEQ          *string  `json:"contentNEQ,omitempty"`
+	ContentIn           []string `json:"contentIn,omitempty"`
+	ContentNotIn        []string `json:"contentNotIn,omitempty"`
+	ContentGT           *string  `json:"contentGT,omitempty"`
+	ContentGTE          *string  `json:"contentGTE,omitempty"`
+	ContentLT           *string  `json:"contentLT,omitempty"`
+	ContentLTE          *string  `json:"contentLTE,omitempty"`
+	ContentContains     *string  `json:"contentContains,omitempty"`
+	ContentHasPrefix    *string  `json:"contentHasPrefix,omitempty"`
+	ContentHasSuffix    *string  `json:"contentHasSuffix,omitempty"`
+	ContentEqualFold    *string  `json:"contentEqualFold,omitempty"`
+	ContentContainsFold *string  `json:"contentContainsFold,omitempty"`
 
 	// "user" edge predicates.
 	HasUser     *bool             `json:"hasUser,omitempty"`
@@ -702,6 +1198,45 @@ func (i *OperationLogWhereInput) P() (predicate.OperationLog, error) {
 	if i.TypeContainsFold != nil {
 		predicates = append(predicates, operationlog.TypeContainsFold(*i.TypeContainsFold))
 	}
+	if i.Content != nil {
+		predicates = append(predicates, operationlog.ContentEQ(*i.Content))
+	}
+	if i.ContentNEQ != nil {
+		predicates = append(predicates, operationlog.ContentNEQ(*i.ContentNEQ))
+	}
+	if len(i.ContentIn) > 0 {
+		predicates = append(predicates, operationlog.ContentIn(i.ContentIn...))
+	}
+	if len(i.ContentNotIn) > 0 {
+		predicates = append(predicates, operationlog.ContentNotIn(i.ContentNotIn...))
+	}
+	if i.ContentGT != nil {
+		predicates = append(predicates, operationlog.ContentGT(*i.ContentGT))
+	}
+	if i.ContentGTE != nil {
+		predicates = append(predicates, operationlog.ContentGTE(*i.ContentGTE))
+	}
+	if i.ContentLT != nil {
+		predicates = append(predicates, operationlog.ContentLT(*i.ContentLT))
+	}
+	if i.ContentLTE != nil {
+		predicates = append(predicates, operationlog.ContentLTE(*i.ContentLTE))
+	}
+	if i.ContentContains != nil {
+		predicates = append(predicates, operationlog.ContentContains(*i.ContentContains))
+	}
+	if i.ContentHasPrefix != nil {
+		predicates = append(predicates, operationlog.ContentHasPrefix(*i.ContentHasPrefix))
+	}
+	if i.ContentHasSuffix != nil {
+		predicates = append(predicates, operationlog.ContentHasSuffix(*i.ContentHasSuffix))
+	}
+	if i.ContentEqualFold != nil {
+		predicates = append(predicates, operationlog.ContentEqualFold(*i.ContentEqualFold))
+	}
+	if i.ContentContainsFold != nil {
+		predicates = append(predicates, operationlog.ContentContainsFold(*i.ContentContainsFold))
+	}
 
 	if i.HasUser != nil {
 		p := operationlog.HasUser()
@@ -835,22 +1370,22 @@ type PermissionWhereInput struct {
 	PathEqualFold    *string  `json:"pathEqualFold,omitempty"`
 	PathContainsFold *string  `json:"pathContainsFold,omitempty"`
 
-	// "desc" field predicates.
-	Desc             *string  `json:"desc,omitempty"`
-	DescNEQ          *string  `json:"descNEQ,omitempty"`
-	DescIn           []string `json:"descIn,omitempty"`
-	DescNotIn        []string `json:"descNotIn,omitempty"`
-	DescGT           *string  `json:"descGT,omitempty"`
-	DescGTE          *string  `json:"descGTE,omitempty"`
-	DescLT           *string  `json:"descLT,omitempty"`
-	DescLTE          *string  `json:"descLTE,omitempty"`
-	DescContains     *string  `json:"descContains,omitempty"`
-	DescHasPrefix    *string  `json:"descHasPrefix,omitempty"`
-	DescHasSuffix    *string  `json:"descHasSuffix,omitempty"`
-	DescIsNil        bool     `json:"descIsNil,omitempty"`
-	DescNotNil       bool     `json:"descNotNil,omitempty"`
-	DescEqualFold    *string  `json:"descEqualFold,omitempty"`
-	DescContainsFold *string  `json:"descContainsFold,omitempty"`
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
 	// "sort" field predicates.
 	Sort      *int  `json:"sort,omitempty"`
@@ -1185,50 +1720,50 @@ func (i *PermissionWhereInput) P() (predicate.Permission, error) {
 	if i.PathContainsFold != nil {
 		predicates = append(predicates, permission.PathContainsFold(*i.PathContainsFold))
 	}
-	if i.Desc != nil {
-		predicates = append(predicates, permission.DescEQ(*i.Desc))
+	if i.Description != nil {
+		predicates = append(predicates, permission.DescriptionEQ(*i.Description))
 	}
-	if i.DescNEQ != nil {
-		predicates = append(predicates, permission.DescNEQ(*i.DescNEQ))
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, permission.DescriptionNEQ(*i.DescriptionNEQ))
 	}
-	if len(i.DescIn) > 0 {
-		predicates = append(predicates, permission.DescIn(i.DescIn...))
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, permission.DescriptionIn(i.DescriptionIn...))
 	}
-	if len(i.DescNotIn) > 0 {
-		predicates = append(predicates, permission.DescNotIn(i.DescNotIn...))
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, permission.DescriptionNotIn(i.DescriptionNotIn...))
 	}
-	if i.DescGT != nil {
-		predicates = append(predicates, permission.DescGT(*i.DescGT))
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, permission.DescriptionGT(*i.DescriptionGT))
 	}
-	if i.DescGTE != nil {
-		predicates = append(predicates, permission.DescGTE(*i.DescGTE))
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, permission.DescriptionGTE(*i.DescriptionGTE))
 	}
-	if i.DescLT != nil {
-		predicates = append(predicates, permission.DescLT(*i.DescLT))
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, permission.DescriptionLT(*i.DescriptionLT))
 	}
-	if i.DescLTE != nil {
-		predicates = append(predicates, permission.DescLTE(*i.DescLTE))
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, permission.DescriptionLTE(*i.DescriptionLTE))
 	}
-	if i.DescContains != nil {
-		predicates = append(predicates, permission.DescContains(*i.DescContains))
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, permission.DescriptionContains(*i.DescriptionContains))
 	}
-	if i.DescHasPrefix != nil {
-		predicates = append(predicates, permission.DescHasPrefix(*i.DescHasPrefix))
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, permission.DescriptionHasPrefix(*i.DescriptionHasPrefix))
 	}
-	if i.DescHasSuffix != nil {
-		predicates = append(predicates, permission.DescHasSuffix(*i.DescHasSuffix))
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, permission.DescriptionHasSuffix(*i.DescriptionHasSuffix))
 	}
-	if i.DescIsNil {
-		predicates = append(predicates, permission.DescIsNil())
+	if i.DescriptionIsNil {
+		predicates = append(predicates, permission.DescriptionIsNil())
 	}
-	if i.DescNotNil {
-		predicates = append(predicates, permission.DescNotNil())
+	if i.DescriptionNotNil {
+		predicates = append(predicates, permission.DescriptionNotNil())
 	}
-	if i.DescEqualFold != nil {
-		predicates = append(predicates, permission.DescEqualFold(*i.DescEqualFold))
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, permission.DescriptionEqualFold(*i.DescriptionEqualFold))
 	}
-	if i.DescContainsFold != nil {
-		predicates = append(predicates, permission.DescContainsFold(*i.DescContainsFold))
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, permission.DescriptionContainsFold(*i.DescriptionContainsFold))
 	}
 	if i.Sort != nil {
 		predicates = append(predicates, permission.SortEQ(*i.Sort))
@@ -1356,6 +1891,23 @@ type RoleWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "description" field predicates.
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNEQ          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGT           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGTE          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLT           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLTE          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        bool     `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       bool     `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
 
 	// "sort" field predicates.
 	Sort      *int  `json:"sort,omitempty"`
@@ -1566,6 +2118,51 @@ func (i *RoleWhereInput) P() (predicate.Role, error) {
 	if i.NameContainsFold != nil {
 		predicates = append(predicates, role.NameContainsFold(*i.NameContainsFold))
 	}
+	if i.Description != nil {
+		predicates = append(predicates, role.DescriptionEQ(*i.Description))
+	}
+	if i.DescriptionNEQ != nil {
+		predicates = append(predicates, role.DescriptionNEQ(*i.DescriptionNEQ))
+	}
+	if len(i.DescriptionIn) > 0 {
+		predicates = append(predicates, role.DescriptionIn(i.DescriptionIn...))
+	}
+	if len(i.DescriptionNotIn) > 0 {
+		predicates = append(predicates, role.DescriptionNotIn(i.DescriptionNotIn...))
+	}
+	if i.DescriptionGT != nil {
+		predicates = append(predicates, role.DescriptionGT(*i.DescriptionGT))
+	}
+	if i.DescriptionGTE != nil {
+		predicates = append(predicates, role.DescriptionGTE(*i.DescriptionGTE))
+	}
+	if i.DescriptionLT != nil {
+		predicates = append(predicates, role.DescriptionLT(*i.DescriptionLT))
+	}
+	if i.DescriptionLTE != nil {
+		predicates = append(predicates, role.DescriptionLTE(*i.DescriptionLTE))
+	}
+	if i.DescriptionContains != nil {
+		predicates = append(predicates, role.DescriptionContains(*i.DescriptionContains))
+	}
+	if i.DescriptionHasPrefix != nil {
+		predicates = append(predicates, role.DescriptionHasPrefix(*i.DescriptionHasPrefix))
+	}
+	if i.DescriptionHasSuffix != nil {
+		predicates = append(predicates, role.DescriptionHasSuffix(*i.DescriptionHasSuffix))
+	}
+	if i.DescriptionIsNil {
+		predicates = append(predicates, role.DescriptionIsNil())
+	}
+	if i.DescriptionNotNil {
+		predicates = append(predicates, role.DescriptionNotNil())
+	}
+	if i.DescriptionEqualFold != nil {
+		predicates = append(predicates, role.DescriptionEqualFold(*i.DescriptionEqualFold))
+	}
+	if i.DescriptionContainsFold != nil {
+		predicates = append(predicates, role.DescriptionContainsFold(*i.DescriptionContainsFold))
+	}
 	if i.Sort != nil {
 		predicates = append(predicates, role.SortEQ(*i.Sort))
 	}
@@ -1719,6 +2316,8 @@ type UserWhereInput struct {
 	PasswordContains     *string  `json:"passwordContains,omitempty"`
 	PasswordHasPrefix    *string  `json:"passwordHasPrefix,omitempty"`
 	PasswordHasSuffix    *string  `json:"passwordHasSuffix,omitempty"`
+	PasswordIsNil        bool     `json:"passwordIsNil,omitempty"`
+	PasswordNotNil       bool     `json:"passwordNotNil,omitempty"`
 	PasswordEqualFold    *string  `json:"passwordEqualFold,omitempty"`
 	PasswordContainsFold *string  `json:"passwordContainsFold,omitempty"`
 
@@ -1735,6 +2334,10 @@ type UserWhereInput struct {
 	// "roles" edge predicates.
 	HasRoles     *bool             `json:"hasRoles,omitempty"`
 	HasRolesWith []*RoleWhereInput `json:"hasRolesWith,omitempty"`
+
+	// "oauth_accounts" edge predicates.
+	HasOauthAccounts     *bool                     `json:"hasOauthAccounts,omitempty"`
+	HasOauthAccountsWith []*OAuthAccountWhereInput `json:"hasOauthAccountsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -2048,6 +2651,12 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	if i.PasswordHasSuffix != nil {
 		predicates = append(predicates, user.PasswordHasSuffix(*i.PasswordHasSuffix))
 	}
+	if i.PasswordIsNil {
+		predicates = append(predicates, user.PasswordIsNil())
+	}
+	if i.PasswordNotNil {
+		predicates = append(predicates, user.PasswordNotNil())
+	}
 	if i.PasswordEqualFold != nil {
 		predicates = append(predicates, user.PasswordEqualFold(*i.PasswordEqualFold))
 	}
@@ -2090,6 +2699,24 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, user.HasRolesWith(with...))
+	}
+	if i.HasOauthAccounts != nil {
+		p := user.HasOauthAccounts()
+		if !*i.HasOauthAccounts {
+			p = user.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOauthAccountsWith) > 0 {
+		with := make([]predicate.OAuthAccount, 0, len(i.HasOauthAccountsWith))
+		for _, w := range i.HasOauthAccountsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOauthAccountsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, user.HasOauthAccountsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

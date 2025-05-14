@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"time"
+
 	"github.com/go-keg/monorepo/internal/data/example/ent/app"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/user"
@@ -15,6 +17,7 @@ type CreateAppInput struct {
 	Token       *string
 	Type        app.Type
 	Usable      *bool
+	ExpiresAt   *time.Time
 }
 
 // Mutate applies the CreateAppInput on the AppMutation builder.
@@ -29,6 +32,9 @@ func (i *CreateAppInput) Mutate(m *AppMutation) {
 	m.SetType(i.Type)
 	if v := i.Usable; v != nil {
 		m.SetUsable(*v)
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
 	}
 }
 
@@ -47,6 +53,8 @@ type UpdateAppInput struct {
 	Token            *string
 	Type             *app.Type
 	Usable           *bool
+	ClearExpiresAt   bool
+	ExpiresAt        *time.Time
 }
 
 // Mutate applies the UpdateAppInput on the AppMutation builder.
@@ -72,6 +80,12 @@ func (i *UpdateAppInput) Mutate(m *AppMutation) {
 	if v := i.Usable; v != nil {
 		m.SetUsable(*v)
 	}
+	if i.ClearExpiresAt {
+		m.ClearExpiresAt()
+	}
+	if v := i.ExpiresAt; v != nil {
+		m.SetExpiresAt(*v)
+	}
 }
 
 // SetInput applies the change-set in the UpdateAppInput on the AppUpdate builder.
@@ -88,16 +102,18 @@ func (c *AppUpdateOne) SetInput(i UpdateAppInput) *AppUpdateOne {
 
 // CreateOperationLogInput represents a mutation input for creating operationlogs.
 type CreateOperationLogInput struct {
-	Type    string
-	Context map[string]interface{}
-	UserID  int
+	Type     string
+	Content  string
+	Metadata map[string]interface{}
+	UserID   int
 }
 
 // Mutate applies the CreateOperationLogInput on the OperationLogMutation builder.
 func (i *CreateOperationLogInput) Mutate(m *OperationLogMutation) {
 	m.SetType(i.Type)
-	if v := i.Context; v != nil {
-		m.SetContext(v)
+	m.SetContent(i.Content)
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	m.SetUserID(i.UserID)
 }
@@ -110,9 +126,10 @@ func (c *OperationLogCreate) SetInput(i CreateOperationLogInput) *OperationLogCr
 
 // UpdateOperationLogInput represents a mutation input for updating operationlogs.
 type UpdateOperationLogInput struct {
-	Type    *string
-	Context map[string]interface{}
-	UserID  *int
+	Type     *string
+	Content  *string
+	Metadata map[string]interface{}
+	UserID   *int
 }
 
 // Mutate applies the UpdateOperationLogInput on the OperationLogMutation builder.
@@ -120,8 +137,11 @@ func (i *UpdateOperationLogInput) Mutate(m *OperationLogMutation) {
 	if v := i.Type; v != nil {
 		m.SetType(*v)
 	}
-	if v := i.Context; v != nil {
-		m.SetContext(v)
+	if v := i.Content; v != nil {
+		m.SetContent(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if v := i.UserID; v != nil {
 		m.SetUserID(*v)
@@ -142,15 +162,15 @@ func (c *OperationLogUpdateOne) SetInput(i UpdateOperationLogInput) *OperationLo
 
 // CreatePermissionInput represents a mutation input for creating permissions.
 type CreatePermissionInput struct {
-	Name     string
-	Key      *string
-	Type     permission.Type
-	Path     *string
-	Desc     *string
-	Sort     *int
-	Attrs    map[string]interface{}
-	ParentID *int
-	ChildIDs []int
+	Name        string
+	Key         *string
+	Type        permission.Type
+	Path        *string
+	Description *string
+	Sort        *int
+	Attrs       map[string]interface{}
+	ParentID    *int
+	ChildIDs    []int
 }
 
 // Mutate applies the CreatePermissionInput on the PermissionMutation builder.
@@ -163,8 +183,8 @@ func (i *CreatePermissionInput) Mutate(m *PermissionMutation) {
 	if v := i.Path; v != nil {
 		m.SetPath(*v)
 	}
-	if v := i.Desc; v != nil {
-		m.SetDesc(*v)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
 	}
 	if v := i.Sort; v != nil {
 		m.SetSort(*v)
@@ -188,22 +208,22 @@ func (c *PermissionCreate) SetInput(i CreatePermissionInput) *PermissionCreate {
 
 // UpdatePermissionInput represents a mutation input for updating permissions.
 type UpdatePermissionInput struct {
-	Name           *string
-	ClearKey       bool
-	Key            *string
-	Type           *permission.Type
-	ClearPath      bool
-	Path           *string
-	ClearDesc      bool
-	Desc           *string
-	Sort           *int
-	ClearAttrs     bool
-	Attrs          map[string]interface{}
-	ClearParent    bool
-	ParentID       *int
-	ClearChildren  bool
-	AddChildIDs    []int
-	RemoveChildIDs []int
+	Name             *string
+	ClearKey         bool
+	Key              *string
+	Type             *permission.Type
+	ClearPath        bool
+	Path             *string
+	ClearDescription bool
+	Description      *string
+	Sort             *int
+	ClearAttrs       bool
+	Attrs            map[string]interface{}
+	ClearParent      bool
+	ParentID         *int
+	ClearChildren    bool
+	AddChildIDs      []int
+	RemoveChildIDs   []int
 }
 
 // Mutate applies the UpdatePermissionInput on the PermissionMutation builder.
@@ -226,11 +246,11 @@ func (i *UpdatePermissionInput) Mutate(m *PermissionMutation) {
 	if v := i.Path; v != nil {
 		m.SetPath(*v)
 	}
-	if i.ClearDesc {
-		m.ClearDesc()
+	if i.ClearDescription {
+		m.ClearDescription()
 	}
-	if v := i.Desc; v != nil {
-		m.SetDesc(*v)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
 	}
 	if v := i.Sort; v != nil {
 		m.SetSort(*v)
@@ -273,6 +293,7 @@ func (c *PermissionUpdateOne) SetInput(i UpdatePermissionInput) *PermissionUpdat
 // CreateRoleInput represents a mutation input for creating roles.
 type CreateRoleInput struct {
 	Name          string
+	Description   *string
 	Sort          *int
 	PermissionIDs []int
 }
@@ -280,6 +301,9 @@ type CreateRoleInput struct {
 // Mutate applies the CreateRoleInput on the RoleMutation builder.
 func (i *CreateRoleInput) Mutate(m *RoleMutation) {
 	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
 	if v := i.Sort; v != nil {
 		m.SetSort(*v)
 	}
@@ -297,6 +321,8 @@ func (c *RoleCreate) SetInput(i CreateRoleInput) *RoleCreate {
 // UpdateRoleInput represents a mutation input for updating roles.
 type UpdateRoleInput struct {
 	Name                *string
+	ClearDescription    bool
+	Description         *string
 	Sort                *int
 	ClearPermissions    bool
 	AddPermissionIDs    []int
@@ -307,6 +333,12 @@ type UpdateRoleInput struct {
 func (i *UpdateRoleInput) Mutate(m *RoleMutation) {
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
 	}
 	if v := i.Sort; v != nil {
 		m.SetSort(*v)
@@ -336,13 +368,14 @@ func (c *RoleUpdateOne) SetInput(i UpdateRoleInput) *RoleUpdateOne {
 
 // CreateUserInput represents a mutation input for creating users.
 type CreateUserInput struct {
-	Email    string
-	Nickname string
-	Avatar   *string
-	Password string
-	Status   user.Status
-	IsAdmin  *bool
-	RoleIDs  []int
+	Email           string
+	Nickname        string
+	Avatar          *string
+	Password        *string
+	Status          *user.Status
+	IsAdmin         *bool
+	RoleIDs         []int
+	OauthAccountIDs []int
 }
 
 // Mutate applies the CreateUserInput on the UserMutation builder.
@@ -352,13 +385,20 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.Avatar; v != nil {
 		m.SetAvatar(*v)
 	}
-	m.SetPassword(i.Password)
-	m.SetStatus(i.Status)
+	if v := i.Password; v != nil {
+		m.SetPassword(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
 	if v := i.IsAdmin; v != nil {
 		m.SetIsAdmin(*v)
 	}
 	if v := i.RoleIDs; len(v) > 0 {
 		m.AddRoleIDs(v...)
+	}
+	if v := i.OauthAccountIDs; len(v) > 0 {
+		m.AddOauthAccountIDs(v...)
 	}
 }
 
@@ -370,16 +410,20 @@ func (c *UserCreate) SetInput(i CreateUserInput) *UserCreate {
 
 // UpdateUserInput represents a mutation input for updating users.
 type UpdateUserInput struct {
-	Email         *string
-	Nickname      *string
-	ClearAvatar   bool
-	Avatar        *string
-	Password      *string
-	Status        *user.Status
-	IsAdmin       *bool
-	ClearRoles    bool
-	AddRoleIDs    []int
-	RemoveRoleIDs []int
+	Email                 *string
+	Nickname              *string
+	ClearAvatar           bool
+	Avatar                *string
+	ClearPassword         bool
+	Password              *string
+	Status                *user.Status
+	IsAdmin               *bool
+	ClearRoles            bool
+	AddRoleIDs            []int
+	RemoveRoleIDs         []int
+	ClearOauthAccounts    bool
+	AddOauthAccountIDs    []int
+	RemoveOauthAccountIDs []int
 }
 
 // Mutate applies the UpdateUserInput on the UserMutation builder.
@@ -395,6 +439,9 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.Avatar; v != nil {
 		m.SetAvatar(*v)
+	}
+	if i.ClearPassword {
+		m.ClearPassword()
 	}
 	if v := i.Password; v != nil {
 		m.SetPassword(*v)
@@ -413,6 +460,15 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.RemoveRoleIDs; len(v) > 0 {
 		m.RemoveRoleIDs(v...)
+	}
+	if i.ClearOauthAccounts {
+		m.ClearOauthAccounts()
+	}
+	if v := i.AddOauthAccountIDs; len(v) > 0 {
+		m.AddOauthAccountIDs(v...)
+	}
+	if v := i.RemoveOauthAccountIDs; len(v) > 0 {
+		m.RemoveOauthAccountIDs(v...)
 	}
 }
 

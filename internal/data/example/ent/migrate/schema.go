@@ -18,6 +18,7 @@ var (
 		{Name: "token", Type: field.TypeString, Nullable: true},
 		{Name: "type", Type: field.TypeEnum, Comment: "应用类型", Enums: []string{"chat", "agent_chat", "workflow"}},
 		{Name: "usable", Type: field.TypeBool, Comment: "是否可用", Default: false},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true, Comment: "到期时间"},
 	}
 	// AppsTable holds the schema information for the "apps" table.
 	AppsTable = &schema.Table{
@@ -33,14 +34,47 @@ var (
 			},
 		},
 	}
+	// OauthAccountsColumns holds the columns for the "oauth_accounts" table.
+	OauthAccountsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "provider", Type: field.TypeString},
+		{Name: "provider_user_id", Type: field.TypeString},
+		{Name: "access_token", Type: field.TypeString, Nullable: true},
+		{Name: "refresh_token", Type: field.TypeString, Nullable: true},
+		{Name: "token_expiry", Type: field.TypeTime, Nullable: true},
+		{Name: "profile", Type: field.TypeJSON, Nullable: true},
+		{Name: "user_id", Type: field.TypeInt},
+	}
+	// OauthAccountsTable holds the schema information for the "oauth_accounts" table.
+	OauthAccountsTable = &schema.Table{
+		Name:       "oauth_accounts",
+		Columns:    OauthAccountsColumns,
+		PrimaryKey: []*schema.Column{OauthAccountsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "oauth_accounts_users_oauth_accounts",
+				Columns:    []*schema.Column{OauthAccountsColumns[7]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "oauthaccount_provider_provider_user_id",
+				Unique:  true,
+				Columns: []*schema.Column{OauthAccountsColumns[1], OauthAccountsColumns[2]},
+			},
+		},
+	}
 	// OperationLogsColumns holds the columns for the "operation_logs" table.
 	OperationLogsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "type", Type: field.TypeString, Comment: "操作类型"},
-		{Name: "context", Type: field.TypeJSON},
-		{Name: "user_id", Type: field.TypeInt},
+		{Name: "content", Type: field.TypeString, Comment: "操作内容"},
+		{Name: "metadata", Type: field.TypeJSON, Comment: "元数据"},
+		{Name: "user_id", Type: field.TypeInt, Comment: "操作人"},
 	}
 	// OperationLogsTable holds the schema information for the "operation_logs" table.
 	OperationLogsTable = &schema.Table{
@@ -51,7 +85,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "operation_logs_users_operation_logs",
-				Columns:    []*schema.Column{OperationLogsColumns[5]},
+				Columns:    []*schema.Column{OperationLogsColumns[6]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -71,9 +105,9 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "key", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "type", Type: field.TypeEnum, Enums: []string{"menu", "page", "element"}},
+		{Name: "type", Type: field.TypeEnum, Comment: "权限类型", Enums: []string{"menu", "page", "element"}},
 		{Name: "path", Type: field.TypeString, Nullable: true},
-		{Name: "desc", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "sort", Type: field.TypeInt, Default: 1000},
 		{Name: "attrs", Type: field.TypeJSON, Nullable: true},
 		{Name: "parent_id", Type: field.TypeInt, Nullable: true},
@@ -106,6 +140,7 @@ var (
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "sort", Type: field.TypeInt, Default: 1000},
 	}
 	// RolesTable holds the schema information for the "roles" table.
@@ -131,8 +166,8 @@ var (
 		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "nickname", Type: field.TypeString},
 		{Name: "avatar", Type: field.TypeString, Nullable: true},
-		{Name: "password", Type: field.TypeString},
-		{Name: "status", Type: field.TypeEnum, Comment: "状态", Enums: []string{"normal", "freeze"}},
+		{Name: "password", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeEnum, Comment: "状态", Enums: []string{"normal", "freeze"}, Default: "normal"},
 		{Name: "is_admin", Type: field.TypeBool, Default: false},
 	}
 	// UsersTable holds the schema information for the "users" table.
@@ -207,6 +242,7 @@ var (
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AppsTable,
+		OauthAccountsTable,
 		OperationLogsTable,
 		PermissionsTable,
 		RolesTable,
@@ -217,6 +253,7 @@ var (
 )
 
 func init() {
+	OauthAccountsTable.ForeignKeys[0].RefTable = UsersTable
 	OperationLogsTable.ForeignKeys[0].RefTable = UsersTable
 	PermissionsTable.ForeignKeys[0].RefTable = PermissionsTable
 	RolePermissionsTable.ForeignKeys[0].RefTable = RolesTable

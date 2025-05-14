@@ -496,19 +496,10 @@ type OAuthAccountWhereInput struct {
 	UserIDNotIn []int `json:"userIDNotIn,omitempty"`
 
 	// "provider" field predicates.
-	Provider             *string  `json:"provider,omitempty"`
-	ProviderNEQ          *string  `json:"providerNEQ,omitempty"`
-	ProviderIn           []string `json:"providerIn,omitempty"`
-	ProviderNotIn        []string `json:"providerNotIn,omitempty"`
-	ProviderGT           *string  `json:"providerGT,omitempty"`
-	ProviderGTE          *string  `json:"providerGTE,omitempty"`
-	ProviderLT           *string  `json:"providerLT,omitempty"`
-	ProviderLTE          *string  `json:"providerLTE,omitempty"`
-	ProviderContains     *string  `json:"providerContains,omitempty"`
-	ProviderHasPrefix    *string  `json:"providerHasPrefix,omitempty"`
-	ProviderHasSuffix    *string  `json:"providerHasSuffix,omitempty"`
-	ProviderEqualFold    *string  `json:"providerEqualFold,omitempty"`
-	ProviderContainsFold *string  `json:"providerContainsFold,omitempty"`
+	Provider      *oauthaccount.Provider  `json:"provider,omitempty"`
+	ProviderNEQ   *oauthaccount.Provider  `json:"providerNEQ,omitempty"`
+	ProviderIn    []oauthaccount.Provider `json:"providerIn,omitempty"`
+	ProviderNotIn []oauthaccount.Provider `json:"providerNotIn,omitempty"`
 
 	// "provider_user_id" field predicates.
 	ProviderUserID             *string  `json:"providerUserID,omitempty"`
@@ -694,33 +685,6 @@ func (i *OAuthAccountWhereInput) P() (predicate.OAuthAccount, error) {
 	}
 	if len(i.ProviderNotIn) > 0 {
 		predicates = append(predicates, oauthaccount.ProviderNotIn(i.ProviderNotIn...))
-	}
-	if i.ProviderGT != nil {
-		predicates = append(predicates, oauthaccount.ProviderGT(*i.ProviderGT))
-	}
-	if i.ProviderGTE != nil {
-		predicates = append(predicates, oauthaccount.ProviderGTE(*i.ProviderGTE))
-	}
-	if i.ProviderLT != nil {
-		predicates = append(predicates, oauthaccount.ProviderLT(*i.ProviderLT))
-	}
-	if i.ProviderLTE != nil {
-		predicates = append(predicates, oauthaccount.ProviderLTE(*i.ProviderLTE))
-	}
-	if i.ProviderContains != nil {
-		predicates = append(predicates, oauthaccount.ProviderContains(*i.ProviderContains))
-	}
-	if i.ProviderHasPrefix != nil {
-		predicates = append(predicates, oauthaccount.ProviderHasPrefix(*i.ProviderHasPrefix))
-	}
-	if i.ProviderHasSuffix != nil {
-		predicates = append(predicates, oauthaccount.ProviderHasSuffix(*i.ProviderHasSuffix))
-	}
-	if i.ProviderEqualFold != nil {
-		predicates = append(predicates, oauthaccount.ProviderEqualFold(*i.ProviderEqualFold))
-	}
-	if i.ProviderContainsFold != nil {
-		predicates = append(predicates, oauthaccount.ProviderContainsFold(*i.ProviderContainsFold))
 	}
 	if i.ProviderUserID != nil {
 		predicates = append(predicates, oauthaccount.ProviderUserIDEQ(*i.ProviderUserID))

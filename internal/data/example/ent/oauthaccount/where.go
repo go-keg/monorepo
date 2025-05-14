@@ -60,11 +60,6 @@ func UserID(v int) predicate.OAuthAccount {
 	return predicate.OAuthAccount(sql.FieldEQ(FieldUserID, v))
 }
 
-// Provider applies equality check predicate on the "provider" field. It's identical to ProviderEQ.
-func Provider(v string) predicate.OAuthAccount {
-	return predicate.OAuthAccount(sql.FieldEQ(FieldProvider, v))
-}
-
 // ProviderUserID applies equality check predicate on the "provider_user_id" field. It's identical to ProviderUserIDEQ.
 func ProviderUserID(v string) predicate.OAuthAccount {
 	return predicate.OAuthAccount(sql.FieldEQ(FieldProviderUserID, v))
@@ -106,68 +101,23 @@ func UserIDNotIn(vs ...int) predicate.OAuthAccount {
 }
 
 // ProviderEQ applies the EQ predicate on the "provider" field.
-func ProviderEQ(v string) predicate.OAuthAccount {
+func ProviderEQ(v Provider) predicate.OAuthAccount {
 	return predicate.OAuthAccount(sql.FieldEQ(FieldProvider, v))
 }
 
 // ProviderNEQ applies the NEQ predicate on the "provider" field.
-func ProviderNEQ(v string) predicate.OAuthAccount {
+func ProviderNEQ(v Provider) predicate.OAuthAccount {
 	return predicate.OAuthAccount(sql.FieldNEQ(FieldProvider, v))
 }
 
 // ProviderIn applies the In predicate on the "provider" field.
-func ProviderIn(vs ...string) predicate.OAuthAccount {
+func ProviderIn(vs ...Provider) predicate.OAuthAccount {
 	return predicate.OAuthAccount(sql.FieldIn(FieldProvider, vs...))
 }
 
 // ProviderNotIn applies the NotIn predicate on the "provider" field.
-func ProviderNotIn(vs ...string) predicate.OAuthAccount {
+func ProviderNotIn(vs ...Provider) predicate.OAuthAccount {
 	return predicate.OAuthAccount(sql.FieldNotIn(FieldProvider, vs...))
-}
-
-// ProviderGT applies the GT predicate on the "provider" field.
-func ProviderGT(v string) predicate.OAuthAccount {
-	return predicate.OAuthAccount(sql.FieldGT(FieldProvider, v))
-}
-
-// ProviderGTE applies the GTE predicate on the "provider" field.
-func ProviderGTE(v string) predicate.OAuthAccount {
-	return predicate.OAuthAccount(sql.FieldGTE(FieldProvider, v))
-}
-
-// ProviderLT applies the LT predicate on the "provider" field.
-func ProviderLT(v string) predicate.OAuthAccount {
-	return predicate.OAuthAccount(sql.FieldLT(FieldProvider, v))
-}
-
-// ProviderLTE applies the LTE predicate on the "provider" field.
-func ProviderLTE(v string) predicate.OAuthAccount {
-	return predicate.OAuthAccount(sql.FieldLTE(FieldProvider, v))
-}
-
-// ProviderContains applies the Contains predicate on the "provider" field.
-func ProviderContains(v string) predicate.OAuthAccount {
-	return predicate.OAuthAccount(sql.FieldContains(FieldProvider, v))
-}
-
-// ProviderHasPrefix applies the HasPrefix predicate on the "provider" field.
-func ProviderHasPrefix(v string) predicate.OAuthAccount {
-	return predicate.OAuthAccount(sql.FieldHasPrefix(FieldProvider, v))
-}
-
-// ProviderHasSuffix applies the HasSuffix predicate on the "provider" field.
-func ProviderHasSuffix(v string) predicate.OAuthAccount {
-	return predicate.OAuthAccount(sql.FieldHasSuffix(FieldProvider, v))
-}
-
-// ProviderEqualFold applies the EqualFold predicate on the "provider" field.
-func ProviderEqualFold(v string) predicate.OAuthAccount {
-	return predicate.OAuthAccount(sql.FieldEqualFold(FieldProvider, v))
-}
-
-// ProviderContainsFold applies the ContainsFold predicate on the "provider" field.
-func ProviderContainsFold(v string) predicate.OAuthAccount {
-	return predicate.OAuthAccount(sql.FieldContainsFold(FieldProvider, v))
 }
 
 // ProviderUserIDEQ applies the EQ predicate on the "provider_user_id" field.

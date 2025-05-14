@@ -30,8 +30,8 @@ func (oac *OAuthAccountCreate) SetUserID(i int) *OAuthAccountCreate {
 }
 
 // SetProvider sets the "provider" field.
-func (oac *OAuthAccountCreate) SetProvider(s string) *OAuthAccountCreate {
-	oac.mutation.SetProvider(s)
+func (oac *OAuthAccountCreate) SetProvider(o oauthaccount.Provider) *OAuthAccountCreate {
+	oac.mutation.SetProvider(o)
 	return oac
 }
 
@@ -134,6 +134,11 @@ func (oac *OAuthAccountCreate) check() error {
 	if _, ok := oac.mutation.Provider(); !ok {
 		return &ValidationError{Name: "provider", err: errors.New(`ent: missing required field "OAuthAccount.provider"`)}
 	}
+	if v, ok := oac.mutation.Provider(); ok {
+		if err := oauthaccount.ProviderValidator(v); err != nil {
+			return &ValidationError{Name: "provider", err: fmt.Errorf(`ent: validator failed for field "OAuthAccount.provider": %w`, err)}
+		}
+	}
 	if _, ok := oac.mutation.ProviderUserID(); !ok {
 		return &ValidationError{Name: "provider_user_id", err: errors.New(`ent: missing required field "OAuthAccount.provider_user_id"`)}
 	}
@@ -168,7 +173,7 @@ func (oac *OAuthAccountCreate) createSpec() (*OAuthAccount, *sqlgraph.CreateSpec
 	)
 	_spec.OnConflict = oac.conflict
 	if value, ok := oac.mutation.Provider(); ok {
-		_spec.SetField(oauthaccount.FieldProvider, field.TypeString, value)
+		_spec.SetField(oauthaccount.FieldProvider, field.TypeEnum, value)
 		_node.Provider = value
 	}
 	if value, ok := oac.mutation.ProviderUserID(); ok {
@@ -273,7 +278,7 @@ func (u *OAuthAccountUpsert) UpdateUserID() *OAuthAccountUpsert {
 }
 
 // SetProvider sets the "provider" field.
-func (u *OAuthAccountUpsert) SetProvider(v string) *OAuthAccountUpsert {
+func (u *OAuthAccountUpsert) SetProvider(v oauthaccount.Provider) *OAuthAccountUpsert {
 	u.Set(oauthaccount.FieldProvider, v)
 	return u
 }
@@ -423,7 +428,7 @@ func (u *OAuthAccountUpsertOne) UpdateUserID() *OAuthAccountUpsertOne {
 }
 
 // SetProvider sets the "provider" field.
-func (u *OAuthAccountUpsertOne) SetProvider(v string) *OAuthAccountUpsertOne {
+func (u *OAuthAccountUpsertOne) SetProvider(v oauthaccount.Provider) *OAuthAccountUpsertOne {
 	return u.Update(func(s *OAuthAccountUpsert) {
 		s.SetProvider(v)
 	})
@@ -752,7 +757,7 @@ func (u *OAuthAccountUpsertBulk) UpdateUserID() *OAuthAccountUpsertBulk {
 }
 
 // SetProvider sets the "provider" field.
-func (u *OAuthAccountUpsertBulk) SetProvider(v string) *OAuthAccountUpsertBulk {
+func (u *OAuthAccountUpsertBulk) SetProvider(v oauthaccount.Provider) *OAuthAccountUpsertBulk {
 	return u.Update(func(s *OAuthAccountUpsert) {
 		s.SetProvider(v)
 	})

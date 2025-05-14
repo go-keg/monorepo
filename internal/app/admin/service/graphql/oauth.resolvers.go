@@ -11,6 +11,7 @@ import (
 	"github.com/go-keg/monorepo/internal/app/admin/server/auth"
 	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/model"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/data/example/ent/oauthaccount"
 )
 
 // LinkGoogleAccount is the resolver for the linkGoogleAccount field.
@@ -22,7 +23,7 @@ func (r *mutationResolver) LinkGoogleAccount(ctx context.Context, code string) (
 	u := auth.GetUser(ctx)
 	err = r.userRepo.BindOAuthAccount(ctx, &ent.OAuthAccount{
 		UserID:         u.ID,
-		Provider:       "google",
+		Provider:       oauthaccount.ProviderGoogle,
 		ProviderUserID: info.ID,
 		Profile:        info.Map(),
 	})
@@ -35,7 +36,7 @@ func (r *mutationResolver) LinkGoogleAccount(ctx context.Context, code string) (
 // UnlinkGoogleAccount is the resolver for the unlinkGoogleAccount field.
 func (r *mutationResolver) UnlinkGoogleAccount(ctx context.Context) (bool, error) {
 	u := auth.GetUser(ctx)
-	err := r.userRepo.UnBindOAuthAccount(ctx, u.ID, "google")
+	err := r.userRepo.UnBindOAuthAccount(ctx, u.ID, oauthaccount.ProviderGoogle)
 	if err != nil {
 		return false, err
 	}
@@ -48,7 +49,7 @@ func (r *queryResolver) GoogleOAuthLogin(ctx context.Context, code string) (*mod
 	if err != nil {
 		return nil, err
 	}
-	user, err := r.userRepo.FindUserByOAuth(ctx, "google", info.ID)
+	user, err := r.userRepo.FindUserByOAuth(ctx, oauthaccount.ProviderGoogle, info.ID)
 	if ent.IsNotFound(err) {
 		return nil, gql.Error("failed to find user")
 	} else if err != nil {

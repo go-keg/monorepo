@@ -45,15 +45,15 @@ func (oau *OAuthAccountUpdate) SetNillableUserID(i *int) *OAuthAccountUpdate {
 }
 
 // SetProvider sets the "provider" field.
-func (oau *OAuthAccountUpdate) SetProvider(s string) *OAuthAccountUpdate {
-	oau.mutation.SetProvider(s)
+func (oau *OAuthAccountUpdate) SetProvider(o oauthaccount.Provider) *OAuthAccountUpdate {
+	oau.mutation.SetProvider(o)
 	return oau
 }
 
 // SetNillableProvider sets the "provider" field if the given value is not nil.
-func (oau *OAuthAccountUpdate) SetNillableProvider(s *string) *OAuthAccountUpdate {
-	if s != nil {
-		oau.SetProvider(*s)
+func (oau *OAuthAccountUpdate) SetNillableProvider(o *oauthaccount.Provider) *OAuthAccountUpdate {
+	if o != nil {
+		oau.SetProvider(*o)
 	}
 	return oau
 }
@@ -189,6 +189,11 @@ func (oau *OAuthAccountUpdate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (oau *OAuthAccountUpdate) check() error {
+	if v, ok := oau.mutation.Provider(); ok {
+		if err := oauthaccount.ProviderValidator(v); err != nil {
+			return &ValidationError{Name: "provider", err: fmt.Errorf(`ent: validator failed for field "OAuthAccount.provider": %w`, err)}
+		}
+	}
 	if oau.mutation.UserCleared() && len(oau.mutation.UserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "OAuthAccount.user"`)
 	}
@@ -214,7 +219,7 @@ func (oau *OAuthAccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := oau.mutation.Provider(); ok {
-		_spec.SetField(oauthaccount.FieldProvider, field.TypeString, value)
+		_spec.SetField(oauthaccount.FieldProvider, field.TypeEnum, value)
 	}
 	if value, ok := oau.mutation.ProviderUserID(); ok {
 		_spec.SetField(oauthaccount.FieldProviderUserID, field.TypeString, value)
@@ -309,15 +314,15 @@ func (oauo *OAuthAccountUpdateOne) SetNillableUserID(i *int) *OAuthAccountUpdate
 }
 
 // SetProvider sets the "provider" field.
-func (oauo *OAuthAccountUpdateOne) SetProvider(s string) *OAuthAccountUpdateOne {
-	oauo.mutation.SetProvider(s)
+func (oauo *OAuthAccountUpdateOne) SetProvider(o oauthaccount.Provider) *OAuthAccountUpdateOne {
+	oauo.mutation.SetProvider(o)
 	return oauo
 }
 
 // SetNillableProvider sets the "provider" field if the given value is not nil.
-func (oauo *OAuthAccountUpdateOne) SetNillableProvider(s *string) *OAuthAccountUpdateOne {
-	if s != nil {
-		oauo.SetProvider(*s)
+func (oauo *OAuthAccountUpdateOne) SetNillableProvider(o *oauthaccount.Provider) *OAuthAccountUpdateOne {
+	if o != nil {
+		oauo.SetProvider(*o)
 	}
 	return oauo
 }
@@ -466,6 +471,11 @@ func (oauo *OAuthAccountUpdateOne) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (oauo *OAuthAccountUpdateOne) check() error {
+	if v, ok := oauo.mutation.Provider(); ok {
+		if err := oauthaccount.ProviderValidator(v); err != nil {
+			return &ValidationError{Name: "provider", err: fmt.Errorf(`ent: validator failed for field "OAuthAccount.provider": %w`, err)}
+		}
+	}
 	if oauo.mutation.UserCleared() && len(oauo.mutation.UserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "OAuthAccount.user"`)
 	}
@@ -508,7 +518,7 @@ func (oauo *OAuthAccountUpdateOne) sqlSave(ctx context.Context) (_node *OAuthAcc
 		}
 	}
 	if value, ok := oauo.mutation.Provider(); ok {
-		_spec.SetField(oauthaccount.FieldProvider, field.TypeString, value)
+		_spec.SetField(oauthaccount.FieldProvider, field.TypeEnum, value)
 	}
 	if value, ok := oauo.mutation.ProviderUserID(); ok {
 		_spec.SetField(oauthaccount.FieldProviderUserID, field.TypeString, value)

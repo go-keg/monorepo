@@ -845,7 +845,7 @@ type OAuthAccountMutation struct {
 	op               Op
 	typ              string
 	id               *int
-	provider         *string
+	provider         *oauthaccount.Provider
 	provider_user_id *string
 	access_token     *string
 	refresh_token    *string
@@ -994,12 +994,12 @@ func (m *OAuthAccountMutation) ResetUserID() {
 }
 
 // SetProvider sets the "provider" field.
-func (m *OAuthAccountMutation) SetProvider(s string) {
-	m.provider = &s
+func (m *OAuthAccountMutation) SetProvider(o oauthaccount.Provider) {
+	m.provider = &o
 }
 
 // Provider returns the value of the "provider" field in the mutation.
-func (m *OAuthAccountMutation) Provider() (r string, exists bool) {
+func (m *OAuthAccountMutation) Provider() (r oauthaccount.Provider, exists bool) {
 	v := m.provider
 	if v == nil {
 		return
@@ -1010,7 +1010,7 @@ func (m *OAuthAccountMutation) Provider() (r string, exists bool) {
 // OldProvider returns the old "provider" field's value of the OAuthAccount entity.
 // If the OAuthAccount object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *OAuthAccountMutation) OldProvider(ctx context.Context) (v string, err error) {
+func (m *OAuthAccountMutation) OldProvider(ctx context.Context) (v oauthaccount.Provider, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldProvider is only allowed on UpdateOne operations")
 	}
@@ -1406,7 +1406,7 @@ func (m *OAuthAccountMutation) SetField(name string, value ent.Value) error {
 		m.SetUserID(v)
 		return nil
 	case oauthaccount.FieldProvider:
-		v, ok := value.(string)
+		v, ok := value.(oauthaccount.Provider)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

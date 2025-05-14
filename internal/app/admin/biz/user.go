@@ -9,6 +9,7 @@ import (
 	"github.com/go-keg/monorepo/internal/app/admin/conf"
 	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/model"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
+	"github.com/go-keg/monorepo/internal/data/example/ent/oauthaccount"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/samber/lo"
 	"github.com/spf13/cast"
@@ -18,10 +19,10 @@ import (
 
 type UserRepo interface {
 	GetUserPermissionKeys(ctx context.Context, userID int) ([]string, error)
-	FindUserByOAuth(ctx context.Context, provider, providerUserID string) (*ent.User, error)
+	FindUserByOAuth(ctx context.Context, provider oauthaccount.Provider, providerUserID string) (*ent.User, error)
 	FindUserByEmail(ctx context.Context, email string) (*ent.User, error)
 	BindOAuthAccount(ctx context.Context, data *ent.OAuthAccount) error
-	UnBindOAuthAccount(ctx context.Context, userID int, provider string) error
+	UnBindOAuthAccount(ctx context.Context, userID int, provider oauthaccount.Provider) error
 	CreateUser(ctx context.Context, user *ent.User) (*ent.User, error)
 }
 type UserUseCase struct {

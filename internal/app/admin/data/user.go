@@ -16,17 +16,17 @@ type userRepo struct {
 	ent *ent.Client
 }
 
-func (r userRepo) UnBindOAuthAccount(ctx context.Context, userID int, provider string) error {
+func (r userRepo) UnBindOAuthAccount(ctx context.Context, userID int, provider oauthaccount.Provider) error {
 	_, err := r.ent.OAuthAccount.Delete().Where(
 		oauthaccount.UserID(userID),
-		oauthaccount.Provider(provider),
+		oauthaccount.ProviderEQ(provider),
 	).Exec(ctx)
 	return err
 }
 
-func (r userRepo) FindUserByOAuth(ctx context.Context, provider, providerUserID string) (*ent.User, error) {
+func (r userRepo) FindUserByOAuth(ctx context.Context, provider oauthaccount.Provider, providerUserID string) (*ent.User, error) {
 	return r.ent.User.Query().Where(user.HasOauthAccountsWith(
-		oauthaccount.Provider(provider),
+		oauthaccount.ProviderEQ(provider),
 		oauthaccount.ProviderUserID(providerUserID),
 	)).First(ctx)
 }

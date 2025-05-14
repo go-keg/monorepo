@@ -37,7 +37,7 @@ var (
 	// OauthAccountsColumns holds the columns for the "oauth_accounts" table.
 	OauthAccountsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "provider", Type: field.TypeString},
+		{Name: "provider", Type: field.TypeEnum, Enums: []string{"google"}},
 		{Name: "provider_user_id", Type: field.TypeString},
 		{Name: "access_token", Type: field.TypeString, Nullable: true},
 		{Name: "refresh_token", Type: field.TypeString, Nullable: true},

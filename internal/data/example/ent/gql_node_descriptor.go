@@ -131,7 +131,7 @@ func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 		return nil, err
 	}
 	node.Fields[1] = &Field{
-		Type:  "string",
+		Type:  "oauthaccount.Provider",
 		Name:  "provider",
 		Value: string(buf),
 	}

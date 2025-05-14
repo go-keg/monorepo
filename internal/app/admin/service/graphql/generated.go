@@ -19,6 +19,7 @@ import (
 	"github.com/go-keg/monorepo/internal/app/admin/service/graphql/model"
 	"github.com/go-keg/monorepo/internal/data/example/ent"
 	"github.com/go-keg/monorepo/internal/data/example/ent/app"
+	"github.com/go-keg/monorepo/internal/data/example/ent/oauthaccount"
 	"github.com/go-keg/monorepo/internal/data/example/ent/permission"
 	"github.com/go-keg/monorepo/internal/data/example/ent/user"
 	gqlparser "github.com/vektah/gqlparser/v2"
@@ -5891,9 +5892,9 @@ func (ec *executionContext) _OAuthAccount_provider(ctx context.Context, field gr
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(oauthaccount.Provider)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNOAuthAccountProvider2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProvider(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_OAuthAccount_provider(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5903,7 +5904,7 @@ func (ec *executionContext) fieldContext_OAuthAccount_provider(_ context.Context
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type OAuthAccountProvider does not have child fields")
 		},
 	}
 	return fc, nil
@@ -13943,7 +13944,7 @@ func (ec *executionContext) unmarshalInputOAuthAccountWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "userID", "userIDNEQ", "userIDIn", "userIDNotIn", "provider", "providerNEQ", "providerIn", "providerNotIn", "providerGT", "providerGTE", "providerLT", "providerLTE", "providerContains", "providerHasPrefix", "providerHasSuffix", "providerEqualFold", "providerContainsFold", "providerUserID", "providerUserIDNEQ", "providerUserIDIn", "providerUserIDNotIn", "providerUserIDGT", "providerUserIDGTE", "providerUserIDLT", "providerUserIDLTE", "providerUserIDContains", "providerUserIDHasPrefix", "providerUserIDHasSuffix", "providerUserIDEqualFold", "providerUserIDContainsFold", "accessToken", "accessTokenNEQ", "accessTokenIn", "accessTokenNotIn", "accessTokenGT", "accessTokenGTE", "accessTokenLT", "accessTokenLTE", "accessTokenContains", "accessTokenHasPrefix", "accessTokenHasSuffix", "accessTokenIsNil", "accessTokenNotNil", "accessTokenEqualFold", "accessTokenContainsFold", "refreshToken", "refreshTokenNEQ", "refreshTokenIn", "refreshTokenNotIn", "refreshTokenGT", "refreshTokenGTE", "refreshTokenLT", "refreshTokenLTE", "refreshTokenContains", "refreshTokenHasPrefix", "refreshTokenHasSuffix", "refreshTokenIsNil", "refreshTokenNotNil", "refreshTokenEqualFold", "refreshTokenContainsFold", "tokenExpiry", "tokenExpiryNEQ", "tokenExpiryIn", "tokenExpiryNotIn", "tokenExpiryGT", "tokenExpiryGTE", "tokenExpiryLT", "tokenExpiryLTE", "tokenExpiryIsNil", "tokenExpiryNotNil", "hasUser", "hasUserWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "userID", "userIDNEQ", "userIDIn", "userIDNotIn", "provider", "providerNEQ", "providerIn", "providerNotIn", "providerUserID", "providerUserIDNEQ", "providerUserIDIn", "providerUserIDNotIn", "providerUserIDGT", "providerUserIDGTE", "providerUserIDLT", "providerUserIDLTE", "providerUserIDContains", "providerUserIDHasPrefix", "providerUserIDHasSuffix", "providerUserIDEqualFold", "providerUserIDContainsFold", "accessToken", "accessTokenNEQ", "accessTokenIn", "accessTokenNotIn", "accessTokenGT", "accessTokenGTE", "accessTokenLT", "accessTokenLTE", "accessTokenContains", "accessTokenHasPrefix", "accessTokenHasSuffix", "accessTokenIsNil", "accessTokenNotNil", "accessTokenEqualFold", "accessTokenContainsFold", "refreshToken", "refreshTokenNEQ", "refreshTokenIn", "refreshTokenNotIn", "refreshTokenGT", "refreshTokenGTE", "refreshTokenLT", "refreshTokenLTE", "refreshTokenContains", "refreshTokenHasPrefix", "refreshTokenHasSuffix", "refreshTokenIsNil", "refreshTokenNotNil", "refreshTokenEqualFold", "refreshTokenContainsFold", "tokenExpiry", "tokenExpiryNEQ", "tokenExpiryIn", "tokenExpiryNotIn", "tokenExpiryGT", "tokenExpiryGTE", "tokenExpiryLT", "tokenExpiryLTE", "tokenExpiryIsNil", "tokenExpiryNotNil", "hasUser", "hasUserWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -14057,95 +14058,32 @@ func (ec *executionContext) unmarshalInputOAuthAccountWhereInput(ctx context.Con
 			it.UserIDNotIn = data
 		case "provider":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("provider"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOOAuthAccountProvider2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProvider(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Provider = data
 		case "providerNEQ":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOOAuthAccountProvider2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProvider(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ProviderNEQ = data
 		case "providerIn":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			data, err := ec.unmarshalOOAuthAccountProvider2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProviderᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ProviderIn = data
 		case "providerNotIn":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			data, err := ec.unmarshalOOAuthAccountProvider2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProviderᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ProviderNotIn = data
-		case "providerGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ProviderGT = data
-		case "providerGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ProviderGTE = data
-		case "providerLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ProviderLT = data
-		case "providerLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ProviderLTE = data
-		case "providerContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ProviderContains = data
-		case "providerHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ProviderHasPrefix = data
-		case "providerHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ProviderHasSuffix = data
-		case "providerEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ProviderEqualFold = data
-		case "providerContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ProviderContainsFold = data
 		case "providerUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("providerUserID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -20055,6 +19993,16 @@ func (ec *executionContext) marshalNOAuthAccount2ᚖgithubᚗcomᚋgoᚑkegᚋmo
 	return ec._OAuthAccount(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalNOAuthAccountProvider2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProvider(ctx context.Context, v any) (oauthaccount.Provider, error) {
+	var res oauthaccount.Provider
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNOAuthAccountProvider2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProvider(ctx context.Context, sel ast.SelectionSet, v oauthaccount.Provider) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNOAuthAccountWhereInput2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐOAuthAccountWhereInput(ctx context.Context, v any) (*ent.OAuthAccountWhereInput, error) {
 	res, err := ec.unmarshalInputOAuthAccountWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
@@ -21026,6 +20974,87 @@ func (ec *executionContext) marshalOOAuthAccount2ᚕᚖgithubᚗcomᚋgoᚑkeg�
 	}
 
 	return ret
+}
+
+func (ec *executionContext) unmarshalOOAuthAccountProvider2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProviderᚄ(ctx context.Context, v any) ([]oauthaccount.Provider, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]oauthaccount.Provider, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNOAuthAccountProvider2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProvider(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOOAuthAccountProvider2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProviderᚄ(ctx context.Context, sel ast.SelectionSet, v []oauthaccount.Provider) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNOAuthAccountProvider2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProvider(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOOAuthAccountProvider2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProvider(ctx context.Context, v any) (*oauthaccount.Provider, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(oauthaccount.Provider)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOOAuthAccountProvider2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚋoauthaccountᚐProvider(ctx context.Context, sel ast.SelectionSet, v *oauthaccount.Provider) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOOAuthAccountWhereInput2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋexampleᚋentᚐOAuthAccountWhereInputᚄ(ctx context.Context, v any) ([]*ent.OAuthAccountWhereInput, error) {

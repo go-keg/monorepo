@@ -22,7 +22,7 @@ func (OAuthAccount) Indexes() []ent.Index {
 func (OAuthAccount) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("user_id"),
-		field.String("provider"),
+		field.Enum("provider").Values("google"),
 		field.String("provider_user_id"),
 		field.String("access_token").Optional(),
 		field.String("refresh_token").Optional(),

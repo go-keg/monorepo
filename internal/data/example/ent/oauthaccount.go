@@ -22,7 +22,7 @@ type OAuthAccount struct {
 	// UserID holds the value of the "user_id" field.
 	UserID int `json:"user_id,omitempty"`
 	// Provider holds the value of the "provider" field.
-	Provider string `json:"provider,omitempty"`
+	Provider oauthaccount.Provider `json:"provider,omitempty"`
 	// ProviderUserID holds the value of the "provider_user_id" field.
 	ProviderUserID string `json:"provider_user_id,omitempty"`
 	// AccessToken holds the value of the "access_token" field.
@@ -105,7 +105,7 @@ func (oa *OAuthAccount) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field provider", values[i])
 			} else if value.Valid {
-				oa.Provider = value.String
+				oa.Provider = oauthaccount.Provider(value.String)
 			}
 		case oauthaccount.FieldProviderUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -184,7 +184,7 @@ func (oa *OAuthAccount) String() string {
 	builder.WriteString(fmt.Sprintf("%v", oa.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("provider=")
-	builder.WriteString(oa.Provider)
+	builder.WriteString(fmt.Sprintf("%v", oa.Provider))
 	builder.WriteString(", ")
 	builder.WriteString("provider_user_id=")
 	builder.WriteString(oa.ProviderUserID)

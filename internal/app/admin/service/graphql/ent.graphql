@@ -312,13 +312,19 @@ interface Node @goModel(model: "github.com/go-keg/monorepo/internal/data/example
 type OAuthAccount implements Node {
   id: ID!
   userID: ID!
-  provider: String!
+  provider: OAuthAccountProvider!
   providerUserID: String!
   accessToken: String
   refreshToken: String
   tokenExpiry: Time
   profile: Map
   user: User!
+}
+"""
+OAuthAccountProvider is enum for the field provider
+"""
+enum OAuthAccountProvider @goModel(model: "github.com/go-keg/monorepo/internal/data/example/ent/oauthaccount.Provider") {
+  google
 }
 """
 OAuthAccountWhereInput is used for filtering OAuthAccount objects.
@@ -349,19 +355,10 @@ input OAuthAccountWhereInput {
   """
   provider field predicates
   """
-  provider: String
-  providerNEQ: String
-  providerIn: [String!]
-  providerNotIn: [String!]
-  providerGT: String
-  providerGTE: String
-  providerLT: String
-  providerLTE: String
-  providerContains: String
-  providerHasPrefix: String
-  providerHasSuffix: String
-  providerEqualFold: String
-  providerContainsFold: String
+  provider: OAuthAccountProvider
+  providerNEQ: OAuthAccountProvider
+  providerIn: [OAuthAccountProvider!]
+  providerNotIn: [OAuthAccountProvider!]
   """
   provider_user_id field predicates
   """

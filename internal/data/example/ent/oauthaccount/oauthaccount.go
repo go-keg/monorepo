@@ -3,6 +3,10 @@
 package oauthaccount
 
 import (
+	"fmt"
+	"io"
+	"strconv"
+
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 )
@@ -61,6 +65,28 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// Provider defines the type for the "provider" enum field.
+type Provider string
+
+// Provider values.
+const (
+	ProviderGoogle Provider = "google"
+)
+
+func (pr Provider) String() string {
+	return string(pr)
+}
+
+// ProviderValidator is a validator for the "provider" field enum values. It is called by the builders before save.
+func ProviderValidator(pr Provider) error {
+	switch pr {
+	case ProviderGoogle:
+		return nil
+	default:
+		return fmt.Errorf("oauthaccount: invalid enum value for provider field: %q", pr)
+	}
+}
+
 // OrderOption defines the ordering options for the OAuthAccount queries.
 type OrderOption func(*sql.Selector)
 
@@ -111,4 +137,22 @@ func newUserStep() *sqlgraph.Step {
 		sqlgraph.To(UserInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
 	)
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (e Provider) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(e.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (e *Provider) UnmarshalGQL(val interface{}) error {
+	str, ok := val.(string)
+	if !ok {
+		return fmt.Errorf("enum %T must be a string", val)
+	}
+	*e = Provider(str)
+	if err := ProviderValidator(*e); err != nil {
+		return fmt.Errorf("%s is not a valid Provider", str)
+	}
+	return nil
 }

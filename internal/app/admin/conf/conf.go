@@ -8,7 +8,7 @@ type Config struct {
 	Key    string
 	Name   string
 	Server struct {
-		Http config.Server
+		HTTP config.Server `yaml:"http"`
 	}
 	Data struct {
 		Database config.Database

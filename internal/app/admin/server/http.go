@@ -21,7 +21,7 @@ import (
 )
 
 func NewHTTPServer(cfg *conf.Config, logger log.Logger, client *ent.Client, schema graphql.ExecutableSchema, oauth *oauth2.Config) *http.Server {
-	srv := http.NewServer(cfg.Server.Http.HttpOptions(logger)...)
+	srv := http.NewServer(cfg.Server.HTTP.HttpOptions(logger)...)
 	// graphql
 	gqlSrv := gql.NewServer(schema)
 	loader := dataloader.NewDataLoader(client)

@@ -1,0 +1,8 @@
+extend type Mutation {
+    """创建角色"""
+    createTenantRole(input: CreateTenantRoleInput!): TenantRole! @hasPermission(key: "manage_tenant_role")
+    """修改角色"""
+    updateTenantRole(id: ID!, input: UpdateTenantRoleInput!): TenantRole! @hasPermission(key: "manage_tenant_role")
+    """删除角色"""
+    deleteTenantRole(id: ID!): Boolean! @hasPermission(key: "manage_tenant_role")
+}

@@ -1,0 +1,20 @@
+type Mutation {
+    createCustomer(input: CreateCustomerInput!): Customer!
+    updateCustomer(id: ID!, input: UpdateCustomerInput!): Customer!
+
+    createContact(input: CreateContactInput!): Contact!
+    updateContact(id: ID!, input: UpdateContactInput!): Contact!
+    deleteContact(id: ID!): Boolean!
+
+    createContract(input: CreateContractInput!): Contract!
+    updateContract(id: ID!, input: UpdateContractInput!): Contract!
+    deleteContract(id: ID!): Boolean!
+
+    createFollowUp(input: CreateFollowUpInput!): FollowUp!
+    updateFollowUp(id: ID!, input: UpdateFollowUpInput!): FollowUp!
+    deleteFollowUp(id: ID!): Boolean!
+
+    createPayment(input: CreatePaymentInput!): Payment!
+    updatePayment(id: ID!, input: UpdatePaymentInput!): Payment!
+    deletePayment(id: ID!): Boolean!
+}

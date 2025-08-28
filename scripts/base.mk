@@ -1,7 +1,8 @@
 BUILD_TAG=$(shell keg image tag)
 BUILD_GOARCH := $(shell go env GOARCH)
 BUILD_GOOS := $(shell go env GOOS)
-BASE_IMAGE=$(IMAGE_REGISTRY)/monorepo:$(BUILD_TAG)
+#BASE_IMAGE=$(IMAGE_REGISTRY)/monorepo:$(BUILD_TAG)
+BASE_IMAGE=ubuntu:latest
 
 build-tag:
 	echo "$(BUILD_TAG)"
@@ -20,7 +21,8 @@ generate:
 %.build:
 	$(eval SERVICE:= $*)
 	@echo "build: $(SERVICE):$(GIT_VERSION) platform: $(BUILD_GOOS)/$(BUILD_GOARCH)"
-	GOOS=$(BUILD_GOOS) GOARCH=$(BUILD_GOARCH) go build -ldflags "-X main.Version=$(GIT_VERSION)" -o ./bin/$(SERVICE) ./cmd/$(SERVICE)/
+	#CGO_ENABLED=1 CC=x86_64-unknown-linux-gnu-gcc GOOS=$(BUILD_GOOS) GOARCH=$(BUILD_GOARCH) go build -ldflags "-X main.Version=$(GIT_VERSION)" -o ./bin/$(SERVICE) ./cmd/$(SERVICE)/
+	CGO_ENABLED=0 GOOS=$(BUILD_GOOS) GOARCH=$(BUILD_GOARCH) go build -ldflags "-X main.Version=$(GIT_VERSION)" -o ./bin/$(SERVICE) ./cmd/$(SERVICE)/
 
 %.build-windows:
 	$(eval SERVICE:= $*)

@@ -1,12 +1,13 @@
 package middleware
 
 import (
+	"net/http"
+
 	v1 "github.com/go-keg/apis/api/gateway/middleware/v1"
 	config "github.com/go-kratos/gateway/api/gateway/config/v1"
 	"github.com/go-kratos/gateway/middleware"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
-	"net/http"
 )
 
 func AuthMiddleware(c *config.Middleware) (middleware.Middleware, error) {

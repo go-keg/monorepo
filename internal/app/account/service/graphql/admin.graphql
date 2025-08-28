@@ -1,0 +1,26 @@
+extend type Mutation {
+    """创建用户"""
+    createUser(input: CreateUserInput!): User! @hasRole(role: [SystemAdmin])
+    """修改用户"""
+    updateUser(id: ID!, input: UpdateUserInput!): User! @hasRole(role: [SystemAdmin])
+    """删除用户"""
+    deleteUser(id: ID!): Boolean! @hasRole(role: [SystemAdmin])
+
+    """创建权限"""
+    createPermission(input: CreatePermissionInput!): Permission! @hasRole(role: [SystemAdmin])
+    """修改权限"""
+    updatePermission(id: ID!, input: UpdatePermissionInput!): Permission! @hasRole(role: [SystemAdmin])
+    """删除权限"""
+    deletePermission(id: ID!): Boolean! @hasRole(role: [SystemAdmin])
+
+    """创建租户"""
+    createTenant(input: CreateTenantInput!): Tenant! @hasRole(role: [SystemAdmin])
+    """修改租户"""
+    updateTenant(id: ID!, input: UpdateTenantInput!): Tenant! @hasRole(role: [SystemAdmin])
+    """删除租户"""
+    deleteTenant(id: ID!): Boolean! @hasRole(role: [SystemAdmin])
+}
+
+extend type Permission {
+    childrenCount: Int!
+}

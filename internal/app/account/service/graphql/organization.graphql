@@ -1,0 +1,20 @@
+extend type Mutation {
+    """创建组织架构"""
+    createOrganization(input: CreateOrganizationInput!): Organization! @hasPermission(key: "manage_organization")
+    """修改组织架构"""
+    updateOrganization(id: ID!, input: UpdateOrganizationInput!): Organization! @hasPermission(key: "manage_organization")
+    """删除组织架构"""
+    deleteOrganization(id: ID!): Boolean! @hasPermission(key: "manage_organization")
+
+    """创建组织架构成员"""
+    createMembership(input: CreateMembershipInput!): Membership! @hasPermission(key: "manage_organization")
+    """修改组织架构成员"""
+    updateMembership(id: ID!, input: UpdateMembershipInput!): Membership! @hasPermission(key: "manage_organization")
+    """删除组织架构成员"""
+    deleteMembership(id: ID!): Boolean! @hasPermission(key: "manage_organization")
+}
+
+extend type Organization {
+    childrenCount: Int!
+    memberCount: Int!
+}

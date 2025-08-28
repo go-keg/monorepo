@@ -1,7 +1,0 @@
-directive @disabled on FIELD_DEFINITION | OBJECT
-
-"""是否需要登陆"""
-directive @login on FIELD_DEFINITION | OBJECT
-
-"""是否拥有权限"""
-directive @permission(key: String!) on FIELD_DEFINITION | OBJECT

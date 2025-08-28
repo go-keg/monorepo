@@ -1,9 +1,0 @@
-extend type Query {
-    googleOAuthLogin(code: String!): LoginReply!
-    googleOAuthRegister(code: String!): LoginReply!
-}
-
-extend type Mutation {
-    linkGoogleAccount(code: String!): Boolean! @login
-    unlinkGoogleAccount: Boolean! @login
-}

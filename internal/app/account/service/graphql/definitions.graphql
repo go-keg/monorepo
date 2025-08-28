@@ -1,0 +1,34 @@
+directive @disabled on FIELD_DEFINITION | OBJECT
+
+"""是否需要登陆"""
+directive @login on FIELD_DEFINITION | OBJECT
+
+"""是否拥有角色"""
+directive @hasRole(role: [UserRole!]) on FIELD_DEFINITION | OBJECT
+
+"""拥有指定权限"""
+directive @hasPermission(key: String!) on FIELD_DEFINITION | OBJECT
+"""拥有任意权限"""
+directive @hasSomePermissions(keys: [String!]) on FIELD_DEFINITION | OBJECT
+"""拥有所有权限"""
+directive @hasEveryPermission(keys: [String!]) on FIELD_DEFINITION | OBJECT
+"""拥有指定系统权限"""
+directive @hasSystemPermission(key: String!) on FIELD_DEFINITION | OBJECT
+
+"""用户角色类型"""
+enum UserRole {
+    """租户成员"""
+    TenantUser
+    """租户Owner"""
+    TenantOwner
+    """系统后台管理员"""
+    SystemAdmin
+}
+
+"""验证码类型"""
+enum VerifyCodeType {
+    """忘记密码"""
+    ForgetPassword
+    """注册验证"""
+    Register
+}

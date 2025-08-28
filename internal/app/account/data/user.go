@@ -1,0 +1,72 @@
+package data
+
+import (
+	"context"
+
+	"github.com/go-keg/monorepo/internal/app/account/biz"
+	"github.com/go-keg/monorepo/internal/data/account/ent"
+	"github.com/go-keg/monorepo/internal/data/account/ent/oauthaccount"
+	"github.com/go-keg/monorepo/internal/data/account/ent/permission"
+	"github.com/go-keg/monorepo/internal/data/account/ent/tenantrole"
+	"github.com/go-keg/monorepo/internal/data/account/ent/tenantuser"
+	"github.com/go-keg/monorepo/internal/data/account/ent/user"
+	"github.com/samber/lo"
+)
+
+type userRepo struct {
+	ent *ent.Client
+}
+
+func (r userRepo) UnBindOAuthAccount(ctx context.Context, userID int, provider string) error {
+	_, err := r.ent.OAuthAccount.Delete().Where(
+		oauthaccount.UserID(userID),
+		oauthaccount.ProviderEQ(provider),
+	).Exec(ctx)
+	return err
+}
+
+func (r userRepo) FindUserByOAuth(ctx context.Context, provider string, providerUserID string) (*ent.User, error) {
+	return r.ent.User.Query().Where(user.HasOauthAccountsWith(
+		oauthaccount.ProviderEQ(provider),
+		oauthaccount.ProviderUserID(providerUserID),
+	)).First(ctx)
+}
+
+func (r userRepo) FindUserByEmail(ctx context.Context, email string) (*ent.User, error) {
+	return r.ent.User.Query().Where(user.Email(email)).First(ctx)
+}
+
+func (r userRepo) BindOAuthAccount(ctx context.Context, data ent.OAuthAccount) error {
+	err := r.UnBindOAuthAccount(ctx, data.UserID, data.Provider)
+	if err != nil {
+		return err
+	}
+	return r.ent.OAuthAccount.Create().
+		SetUserID(data.UserID).
+		SetProvider(data.Provider).
+		SetProviderUserID(data.ProviderUserID).
+		SetNillableAccessToken(lo.EmptyableToPtr(data.AccessToken)).
+		SetNillableRefreshToken(lo.EmptyableToPtr(data.RefreshToken)).
+		SetNillableTokenExpiry(lo.EmptyableToPtr(data.TokenExpiry)).
+		SetProfile(data.Profile).
+		Exec(ctx)
+}
+
+func (r userRepo) CreateUser(ctx context.Context, user ent.User) (*ent.User, error) {
+	return r.ent.User.Create().
+		SetEmail(user.Email).
+		SetNickname(user.Nickname).
+		SetNillableAvatar(lo.EmptyableToPtr(user.Avatar)).
+		SetNillablePassword(lo.EmptyableToPtr(user.Password)).
+		Save(ctx)
+}
+
+func NewUserRepo(ent *ent.Client) biz.UserRepo {
+	return &userRepo{ent: ent}
+}
+
+func (r userRepo) GetTenantUserPermissionKeys(ctx context.Context, tenantUserID int) ([]string, error) {
+	return r.ent.Permission.Query().
+		Where(permission.HasRolesWith(tenantrole.HasTenantUsersWith(tenantuser.ID(tenantUserID)))).
+		Select(permission.FieldKey).Strings(ctx)
+}

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: golang-account
+    lang: golang
+  name: golang-account
+  namespace: ${NAMESPACE}
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+  selector:
+    matchLabels:
+      app: golang-account
+      lang: golang
+  template:
+    metadata:
+      labels:
+        app: golang-account
+        lang: golang
+    spec:
+      containers:
+        - image: ${IMAGE_REGISTRY}/golang-account:${IMAGE_VERSION}
+          imagePullPolicy: ${IMAGE_PULL_POLICY}
+          name: golang-account
+          resources:
+            requests:
+              cpu: ${RESOURCES_REQUESTS_CPU}
+              memory: ${RESOURCES_REQUESTS_MEMORY}
+          envFrom:
+            - configMapRef:
+                name: monorepo-env
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: account-svc
+    lang: golang
+  name: golang-account-svc
+  namespace: ${NAMESPACE}
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: golang-account
+    lang: golang
+  type: ClusterIP

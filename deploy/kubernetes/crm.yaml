@@ -1,0 +1,52 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: golang-crm
+    lang: golang
+  name: golang-crm
+  namespace: ${NAMESPACE}
+spec:
+  replicas: ${DEFAULT_REPLICAS}
+  selector:
+    matchLabels:
+      app: golang-crm
+      lang: golang
+  template:
+    metadata:
+      labels:
+        app: golang-crm
+        lang: golang
+    spec:
+      containers:
+        - image: ${IMAGE_REGISTRY}/golang-crm:${IMAGE_VERSION}
+          imagePullPolicy: ${IMAGE_PULL_POLICY}
+          name: golang-crm
+          resources:
+            requests:
+              cpu: ${RESOURCES_REQUESTS_CPU}
+              memory: ${RESOURCES_REQUESTS_MEMORY}
+          envFrom:
+            - configMapRef:
+                name: monorepo-env
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: crm-svc
+    lang: golang
+  name: golang-crm-svc
+  namespace: ${NAMESPACE}
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: golang-crm
+    lang: golang
+  type: ClusterIP

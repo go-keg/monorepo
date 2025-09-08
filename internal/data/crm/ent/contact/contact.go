@@ -18,6 +18,10 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldPosition holds the string denoting the position field in the database.
@@ -26,10 +30,6 @@ const (
 	FieldPhone = "phone"
 	// FieldEmail holds the string denoting the email field in the database.
 	FieldEmail = "email"
-	// FieldCreatedBy holds the string denoting the created_by field in the database.
-	FieldCreatedBy = "created_by"
-	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
-	FieldUpdatedBy = "updated_by"
 	// EdgeCustomer holds the string denoting the customer edge name in mutations.
 	EdgeCustomer = "customer"
 	// Table holds the table name of the contact in the database.
@@ -48,12 +48,12 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldCreatedBy,
+	FieldUpdatedBy,
 	FieldName,
 	FieldPosition,
 	FieldPhone,
 	FieldEmail,
-	FieldCreatedBy,
-	FieldUpdatedBy,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "contacts"
@@ -106,6 +106,16 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -124,16 +134,6 @@ func ByPhone(opts ...sql.OrderTermOption) OrderOption {
 // ByEmail orders the results by the email field.
 func ByEmail(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEmail, opts...).ToFunc()
-}
-
-// ByCreatedBy orders the results by the created_by field.
-func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
-}
-
-// ByUpdatedBy orders the results by the updated_by field.
-func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
 // ByCustomerField orders the results by customer field.

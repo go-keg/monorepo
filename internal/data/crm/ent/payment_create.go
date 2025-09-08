@@ -51,6 +51,26 @@ func (pc *PaymentCreate) SetNillableUpdatedAt(t *time.Time) *PaymentCreate {
 	return pc
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (pc *PaymentCreate) SetCreatedBy(i int) *PaymentCreate {
+	pc.mutation.SetCreatedBy(i)
+	return pc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (pc *PaymentCreate) SetUpdatedBy(i int) *PaymentCreate {
+	pc.mutation.SetUpdatedBy(i)
+	return pc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pc *PaymentCreate) SetNillableUpdatedBy(i *int) *PaymentCreate {
+	if i != nil {
+		pc.SetUpdatedBy(*i)
+	}
+	return pc
+}
+
 // SetAmount sets the "amount" field.
 func (pc *PaymentCreate) SetAmount(f float64) *PaymentCreate {
 	pc.mutation.SetAmount(f)
@@ -75,26 +95,6 @@ func (pc *PaymentCreate) SetReceivedAt(t time.Time) *PaymentCreate {
 func (pc *PaymentCreate) SetNillableReceivedAt(t *time.Time) *PaymentCreate {
 	if t != nil {
 		pc.SetReceivedAt(*t)
-	}
-	return pc
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (pc *PaymentCreate) SetCreatedBy(i int) *PaymentCreate {
-	pc.mutation.SetCreatedBy(i)
-	return pc
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (pc *PaymentCreate) SetUpdatedBy(i int) *PaymentCreate {
-	pc.mutation.SetUpdatedBy(i)
-	return pc
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pc *PaymentCreate) SetNillableUpdatedBy(i *int) *PaymentCreate {
-	if i != nil {
-		pc.SetUpdatedBy(*i)
 	}
 	return pc
 }
@@ -161,11 +161,11 @@ func (pc *PaymentCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (pc *PaymentCreate) check() error {
-	if _, ok := pc.mutation.Amount(); !ok {
-		return &ValidationError{Name: "amount", err: errors.New(`ent: missing required field "Payment.amount"`)}
-	}
 	if _, ok := pc.mutation.CreatedBy(); !ok {
 		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "Payment.created_by"`)}
+	}
+	if _, ok := pc.mutation.Amount(); !ok {
+		return &ValidationError{Name: "amount", err: errors.New(`ent: missing required field "Payment.amount"`)}
 	}
 	if len(pc.mutation.ContractIDs()) == 0 {
 		return &ValidationError{Name: "contract", err: errors.New(`ent: missing required edge "Payment.contract"`)}
@@ -205,14 +205,6 @@ func (pc *PaymentCreate) createSpec() (*Payment, *sqlgraph.CreateSpec) {
 		_spec.SetField(payment.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := pc.mutation.Amount(); ok {
-		_spec.SetField(payment.FieldAmount, field.TypeFloat64, value)
-		_node.Amount = value
-	}
-	if value, ok := pc.mutation.ReceivedAt(); ok {
-		_spec.SetField(payment.FieldReceivedAt, field.TypeTime, value)
-		_node.ReceivedAt = value
-	}
 	if value, ok := pc.mutation.CreatedBy(); ok {
 		_spec.SetField(payment.FieldCreatedBy, field.TypeInt, value)
 		_node.CreatedBy = value
@@ -220,6 +212,14 @@ func (pc *PaymentCreate) createSpec() (*Payment, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.UpdatedBy(); ok {
 		_spec.SetField(payment.FieldUpdatedBy, field.TypeInt, value)
 		_node.UpdatedBy = value
+	}
+	if value, ok := pc.mutation.Amount(); ok {
+		_spec.SetField(payment.FieldAmount, field.TypeFloat64, value)
+		_node.Amount = value
+	}
+	if value, ok := pc.mutation.ReceivedAt(); ok {
+		_spec.SetField(payment.FieldReceivedAt, field.TypeTime, value)
+		_node.ReceivedAt = value
 	}
 	if nodes := pc.mutation.ContractIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -308,6 +308,30 @@ func (u *PaymentUpsert) ClearUpdatedAt() *PaymentUpsert {
 	return u
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *PaymentUpsert) SetUpdatedBy(v int) *PaymentUpsert {
+	u.Set(payment.FieldUpdatedBy, v)
+	return u
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *PaymentUpsert) UpdateUpdatedBy() *PaymentUpsert {
+	u.SetExcluded(payment.FieldUpdatedBy)
+	return u
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *PaymentUpsert) AddUpdatedBy(v int) *PaymentUpsert {
+	u.Add(payment.FieldUpdatedBy, v)
+	return u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *PaymentUpsert) ClearUpdatedBy() *PaymentUpsert {
+	u.SetNull(payment.FieldUpdatedBy)
+	return u
+}
+
 // SetAmount sets the "amount" field.
 func (u *PaymentUpsert) SetAmount(v float64) *PaymentUpsert {
 	u.Set(payment.FieldAmount, v)
@@ -341,30 +365,6 @@ func (u *PaymentUpsert) UpdateReceivedAt() *PaymentUpsert {
 // ClearReceivedAt clears the value of the "received_at" field.
 func (u *PaymentUpsert) ClearReceivedAt() *PaymentUpsert {
 	u.SetNull(payment.FieldReceivedAt)
-	return u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *PaymentUpsert) SetUpdatedBy(v int) *PaymentUpsert {
-	u.Set(payment.FieldUpdatedBy, v)
-	return u
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *PaymentUpsert) UpdateUpdatedBy() *PaymentUpsert {
-	u.SetExcluded(payment.FieldUpdatedBy)
-	return u
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *PaymentUpsert) AddUpdatedBy(v int) *PaymentUpsert {
-	u.Add(payment.FieldUpdatedBy, v)
-	return u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *PaymentUpsert) ClearUpdatedBy() *PaymentUpsert {
-	u.SetNull(payment.FieldUpdatedBy)
 	return u
 }
 
@@ -437,6 +437,34 @@ func (u *PaymentUpsertOne) ClearUpdatedAt() *PaymentUpsertOne {
 	})
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *PaymentUpsertOne) SetUpdatedBy(v int) *PaymentUpsertOne {
+	return u.Update(func(s *PaymentUpsert) {
+		s.SetUpdatedBy(v)
+	})
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *PaymentUpsertOne) AddUpdatedBy(v int) *PaymentUpsertOne {
+	return u.Update(func(s *PaymentUpsert) {
+		s.AddUpdatedBy(v)
+	})
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *PaymentUpsertOne) UpdateUpdatedBy() *PaymentUpsertOne {
+	return u.Update(func(s *PaymentUpsert) {
+		s.UpdateUpdatedBy()
+	})
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *PaymentUpsertOne) ClearUpdatedBy() *PaymentUpsertOne {
+	return u.Update(func(s *PaymentUpsert) {
+		s.ClearUpdatedBy()
+	})
+}
+
 // SetAmount sets the "amount" field.
 func (u *PaymentUpsertOne) SetAmount(v float64) *PaymentUpsertOne {
 	return u.Update(func(s *PaymentUpsert) {
@@ -476,34 +504,6 @@ func (u *PaymentUpsertOne) UpdateReceivedAt() *PaymentUpsertOne {
 func (u *PaymentUpsertOne) ClearReceivedAt() *PaymentUpsertOne {
 	return u.Update(func(s *PaymentUpsert) {
 		s.ClearReceivedAt()
-	})
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *PaymentUpsertOne) SetUpdatedBy(v int) *PaymentUpsertOne {
-	return u.Update(func(s *PaymentUpsert) {
-		s.SetUpdatedBy(v)
-	})
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *PaymentUpsertOne) AddUpdatedBy(v int) *PaymentUpsertOne {
-	return u.Update(func(s *PaymentUpsert) {
-		s.AddUpdatedBy(v)
-	})
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *PaymentUpsertOne) UpdateUpdatedBy() *PaymentUpsertOne {
-	return u.Update(func(s *PaymentUpsert) {
-		s.UpdateUpdatedBy()
-	})
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *PaymentUpsertOne) ClearUpdatedBy() *PaymentUpsertOne {
-	return u.Update(func(s *PaymentUpsert) {
-		s.ClearUpdatedBy()
 	})
 }
 
@@ -742,6 +742,34 @@ func (u *PaymentUpsertBulk) ClearUpdatedAt() *PaymentUpsertBulk {
 	})
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *PaymentUpsertBulk) SetUpdatedBy(v int) *PaymentUpsertBulk {
+	return u.Update(func(s *PaymentUpsert) {
+		s.SetUpdatedBy(v)
+	})
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *PaymentUpsertBulk) AddUpdatedBy(v int) *PaymentUpsertBulk {
+	return u.Update(func(s *PaymentUpsert) {
+		s.AddUpdatedBy(v)
+	})
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *PaymentUpsertBulk) UpdateUpdatedBy() *PaymentUpsertBulk {
+	return u.Update(func(s *PaymentUpsert) {
+		s.UpdateUpdatedBy()
+	})
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *PaymentUpsertBulk) ClearUpdatedBy() *PaymentUpsertBulk {
+	return u.Update(func(s *PaymentUpsert) {
+		s.ClearUpdatedBy()
+	})
+}
+
 // SetAmount sets the "amount" field.
 func (u *PaymentUpsertBulk) SetAmount(v float64) *PaymentUpsertBulk {
 	return u.Update(func(s *PaymentUpsert) {
@@ -781,34 +809,6 @@ func (u *PaymentUpsertBulk) UpdateReceivedAt() *PaymentUpsertBulk {
 func (u *PaymentUpsertBulk) ClearReceivedAt() *PaymentUpsertBulk {
 	return u.Update(func(s *PaymentUpsert) {
 		s.ClearReceivedAt()
-	})
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *PaymentUpsertBulk) SetUpdatedBy(v int) *PaymentUpsertBulk {
-	return u.Update(func(s *PaymentUpsert) {
-		s.SetUpdatedBy(v)
-	})
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *PaymentUpsertBulk) AddUpdatedBy(v int) *PaymentUpsertBulk {
-	return u.Update(func(s *PaymentUpsert) {
-		s.AddUpdatedBy(v)
-	})
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *PaymentUpsertBulk) UpdateUpdatedBy() *PaymentUpsertBulk {
-	return u.Update(func(s *PaymentUpsert) {
-		s.UpdateUpdatedBy()
-	})
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *PaymentUpsertBulk) ClearUpdatedBy() *PaymentUpsertBulk {
-	return u.Update(func(s *PaymentUpsert) {
-		s.ClearUpdatedBy()
 	})
 }
 

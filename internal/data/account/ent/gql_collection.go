@@ -662,6 +662,11 @@ func (pq *PermissionQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, permission.FieldAttrs)
 				fieldSeen[permission.FieldAttrs] = struct{}{}
 			}
+		case "isSystem":
+			if _, ok := fieldSeen[permission.FieldIsSystem]; !ok {
+				selectedFields = append(selectedFields, permission.FieldIsSystem)
+				fieldSeen[permission.FieldIsSystem] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

@@ -43,14 +43,14 @@ type ContactMutation struct {
 	id              *int
 	created_at      *time.Time
 	updated_at      *time.Time
-	name            *string
-	position        *string
-	phone           *string
-	email           *string
 	created_by      *int
 	addcreated_by   *int
 	updated_by      *int
 	addupdated_by   *int
+	name            *string
+	position        *string
+	phone           *string
+	email           *string
 	clearedFields   map[string]struct{}
 	customer        *int
 	clearedcustomer bool
@@ -255,6 +255,132 @@ func (m *ContactMutation) ResetUpdatedAt() {
 	delete(m.clearedFields, contact.FieldUpdatedAt)
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (m *ContactMutation) SetCreatedBy(i int) {
+	m.created_by = &i
+	m.addcreated_by = nil
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ContactMutation) CreatedBy() (r int, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Contact entity.
+// If the Contact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactMutation) OldCreatedBy(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// AddCreatedBy adds i to the "created_by" field.
+func (m *ContactMutation) AddCreatedBy(i int) {
+	if m.addcreated_by != nil {
+		*m.addcreated_by += i
+	} else {
+		m.addcreated_by = &i
+	}
+}
+
+// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
+func (m *ContactMutation) AddedCreatedBy() (r int, exists bool) {
+	v := m.addcreated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ContactMutation) ResetCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ContactMutation) SetUpdatedBy(i int) {
+	m.updated_by = &i
+	m.addupdated_by = nil
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ContactMutation) UpdatedBy() (r int, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Contact entity.
+// If the Contact object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContactMutation) OldUpdatedBy(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (m *ContactMutation) AddUpdatedBy(i int) {
+	if m.addupdated_by != nil {
+		*m.addupdated_by += i
+	} else {
+		m.addupdated_by = &i
+	}
+}
+
+// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
+func (m *ContactMutation) AddedUpdatedBy() (r int, exists bool) {
+	v := m.addupdated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ContactMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	m.clearedFields[contact.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ContactMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[contact.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ContactMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	delete(m.clearedFields, contact.FieldUpdatedBy)
+}
+
 // SetName sets the "name" field.
 func (m *ContactMutation) SetName(s string) {
 	m.name = &s
@@ -438,132 +564,6 @@ func (m *ContactMutation) ResetEmail() {
 	delete(m.clearedFields, contact.FieldEmail)
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (m *ContactMutation) SetCreatedBy(i int) {
-	m.created_by = &i
-	m.addcreated_by = nil
-}
-
-// CreatedBy returns the value of the "created_by" field in the mutation.
-func (m *ContactMutation) CreatedBy() (r int, exists bool) {
-	v := m.created_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedBy returns the old "created_by" field's value of the Contact entity.
-// If the Contact object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ContactMutation) OldCreatedBy(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
-	}
-	return oldValue.CreatedBy, nil
-}
-
-// AddCreatedBy adds i to the "created_by" field.
-func (m *ContactMutation) AddCreatedBy(i int) {
-	if m.addcreated_by != nil {
-		*m.addcreated_by += i
-	} else {
-		m.addcreated_by = &i
-	}
-}
-
-// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
-func (m *ContactMutation) AddedCreatedBy() (r int, exists bool) {
-	v := m.addcreated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetCreatedBy resets all changes to the "created_by" field.
-func (m *ContactMutation) ResetCreatedBy() {
-	m.created_by = nil
-	m.addcreated_by = nil
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (m *ContactMutation) SetUpdatedBy(i int) {
-	m.updated_by = &i
-	m.addupdated_by = nil
-}
-
-// UpdatedBy returns the value of the "updated_by" field in the mutation.
-func (m *ContactMutation) UpdatedBy() (r int, exists bool) {
-	v := m.updated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedBy returns the old "updated_by" field's value of the Contact entity.
-// If the Contact object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ContactMutation) OldUpdatedBy(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
-	}
-	return oldValue.UpdatedBy, nil
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (m *ContactMutation) AddUpdatedBy(i int) {
-	if m.addupdated_by != nil {
-		*m.addupdated_by += i
-	} else {
-		m.addupdated_by = &i
-	}
-}
-
-// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
-func (m *ContactMutation) AddedUpdatedBy() (r int, exists bool) {
-	v := m.addupdated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (m *ContactMutation) ClearUpdatedBy() {
-	m.updated_by = nil
-	m.addupdated_by = nil
-	m.clearedFields[contact.FieldUpdatedBy] = struct{}{}
-}
-
-// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
-func (m *ContactMutation) UpdatedByCleared() bool {
-	_, ok := m.clearedFields[contact.FieldUpdatedBy]
-	return ok
-}
-
-// ResetUpdatedBy resets all changes to the "updated_by" field.
-func (m *ContactMutation) ResetUpdatedBy() {
-	m.updated_by = nil
-	m.addupdated_by = nil
-	delete(m.clearedFields, contact.FieldUpdatedBy)
-}
-
 // SetCustomerID sets the "customer" edge to the Customer entity by id.
 func (m *ContactMutation) SetCustomerID(id int) {
 	m.customer = &id
@@ -644,6 +644,12 @@ func (m *ContactMutation) Fields() []string {
 	if m.updated_at != nil {
 		fields = append(fields, contact.FieldUpdatedAt)
 	}
+	if m.created_by != nil {
+		fields = append(fields, contact.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, contact.FieldUpdatedBy)
+	}
 	if m.name != nil {
 		fields = append(fields, contact.FieldName)
 	}
@@ -655,12 +661,6 @@ func (m *ContactMutation) Fields() []string {
 	}
 	if m.email != nil {
 		fields = append(fields, contact.FieldEmail)
-	}
-	if m.created_by != nil {
-		fields = append(fields, contact.FieldCreatedBy)
-	}
-	if m.updated_by != nil {
-		fields = append(fields, contact.FieldUpdatedBy)
 	}
 	return fields
 }
@@ -674,6 +674,10 @@ func (m *ContactMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case contact.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case contact.FieldCreatedBy:
+		return m.CreatedBy()
+	case contact.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case contact.FieldName:
 		return m.Name()
 	case contact.FieldPosition:
@@ -682,10 +686,6 @@ func (m *ContactMutation) Field(name string) (ent.Value, bool) {
 		return m.Phone()
 	case contact.FieldEmail:
 		return m.Email()
-	case contact.FieldCreatedBy:
-		return m.CreatedBy()
-	case contact.FieldUpdatedBy:
-		return m.UpdatedBy()
 	}
 	return nil, false
 }
@@ -699,6 +699,10 @@ func (m *ContactMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldCreatedAt(ctx)
 	case contact.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case contact.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case contact.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case contact.FieldName:
 		return m.OldName(ctx)
 	case contact.FieldPosition:
@@ -707,10 +711,6 @@ func (m *ContactMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldPhone(ctx)
 	case contact.FieldEmail:
 		return m.OldEmail(ctx)
-	case contact.FieldCreatedBy:
-		return m.OldCreatedBy(ctx)
-	case contact.FieldUpdatedBy:
-		return m.OldUpdatedBy(ctx)
 	}
 	return nil, fmt.Errorf("unknown Contact field %s", name)
 }
@@ -733,6 +733,20 @@ func (m *ContactMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
+		return nil
+	case contact.FieldCreatedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case contact.FieldUpdatedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
 		return nil
 	case contact.FieldName:
 		v, ok := value.(string)
@@ -761,20 +775,6 @@ func (m *ContactMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetEmail(v)
-		return nil
-	case contact.FieldCreatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedBy(v)
-		return nil
-	case contact.FieldUpdatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedBy(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Contact field %s", name)
@@ -839,6 +839,9 @@ func (m *ContactMutation) ClearedFields() []string {
 	if m.FieldCleared(contact.FieldUpdatedAt) {
 		fields = append(fields, contact.FieldUpdatedAt)
 	}
+	if m.FieldCleared(contact.FieldUpdatedBy) {
+		fields = append(fields, contact.FieldUpdatedBy)
+	}
 	if m.FieldCleared(contact.FieldPosition) {
 		fields = append(fields, contact.FieldPosition)
 	}
@@ -847,9 +850,6 @@ func (m *ContactMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(contact.FieldEmail) {
 		fields = append(fields, contact.FieldEmail)
-	}
-	if m.FieldCleared(contact.FieldUpdatedBy) {
-		fields = append(fields, contact.FieldUpdatedBy)
 	}
 	return fields
 }
@@ -871,6 +871,9 @@ func (m *ContactMutation) ClearField(name string) error {
 	case contact.FieldUpdatedAt:
 		m.ClearUpdatedAt()
 		return nil
+	case contact.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
 	case contact.FieldPosition:
 		m.ClearPosition()
 		return nil
@@ -879,9 +882,6 @@ func (m *ContactMutation) ClearField(name string) error {
 		return nil
 	case contact.FieldEmail:
 		m.ClearEmail()
-		return nil
-	case contact.FieldUpdatedBy:
-		m.ClearUpdatedBy()
 		return nil
 	}
 	return fmt.Errorf("unknown Contact nullable field %s", name)
@@ -897,6 +897,12 @@ func (m *ContactMutation) ResetField(name string) error {
 	case contact.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
+	case contact.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case contact.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
 	case contact.FieldName:
 		m.ResetName()
 		return nil
@@ -908,12 +914,6 @@ func (m *ContactMutation) ResetField(name string) error {
 		return nil
 	case contact.FieldEmail:
 		m.ResetEmail()
-		return nil
-	case contact.FieldCreatedBy:
-		m.ResetCreatedBy()
-		return nil
-	case contact.FieldUpdatedBy:
-		m.ResetUpdatedBy()
 		return nil
 	}
 	return fmt.Errorf("unknown Contact field %s", name)
@@ -1001,15 +1001,15 @@ type ContractMutation struct {
 	id              *int
 	created_at      *time.Time
 	updated_at      *time.Time
+	created_by      *int
+	addcreated_by   *int
+	updated_by      *int
+	addupdated_by   *int
 	contract_no     *string
 	amount          *float64
 	addamount       *float64
 	signed_at       *time.Time
 	end_at          *time.Time
-	created_by      *int
-	addcreated_by   *int
-	updated_by      *int
-	addupdated_by   *int
 	clearedFields   map[string]struct{}
 	customer        *int
 	clearedcustomer bool
@@ -1217,6 +1217,132 @@ func (m *ContractMutation) ResetUpdatedAt() {
 	delete(m.clearedFields, contract.FieldUpdatedAt)
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (m *ContractMutation) SetCreatedBy(i int) {
+	m.created_by = &i
+	m.addcreated_by = nil
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *ContractMutation) CreatedBy() (r int, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Contract entity.
+// If the Contract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContractMutation) OldCreatedBy(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// AddCreatedBy adds i to the "created_by" field.
+func (m *ContractMutation) AddCreatedBy(i int) {
+	if m.addcreated_by != nil {
+		*m.addcreated_by += i
+	} else {
+		m.addcreated_by = &i
+	}
+}
+
+// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
+func (m *ContractMutation) AddedCreatedBy() (r int, exists bool) {
+	v := m.addcreated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *ContractMutation) ResetCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *ContractMutation) SetUpdatedBy(i int) {
+	m.updated_by = &i
+	m.addupdated_by = nil
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *ContractMutation) UpdatedBy() (r int, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Contract entity.
+// If the Contract object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ContractMutation) OldUpdatedBy(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (m *ContractMutation) AddUpdatedBy(i int) {
+	if m.addupdated_by != nil {
+		*m.addupdated_by += i
+	} else {
+		m.addupdated_by = &i
+	}
+}
+
+// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
+func (m *ContractMutation) AddedUpdatedBy() (r int, exists bool) {
+	v := m.addupdated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *ContractMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	m.clearedFields[contract.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *ContractMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[contract.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *ContractMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	delete(m.clearedFields, contract.FieldUpdatedBy)
+}
+
 // SetContractNo sets the "contract_no" field.
 func (m *ContractMutation) SetContractNo(s string) {
 	m.contract_no = &s
@@ -1407,132 +1533,6 @@ func (m *ContractMutation) ResetEndAt() {
 	delete(m.clearedFields, contract.FieldEndAt)
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (m *ContractMutation) SetCreatedBy(i int) {
-	m.created_by = &i
-	m.addcreated_by = nil
-}
-
-// CreatedBy returns the value of the "created_by" field in the mutation.
-func (m *ContractMutation) CreatedBy() (r int, exists bool) {
-	v := m.created_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedBy returns the old "created_by" field's value of the Contract entity.
-// If the Contract object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ContractMutation) OldCreatedBy(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
-	}
-	return oldValue.CreatedBy, nil
-}
-
-// AddCreatedBy adds i to the "created_by" field.
-func (m *ContractMutation) AddCreatedBy(i int) {
-	if m.addcreated_by != nil {
-		*m.addcreated_by += i
-	} else {
-		m.addcreated_by = &i
-	}
-}
-
-// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
-func (m *ContractMutation) AddedCreatedBy() (r int, exists bool) {
-	v := m.addcreated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetCreatedBy resets all changes to the "created_by" field.
-func (m *ContractMutation) ResetCreatedBy() {
-	m.created_by = nil
-	m.addcreated_by = nil
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (m *ContractMutation) SetUpdatedBy(i int) {
-	m.updated_by = &i
-	m.addupdated_by = nil
-}
-
-// UpdatedBy returns the value of the "updated_by" field in the mutation.
-func (m *ContractMutation) UpdatedBy() (r int, exists bool) {
-	v := m.updated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedBy returns the old "updated_by" field's value of the Contract entity.
-// If the Contract object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ContractMutation) OldUpdatedBy(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
-	}
-	return oldValue.UpdatedBy, nil
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (m *ContractMutation) AddUpdatedBy(i int) {
-	if m.addupdated_by != nil {
-		*m.addupdated_by += i
-	} else {
-		m.addupdated_by = &i
-	}
-}
-
-// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
-func (m *ContractMutation) AddedUpdatedBy() (r int, exists bool) {
-	v := m.addupdated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (m *ContractMutation) ClearUpdatedBy() {
-	m.updated_by = nil
-	m.addupdated_by = nil
-	m.clearedFields[contract.FieldUpdatedBy] = struct{}{}
-}
-
-// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
-func (m *ContractMutation) UpdatedByCleared() bool {
-	_, ok := m.clearedFields[contract.FieldUpdatedBy]
-	return ok
-}
-
-// ResetUpdatedBy resets all changes to the "updated_by" field.
-func (m *ContractMutation) ResetUpdatedBy() {
-	m.updated_by = nil
-	m.addupdated_by = nil
-	delete(m.clearedFields, contract.FieldUpdatedBy)
-}
-
 // SetCustomerID sets the "customer" edge to the Customer entity by id.
 func (m *ContractMutation) SetCustomerID(id int) {
 	m.customer = &id
@@ -1667,6 +1667,12 @@ func (m *ContractMutation) Fields() []string {
 	if m.updated_at != nil {
 		fields = append(fields, contract.FieldUpdatedAt)
 	}
+	if m.created_by != nil {
+		fields = append(fields, contract.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, contract.FieldUpdatedBy)
+	}
 	if m.contract_no != nil {
 		fields = append(fields, contract.FieldContractNo)
 	}
@@ -1678,12 +1684,6 @@ func (m *ContractMutation) Fields() []string {
 	}
 	if m.end_at != nil {
 		fields = append(fields, contract.FieldEndAt)
-	}
-	if m.created_by != nil {
-		fields = append(fields, contract.FieldCreatedBy)
-	}
-	if m.updated_by != nil {
-		fields = append(fields, contract.FieldUpdatedBy)
 	}
 	return fields
 }
@@ -1697,6 +1697,10 @@ func (m *ContractMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case contract.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case contract.FieldCreatedBy:
+		return m.CreatedBy()
+	case contract.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case contract.FieldContractNo:
 		return m.ContractNo()
 	case contract.FieldAmount:
@@ -1705,10 +1709,6 @@ func (m *ContractMutation) Field(name string) (ent.Value, bool) {
 		return m.SignedAt()
 	case contract.FieldEndAt:
 		return m.EndAt()
-	case contract.FieldCreatedBy:
-		return m.CreatedBy()
-	case contract.FieldUpdatedBy:
-		return m.UpdatedBy()
 	}
 	return nil, false
 }
@@ -1722,6 +1722,10 @@ func (m *ContractMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldCreatedAt(ctx)
 	case contract.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case contract.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case contract.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case contract.FieldContractNo:
 		return m.OldContractNo(ctx)
 	case contract.FieldAmount:
@@ -1730,10 +1734,6 @@ func (m *ContractMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldSignedAt(ctx)
 	case contract.FieldEndAt:
 		return m.OldEndAt(ctx)
-	case contract.FieldCreatedBy:
-		return m.OldCreatedBy(ctx)
-	case contract.FieldUpdatedBy:
-		return m.OldUpdatedBy(ctx)
 	}
 	return nil, fmt.Errorf("unknown Contract field %s", name)
 }
@@ -1756,6 +1756,20 @@ func (m *ContractMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
+		return nil
+	case contract.FieldCreatedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case contract.FieldUpdatedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
 		return nil
 	case contract.FieldContractNo:
 		v, ok := value.(string)
@@ -1785,20 +1799,6 @@ func (m *ContractMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEndAt(v)
 		return nil
-	case contract.FieldCreatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedBy(v)
-		return nil
-	case contract.FieldUpdatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedBy(v)
-		return nil
 	}
 	return fmt.Errorf("unknown Contract field %s", name)
 }
@@ -1807,14 +1807,14 @@ func (m *ContractMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *ContractMutation) AddedFields() []string {
 	var fields []string
-	if m.addamount != nil {
-		fields = append(fields, contract.FieldAmount)
-	}
 	if m.addcreated_by != nil {
 		fields = append(fields, contract.FieldCreatedBy)
 	}
 	if m.addupdated_by != nil {
 		fields = append(fields, contract.FieldUpdatedBy)
+	}
+	if m.addamount != nil {
+		fields = append(fields, contract.FieldAmount)
 	}
 	return fields
 }
@@ -1824,12 +1824,12 @@ func (m *ContractMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ContractMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case contract.FieldAmount:
-		return m.AddedAmount()
 	case contract.FieldCreatedBy:
 		return m.AddedCreatedBy()
 	case contract.FieldUpdatedBy:
 		return m.AddedUpdatedBy()
+	case contract.FieldAmount:
+		return m.AddedAmount()
 	}
 	return nil, false
 }
@@ -1839,13 +1839,6 @@ func (m *ContractMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ContractMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case contract.FieldAmount:
-		v, ok := value.(float64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddAmount(v)
-		return nil
 	case contract.FieldCreatedBy:
 		v, ok := value.(int)
 		if !ok {
@@ -1859,6 +1852,13 @@ func (m *ContractMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUpdatedBy(v)
+		return nil
+	case contract.FieldAmount:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddAmount(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Contract numeric field %s", name)
@@ -1874,14 +1874,14 @@ func (m *ContractMutation) ClearedFields() []string {
 	if m.FieldCleared(contract.FieldUpdatedAt) {
 		fields = append(fields, contract.FieldUpdatedAt)
 	}
+	if m.FieldCleared(contract.FieldUpdatedBy) {
+		fields = append(fields, contract.FieldUpdatedBy)
+	}
 	if m.FieldCleared(contract.FieldSignedAt) {
 		fields = append(fields, contract.FieldSignedAt)
 	}
 	if m.FieldCleared(contract.FieldEndAt) {
 		fields = append(fields, contract.FieldEndAt)
-	}
-	if m.FieldCleared(contract.FieldUpdatedBy) {
-		fields = append(fields, contract.FieldUpdatedBy)
 	}
 	return fields
 }
@@ -1903,14 +1903,14 @@ func (m *ContractMutation) ClearField(name string) error {
 	case contract.FieldUpdatedAt:
 		m.ClearUpdatedAt()
 		return nil
+	case contract.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
 	case contract.FieldSignedAt:
 		m.ClearSignedAt()
 		return nil
 	case contract.FieldEndAt:
 		m.ClearEndAt()
-		return nil
-	case contract.FieldUpdatedBy:
-		m.ClearUpdatedBy()
 		return nil
 	}
 	return fmt.Errorf("unknown Contract nullable field %s", name)
@@ -1926,6 +1926,12 @@ func (m *ContractMutation) ResetField(name string) error {
 	case contract.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
+	case contract.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case contract.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
 	case contract.FieldContractNo:
 		m.ResetContractNo()
 		return nil
@@ -1937,12 +1943,6 @@ func (m *ContractMutation) ResetField(name string) error {
 		return nil
 	case contract.FieldEndAt:
 		m.ResetEndAt()
-		return nil
-	case contract.FieldCreatedBy:
-		m.ResetCreatedBy()
-		return nil
-	case contract.FieldUpdatedBy:
-		m.ResetUpdatedBy()
 		return nil
 	}
 	return fmt.Errorf("unknown Contract field %s", name)
@@ -2058,15 +2058,15 @@ type CustomerMutation struct {
 	id                *int
 	created_at        *time.Time
 	updated_at        *time.Time
+	created_by        *int
+	addcreated_by     *int
+	updated_by        *int
+	addupdated_by     *int
 	name              *string
 	industry          *string
 	source            *string
 	level             *string
 	metadata          *map[string]interface{}
-	created_by        *int
-	addcreated_by     *int
-	updated_by        *int
-	addupdated_by     *int
 	clearedFields     map[string]struct{}
 	contacts          map[int]struct{}
 	removedcontacts   map[int]struct{}
@@ -2276,6 +2276,132 @@ func (m *CustomerMutation) UpdatedAtCleared() bool {
 func (m *CustomerMutation) ResetUpdatedAt() {
 	m.updated_at = nil
 	delete(m.clearedFields, customer.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *CustomerMutation) SetCreatedBy(i int) {
+	m.created_by = &i
+	m.addcreated_by = nil
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *CustomerMutation) CreatedBy() (r int, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Customer entity.
+// If the Customer object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CustomerMutation) OldCreatedBy(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// AddCreatedBy adds i to the "created_by" field.
+func (m *CustomerMutation) AddCreatedBy(i int) {
+	if m.addcreated_by != nil {
+		*m.addcreated_by += i
+	} else {
+		m.addcreated_by = &i
+	}
+}
+
+// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
+func (m *CustomerMutation) AddedCreatedBy() (r int, exists bool) {
+	v := m.addcreated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *CustomerMutation) ResetCreatedBy() {
+	m.created_by = nil
+	m.addcreated_by = nil
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *CustomerMutation) SetUpdatedBy(i int) {
+	m.updated_by = &i
+	m.addupdated_by = nil
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *CustomerMutation) UpdatedBy() (r int, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Customer entity.
+// If the Customer object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CustomerMutation) OldUpdatedBy(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (m *CustomerMutation) AddUpdatedBy(i int) {
+	if m.addupdated_by != nil {
+		*m.addupdated_by += i
+	} else {
+		m.addupdated_by = &i
+	}
+}
+
+// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
+func (m *CustomerMutation) AddedUpdatedBy() (r int, exists bool) {
+	v := m.addupdated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *CustomerMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	m.clearedFields[customer.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *CustomerMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[customer.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *CustomerMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	m.addupdated_by = nil
+	delete(m.clearedFields, customer.FieldUpdatedBy)
 }
 
 // SetName sets the "name" field.
@@ -2510,132 +2636,6 @@ func (m *CustomerMutation) ResetMetadata() {
 	delete(m.clearedFields, customer.FieldMetadata)
 }
 
-// SetCreatedBy sets the "created_by" field.
-func (m *CustomerMutation) SetCreatedBy(i int) {
-	m.created_by = &i
-	m.addcreated_by = nil
-}
-
-// CreatedBy returns the value of the "created_by" field in the mutation.
-func (m *CustomerMutation) CreatedBy() (r int, exists bool) {
-	v := m.created_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCreatedBy returns the old "created_by" field's value of the Customer entity.
-// If the Customer object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CustomerMutation) OldCreatedBy(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
-	}
-	return oldValue.CreatedBy, nil
-}
-
-// AddCreatedBy adds i to the "created_by" field.
-func (m *CustomerMutation) AddCreatedBy(i int) {
-	if m.addcreated_by != nil {
-		*m.addcreated_by += i
-	} else {
-		m.addcreated_by = &i
-	}
-}
-
-// AddedCreatedBy returns the value that was added to the "created_by" field in this mutation.
-func (m *CustomerMutation) AddedCreatedBy() (r int, exists bool) {
-	v := m.addcreated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetCreatedBy resets all changes to the "created_by" field.
-func (m *CustomerMutation) ResetCreatedBy() {
-	m.created_by = nil
-	m.addcreated_by = nil
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (m *CustomerMutation) SetUpdatedBy(i int) {
-	m.updated_by = &i
-	m.addupdated_by = nil
-}
-
-// UpdatedBy returns the value of the "updated_by" field in the mutation.
-func (m *CustomerMutation) UpdatedBy() (r int, exists bool) {
-	v := m.updated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldUpdatedBy returns the old "updated_by" field's value of the Customer entity.
-// If the Customer object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CustomerMutation) OldUpdatedBy(ctx context.Context) (v int, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
-	}
-	return oldValue.UpdatedBy, nil
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (m *CustomerMutation) AddUpdatedBy(i int) {
-	if m.addupdated_by != nil {
-		*m.addupdated_by += i
-	} else {
-		m.addupdated_by = &i
-	}
-}
-
-// AddedUpdatedBy returns the value that was added to the "updated_by" field in this mutation.
-func (m *CustomerMutation) AddedUpdatedBy() (r int, exists bool) {
-	v := m.addupdated_by
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (m *CustomerMutation) ClearUpdatedBy() {
-	m.updated_by = nil
-	m.addupdated_by = nil
-	m.clearedFields[customer.FieldUpdatedBy] = struct{}{}
-}
-
-// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
-func (m *CustomerMutation) UpdatedByCleared() bool {
-	_, ok := m.clearedFields[customer.FieldUpdatedBy]
-	return ok
-}
-
-// ResetUpdatedBy resets all changes to the "updated_by" field.
-func (m *CustomerMutation) ResetUpdatedBy() {
-	m.updated_by = nil
-	m.addupdated_by = nil
-	delete(m.clearedFields, customer.FieldUpdatedBy)
-}
-
 // AddContactIDs adds the "contacts" edge to the Contact entity by ids.
 func (m *CustomerMutation) AddContactIDs(ids ...int) {
 	if m.contacts == nil {
@@ -2839,6 +2839,12 @@ func (m *CustomerMutation) Fields() []string {
 	if m.updated_at != nil {
 		fields = append(fields, customer.FieldUpdatedAt)
 	}
+	if m.created_by != nil {
+		fields = append(fields, customer.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, customer.FieldUpdatedBy)
+	}
 	if m.name != nil {
 		fields = append(fields, customer.FieldName)
 	}
@@ -2854,12 +2860,6 @@ func (m *CustomerMutation) Fields() []string {
 	if m.metadata != nil {
 		fields = append(fields, customer.FieldMetadata)
 	}
-	if m.created_by != nil {
-		fields = append(fields, customer.FieldCreatedBy)
-	}
-	if m.updated_by != nil {
-		fields = append(fields, customer.FieldUpdatedBy)
-	}
 	return fields
 }
 
@@ -2872,6 +2872,10 @@ func (m *CustomerMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case customer.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case customer.FieldCreatedBy:
+		return m.CreatedBy()
+	case customer.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case customer.FieldName:
 		return m.Name()
 	case customer.FieldIndustry:
@@ -2882,10 +2886,6 @@ func (m *CustomerMutation) Field(name string) (ent.Value, bool) {
 		return m.Level()
 	case customer.FieldMetadata:
 		return m.Metadata()
-	case customer.FieldCreatedBy:
-		return m.CreatedBy()
-	case customer.FieldUpdatedBy:
-		return m.UpdatedBy()
 	}
 	return nil, false
 }
@@ -2899,6 +2899,10 @@ func (m *CustomerMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldCreatedAt(ctx)
 	case customer.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case customer.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case customer.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case customer.FieldName:
 		return m.OldName(ctx)
 	case customer.FieldIndustry:
@@ -2909,10 +2913,6 @@ func (m *CustomerMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldLevel(ctx)
 	case customer.FieldMetadata:
 		return m.OldMetadata(ctx)
-	case customer.FieldCreatedBy:
-		return m.OldCreatedBy(ctx)
-	case customer.FieldUpdatedBy:
-		return m.OldUpdatedBy(ctx)
 	}
 	return nil, fmt.Errorf("unknown Customer field %s", name)
 }
@@ -2935,6 +2935,20 @@ func (m *CustomerMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
+		return nil
+	case customer.FieldCreatedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case customer.FieldUpdatedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
 		return nil
 	case customer.FieldName:
 		v, ok := value.(string)
@@ -2970,20 +2984,6 @@ func (m *CustomerMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetMetadata(v)
-		return nil
-	case customer.FieldCreatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedBy(v)
-		return nil
-	case customer.FieldUpdatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedBy(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Customer field %s", name)
@@ -3048,6 +3048,9 @@ func (m *CustomerMutation) ClearedFields() []string {
 	if m.FieldCleared(customer.FieldUpdatedAt) {
 		fields = append(fields, customer.FieldUpdatedAt)
 	}
+	if m.FieldCleared(customer.FieldUpdatedBy) {
+		fields = append(fields, customer.FieldUpdatedBy)
+	}
 	if m.FieldCleared(customer.FieldIndustry) {
 		fields = append(fields, customer.FieldIndustry)
 	}
@@ -3059,9 +3062,6 @@ func (m *CustomerMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(customer.FieldMetadata) {
 		fields = append(fields, customer.FieldMetadata)
-	}
-	if m.FieldCleared(customer.FieldUpdatedBy) {
-		fields = append(fields, customer.FieldUpdatedBy)
 	}
 	return fields
 }
@@ -3083,6 +3083,9 @@ func (m *CustomerMutation) ClearField(name string) error {
 	case customer.FieldUpdatedAt:
 		m.ClearUpdatedAt()
 		return nil
+	case customer.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
 	case customer.FieldIndustry:
 		m.ClearIndustry()
 		return nil
@@ -3094,9 +3097,6 @@ func (m *CustomerMutation) ClearField(name string) error {
 		return nil
 	case customer.FieldMetadata:
 		m.ClearMetadata()
-		return nil
-	case customer.FieldUpdatedBy:
-		m.ClearUpdatedBy()
 		return nil
 	}
 	return fmt.Errorf("unknown Customer nullable field %s", name)
@@ -3112,6 +3112,12 @@ func (m *CustomerMutation) ResetField(name string) error {
 	case customer.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
+	case customer.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case customer.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
 	case customer.FieldName:
 		m.ResetName()
 		return nil
@@ -3126,12 +3132,6 @@ func (m *CustomerMutation) ResetField(name string) error {
 		return nil
 	case customer.FieldMetadata:
 		m.ResetMetadata()
-		return nil
-	case customer.FieldCreatedBy:
-		m.ResetCreatedBy()
-		return nil
-	case customer.FieldUpdatedBy:
-		m.ResetUpdatedBy()
 		return nil
 	}
 	return fmt.Errorf("unknown Customer field %s", name)
@@ -3281,13 +3281,13 @@ type FollowUpMutation struct {
 	id              *int
 	created_at      *time.Time
 	updated_at      *time.Time
-	_type           *followup.Type
-	content         *string
-	followed_at     *time.Time
 	created_by      *int
 	addcreated_by   *int
 	updated_by      *int
 	addupdated_by   *int
+	_type           *followup.Type
+	content         *string
+	followed_at     *time.Time
 	clearedFields   map[string]struct{}
 	customer        *int
 	clearedcustomer bool
@@ -3492,114 +3492,6 @@ func (m *FollowUpMutation) ResetUpdatedAt() {
 	delete(m.clearedFields, followup.FieldUpdatedAt)
 }
 
-// SetType sets the "type" field.
-func (m *FollowUpMutation) SetType(f followup.Type) {
-	m._type = &f
-}
-
-// GetType returns the value of the "type" field in the mutation.
-func (m *FollowUpMutation) GetType() (r followup.Type, exists bool) {
-	v := m._type
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldType returns the old "type" field's value of the FollowUp entity.
-// If the FollowUp object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FollowUpMutation) OldType(ctx context.Context) (v followup.Type, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldType is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldType requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldType: %w", err)
-	}
-	return oldValue.Type, nil
-}
-
-// ResetType resets all changes to the "type" field.
-func (m *FollowUpMutation) ResetType() {
-	m._type = nil
-}
-
-// SetContent sets the "content" field.
-func (m *FollowUpMutation) SetContent(s string) {
-	m.content = &s
-}
-
-// Content returns the value of the "content" field in the mutation.
-func (m *FollowUpMutation) Content() (r string, exists bool) {
-	v := m.content
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldContent returns the old "content" field's value of the FollowUp entity.
-// If the FollowUp object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FollowUpMutation) OldContent(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldContent is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldContent requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldContent: %w", err)
-	}
-	return oldValue.Content, nil
-}
-
-// ResetContent resets all changes to the "content" field.
-func (m *FollowUpMutation) ResetContent() {
-	m.content = nil
-}
-
-// SetFollowedAt sets the "followed_at" field.
-func (m *FollowUpMutation) SetFollowedAt(t time.Time) {
-	m.followed_at = &t
-}
-
-// FollowedAt returns the value of the "followed_at" field in the mutation.
-func (m *FollowUpMutation) FollowedAt() (r time.Time, exists bool) {
-	v := m.followed_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFollowedAt returns the old "followed_at" field's value of the FollowUp entity.
-// If the FollowUp object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FollowUpMutation) OldFollowedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFollowedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFollowedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFollowedAt: %w", err)
-	}
-	return oldValue.FollowedAt, nil
-}
-
-// ResetFollowedAt resets all changes to the "followed_at" field.
-func (m *FollowUpMutation) ResetFollowedAt() {
-	m.followed_at = nil
-}
-
 // SetCreatedBy sets the "created_by" field.
 func (m *FollowUpMutation) SetCreatedBy(i int) {
 	m.created_by = &i
@@ -3726,6 +3618,114 @@ func (m *FollowUpMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, followup.FieldUpdatedBy)
 }
 
+// SetType sets the "type" field.
+func (m *FollowUpMutation) SetType(f followup.Type) {
+	m._type = &f
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *FollowUpMutation) GetType() (r followup.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the FollowUp entity.
+// If the FollowUp object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FollowUpMutation) OldType(ctx context.Context) (v followup.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *FollowUpMutation) ResetType() {
+	m._type = nil
+}
+
+// SetContent sets the "content" field.
+func (m *FollowUpMutation) SetContent(s string) {
+	m.content = &s
+}
+
+// Content returns the value of the "content" field in the mutation.
+func (m *FollowUpMutation) Content() (r string, exists bool) {
+	v := m.content
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContent returns the old "content" field's value of the FollowUp entity.
+// If the FollowUp object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FollowUpMutation) OldContent(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContent is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContent requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContent: %w", err)
+	}
+	return oldValue.Content, nil
+}
+
+// ResetContent resets all changes to the "content" field.
+func (m *FollowUpMutation) ResetContent() {
+	m.content = nil
+}
+
+// SetFollowedAt sets the "followed_at" field.
+func (m *FollowUpMutation) SetFollowedAt(t time.Time) {
+	m.followed_at = &t
+}
+
+// FollowedAt returns the value of the "followed_at" field in the mutation.
+func (m *FollowUpMutation) FollowedAt() (r time.Time, exists bool) {
+	v := m.followed_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFollowedAt returns the old "followed_at" field's value of the FollowUp entity.
+// If the FollowUp object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FollowUpMutation) OldFollowedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFollowedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFollowedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFollowedAt: %w", err)
+	}
+	return oldValue.FollowedAt, nil
+}
+
+// ResetFollowedAt resets all changes to the "followed_at" field.
+func (m *FollowUpMutation) ResetFollowedAt() {
+	m.followed_at = nil
+}
+
 // SetCustomerID sets the "customer" edge to the Customer entity by id.
 func (m *FollowUpMutation) SetCustomerID(id int) {
 	m.customer = &id
@@ -3806,6 +3806,12 @@ func (m *FollowUpMutation) Fields() []string {
 	if m.updated_at != nil {
 		fields = append(fields, followup.FieldUpdatedAt)
 	}
+	if m.created_by != nil {
+		fields = append(fields, followup.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, followup.FieldUpdatedBy)
+	}
 	if m._type != nil {
 		fields = append(fields, followup.FieldType)
 	}
@@ -3814,12 +3820,6 @@ func (m *FollowUpMutation) Fields() []string {
 	}
 	if m.followed_at != nil {
 		fields = append(fields, followup.FieldFollowedAt)
-	}
-	if m.created_by != nil {
-		fields = append(fields, followup.FieldCreatedBy)
-	}
-	if m.updated_by != nil {
-		fields = append(fields, followup.FieldUpdatedBy)
 	}
 	return fields
 }
@@ -3833,16 +3833,16 @@ func (m *FollowUpMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case followup.FieldUpdatedAt:
 		return m.UpdatedAt()
+	case followup.FieldCreatedBy:
+		return m.CreatedBy()
+	case followup.FieldUpdatedBy:
+		return m.UpdatedBy()
 	case followup.FieldType:
 		return m.GetType()
 	case followup.FieldContent:
 		return m.Content()
 	case followup.FieldFollowedAt:
 		return m.FollowedAt()
-	case followup.FieldCreatedBy:
-		return m.CreatedBy()
-	case followup.FieldUpdatedBy:
-		return m.UpdatedBy()
 	}
 	return nil, false
 }
@@ -3856,16 +3856,16 @@ func (m *FollowUpMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldCreatedAt(ctx)
 	case followup.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
+	case followup.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case followup.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
 	case followup.FieldType:
 		return m.OldType(ctx)
 	case followup.FieldContent:
 		return m.OldContent(ctx)
 	case followup.FieldFollowedAt:
 		return m.OldFollowedAt(ctx)
-	case followup.FieldCreatedBy:
-		return m.OldCreatedBy(ctx)
-	case followup.FieldUpdatedBy:
-		return m.OldUpdatedBy(ctx)
 	}
 	return nil, fmt.Errorf("unknown FollowUp field %s", name)
 }
@@ -3889,6 +3889,20 @@ func (m *FollowUpMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedAt(v)
 		return nil
+	case followup.FieldCreatedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case followup.FieldUpdatedBy:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
 	case followup.FieldType:
 		v, ok := value.(followup.Type)
 		if !ok {
@@ -3909,20 +3923,6 @@ func (m *FollowUpMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetFollowedAt(v)
-		return nil
-	case followup.FieldCreatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCreatedBy(v)
-		return nil
-	case followup.FieldUpdatedBy:
-		v, ok := value.(int)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetUpdatedBy(v)
 		return nil
 	}
 	return fmt.Errorf("unknown FollowUp field %s", name)
@@ -4027,6 +4027,12 @@ func (m *FollowUpMutation) ResetField(name string) error {
 	case followup.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
+	case followup.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case followup.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
 	case followup.FieldType:
 		m.ResetType()
 		return nil
@@ -4035,12 +4041,6 @@ func (m *FollowUpMutation) ResetField(name string) error {
 		return nil
 	case followup.FieldFollowedAt:
 		m.ResetFollowedAt()
-		return nil
-	case followup.FieldCreatedBy:
-		m.ResetCreatedBy()
-		return nil
-	case followup.FieldUpdatedBy:
-		m.ResetUpdatedBy()
 		return nil
 	}
 	return fmt.Errorf("unknown FollowUp field %s", name)
@@ -4128,13 +4128,13 @@ type PaymentMutation struct {
 	id              *int
 	created_at      *time.Time
 	updated_at      *time.Time
-	amount          *float64
-	addamount       *float64
-	received_at     *time.Time
 	created_by      *int
 	addcreated_by   *int
 	updated_by      *int
 	addupdated_by   *int
+	amount          *float64
+	addamount       *float64
+	received_at     *time.Time
 	clearedFields   map[string]struct{}
 	contract        *int
 	clearedcontract bool
@@ -4339,111 +4339,6 @@ func (m *PaymentMutation) ResetUpdatedAt() {
 	delete(m.clearedFields, payment.FieldUpdatedAt)
 }
 
-// SetAmount sets the "amount" field.
-func (m *PaymentMutation) SetAmount(f float64) {
-	m.amount = &f
-	m.addamount = nil
-}
-
-// Amount returns the value of the "amount" field in the mutation.
-func (m *PaymentMutation) Amount() (r float64, exists bool) {
-	v := m.amount
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldAmount returns the old "amount" field's value of the Payment entity.
-// If the Payment object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PaymentMutation) OldAmount(ctx context.Context) (v float64, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldAmount is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldAmount requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldAmount: %w", err)
-	}
-	return oldValue.Amount, nil
-}
-
-// AddAmount adds f to the "amount" field.
-func (m *PaymentMutation) AddAmount(f float64) {
-	if m.addamount != nil {
-		*m.addamount += f
-	} else {
-		m.addamount = &f
-	}
-}
-
-// AddedAmount returns the value that was added to the "amount" field in this mutation.
-func (m *PaymentMutation) AddedAmount() (r float64, exists bool) {
-	v := m.addamount
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// ResetAmount resets all changes to the "amount" field.
-func (m *PaymentMutation) ResetAmount() {
-	m.amount = nil
-	m.addamount = nil
-}
-
-// SetReceivedAt sets the "received_at" field.
-func (m *PaymentMutation) SetReceivedAt(t time.Time) {
-	m.received_at = &t
-}
-
-// ReceivedAt returns the value of the "received_at" field in the mutation.
-func (m *PaymentMutation) ReceivedAt() (r time.Time, exists bool) {
-	v := m.received_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldReceivedAt returns the old "received_at" field's value of the Payment entity.
-// If the Payment object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *PaymentMutation) OldReceivedAt(ctx context.Context) (v time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldReceivedAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldReceivedAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldReceivedAt: %w", err)
-	}
-	return oldValue.ReceivedAt, nil
-}
-
-// ClearReceivedAt clears the value of the "received_at" field.
-func (m *PaymentMutation) ClearReceivedAt() {
-	m.received_at = nil
-	m.clearedFields[payment.FieldReceivedAt] = struct{}{}
-}
-
-// ReceivedAtCleared returns if the "received_at" field was cleared in this mutation.
-func (m *PaymentMutation) ReceivedAtCleared() bool {
-	_, ok := m.clearedFields[payment.FieldReceivedAt]
-	return ok
-}
-
-// ResetReceivedAt resets all changes to the "received_at" field.
-func (m *PaymentMutation) ResetReceivedAt() {
-	m.received_at = nil
-	delete(m.clearedFields, payment.FieldReceivedAt)
-}
-
 // SetCreatedBy sets the "created_by" field.
 func (m *PaymentMutation) SetCreatedBy(i int) {
 	m.created_by = &i
@@ -4570,6 +4465,111 @@ func (m *PaymentMutation) ResetUpdatedBy() {
 	delete(m.clearedFields, payment.FieldUpdatedBy)
 }
 
+// SetAmount sets the "amount" field.
+func (m *PaymentMutation) SetAmount(f float64) {
+	m.amount = &f
+	m.addamount = nil
+}
+
+// Amount returns the value of the "amount" field in the mutation.
+func (m *PaymentMutation) Amount() (r float64, exists bool) {
+	v := m.amount
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAmount returns the old "amount" field's value of the Payment entity.
+// If the Payment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PaymentMutation) OldAmount(ctx context.Context) (v float64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAmount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAmount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAmount: %w", err)
+	}
+	return oldValue.Amount, nil
+}
+
+// AddAmount adds f to the "amount" field.
+func (m *PaymentMutation) AddAmount(f float64) {
+	if m.addamount != nil {
+		*m.addamount += f
+	} else {
+		m.addamount = &f
+	}
+}
+
+// AddedAmount returns the value that was added to the "amount" field in this mutation.
+func (m *PaymentMutation) AddedAmount() (r float64, exists bool) {
+	v := m.addamount
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetAmount resets all changes to the "amount" field.
+func (m *PaymentMutation) ResetAmount() {
+	m.amount = nil
+	m.addamount = nil
+}
+
+// SetReceivedAt sets the "received_at" field.
+func (m *PaymentMutation) SetReceivedAt(t time.Time) {
+	m.received_at = &t
+}
+
+// ReceivedAt returns the value of the "received_at" field in the mutation.
+func (m *PaymentMutation) ReceivedAt() (r time.Time, exists bool) {
+	v := m.received_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReceivedAt returns the old "received_at" field's value of the Payment entity.
+// If the Payment object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PaymentMutation) OldReceivedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReceivedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReceivedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReceivedAt: %w", err)
+	}
+	return oldValue.ReceivedAt, nil
+}
+
+// ClearReceivedAt clears the value of the "received_at" field.
+func (m *PaymentMutation) ClearReceivedAt() {
+	m.received_at = nil
+	m.clearedFields[payment.FieldReceivedAt] = struct{}{}
+}
+
+// ReceivedAtCleared returns if the "received_at" field was cleared in this mutation.
+func (m *PaymentMutation) ReceivedAtCleared() bool {
+	_, ok := m.clearedFields[payment.FieldReceivedAt]
+	return ok
+}
+
+// ResetReceivedAt resets all changes to the "received_at" field.
+func (m *PaymentMutation) ResetReceivedAt() {
+	m.received_at = nil
+	delete(m.clearedFields, payment.FieldReceivedAt)
+}
+
 // SetContractID sets the "contract" edge to the Contract entity by id.
 func (m *PaymentMutation) SetContractID(id int) {
 	m.contract = &id
@@ -4650,17 +4650,17 @@ func (m *PaymentMutation) Fields() []string {
 	if m.updated_at != nil {
 		fields = append(fields, payment.FieldUpdatedAt)
 	}
-	if m.amount != nil {
-		fields = append(fields, payment.FieldAmount)
-	}
-	if m.received_at != nil {
-		fields = append(fields, payment.FieldReceivedAt)
-	}
 	if m.created_by != nil {
 		fields = append(fields, payment.FieldCreatedBy)
 	}
 	if m.updated_by != nil {
 		fields = append(fields, payment.FieldUpdatedBy)
+	}
+	if m.amount != nil {
+		fields = append(fields, payment.FieldAmount)
+	}
+	if m.received_at != nil {
+		fields = append(fields, payment.FieldReceivedAt)
 	}
 	return fields
 }
@@ -4674,14 +4674,14 @@ func (m *PaymentMutation) Field(name string) (ent.Value, bool) {
 		return m.CreatedAt()
 	case payment.FieldUpdatedAt:
 		return m.UpdatedAt()
-	case payment.FieldAmount:
-		return m.Amount()
-	case payment.FieldReceivedAt:
-		return m.ReceivedAt()
 	case payment.FieldCreatedBy:
 		return m.CreatedBy()
 	case payment.FieldUpdatedBy:
 		return m.UpdatedBy()
+	case payment.FieldAmount:
+		return m.Amount()
+	case payment.FieldReceivedAt:
+		return m.ReceivedAt()
 	}
 	return nil, false
 }
@@ -4695,14 +4695,14 @@ func (m *PaymentMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldCreatedAt(ctx)
 	case payment.FieldUpdatedAt:
 		return m.OldUpdatedAt(ctx)
-	case payment.FieldAmount:
-		return m.OldAmount(ctx)
-	case payment.FieldReceivedAt:
-		return m.OldReceivedAt(ctx)
 	case payment.FieldCreatedBy:
 		return m.OldCreatedBy(ctx)
 	case payment.FieldUpdatedBy:
 		return m.OldUpdatedBy(ctx)
+	case payment.FieldAmount:
+		return m.OldAmount(ctx)
+	case payment.FieldReceivedAt:
+		return m.OldReceivedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown Payment field %s", name)
 }
@@ -4726,20 +4726,6 @@ func (m *PaymentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedAt(v)
 		return nil
-	case payment.FieldAmount:
-		v, ok := value.(float64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetAmount(v)
-		return nil
-	case payment.FieldReceivedAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetReceivedAt(v)
-		return nil
 	case payment.FieldCreatedBy:
 		v, ok := value.(int)
 		if !ok {
@@ -4754,6 +4740,20 @@ func (m *PaymentMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUpdatedBy(v)
 		return nil
+	case payment.FieldAmount:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAmount(v)
+		return nil
+	case payment.FieldReceivedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReceivedAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Payment field %s", name)
 }
@@ -4762,14 +4762,14 @@ func (m *PaymentMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *PaymentMutation) AddedFields() []string {
 	var fields []string
-	if m.addamount != nil {
-		fields = append(fields, payment.FieldAmount)
-	}
 	if m.addcreated_by != nil {
 		fields = append(fields, payment.FieldCreatedBy)
 	}
 	if m.addupdated_by != nil {
 		fields = append(fields, payment.FieldUpdatedBy)
+	}
+	if m.addamount != nil {
+		fields = append(fields, payment.FieldAmount)
 	}
 	return fields
 }
@@ -4779,12 +4779,12 @@ func (m *PaymentMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *PaymentMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case payment.FieldAmount:
-		return m.AddedAmount()
 	case payment.FieldCreatedBy:
 		return m.AddedCreatedBy()
 	case payment.FieldUpdatedBy:
 		return m.AddedUpdatedBy()
+	case payment.FieldAmount:
+		return m.AddedAmount()
 	}
 	return nil, false
 }
@@ -4794,13 +4794,6 @@ func (m *PaymentMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *PaymentMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case payment.FieldAmount:
-		v, ok := value.(float64)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.AddAmount(v)
-		return nil
 	case payment.FieldCreatedBy:
 		v, ok := value.(int)
 		if !ok {
@@ -4814,6 +4807,13 @@ func (m *PaymentMutation) AddField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUpdatedBy(v)
+		return nil
+	case payment.FieldAmount:
+		v, ok := value.(float64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddAmount(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Payment numeric field %s", name)
@@ -4829,11 +4829,11 @@ func (m *PaymentMutation) ClearedFields() []string {
 	if m.FieldCleared(payment.FieldUpdatedAt) {
 		fields = append(fields, payment.FieldUpdatedAt)
 	}
-	if m.FieldCleared(payment.FieldReceivedAt) {
-		fields = append(fields, payment.FieldReceivedAt)
-	}
 	if m.FieldCleared(payment.FieldUpdatedBy) {
 		fields = append(fields, payment.FieldUpdatedBy)
+	}
+	if m.FieldCleared(payment.FieldReceivedAt) {
+		fields = append(fields, payment.FieldReceivedAt)
 	}
 	return fields
 }
@@ -4855,11 +4855,11 @@ func (m *PaymentMutation) ClearField(name string) error {
 	case payment.FieldUpdatedAt:
 		m.ClearUpdatedAt()
 		return nil
-	case payment.FieldReceivedAt:
-		m.ClearReceivedAt()
-		return nil
 	case payment.FieldUpdatedBy:
 		m.ClearUpdatedBy()
+		return nil
+	case payment.FieldReceivedAt:
+		m.ClearReceivedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Payment nullable field %s", name)
@@ -4875,17 +4875,17 @@ func (m *PaymentMutation) ResetField(name string) error {
 	case payment.FieldUpdatedAt:
 		m.ResetUpdatedAt()
 		return nil
-	case payment.FieldAmount:
-		m.ResetAmount()
-		return nil
-	case payment.FieldReceivedAt:
-		m.ResetReceivedAt()
-		return nil
 	case payment.FieldCreatedBy:
 		m.ResetCreatedBy()
 		return nil
 	case payment.FieldUpdatedBy:
 		m.ResetUpdatedBy()
+		return nil
+	case payment.FieldAmount:
+		m.ResetAmount()
+		return nil
+	case payment.FieldReceivedAt:
+		m.ResetReceivedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown Payment field %s", name)

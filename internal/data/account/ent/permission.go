@@ -38,6 +38,8 @@ type Permission struct {
 	Sort int `json:"sort,omitempty"`
 	// 自定义属性
 	Attrs map[string]interface{} `json:"attrs,omitempty"`
+	// 是否是系统级权限
+	IsSystem bool `json:"is_system,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PermissionQuery when eager-loading is set.
 	Edges        PermissionEdges `json:"edges"`
@@ -98,6 +100,8 @@ func (*Permission) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case permission.FieldAttrs:
 			values[i] = new([]byte)
+		case permission.FieldIsSystem:
+			values[i] = new(sql.NullBool)
 		case permission.FieldID, permission.FieldParentID, permission.FieldSort:
 			values[i] = new(sql.NullInt64)
 		case permission.FieldName, permission.FieldKey, permission.FieldType, permission.FieldPath, permission.FieldDescription:
@@ -189,6 +193,12 @@ func (pe *Permission) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field attrs: %w", err)
 				}
 			}
+		case permission.FieldIsSystem:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_system", values[i])
+			} else if value.Valid {
+				pe.IsSystem = value.Bool
+			}
 		default:
 			pe.selectValues.Set(columns[i], values[i])
 		}
@@ -273,6 +283,9 @@ func (pe *Permission) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("attrs=")
 	builder.WriteString(fmt.Sprintf("%v", pe.Attrs))
+	builder.WriteString(", ")
+	builder.WriteString("is_system=")
+	builder.WriteString(fmt.Sprintf("%v", pe.IsSystem))
 	builder.WriteByte(')')
 	return builder.String()
 }

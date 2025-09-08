@@ -51,6 +51,26 @@ func (cc *ContactCreate) SetNillableUpdatedAt(t *time.Time) *ContactCreate {
 	return cc
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (cc *ContactCreate) SetCreatedBy(i int) *ContactCreate {
+	cc.mutation.SetCreatedBy(i)
+	return cc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (cc *ContactCreate) SetUpdatedBy(i int) *ContactCreate {
+	cc.mutation.SetUpdatedBy(i)
+	return cc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cc *ContactCreate) SetNillableUpdatedBy(i *int) *ContactCreate {
+	if i != nil {
+		cc.SetUpdatedBy(*i)
+	}
+	return cc
+}
+
 // SetName sets the "name" field.
 func (cc *ContactCreate) SetName(s string) *ContactCreate {
 	cc.mutation.SetName(s)
@@ -95,26 +115,6 @@ func (cc *ContactCreate) SetEmail(s string) *ContactCreate {
 func (cc *ContactCreate) SetNillableEmail(s *string) *ContactCreate {
 	if s != nil {
 		cc.SetEmail(*s)
-	}
-	return cc
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (cc *ContactCreate) SetCreatedBy(i int) *ContactCreate {
-	cc.mutation.SetCreatedBy(i)
-	return cc
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (cc *ContactCreate) SetUpdatedBy(i int) *ContactCreate {
-	cc.mutation.SetUpdatedBy(i)
-	return cc
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cc *ContactCreate) SetNillableUpdatedBy(i *int) *ContactCreate {
-	if i != nil {
-		cc.SetUpdatedBy(*i)
 	}
 	return cc
 }
@@ -177,6 +177,9 @@ func (cc *ContactCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cc *ContactCreate) check() error {
+	if _, ok := cc.mutation.CreatedBy(); !ok {
+		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "Contact.created_by"`)}
+	}
 	if _, ok := cc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Contact.name"`)}
 	}
@@ -184,9 +187,6 @@ func (cc *ContactCreate) check() error {
 		if err := contact.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Contact.name": %w`, err)}
 		}
-	}
-	if _, ok := cc.mutation.CreatedBy(); !ok {
-		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "Contact.created_by"`)}
 	}
 	if len(cc.mutation.CustomerIDs()) == 0 {
 		return &ValidationError{Name: "customer", err: errors.New(`ent: missing required edge "Contact.customer"`)}
@@ -226,6 +226,14 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		_spec.SetField(contact.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := cc.mutation.CreatedBy(); ok {
+		_spec.SetField(contact.FieldCreatedBy, field.TypeInt, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := cc.mutation.UpdatedBy(); ok {
+		_spec.SetField(contact.FieldUpdatedBy, field.TypeInt, value)
+		_node.UpdatedBy = value
+	}
 	if value, ok := cc.mutation.Name(); ok {
 		_spec.SetField(contact.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -241,14 +249,6 @@ func (cc *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Email(); ok {
 		_spec.SetField(contact.FieldEmail, field.TypeString, value)
 		_node.Email = value
-	}
-	if value, ok := cc.mutation.CreatedBy(); ok {
-		_spec.SetField(contact.FieldCreatedBy, field.TypeInt, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := cc.mutation.UpdatedBy(); ok {
-		_spec.SetField(contact.FieldUpdatedBy, field.TypeInt, value)
-		_node.UpdatedBy = value
 	}
 	if nodes := cc.mutation.CustomerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -337,6 +337,30 @@ func (u *ContactUpsert) ClearUpdatedAt() *ContactUpsert {
 	return u
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *ContactUpsert) SetUpdatedBy(v int) *ContactUpsert {
+	u.Set(contact.FieldUpdatedBy, v)
+	return u
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *ContactUpsert) UpdateUpdatedBy() *ContactUpsert {
+	u.SetExcluded(contact.FieldUpdatedBy)
+	return u
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *ContactUpsert) AddUpdatedBy(v int) *ContactUpsert {
+	u.Add(contact.FieldUpdatedBy, v)
+	return u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *ContactUpsert) ClearUpdatedBy() *ContactUpsert {
+	u.SetNull(contact.FieldUpdatedBy)
+	return u
+}
+
 // SetName sets the "name" field.
 func (u *ContactUpsert) SetName(v string) *ContactUpsert {
 	u.Set(contact.FieldName, v)
@@ -400,30 +424,6 @@ func (u *ContactUpsert) UpdateEmail() *ContactUpsert {
 // ClearEmail clears the value of the "email" field.
 func (u *ContactUpsert) ClearEmail() *ContactUpsert {
 	u.SetNull(contact.FieldEmail)
-	return u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *ContactUpsert) SetUpdatedBy(v int) *ContactUpsert {
-	u.Set(contact.FieldUpdatedBy, v)
-	return u
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *ContactUpsert) UpdateUpdatedBy() *ContactUpsert {
-	u.SetExcluded(contact.FieldUpdatedBy)
-	return u
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *ContactUpsert) AddUpdatedBy(v int) *ContactUpsert {
-	u.Add(contact.FieldUpdatedBy, v)
-	return u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *ContactUpsert) ClearUpdatedBy() *ContactUpsert {
-	u.SetNull(contact.FieldUpdatedBy)
 	return u
 }
 
@@ -493,6 +493,34 @@ func (u *ContactUpsertOne) UpdateUpdatedAt() *ContactUpsertOne {
 func (u *ContactUpsertOne) ClearUpdatedAt() *ContactUpsertOne {
 	return u.Update(func(s *ContactUpsert) {
 		s.ClearUpdatedAt()
+	})
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (u *ContactUpsertOne) SetUpdatedBy(v int) *ContactUpsertOne {
+	return u.Update(func(s *ContactUpsert) {
+		s.SetUpdatedBy(v)
+	})
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *ContactUpsertOne) AddUpdatedBy(v int) *ContactUpsertOne {
+	return u.Update(func(s *ContactUpsert) {
+		s.AddUpdatedBy(v)
+	})
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *ContactUpsertOne) UpdateUpdatedBy() *ContactUpsertOne {
+	return u.Update(func(s *ContactUpsert) {
+		s.UpdateUpdatedBy()
+	})
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *ContactUpsertOne) ClearUpdatedBy() *ContactUpsertOne {
+	return u.Update(func(s *ContactUpsert) {
+		s.ClearUpdatedBy()
 	})
 }
 
@@ -570,34 +598,6 @@ func (u *ContactUpsertOne) UpdateEmail() *ContactUpsertOne {
 func (u *ContactUpsertOne) ClearEmail() *ContactUpsertOne {
 	return u.Update(func(s *ContactUpsert) {
 		s.ClearEmail()
-	})
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *ContactUpsertOne) SetUpdatedBy(v int) *ContactUpsertOne {
-	return u.Update(func(s *ContactUpsert) {
-		s.SetUpdatedBy(v)
-	})
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *ContactUpsertOne) AddUpdatedBy(v int) *ContactUpsertOne {
-	return u.Update(func(s *ContactUpsert) {
-		s.AddUpdatedBy(v)
-	})
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *ContactUpsertOne) UpdateUpdatedBy() *ContactUpsertOne {
-	return u.Update(func(s *ContactUpsert) {
-		s.UpdateUpdatedBy()
-	})
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *ContactUpsertOne) ClearUpdatedBy() *ContactUpsertOne {
-	return u.Update(func(s *ContactUpsert) {
-		s.ClearUpdatedBy()
 	})
 }
 
@@ -836,6 +836,34 @@ func (u *ContactUpsertBulk) ClearUpdatedAt() *ContactUpsertBulk {
 	})
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *ContactUpsertBulk) SetUpdatedBy(v int) *ContactUpsertBulk {
+	return u.Update(func(s *ContactUpsert) {
+		s.SetUpdatedBy(v)
+	})
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *ContactUpsertBulk) AddUpdatedBy(v int) *ContactUpsertBulk {
+	return u.Update(func(s *ContactUpsert) {
+		s.AddUpdatedBy(v)
+	})
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *ContactUpsertBulk) UpdateUpdatedBy() *ContactUpsertBulk {
+	return u.Update(func(s *ContactUpsert) {
+		s.UpdateUpdatedBy()
+	})
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *ContactUpsertBulk) ClearUpdatedBy() *ContactUpsertBulk {
+	return u.Update(func(s *ContactUpsert) {
+		s.ClearUpdatedBy()
+	})
+}
+
 // SetName sets the "name" field.
 func (u *ContactUpsertBulk) SetName(v string) *ContactUpsertBulk {
 	return u.Update(func(s *ContactUpsert) {
@@ -910,34 +938,6 @@ func (u *ContactUpsertBulk) UpdateEmail() *ContactUpsertBulk {
 func (u *ContactUpsertBulk) ClearEmail() *ContactUpsertBulk {
 	return u.Update(func(s *ContactUpsert) {
 		s.ClearEmail()
-	})
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *ContactUpsertBulk) SetUpdatedBy(v int) *ContactUpsertBulk {
-	return u.Update(func(s *ContactUpsert) {
-		s.SetUpdatedBy(v)
-	})
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *ContactUpsertBulk) AddUpdatedBy(v int) *ContactUpsertBulk {
-	return u.Update(func(s *ContactUpsert) {
-		s.AddUpdatedBy(v)
-	})
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *ContactUpsertBulk) UpdateUpdatedBy() *ContactUpsertBulk {
-	return u.Update(func(s *ContactUpsert) {
-		s.UpdateUpdatedBy()
-	})
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *ContactUpsertBulk) ClearUpdatedBy() *ContactUpsertBulk {
-	return u.Update(func(s *ContactUpsert) {
-		s.ClearUpdatedBy()
 	})
 }
 

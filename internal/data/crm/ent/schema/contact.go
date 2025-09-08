@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/go-keg/keg/contrib/ent/mixin"
+	mixin2 "github.com/go-keg/monorepo/internal/data/mixin"
 )
 
 // Contact holds the schema definition for the Contact entity.
@@ -18,6 +19,7 @@ type Contact struct {
 func (Contact) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.TimeMixin{SortFieldCaseStyle: mixin.NamingStyleCamelCase},
+		mixin2.OperatorMixin{},
 	}
 }
 
@@ -38,10 +40,6 @@ func (Contact) Fields() []ent.Field {
 		field.String("position").Optional().Comment("职位"),
 		field.String("phone").Optional().Comment("手机号"),
 		field.String("email").Optional().Comment("邮箱"),
-		field.Int("created_by").Immutable().Comment("创建人").
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput)),
-		field.Int("updated_by").Optional().Comment("修改人").
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)),
 	}
 }
 

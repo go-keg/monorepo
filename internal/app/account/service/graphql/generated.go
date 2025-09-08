@@ -168,6 +168,7 @@ type ComplexityRoot struct {
 		CreatedAt     func(childComplexity int) int
 		Description   func(childComplexity int) int
 		ID            func(childComplexity int) int
+		IsSystem      func(childComplexity int) int
 		Key           func(childComplexity int) int
 		Name          func(childComplexity int) int
 		Parent        func(childComplexity int) int
@@ -188,6 +189,11 @@ type ComplexityRoot struct {
 	PermissionEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	PermissionList struct {
+		Nodes      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
 	}
 
 	Query struct {
@@ -243,6 +249,11 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	TenantRoleList struct {
+		Nodes      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
 	TenantUser struct {
 		ID              func(childComplexity int) int
 		IsActive        func(childComplexity int) int
@@ -282,6 +293,11 @@ type ComplexityRoot struct {
 	UserEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	UserList struct {
+		Nodes      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
 	}
 }
 
@@ -323,9 +339,9 @@ type QueryResolver interface {
 	Permissions(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) (*ent.PermissionConnection, error)
 	TenantRoles(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.TenantRoleOrder, where *ent.TenantRoleWhereInput) (*ent.TenantRoleConnection, error)
 	Users(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.UserOrder, where *ent.UserWhereInput) (*ent.UserConnection, error)
-	PermissionList(ctx context.Context, offset int, limit int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) (*ent.PermissionConnection, error)
-	TenantRoleList(ctx context.Context, offset int, limit int, orderBy *ent.TenantRoleOrder, where *ent.TenantRoleWhereInput) (*ent.TenantRoleConnection, error)
-	UserList(ctx context.Context, offset int, limit int, orderBy *ent.UserOrder, where *ent.UserWhereInput) (*ent.UserConnection, error)
+	PermissionList(ctx context.Context, offset int, limit int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) (*ent.PermissionList, error)
+	TenantRoleList(ctx context.Context, offset int, limit int, orderBy *ent.TenantRoleOrder, where *ent.TenantRoleWhereInput) (*ent.TenantRoleList, error)
+	UserList(ctx context.Context, offset int, limit int, orderBy *ent.UserOrder, where *ent.UserWhereInput) (*ent.UserList, error)
 	GoogleOAuthLogin(ctx context.Context, state string, code string) (*model.LoginReply, error)
 	GoogleOAuthRegister(ctx context.Context, state string, code string) (*model.LoginReply, error)
 	Login(ctx context.Context, email string, password string, captchaID *string, captchaValue *string) (*model.LoginReply, error)
@@ -1024,6 +1040,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Permission.ID(childComplexity), true
 
+	case "Permission.isSystem":
+		if e.complexity.Permission.IsSystem == nil {
+			break
+		}
+
+		return e.complexity.Permission.IsSystem(childComplexity), true
+
 	case "Permission.key":
 		if e.complexity.Permission.Key == nil {
 			break
@@ -1121,6 +1144,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.PermissionEdge.Node(childComplexity), true
+
+	case "PermissionList.nodes":
+		if e.complexity.PermissionList.Nodes == nil {
+			break
+		}
+
+		return e.complexity.PermissionList.Nodes(childComplexity), true
+
+	case "PermissionList.totalCount":
+		if e.complexity.PermissionList.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.PermissionList.TotalCount(childComplexity), true
 
 	case "Query.captcha":
 		if e.complexity.Query.Captcha == nil {
@@ -1448,6 +1485,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TenantRoleEdge.Node(childComplexity), true
 
+	case "TenantRoleList.nodes":
+		if e.complexity.TenantRoleList.Nodes == nil {
+			break
+		}
+
+		return e.complexity.TenantRoleList.Nodes(childComplexity), true
+
+	case "TenantRoleList.totalCount":
+		if e.complexity.TenantRoleList.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TenantRoleList.TotalCount(childComplexity), true
+
 	case "TenantUser.id":
 		if e.complexity.TenantUser.ID == nil {
 			break
@@ -1655,6 +1706,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.UserEdge.Node(childComplexity), true
+
+	case "UserList.nodes":
+		if e.complexity.UserList.Nodes == nil {
+			break
+		}
+
+		return e.complexity.UserList.Nodes(childComplexity), true
+
+	case "UserList.totalCount":
+		if e.complexity.UserList.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.UserList.TotalCount(childComplexity), true
 
 	}
 	return 0, false
@@ -5254,6 +5319,8 @@ func (ec *executionContext) fieldContext_Mutation_createPermission(ctx context.C
 				return ec.fieldContext_Permission_sort(ctx, field)
 			case "attrs":
 				return ec.fieldContext_Permission_attrs(ctx, field)
+			case "isSystem":
+				return ec.fieldContext_Permission_isSystem(ctx, field)
 			case "parent":
 				return ec.fieldContext_Permission_parent(ctx, field)
 			case "children":
@@ -5366,6 +5433,8 @@ func (ec *executionContext) fieldContext_Mutation_updatePermission(ctx context.C
 				return ec.fieldContext_Permission_sort(ctx, field)
 			case "attrs":
 				return ec.fieldContext_Permission_attrs(ctx, field)
+			case "isSystem":
+				return ec.fieldContext_Permission_isSystem(ctx, field)
 			case "parent":
 				return ec.fieldContext_Permission_parent(ctx, field)
 			case "children":
@@ -8901,6 +8970,50 @@ func (ec *executionContext) fieldContext_Permission_attrs(_ context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _Permission_isSystem(ctx context.Context, field graphql.CollectedField, obj *ent.Permission) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Permission_isSystem(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsSystem, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Permission_isSystem(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Permission",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Permission_parent(ctx context.Context, field graphql.CollectedField, obj *ent.Permission) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Permission_parent(ctx, field)
 	if err != nil {
@@ -8959,6 +9072,8 @@ func (ec *executionContext) fieldContext_Permission_parent(_ context.Context, fi
 				return ec.fieldContext_Permission_sort(ctx, field)
 			case "attrs":
 				return ec.fieldContext_Permission_attrs(ctx, field)
+			case "isSystem":
+				return ec.fieldContext_Permission_isSystem(ctx, field)
 			case "parent":
 				return ec.fieldContext_Permission_parent(ctx, field)
 			case "children":
@@ -9030,6 +9145,8 @@ func (ec *executionContext) fieldContext_Permission_children(_ context.Context, 
 				return ec.fieldContext_Permission_sort(ctx, field)
 			case "attrs":
 				return ec.fieldContext_Permission_attrs(ctx, field)
+			case "isSystem":
+				return ec.fieldContext_Permission_isSystem(ctx, field)
 			case "parent":
 				return ec.fieldContext_Permission_parent(ctx, field)
 			case "children":
@@ -9192,6 +9309,8 @@ func (ec *executionContext) fieldContext_PermissionConnection_nodes(_ context.Co
 				return ec.fieldContext_Permission_sort(ctx, field)
 			case "attrs":
 				return ec.fieldContext_Permission_attrs(ctx, field)
+			case "isSystem":
+				return ec.fieldContext_Permission_isSystem(ctx, field)
 			case "parent":
 				return ec.fieldContext_Permission_parent(ctx, field)
 			case "children":
@@ -9361,6 +9480,8 @@ func (ec *executionContext) fieldContext_PermissionEdge_node(_ context.Context, 
 				return ec.fieldContext_Permission_sort(ctx, field)
 			case "attrs":
 				return ec.fieldContext_Permission_attrs(ctx, field)
+			case "isSystem":
+				return ec.fieldContext_Permission_isSystem(ctx, field)
 			case "parent":
 				return ec.fieldContext_Permission_parent(ctx, field)
 			case "children":
@@ -9413,6 +9534,123 @@ func (ec *executionContext) fieldContext_PermissionEdge_cursor(_ context.Context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PermissionList_nodes(ctx context.Context, field graphql.CollectedField, obj *ent.PermissionList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PermissionList_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Permission)
+	fc.Result = res
+	return ec.marshalOPermission2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermission(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PermissionList_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PermissionList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Permission_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Permission_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Permission_updatedAt(ctx, field)
+			case "parentID":
+				return ec.fieldContext_Permission_parentID(ctx, field)
+			case "name":
+				return ec.fieldContext_Permission_name(ctx, field)
+			case "key":
+				return ec.fieldContext_Permission_key(ctx, field)
+			case "type":
+				return ec.fieldContext_Permission_type(ctx, field)
+			case "path":
+				return ec.fieldContext_Permission_path(ctx, field)
+			case "description":
+				return ec.fieldContext_Permission_description(ctx, field)
+			case "sort":
+				return ec.fieldContext_Permission_sort(ctx, field)
+			case "attrs":
+				return ec.fieldContext_Permission_attrs(ctx, field)
+			case "isSystem":
+				return ec.fieldContext_Permission_isSystem(ctx, field)
+			case "parent":
+				return ec.fieldContext_Permission_parent(ctx, field)
+			case "children":
+				return ec.fieldContext_Permission_children(ctx, field)
+			case "childrenCount":
+				return ec.fieldContext_Permission_childrenCount(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Permission", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PermissionList_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.PermissionList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PermissionList_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PermissionList_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PermissionList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -9746,9 +9984,9 @@ func (ec *executionContext) _Query_permissionList(ctx context.Context, field gra
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*ent.PermissionConnection)
+	res := resTmp.(*ent.PermissionList)
 	fc.Result = res
-	return ec.marshalNPermissionConnection2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermissionConnection(ctx, field.Selections, res)
+	return ec.marshalNPermissionList2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermissionList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_permissionList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9759,16 +9997,12 @@ func (ec *executionContext) fieldContext_Query_permissionList(ctx context.Contex
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "edges":
-				return ec.fieldContext_PermissionConnection_edges(ctx, field)
 			case "nodes":
-				return ec.fieldContext_PermissionConnection_nodes(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_PermissionConnection_pageInfo(ctx, field)
+				return ec.fieldContext_PermissionList_nodes(ctx, field)
 			case "totalCount":
-				return ec.fieldContext_PermissionConnection_totalCount(ctx, field)
+				return ec.fieldContext_PermissionList_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type PermissionConnection", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type PermissionList", field.Name)
 		},
 	}
 	defer func() {
@@ -9811,9 +10045,9 @@ func (ec *executionContext) _Query_tenantRoleList(ctx context.Context, field gra
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*ent.TenantRoleConnection)
+	res := resTmp.(*ent.TenantRoleList)
 	fc.Result = res
-	return ec.marshalNTenantRoleConnection2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRoleConnection(ctx, field.Selections, res)
+	return ec.marshalNTenantRoleList2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRoleList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_tenantRoleList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9824,16 +10058,12 @@ func (ec *executionContext) fieldContext_Query_tenantRoleList(ctx context.Contex
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "edges":
-				return ec.fieldContext_TenantRoleConnection_edges(ctx, field)
 			case "nodes":
-				return ec.fieldContext_TenantRoleConnection_nodes(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_TenantRoleConnection_pageInfo(ctx, field)
+				return ec.fieldContext_TenantRoleList_nodes(ctx, field)
 			case "totalCount":
-				return ec.fieldContext_TenantRoleConnection_totalCount(ctx, field)
+				return ec.fieldContext_TenantRoleList_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TenantRoleConnection", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TenantRoleList", field.Name)
 		},
 	}
 	defer func() {
@@ -9876,9 +10106,9 @@ func (ec *executionContext) _Query_userList(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*ent.UserConnection)
+	res := resTmp.(*ent.UserList)
 	fc.Result = res
-	return ec.marshalNUserConnection2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUserConnection(ctx, field.Selections, res)
+	return ec.marshalNUserList2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUserList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_userList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -9889,16 +10119,12 @@ func (ec *executionContext) fieldContext_Query_userList(ctx context.Context, fie
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "edges":
-				return ec.fieldContext_UserConnection_edges(ctx, field)
 			case "nodes":
-				return ec.fieldContext_UserConnection_nodes(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_UserConnection_pageInfo(ctx, field)
+				return ec.fieldContext_UserList_nodes(ctx, field)
 			case "totalCount":
-				return ec.fieldContext_UserConnection_totalCount(ctx, field)
+				return ec.fieldContext_UserList_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type UserConnection", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type UserList", field.Name)
 		},
 	}
 	defer func() {
@@ -11309,6 +11535,8 @@ func (ec *executionContext) fieldContext_TenantRole_permissions(_ context.Contex
 				return ec.fieldContext_Permission_sort(ctx, field)
 			case "attrs":
 				return ec.fieldContext_Permission_attrs(ctx, field)
+			case "isSystem":
+				return ec.fieldContext_Permission_isSystem(ctx, field)
 			case "parent":
 				return ec.fieldContext_Permission_parent(ctx, field)
 			case "children":
@@ -11624,6 +11852,109 @@ func (ec *executionContext) fieldContext_TenantRoleEdge_cursor(_ context.Context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TenantRoleList_nodes(ctx context.Context, field graphql.CollectedField, obj *ent.TenantRoleList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TenantRoleList_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.TenantRole)
+	fc.Result = res
+	return ec.marshalOTenantRole2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRole(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TenantRoleList_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TenantRoleList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_TenantRole_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_TenantRole_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_TenantRole_updatedAt(ctx, field)
+			case "tenantID":
+				return ec.fieldContext_TenantRole_tenantID(ctx, field)
+			case "name":
+				return ec.fieldContext_TenantRole_name(ctx, field)
+			case "description":
+				return ec.fieldContext_TenantRole_description(ctx, field)
+			case "sort":
+				return ec.fieldContext_TenantRole_sort(ctx, field)
+			case "permissions":
+				return ec.fieldContext_TenantRole_permissions(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TenantRole", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TenantRoleList_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.TenantRoleList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_TenantRoleList_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_TenantRoleList_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TenantRoleList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -12284,6 +12615,8 @@ func (ec *executionContext) fieldContext_TenantUser_permissions(_ context.Contex
 				return ec.fieldContext_Permission_sort(ctx, field)
 			case "attrs":
 				return ec.fieldContext_Permission_attrs(ctx, field)
+			case "isSystem":
+				return ec.fieldContext_Permission_isSystem(ctx, field)
 			case "parent":
 				return ec.fieldContext_Permission_parent(ctx, field)
 			case "children":
@@ -13095,6 +13428,113 @@ func (ec *executionContext) fieldContext_UserEdge_cursor(_ context.Context, fiel
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserList_nodes(ctx context.Context, field graphql.CollectedField, obj *ent.UserList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserList_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.User)
+	fc.Result = res
+	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserList_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_User_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_User_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_User_updatedAt(ctx, field)
+			case "email":
+				return ec.fieldContext_User_email(ctx, field)
+			case "nickname":
+				return ec.fieldContext_User_nickname(ctx, field)
+			case "avatar":
+				return ec.fieldContext_User_avatar(ctx, field)
+			case "status":
+				return ec.fieldContext_User_status(ctx, field)
+			case "isAdmin":
+				return ec.fieldContext_User_isAdmin(ctx, field)
+			case "oauthAccounts":
+				return ec.fieldContext_User_oauthAccounts(ctx, field)
+			case "tenantUsers":
+				return ec.fieldContext_User_tenantUsers(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _UserList_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.UserList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserList_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_UserList_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "UserList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -15133,7 +15573,7 @@ func (ec *executionContext) unmarshalInputCreatePermissionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "key", "type", "path", "description", "sort", "attrs", "parentID", "childIDs"}
+	fieldsInOrder := [...]string{"name", "key", "type", "path", "description", "sort", "attrs", "isSystem", "parentID", "childIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -15189,6 +15629,13 @@ func (ec *executionContext) unmarshalInputCreatePermissionInput(ctx context.Cont
 				return it, err
 			}
 			it.Attrs = data
+		case "isSystem":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isSystem"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsSystem = data
 		case "parentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("parentID"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
@@ -17923,7 +18370,7 @@ func (ec *executionContext) unmarshalInputPermissionWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "parentID", "parentIDNEQ", "parentIDIn", "parentIDNotIn", "parentIDIsNil", "parentIDNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "key", "keyNEQ", "keyIn", "keyNotIn", "keyGT", "keyGTE", "keyLT", "keyLTE", "keyContains", "keyHasPrefix", "keyHasSuffix", "keyIsNil", "keyNotNil", "keyEqualFold", "keyContainsFold", "type", "typeNEQ", "typeIn", "typeNotIn", "path", "pathNEQ", "pathIn", "pathNotIn", "pathGT", "pathGTE", "pathLT", "pathLTE", "pathContains", "pathHasPrefix", "pathHasSuffix", "pathIsNil", "pathNotNil", "pathEqualFold", "pathContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "sort", "sortNEQ", "sortIn", "sortNotIn", "sortGT", "sortGTE", "sortLT", "sortLTE", "hasParent", "hasParentWith", "hasChildren", "hasChildrenWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "parentID", "parentIDNEQ", "parentIDIn", "parentIDNotIn", "parentIDIsNil", "parentIDNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "key", "keyNEQ", "keyIn", "keyNotIn", "keyGT", "keyGTE", "keyLT", "keyLTE", "keyContains", "keyHasPrefix", "keyHasSuffix", "keyIsNil", "keyNotNil", "keyEqualFold", "keyContainsFold", "type", "typeNEQ", "typeIn", "typeNotIn", "path", "pathNEQ", "pathIn", "pathNotIn", "pathGT", "pathGTE", "pathLT", "pathLTE", "pathContains", "pathHasPrefix", "pathHasSuffix", "pathIsNil", "pathNotNil", "pathEqualFold", "pathContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "sort", "sortNEQ", "sortIn", "sortNotIn", "sortGT", "sortGTE", "sortLT", "sortLTE", "isSystem", "isSystemNEQ", "hasParent", "hasParentWith", "hasChildren", "hasChildrenWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -18679,6 +19126,20 @@ func (ec *executionContext) unmarshalInputPermissionWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.SortLTE = data
+		case "isSystem":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isSystem"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsSystem = data
+		case "isSystemNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isSystemNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsSystemNEQ = data
 		case "hasParent":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasParent"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -20135,7 +20596,7 @@ func (ec *executionContext) unmarshalInputUpdatePermissionInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"name", "key", "clearKey", "type", "path", "clearPath", "description", "clearDescription", "sort", "attrs", "clearAttrs", "parentID", "clearParent", "addChildIDs", "removeChildIDs", "clearChildren"}
+	fieldsInOrder := [...]string{"name", "key", "clearKey", "type", "path", "clearPath", "description", "clearDescription", "sort", "attrs", "clearAttrs", "isSystem", "parentID", "clearParent", "addChildIDs", "removeChildIDs", "clearChildren"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -20219,6 +20680,13 @@ func (ec *executionContext) unmarshalInputUpdatePermissionInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearAttrs = data
+		case "isSystem":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isSystem"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsSystem = data
 		case "parentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("parentID"))
 			data, err := ec.unmarshalOID2ᚖint(ctx, v)
@@ -22135,6 +22603,11 @@ func (ec *executionContext) _Permission(ctx context.Context, sel ast.SelectionSe
 			}
 		case "attrs":
 			out.Values[i] = ec._Permission_attrs(ctx, field, obj)
+		case "isSystem":
+			out.Values[i] = ec._Permission_isSystem(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "parent":
 			field := field
 
@@ -22323,6 +22796,47 @@ func (ec *executionContext) _PermissionEdge(ctx context.Context, sel ast.Selecti
 			out.Values[i] = ec._PermissionEdge_node(ctx, field, obj)
 		case "cursor":
 			out.Values[i] = ec._PermissionEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var permissionListImplementors = []string{"PermissionList"}
+
+func (ec *executionContext) _PermissionList(ctx context.Context, sel ast.SelectionSet, obj *ent.PermissionList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, permissionListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PermissionList")
+		case "nodes":
+			out.Values[i] = ec._PermissionList_nodes(ctx, field, obj)
+		case "totalCount":
+			out.Values[i] = ec._PermissionList_totalCount(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -23062,6 +23576,47 @@ func (ec *executionContext) _TenantRoleEdge(ctx context.Context, sel ast.Selecti
 	return out
 }
 
+var tenantRoleListImplementors = []string{"TenantRoleList"}
+
+func (ec *executionContext) _TenantRoleList(ctx context.Context, sel ast.SelectionSet, obj *ent.TenantRoleList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, tenantRoleListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TenantRoleList")
+		case "nodes":
+			out.Values[i] = ec._TenantRoleList_nodes(ctx, field, obj)
+		case "totalCount":
+			out.Values[i] = ec._TenantRoleList_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var tenantUserImplementors = []string{"TenantUser", "Node"}
 
 func (ec *executionContext) _TenantUser(ctx context.Context, sel ast.SelectionSet, obj *ent.TenantUser) graphql.Marshaler {
@@ -23529,6 +24084,47 @@ func (ec *executionContext) _UserEdge(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._UserEdge_node(ctx, field, obj)
 		case "cursor":
 			out.Values[i] = ec._UserEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var userListImplementors = []string{"UserList"}
+
+func (ec *executionContext) _UserList(ctx context.Context, sel ast.SelectionSet, obj *ent.UserList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("UserList")
+		case "nodes":
+			out.Values[i] = ec._UserList_nodes(ctx, field, obj)
+		case "totalCount":
+			out.Values[i] = ec._UserList_totalCount(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -24229,6 +24825,20 @@ func (ec *executionContext) marshalNPermissionConnection2ᚖgithubᚗcomᚋgoᚑ
 	return ec._PermissionConnection(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNPermissionList2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermissionList(ctx context.Context, sel ast.SelectionSet, v ent.PermissionList) graphql.Marshaler {
+	return ec._PermissionList(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPermissionList2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermissionList(ctx context.Context, sel ast.SelectionSet, v *ent.PermissionList) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PermissionList(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNPermissionOrderField2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermissionOrderField(ctx context.Context, v any) (*ent.PermissionOrderField, error) {
 	var res = new(ent.PermissionOrderField)
 	err := res.UnmarshalGQL(v)
@@ -24331,6 +24941,20 @@ func (ec *executionContext) marshalNTenantRoleConnection2ᚖgithubᚗcomᚋgoᚑ
 		return graphql.Null
 	}
 	return ec._TenantRoleConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNTenantRoleList2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRoleList(ctx context.Context, sel ast.SelectionSet, v ent.TenantRoleList) graphql.Marshaler {
+	return ec._TenantRoleList(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTenantRoleList2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRoleList(ctx context.Context, sel ast.SelectionSet, v *ent.TenantRoleList) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TenantRoleList(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNTenantRoleOrderField2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRoleOrderField(ctx context.Context, v any) (*ent.TenantRoleOrderField, error) {
@@ -24450,6 +25074,20 @@ func (ec *executionContext) marshalNUserConnection2ᚖgithubᚗcomᚋgoᚑkegᚋ
 		return graphql.Null
 	}
 	return ec._UserConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNUserList2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUserList(ctx context.Context, sel ast.SelectionSet, v ent.UserList) graphql.Marshaler {
+	return ec._UserList(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNUserList2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUserList(ctx context.Context, sel ast.SelectionSet, v *ent.UserList) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._UserList(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNUserOrderField2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUserOrderField(ctx context.Context, v any) (*ent.UserOrderField, error) {

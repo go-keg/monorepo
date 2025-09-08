@@ -22,16 +22,16 @@ type FollowUp struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 创建人
+	CreatedBy int `json:"created_by,omitempty"`
+	// 修改人
+	UpdatedBy int `json:"updated_by,omitempty"`
 	// 跟进类型
 	Type followup.Type `json:"type,omitempty"`
 	// 跟进内容
 	Content string `json:"content,omitempty"`
 	// 跟进时间
 	FollowedAt time.Time `json:"followed_at,omitempty"`
-	// 创建人
-	CreatedBy int `json:"created_by,omitempty"`
-	// 修改人
-	UpdatedBy int `json:"updated_by,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FollowUpQuery when eager-loading is set.
 	Edges               FollowUpEdges `json:"edges"`
@@ -107,6 +107,18 @@ func (fu *FollowUp) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				fu.UpdatedAt = value.Time
 			}
+		case followup.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				fu.CreatedBy = int(value.Int64)
+			}
+		case followup.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				fu.UpdatedBy = int(value.Int64)
+			}
 		case followup.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
@@ -124,18 +136,6 @@ func (fu *FollowUp) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field followed_at", values[i])
 			} else if value.Valid {
 				fu.FollowedAt = value.Time
-			}
-		case followup.FieldCreatedBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
-			} else if value.Valid {
-				fu.CreatedBy = int(value.Int64)
-			}
-		case followup.FieldUpdatedBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
-			} else if value.Valid {
-				fu.UpdatedBy = int(value.Int64)
 			}
 		case followup.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -191,6 +191,12 @@ func (fu *FollowUp) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(fu.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(fmt.Sprintf("%v", fu.CreatedBy))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(fmt.Sprintf("%v", fu.UpdatedBy))
+	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(fmt.Sprintf("%v", fu.Type))
 	builder.WriteString(", ")
@@ -199,12 +205,6 @@ func (fu *FollowUp) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("followed_at=")
 	builder.WriteString(fu.FollowedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", fu.CreatedBy))
-	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", fu.UpdatedBy))
 	builder.WriteByte(')')
 	return builder.String()
 }

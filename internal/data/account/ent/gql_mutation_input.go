@@ -111,6 +111,7 @@ type CreatePermissionInput struct {
 	Description *string
 	Sort        *int
 	Attrs       map[string]interface{}
+	IsSystem    *bool
 	ParentID    *int
 	ChildIDs    []int
 }
@@ -133,6 +134,9 @@ func (i *CreatePermissionInput) Mutate(m *PermissionMutation) {
 	}
 	if v := i.Attrs; v != nil {
 		m.SetAttrs(v)
+	}
+	if v := i.IsSystem; v != nil {
+		m.SetIsSystem(*v)
 	}
 	if v := i.ParentID; v != nil {
 		m.SetParentID(*v)
@@ -161,6 +165,7 @@ type UpdatePermissionInput struct {
 	Sort             *int
 	ClearAttrs       bool
 	Attrs            map[string]interface{}
+	IsSystem         *bool
 	ClearParent      bool
 	ParentID         *int
 	ClearChildren    bool
@@ -202,6 +207,9 @@ func (i *UpdatePermissionInput) Mutate(m *PermissionMutation) {
 	}
 	if v := i.Attrs; v != nil {
 		m.SetAttrs(v)
+	}
+	if v := i.IsSystem; v != nil {
+		m.SetIsSystem(*v)
 	}
 	if i.ClearParent {
 		m.ClearParent()

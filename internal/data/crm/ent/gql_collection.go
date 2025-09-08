@@ -59,6 +59,16 @@ func (cq *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, contact.FieldUpdatedAt)
 				fieldSeen[contact.FieldUpdatedAt] = struct{}{}
 			}
+		case "createdBy":
+			if _, ok := fieldSeen[contact.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, contact.FieldCreatedBy)
+				fieldSeen[contact.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[contact.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, contact.FieldUpdatedBy)
+				fieldSeen[contact.FieldUpdatedBy] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[contact.FieldName]; !ok {
 				selectedFields = append(selectedFields, contact.FieldName)
@@ -78,16 +88,6 @@ func (cq *ContactQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[contact.FieldEmail]; !ok {
 				selectedFields = append(selectedFields, contact.FieldEmail)
 				fieldSeen[contact.FieldEmail] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[contact.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, contact.FieldCreatedBy)
-				fieldSeen[contact.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[contact.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, contact.FieldUpdatedBy)
-				fieldSeen[contact.FieldUpdatedBy] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -207,6 +207,16 @@ func (cq *ContractQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, contract.FieldUpdatedAt)
 				fieldSeen[contract.FieldUpdatedAt] = struct{}{}
 			}
+		case "createdBy":
+			if _, ok := fieldSeen[contract.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, contract.FieldCreatedBy)
+				fieldSeen[contract.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[contract.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, contract.FieldUpdatedBy)
+				fieldSeen[contract.FieldUpdatedBy] = struct{}{}
+			}
 		case "contractNo":
 			if _, ok := fieldSeen[contract.FieldContractNo]; !ok {
 				selectedFields = append(selectedFields, contract.FieldContractNo)
@@ -226,16 +236,6 @@ func (cq *ContractQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if _, ok := fieldSeen[contract.FieldEndAt]; !ok {
 				selectedFields = append(selectedFields, contract.FieldEndAt)
 				fieldSeen[contract.FieldEndAt] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[contract.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, contract.FieldCreatedBy)
-				fieldSeen[contract.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[contract.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, contract.FieldUpdatedBy)
-				fieldSeen[contract.FieldUpdatedBy] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -598,6 +598,16 @@ func (cq *CustomerQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, customer.FieldUpdatedAt)
 				fieldSeen[customer.FieldUpdatedAt] = struct{}{}
 			}
+		case "createdBy":
+			if _, ok := fieldSeen[customer.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, customer.FieldCreatedBy)
+				fieldSeen[customer.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[customer.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, customer.FieldUpdatedBy)
+				fieldSeen[customer.FieldUpdatedBy] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[customer.FieldName]; !ok {
 				selectedFields = append(selectedFields, customer.FieldName)
@@ -622,16 +632,6 @@ func (cq *CustomerQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if _, ok := fieldSeen[customer.FieldMetadata]; !ok {
 				selectedFields = append(selectedFields, customer.FieldMetadata)
 				fieldSeen[customer.FieldMetadata] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[customer.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, customer.FieldCreatedBy)
-				fieldSeen[customer.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[customer.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, customer.FieldUpdatedBy)
-				fieldSeen[customer.FieldUpdatedBy] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -738,6 +738,16 @@ func (fuq *FollowUpQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, followup.FieldUpdatedAt)
 				fieldSeen[followup.FieldUpdatedAt] = struct{}{}
 			}
+		case "createdBy":
+			if _, ok := fieldSeen[followup.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, followup.FieldCreatedBy)
+				fieldSeen[followup.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[followup.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, followup.FieldUpdatedBy)
+				fieldSeen[followup.FieldUpdatedBy] = struct{}{}
+			}
 		case "type":
 			if _, ok := fieldSeen[followup.FieldType]; !ok {
 				selectedFields = append(selectedFields, followup.FieldType)
@@ -752,16 +762,6 @@ func (fuq *FollowUpQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if _, ok := fieldSeen[followup.FieldFollowedAt]; !ok {
 				selectedFields = append(selectedFields, followup.FieldFollowedAt)
 				fieldSeen[followup.FieldFollowedAt] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[followup.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, followup.FieldCreatedBy)
-				fieldSeen[followup.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[followup.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, followup.FieldUpdatedBy)
-				fieldSeen[followup.FieldUpdatedBy] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -868,16 +868,6 @@ func (pq *PaymentQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, payment.FieldUpdatedAt)
 				fieldSeen[payment.FieldUpdatedAt] = struct{}{}
 			}
-		case "amount":
-			if _, ok := fieldSeen[payment.FieldAmount]; !ok {
-				selectedFields = append(selectedFields, payment.FieldAmount)
-				fieldSeen[payment.FieldAmount] = struct{}{}
-			}
-		case "receivedAt":
-			if _, ok := fieldSeen[payment.FieldReceivedAt]; !ok {
-				selectedFields = append(selectedFields, payment.FieldReceivedAt)
-				fieldSeen[payment.FieldReceivedAt] = struct{}{}
-			}
 		case "createdBy":
 			if _, ok := fieldSeen[payment.FieldCreatedBy]; !ok {
 				selectedFields = append(selectedFields, payment.FieldCreatedBy)
@@ -887,6 +877,16 @@ func (pq *PaymentQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[payment.FieldUpdatedBy]; !ok {
 				selectedFields = append(selectedFields, payment.FieldUpdatedBy)
 				fieldSeen[payment.FieldUpdatedBy] = struct{}{}
+			}
+		case "amount":
+			if _, ok := fieldSeen[payment.FieldAmount]; !ok {
+				selectedFields = append(selectedFields, payment.FieldAmount)
+				fieldSeen[payment.FieldAmount] = struct{}{}
+			}
+		case "receivedAt":
+			if _, ok := fieldSeen[payment.FieldReceivedAt]; !ok {
+				selectedFields = append(selectedFields, payment.FieldReceivedAt)
+				fieldSeen[payment.FieldReceivedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":

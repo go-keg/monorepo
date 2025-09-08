@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/go-keg/keg/contrib/ent/mixin"
+	mixin2 "github.com/go-keg/monorepo/internal/data/mixin"
 )
 
 // Contract holds the schema definition for the Contract entity.
@@ -18,6 +19,7 @@ type Contract struct {
 func (Contract) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.TimeMixin{SortFieldCaseStyle: mixin.NamingStyleCamelCase},
+		mixin2.OperatorMixin{},
 	}
 }
 
@@ -38,10 +40,6 @@ func (Contract) Fields() []ent.Field {
 		field.Float("amount").Default(0).Comment("合同金额"),
 		field.Time("signed_at").Optional().Comment("签订日期"),
 		field.Time("end_at").Optional().Comment("到期日期"),
-		field.Int("created_by").Immutable().Comment("创建人").
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput)),
-		field.Int("updated_by").Optional().Comment("修改人").
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)),
 	}
 }
 

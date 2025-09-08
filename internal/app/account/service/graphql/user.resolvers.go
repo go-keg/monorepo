@@ -6,7 +6,10 @@ package graphql
 
 import (
 	"context"
+	"fmt"
+	"time"
 
+	"github.com/go-keg/keg/contrib/cache"
 	"github.com/go-keg/keg/contrib/gql"
 	"github.com/go-keg/monorepo/internal/app/account/server/auth"
 	"github.com/go-keg/monorepo/internal/app/account/service/graphql/dataloader"
@@ -127,12 +130,19 @@ func (r *tenantUserResolver) RoleCount(ctx context.Context, obj *ent.TenantUser)
 
 // Permissions is the resolver for the permissions field.
 func (r *tenantUserResolver) Permissions(ctx context.Context, obj *ent.TenantUser) ([]*ent.Permission, error) {
+	hash := gql.QueryFieldsHash(ctx)
 	if obj.IsOwner {
-		return r.ent.Permission.Query().Where().All(ctx)
+		return cache.LocalRemember("tenantOwnerPermissions:"+hash, time.Minute*5, func() ([]*ent.Permission, error) {
+			return r.ent.Permission.Query().Where(
+				permission.IsSystemEQ(false),
+			).AllCollectFields(ctx)
+		})
 	}
-	return r.ent.Permission.Query().
-		Where(permission.HasRolesWith(tenantrole.HasTenantUsersWith(tenantuser.ID(obj.ID)))).
-		AllCollectFields(ctx)
+	return cache.LocalRemember(fmt.Sprintf("tenantUserPermissions:%d:%s", obj.ID, hash), time.Minute*5, func() ([]*ent.Permission, error) {
+		return r.ent.Permission.Query().
+			Where(permission.HasRolesWith(tenantrole.HasTenantUsersWith(tenantuser.ID(obj.ID)))).
+			AllCollectFields(ctx)
+	})
 }
 
 // TenantUsers is the resolver for the tenantUsers field.

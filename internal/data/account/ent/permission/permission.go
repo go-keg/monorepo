@@ -37,6 +37,8 @@ const (
 	FieldSort = "sort"
 	// FieldAttrs holds the string denoting the attrs field in the database.
 	FieldAttrs = "attrs"
+	// FieldIsSystem holds the string denoting the is_system field in the database.
+	FieldIsSystem = "is_system"
 	// EdgeRoles holds the string denoting the roles edge name in mutations.
 	EdgeRoles = "roles"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
@@ -73,6 +75,7 @@ var Columns = []string{
 	FieldDescription,
 	FieldSort,
 	FieldAttrs,
+	FieldIsSystem,
 }
 
 var (
@@ -100,6 +103,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultSort holds the default value on creation for the "sort" field.
 	DefaultSort int
+	// DefaultIsSystem holds the default value on creation for the "is_system" field.
+	DefaultIsSystem bool
 )
 
 // Type defines the type for the "type" enum field.
@@ -177,6 +182,11 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // BySort orders the results by the sort field.
 func BySort(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSort, opts...).ToFunc()
+}
+
+// ByIsSystem orders the results by the is_system field.
+func ByIsSystem(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsSystem, opts...).ToFunc()
 }
 
 // ByRolesCount orders the results by roles count.

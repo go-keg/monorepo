@@ -65,6 +65,16 @@ func UpdatedAt(v time.Time) predicate.Customer {
 	return predicate.Customer(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
+// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
+func CreatedBy(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
+func UpdatedBy(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.Customer {
 	return predicate.Customer(sql.FieldEQ(FieldName, v))
@@ -83,16 +93,6 @@ func Source(v string) predicate.Customer {
 // Level applies equality check predicate on the "level" field. It's identical to LevelEQ.
 func Level(v string) predicate.Customer {
 	return predicate.Customer(sql.FieldEQ(FieldLevel, v))
-}
-
-// CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
-func CreatedBy(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldEQ(FieldCreatedBy, v))
-}
-
-// UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
-func UpdatedBy(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -193,6 +193,96 @@ func UpdatedAtIsNil() predicate.Customer {
 // UpdatedAtNotNil applies the NotNil predicate on the "updated_at" field.
 func UpdatedAtNotNil() predicate.Customer {
 	return predicate.Customer(sql.FieldNotNull(FieldUpdatedAt))
+}
+
+// CreatedByEQ applies the EQ predicate on the "created_by" field.
+func CreatedByEQ(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
+func CreatedByNEQ(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldNEQ(FieldCreatedBy, v))
+}
+
+// CreatedByIn applies the In predicate on the "created_by" field.
+func CreatedByIn(vs ...int) predicate.Customer {
+	return predicate.Customer(sql.FieldIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
+func CreatedByNotIn(vs ...int) predicate.Customer {
+	return predicate.Customer(sql.FieldNotIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByGT applies the GT predicate on the "created_by" field.
+func CreatedByGT(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldGT(FieldCreatedBy, v))
+}
+
+// CreatedByGTE applies the GTE predicate on the "created_by" field.
+func CreatedByGTE(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldGTE(FieldCreatedBy, v))
+}
+
+// CreatedByLT applies the LT predicate on the "created_by" field.
+func CreatedByLT(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldLT(FieldCreatedBy, v))
+}
+
+// CreatedByLTE applies the LTE predicate on the "created_by" field.
+func CreatedByLTE(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldLTE(FieldCreatedBy, v))
+}
+
+// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
+func UpdatedByEQ(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
+func UpdatedByNEQ(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldNEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByIn applies the In predicate on the "updated_by" field.
+func UpdatedByIn(vs ...int) predicate.Customer {
+	return predicate.Customer(sql.FieldIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
+func UpdatedByNotIn(vs ...int) predicate.Customer {
+	return predicate.Customer(sql.FieldNotIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByGT applies the GT predicate on the "updated_by" field.
+func UpdatedByGT(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldGT(FieldUpdatedBy, v))
+}
+
+// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
+func UpdatedByGTE(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldGTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByLT applies the LT predicate on the "updated_by" field.
+func UpdatedByLT(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldLT(FieldUpdatedBy, v))
+}
+
+// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
+func UpdatedByLTE(v int) predicate.Customer {
+	return predicate.Customer(sql.FieldLTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
+func UpdatedByIsNil() predicate.Customer {
+	return predicate.Customer(sql.FieldIsNull(FieldUpdatedBy))
+}
+
+// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
+func UpdatedByNotNil() predicate.Customer {
+	return predicate.Customer(sql.FieldNotNull(FieldUpdatedBy))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -493,96 +583,6 @@ func MetadataIsNil() predicate.Customer {
 // MetadataNotNil applies the NotNil predicate on the "metadata" field.
 func MetadataNotNil() predicate.Customer {
 	return predicate.Customer(sql.FieldNotNull(FieldMetadata))
-}
-
-// CreatedByEQ applies the EQ predicate on the "created_by" field.
-func CreatedByEQ(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldEQ(FieldCreatedBy, v))
-}
-
-// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
-func CreatedByNEQ(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldNEQ(FieldCreatedBy, v))
-}
-
-// CreatedByIn applies the In predicate on the "created_by" field.
-func CreatedByIn(vs ...int) predicate.Customer {
-	return predicate.Customer(sql.FieldIn(FieldCreatedBy, vs...))
-}
-
-// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
-func CreatedByNotIn(vs ...int) predicate.Customer {
-	return predicate.Customer(sql.FieldNotIn(FieldCreatedBy, vs...))
-}
-
-// CreatedByGT applies the GT predicate on the "created_by" field.
-func CreatedByGT(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldGT(FieldCreatedBy, v))
-}
-
-// CreatedByGTE applies the GTE predicate on the "created_by" field.
-func CreatedByGTE(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldGTE(FieldCreatedBy, v))
-}
-
-// CreatedByLT applies the LT predicate on the "created_by" field.
-func CreatedByLT(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldLT(FieldCreatedBy, v))
-}
-
-// CreatedByLTE applies the LTE predicate on the "created_by" field.
-func CreatedByLTE(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldLTE(FieldCreatedBy, v))
-}
-
-// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
-func UpdatedByEQ(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldEQ(FieldUpdatedBy, v))
-}
-
-// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
-func UpdatedByNEQ(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldNEQ(FieldUpdatedBy, v))
-}
-
-// UpdatedByIn applies the In predicate on the "updated_by" field.
-func UpdatedByIn(vs ...int) predicate.Customer {
-	return predicate.Customer(sql.FieldIn(FieldUpdatedBy, vs...))
-}
-
-// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
-func UpdatedByNotIn(vs ...int) predicate.Customer {
-	return predicate.Customer(sql.FieldNotIn(FieldUpdatedBy, vs...))
-}
-
-// UpdatedByGT applies the GT predicate on the "updated_by" field.
-func UpdatedByGT(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldGT(FieldUpdatedBy, v))
-}
-
-// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
-func UpdatedByGTE(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldGTE(FieldUpdatedBy, v))
-}
-
-// UpdatedByLT applies the LT predicate on the "updated_by" field.
-func UpdatedByLT(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldLT(FieldUpdatedBy, v))
-}
-
-// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
-func UpdatedByLTE(v int) predicate.Customer {
-	return predicate.Customer(sql.FieldLTE(FieldUpdatedBy, v))
-}
-
-// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
-func UpdatedByIsNil() predicate.Customer {
-	return predicate.Customer(sql.FieldIsNull(FieldUpdatedBy))
-}
-
-// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
-func UpdatedByNotNil() predicate.Customer {
-	return predicate.Customer(sql.FieldNotNull(FieldUpdatedBy))
 }
 
 // HasContacts applies the HasEdge predicate on the "contacts" edge.

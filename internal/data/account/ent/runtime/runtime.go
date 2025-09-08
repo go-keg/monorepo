@@ -131,6 +131,10 @@ func init() {
 	permissionDescSort := permissionFields[7].Descriptor()
 	// permission.DefaultSort holds the default value on creation for the sort field.
 	permission.DefaultSort = permissionDescSort.Default.(int)
+	// permissionDescIsSystem is the schema descriptor for is_system field.
+	permissionDescIsSystem := permissionFields[9].Descriptor()
+	// permission.DefaultIsSystem holds the default value on creation for the is_system field.
+	permission.DefaultIsSystem = permissionDescIsSystem.Default.(bool)
 	tenantMixin := schema.Tenant{}.Mixin()
 	tenantMixinFields0 := tenantMixin[0].Fields()
 	_ = tenantMixinFields0

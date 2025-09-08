@@ -35,6 +35,10 @@ input CreatePermissionInput {
   自定义属性
   """
   attrs: Map
+  """
+  是否是系统级权限
+  """
+  isSystem: Boolean
   parentID: ID
   childIDs: [ID!]
 }
@@ -753,6 +757,10 @@ type Permission implements Node {
   自定义属性
   """
   attrs: Map
+  """
+  是否是系统级权限
+  """
+  isSystem: Boolean!
   parent: Permission
   children: [Permission!]
 }
@@ -789,6 +797,19 @@ type PermissionEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+A connection to a list of items.
+"""
+type PermissionList {
+  """
+  A list of nodes.
+  """
+  nodes: [Permission]
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
 }
 """
 Ordering options for Permission connections
@@ -972,6 +993,11 @@ input PermissionWhereInput {
   sortLT: Int
   sortLTE: Int
   """
+  is_system field predicates
+  """
+  isSystem: Boolean
+  isSystemNEQ: Boolean
+  """
   parent edge predicates
   """
   hasParent: Boolean
@@ -1126,7 +1152,7 @@ type Query {
     Filtering options for permission returned from the connection.
     """
     where: PermissionWhereInput
-  ): PermissionConnection!
+  ): PermissionList!
   """
   角色
   """
@@ -1150,7 +1176,7 @@ type Query {
     Filtering options for tenantRole returned from the connection.
     """
     where: TenantRoleWhereInput
-  ): TenantRoleConnection!
+  ): TenantRoleList!
   """
   用户
   """
@@ -1174,7 +1200,7 @@ type Query {
     Filtering options for user returned from the connection.
     """
     where: UserWhereInput
-  ): UserConnection!
+  ): UserList!
 }
 type Tenant implements Node {
   id: ID!
@@ -1250,6 +1276,19 @@ type TenantRoleEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+A connection to a list of items.
+"""
+type TenantRoleList {
+  """
+  A list of nodes.
+  """
+  nodes: [TenantRole]
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
 }
 """
 Ordering options for TenantRole connections
@@ -1606,6 +1645,10 @@ input UpdatePermissionInput {
   """
   attrs: Map
   clearAttrs: Boolean
+  """
+  是否是系统级权限
+  """
+  isSystem: Boolean
   parentID: ID
   clearParent: Boolean
   addChildIDs: [ID!]
@@ -1703,6 +1746,19 @@ type UserEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+A connection to a list of items.
+"""
+type UserList {
+  """
+  A list of nodes.
+  """
+  nodes: [User]
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
 }
 """
 Ordering options for User connections

@@ -20,7 +20,7 @@ func NewKafkaConsumer(cfg *conf.Config, logger log.Logger) (*KafkaConsumer, erro
 	}
 	cg, err := r.consumerGroup(cfg)
 	if err != nil {
-		return nil, err
+		r.log.Error(err)
 	}
 	r.cg = cg
 	return r, nil
@@ -40,5 +40,8 @@ func (r KafkaConsumer) consumerGroup(cfg *conf.Config) (*kafka.ConsumerGroup, er
 }
 
 func (r KafkaConsumer) Run(ctx context.Context) error {
-	return r.cg.Run(ctx)
+	if r.cg != nil {
+		return r.cg.Run(ctx)
+	}
+	return nil
 }

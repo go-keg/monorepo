@@ -22,14 +22,14 @@ type Payment struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
-	// 收款金额
-	Amount float64 `json:"amount,omitempty"`
-	// 收款日期
-	ReceivedAt time.Time `json:"received_at,omitempty"`
 	// 创建人
 	CreatedBy int `json:"created_by,omitempty"`
 	// 修改人
 	UpdatedBy int `json:"updated_by,omitempty"`
+	// 收款金额
+	Amount float64 `json:"amount,omitempty"`
+	// 收款日期
+	ReceivedAt time.Time `json:"received_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PaymentQuery when eager-loading is set.
 	Edges             PaymentEdges `json:"edges"`
@@ -105,18 +105,6 @@ func (pa *Payment) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				pa.UpdatedAt = value.Time
 			}
-		case payment.FieldAmount:
-			if value, ok := values[i].(*sql.NullFloat64); !ok {
-				return fmt.Errorf("unexpected type %T for field amount", values[i])
-			} else if value.Valid {
-				pa.Amount = value.Float64
-			}
-		case payment.FieldReceivedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field received_at", values[i])
-			} else if value.Valid {
-				pa.ReceivedAt = value.Time
-			}
 		case payment.FieldCreatedBy:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_by", values[i])
@@ -128,6 +116,18 @@ func (pa *Payment) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				pa.UpdatedBy = int(value.Int64)
+			}
+		case payment.FieldAmount:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field amount", values[i])
+			} else if value.Valid {
+				pa.Amount = value.Float64
+			}
+		case payment.FieldReceivedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field received_at", values[i])
+			} else if value.Valid {
+				pa.ReceivedAt = value.Time
 			}
 		case payment.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -183,17 +183,17 @@ func (pa *Payment) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(pa.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("amount=")
-	builder.WriteString(fmt.Sprintf("%v", pa.Amount))
-	builder.WriteString(", ")
-	builder.WriteString("received_at=")
-	builder.WriteString(pa.ReceivedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
 	builder.WriteString("created_by=")
 	builder.WriteString(fmt.Sprintf("%v", pa.CreatedBy))
 	builder.WriteString(", ")
 	builder.WriteString("updated_by=")
 	builder.WriteString(fmt.Sprintf("%v", pa.UpdatedBy))
+	builder.WriteString(", ")
+	builder.WriteString("amount=")
+	builder.WriteString(fmt.Sprintf("%v", pa.Amount))
+	builder.WriteString(", ")
+	builder.WriteString("received_at=")
+	builder.WriteString(pa.ReceivedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

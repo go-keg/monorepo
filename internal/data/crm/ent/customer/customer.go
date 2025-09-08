@@ -18,6 +18,10 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldIndustry holds the string denoting the industry field in the database.
@@ -28,10 +32,6 @@ const (
 	FieldLevel = "level"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
-	// FieldCreatedBy holds the string denoting the created_by field in the database.
-	FieldCreatedBy = "created_by"
-	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
-	FieldUpdatedBy = "updated_by"
 	// EdgeContacts holds the string denoting the contacts edge name in mutations.
 	EdgeContacts = "contacts"
 	// EdgeContracts holds the string denoting the contracts edge name in mutations.
@@ -68,13 +68,13 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldCreatedBy,
+	FieldUpdatedBy,
 	FieldName,
 	FieldIndustry,
 	FieldSource,
 	FieldLevel,
 	FieldMetadata,
-	FieldCreatedBy,
-	FieldUpdatedBy,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -116,6 +116,16 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
@@ -134,16 +144,6 @@ func BySource(opts ...sql.OrderTermOption) OrderOption {
 // ByLevel orders the results by the level field.
 func ByLevel(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLevel, opts...).ToFunc()
-}
-
-// ByCreatedBy orders the results by the created_by field.
-func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
-}
-
-// ByUpdatedBy orders the results by the updated_by field.
-func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
 // ByContactsCount orders the results by contacts count.

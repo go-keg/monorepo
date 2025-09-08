@@ -13,12 +13,12 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeInt, Comment: "创建人"},
+		{Name: "updated_by", Type: field.TypeInt, Nullable: true, Comment: "修改人"},
 		{Name: "name", Type: field.TypeString, Comment: "联系人姓名"},
 		{Name: "position", Type: field.TypeString, Nullable: true, Comment: "职位"},
 		{Name: "phone", Type: field.TypeString, Nullable: true, Comment: "手机号"},
 		{Name: "email", Type: field.TypeString, Nullable: true, Comment: "邮箱"},
-		{Name: "created_by", Type: field.TypeInt, Comment: "创建人"},
-		{Name: "updated_by", Type: field.TypeInt, Nullable: true, Comment: "修改人"},
 		{Name: "customer_contacts", Type: field.TypeInt},
 	}
 	// ContactsTable holds the schema information for the "contacts" table.
@@ -48,12 +48,12 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeInt, Comment: "创建人"},
+		{Name: "updated_by", Type: field.TypeInt, Nullable: true, Comment: "修改人"},
 		{Name: "contract_no", Type: field.TypeString, Unique: true, Comment: "合同编号"},
 		{Name: "amount", Type: field.TypeFloat64, Comment: "合同金额", Default: 0},
 		{Name: "signed_at", Type: field.TypeTime, Nullable: true, Comment: "签订日期"},
 		{Name: "end_at", Type: field.TypeTime, Nullable: true, Comment: "到期日期"},
-		{Name: "created_by", Type: field.TypeInt, Comment: "创建人"},
-		{Name: "updated_by", Type: field.TypeInt, Nullable: true, Comment: "修改人"},
 		{Name: "customer_contracts", Type: field.TypeInt},
 	}
 	// ContractsTable holds the schema information for the "contracts" table.
@@ -83,13 +83,13 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeInt, Comment: "创建人"},
+		{Name: "updated_by", Type: field.TypeInt, Nullable: true, Comment: "修改人"},
 		{Name: "name", Type: field.TypeString, Comment: "客户名称"},
 		{Name: "industry", Type: field.TypeString, Nullable: true, Comment: "所属行业"},
 		{Name: "source", Type: field.TypeString, Nullable: true, Comment: "客户来源"},
 		{Name: "level", Type: field.TypeString, Nullable: true, Comment: "客户等级"},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true, Comment: "自定义扩展字段"},
-		{Name: "created_by", Type: field.TypeInt, Comment: "创建人"},
-		{Name: "updated_by", Type: field.TypeInt, Nullable: true, Comment: "修改人"},
 	}
 	// CustomersTable holds the schema information for the "customers" table.
 	CustomersTable = &schema.Table{
@@ -110,11 +110,11 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeInt, Comment: "创建人"},
+		{Name: "updated_by", Type: field.TypeInt, Nullable: true, Comment: "修改人"},
 		{Name: "type", Type: field.TypeEnum, Comment: "跟进类型", Enums: []string{"call", "meeting", "email", "visit", "other"}, Default: "other"},
 		{Name: "content", Type: field.TypeString, Comment: "跟进内容"},
 		{Name: "followed_at", Type: field.TypeTime, Comment: "跟进时间"},
-		{Name: "created_by", Type: field.TypeInt, Comment: "创建人"},
-		{Name: "updated_by", Type: field.TypeInt, Nullable: true, Comment: "修改人"},
 		{Name: "customer_follow_ups", Type: field.TypeInt},
 	}
 	// FollowUpsTable holds the schema information for the "follow_ups" table.
@@ -144,10 +144,10 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "created_at", Type: field.TypeTime, Nullable: true},
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "amount", Type: field.TypeFloat64, Comment: "收款金额", Default: 0},
-		{Name: "received_at", Type: field.TypeTime, Nullable: true, Comment: "收款日期"},
 		{Name: "created_by", Type: field.TypeInt, Comment: "创建人"},
 		{Name: "updated_by", Type: field.TypeInt, Nullable: true, Comment: "修改人"},
+		{Name: "amount", Type: field.TypeFloat64, Comment: "收款金额", Default: 0},
+		{Name: "received_at", Type: field.TypeTime, Nullable: true, Comment: "收款日期"},
 		{Name: "contract_payments", Type: field.TypeInt},
 	}
 	// PaymentsTable holds the schema information for the "payments" table.

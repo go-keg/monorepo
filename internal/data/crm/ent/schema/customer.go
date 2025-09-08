@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/go-keg/keg/contrib/ent/mixin"
+	mixin2 "github.com/go-keg/monorepo/internal/data/mixin"
 )
 
 // Customer holds the schema definition for the Customer entity.
@@ -18,6 +19,7 @@ type Customer struct {
 func (Customer) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		mixin.TimeMixin{SortFieldCaseStyle: mixin.NamingStyleCamelCase},
+		mixin2.OperatorMixin{},
 	}
 }
 
@@ -42,10 +44,6 @@ func (Customer) Fields() []ent.Field {
 		field.JSON("metadata", map[string]interface{}{}).
 			Optional().
 			Comment("自定义扩展字段"),
-		field.Int("created_by").Immutable().Comment("创建人").
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput)),
-		field.Int("updated_by").Optional().Comment("修改人").
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)),
 	}
 }
 

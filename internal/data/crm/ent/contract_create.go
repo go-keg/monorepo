@@ -52,6 +52,26 @@ func (cc *ContractCreate) SetNillableUpdatedAt(t *time.Time) *ContractCreate {
 	return cc
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (cc *ContractCreate) SetCreatedBy(i int) *ContractCreate {
+	cc.mutation.SetCreatedBy(i)
+	return cc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (cc *ContractCreate) SetUpdatedBy(i int) *ContractCreate {
+	cc.mutation.SetUpdatedBy(i)
+	return cc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cc *ContractCreate) SetNillableUpdatedBy(i *int) *ContractCreate {
+	if i != nil {
+		cc.SetUpdatedBy(*i)
+	}
+	return cc
+}
+
 // SetContractNo sets the "contract_no" field.
 func (cc *ContractCreate) SetContractNo(s string) *ContractCreate {
 	cc.mutation.SetContractNo(s)
@@ -96,26 +116,6 @@ func (cc *ContractCreate) SetEndAt(t time.Time) *ContractCreate {
 func (cc *ContractCreate) SetNillableEndAt(t *time.Time) *ContractCreate {
 	if t != nil {
 		cc.SetEndAt(*t)
-	}
-	return cc
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (cc *ContractCreate) SetCreatedBy(i int) *ContractCreate {
-	cc.mutation.SetCreatedBy(i)
-	return cc
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (cc *ContractCreate) SetUpdatedBy(i int) *ContractCreate {
-	cc.mutation.SetUpdatedBy(i)
-	return cc
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cc *ContractCreate) SetNillableUpdatedBy(i *int) *ContractCreate {
-	if i != nil {
-		cc.SetUpdatedBy(*i)
 	}
 	return cc
 }
@@ -197,6 +197,9 @@ func (cc *ContractCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cc *ContractCreate) check() error {
+	if _, ok := cc.mutation.CreatedBy(); !ok {
+		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "Contract.created_by"`)}
+	}
 	if _, ok := cc.mutation.ContractNo(); !ok {
 		return &ValidationError{Name: "contract_no", err: errors.New(`ent: missing required field "Contract.contract_no"`)}
 	}
@@ -207,9 +210,6 @@ func (cc *ContractCreate) check() error {
 	}
 	if _, ok := cc.mutation.Amount(); !ok {
 		return &ValidationError{Name: "amount", err: errors.New(`ent: missing required field "Contract.amount"`)}
-	}
-	if _, ok := cc.mutation.CreatedBy(); !ok {
-		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "Contract.created_by"`)}
 	}
 	if len(cc.mutation.CustomerIDs()) == 0 {
 		return &ValidationError{Name: "customer", err: errors.New(`ent: missing required edge "Contract.customer"`)}
@@ -249,6 +249,14 @@ func (cc *ContractCreate) createSpec() (*Contract, *sqlgraph.CreateSpec) {
 		_spec.SetField(contract.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := cc.mutation.CreatedBy(); ok {
+		_spec.SetField(contract.FieldCreatedBy, field.TypeInt, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := cc.mutation.UpdatedBy(); ok {
+		_spec.SetField(contract.FieldUpdatedBy, field.TypeInt, value)
+		_node.UpdatedBy = value
+	}
 	if value, ok := cc.mutation.ContractNo(); ok {
 		_spec.SetField(contract.FieldContractNo, field.TypeString, value)
 		_node.ContractNo = value
@@ -264,14 +272,6 @@ func (cc *ContractCreate) createSpec() (*Contract, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.EndAt(); ok {
 		_spec.SetField(contract.FieldEndAt, field.TypeTime, value)
 		_node.EndAt = value
-	}
-	if value, ok := cc.mutation.CreatedBy(); ok {
-		_spec.SetField(contract.FieldCreatedBy, field.TypeInt, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := cc.mutation.UpdatedBy(); ok {
-		_spec.SetField(contract.FieldUpdatedBy, field.TypeInt, value)
-		_node.UpdatedBy = value
 	}
 	if nodes := cc.mutation.CustomerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -376,6 +376,30 @@ func (u *ContractUpsert) ClearUpdatedAt() *ContractUpsert {
 	return u
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *ContractUpsert) SetUpdatedBy(v int) *ContractUpsert {
+	u.Set(contract.FieldUpdatedBy, v)
+	return u
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *ContractUpsert) UpdateUpdatedBy() *ContractUpsert {
+	u.SetExcluded(contract.FieldUpdatedBy)
+	return u
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *ContractUpsert) AddUpdatedBy(v int) *ContractUpsert {
+	u.Add(contract.FieldUpdatedBy, v)
+	return u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *ContractUpsert) ClearUpdatedBy() *ContractUpsert {
+	u.SetNull(contract.FieldUpdatedBy)
+	return u
+}
+
 // SetContractNo sets the "contract_no" field.
 func (u *ContractUpsert) SetContractNo(v string) *ContractUpsert {
 	u.Set(contract.FieldContractNo, v)
@@ -439,30 +463,6 @@ func (u *ContractUpsert) UpdateEndAt() *ContractUpsert {
 // ClearEndAt clears the value of the "end_at" field.
 func (u *ContractUpsert) ClearEndAt() *ContractUpsert {
 	u.SetNull(contract.FieldEndAt)
-	return u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *ContractUpsert) SetUpdatedBy(v int) *ContractUpsert {
-	u.Set(contract.FieldUpdatedBy, v)
-	return u
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *ContractUpsert) UpdateUpdatedBy() *ContractUpsert {
-	u.SetExcluded(contract.FieldUpdatedBy)
-	return u
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *ContractUpsert) AddUpdatedBy(v int) *ContractUpsert {
-	u.Add(contract.FieldUpdatedBy, v)
-	return u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *ContractUpsert) ClearUpdatedBy() *ContractUpsert {
-	u.SetNull(contract.FieldUpdatedBy)
 	return u
 }
 
@@ -532,6 +532,34 @@ func (u *ContractUpsertOne) UpdateUpdatedAt() *ContractUpsertOne {
 func (u *ContractUpsertOne) ClearUpdatedAt() *ContractUpsertOne {
 	return u.Update(func(s *ContractUpsert) {
 		s.ClearUpdatedAt()
+	})
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (u *ContractUpsertOne) SetUpdatedBy(v int) *ContractUpsertOne {
+	return u.Update(func(s *ContractUpsert) {
+		s.SetUpdatedBy(v)
+	})
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *ContractUpsertOne) AddUpdatedBy(v int) *ContractUpsertOne {
+	return u.Update(func(s *ContractUpsert) {
+		s.AddUpdatedBy(v)
+	})
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *ContractUpsertOne) UpdateUpdatedBy() *ContractUpsertOne {
+	return u.Update(func(s *ContractUpsert) {
+		s.UpdateUpdatedBy()
+	})
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *ContractUpsertOne) ClearUpdatedBy() *ContractUpsertOne {
+	return u.Update(func(s *ContractUpsert) {
+		s.ClearUpdatedBy()
 	})
 }
 
@@ -609,34 +637,6 @@ func (u *ContractUpsertOne) UpdateEndAt() *ContractUpsertOne {
 func (u *ContractUpsertOne) ClearEndAt() *ContractUpsertOne {
 	return u.Update(func(s *ContractUpsert) {
 		s.ClearEndAt()
-	})
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *ContractUpsertOne) SetUpdatedBy(v int) *ContractUpsertOne {
-	return u.Update(func(s *ContractUpsert) {
-		s.SetUpdatedBy(v)
-	})
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *ContractUpsertOne) AddUpdatedBy(v int) *ContractUpsertOne {
-	return u.Update(func(s *ContractUpsert) {
-		s.AddUpdatedBy(v)
-	})
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *ContractUpsertOne) UpdateUpdatedBy() *ContractUpsertOne {
-	return u.Update(func(s *ContractUpsert) {
-		s.UpdateUpdatedBy()
-	})
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *ContractUpsertOne) ClearUpdatedBy() *ContractUpsertOne {
-	return u.Update(func(s *ContractUpsert) {
-		s.ClearUpdatedBy()
 	})
 }
 
@@ -875,6 +875,34 @@ func (u *ContractUpsertBulk) ClearUpdatedAt() *ContractUpsertBulk {
 	})
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *ContractUpsertBulk) SetUpdatedBy(v int) *ContractUpsertBulk {
+	return u.Update(func(s *ContractUpsert) {
+		s.SetUpdatedBy(v)
+	})
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *ContractUpsertBulk) AddUpdatedBy(v int) *ContractUpsertBulk {
+	return u.Update(func(s *ContractUpsert) {
+		s.AddUpdatedBy(v)
+	})
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *ContractUpsertBulk) UpdateUpdatedBy() *ContractUpsertBulk {
+	return u.Update(func(s *ContractUpsert) {
+		s.UpdateUpdatedBy()
+	})
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *ContractUpsertBulk) ClearUpdatedBy() *ContractUpsertBulk {
+	return u.Update(func(s *ContractUpsert) {
+		s.ClearUpdatedBy()
+	})
+}
+
 // SetContractNo sets the "contract_no" field.
 func (u *ContractUpsertBulk) SetContractNo(v string) *ContractUpsertBulk {
 	return u.Update(func(s *ContractUpsert) {
@@ -949,34 +977,6 @@ func (u *ContractUpsertBulk) UpdateEndAt() *ContractUpsertBulk {
 func (u *ContractUpsertBulk) ClearEndAt() *ContractUpsertBulk {
 	return u.Update(func(s *ContractUpsert) {
 		s.ClearEndAt()
-	})
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *ContractUpsertBulk) SetUpdatedBy(v int) *ContractUpsertBulk {
-	return u.Update(func(s *ContractUpsert) {
-		s.SetUpdatedBy(v)
-	})
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *ContractUpsertBulk) AddUpdatedBy(v int) *ContractUpsertBulk {
-	return u.Update(func(s *ContractUpsert) {
-		s.AddUpdatedBy(v)
-	})
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *ContractUpsertBulk) UpdateUpdatedBy() *ContractUpsertBulk {
-	return u.Update(func(s *ContractUpsert) {
-		s.UpdateUpdatedBy()
-	})
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *ContractUpsertBulk) ClearUpdatedBy() *ContractUpsertBulk {
-	return u.Update(func(s *ContractUpsert) {
-		s.ClearUpdatedBy()
 	})
 }
 

@@ -95,6 +95,11 @@ func Sort(v int) predicate.Permission {
 	return predicate.Permission(sql.FieldEQ(FieldSort, v))
 }
 
+// IsSystem applies equality check predicate on the "is_system" field. It's identical to IsSystemEQ.
+func IsSystem(v bool) predicate.Permission {
+	return predicate.Permission(sql.FieldEQ(FieldIsSystem, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Permission {
 	return predicate.Permission(sql.FieldEQ(FieldCreatedAt, v))
@@ -583,6 +588,16 @@ func AttrsIsNil() predicate.Permission {
 // AttrsNotNil applies the NotNil predicate on the "attrs" field.
 func AttrsNotNil() predicate.Permission {
 	return predicate.Permission(sql.FieldNotNull(FieldAttrs))
+}
+
+// IsSystemEQ applies the EQ predicate on the "is_system" field.
+func IsSystemEQ(v bool) predicate.Permission {
+	return predicate.Permission(sql.FieldEQ(FieldIsSystem, v))
+}
+
+// IsSystemNEQ applies the NEQ predicate on the "is_system" field.
+func IsSystemNEQ(v bool) predicate.Permission {
+	return predicate.Permission(sql.FieldNEQ(FieldIsSystem, v))
 }
 
 // HasRoles applies the HasEdge predicate on the "roles" edge.

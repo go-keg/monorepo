@@ -1,5 +1,5 @@
 key: "${APP_KEY}"
-name: "${ADMIN_APP_NAME}"
+name: "${ACCOUNT_APP_NAME}"
 trace:
   endpoint: ""
 server:
@@ -10,7 +10,7 @@ server:
 data:
   database:
     driver: "mysql"
-    dsn: "${EXAMPLE_DB_DSN}"
+    dsn: "${ACCOUNT_DB_DSN}"
   kafka:
     addrs: "${KAFKA_ADDRS}"
 

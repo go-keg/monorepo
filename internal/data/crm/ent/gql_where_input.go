@@ -56,6 +56,28 @@ type ContactWhereInput struct {
 	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
 
+	// "created_by" field predicates.
+	CreatedBy      *int  `json:"createdBy,omitempty"`
+	CreatedByNEQ   *int  `json:"createdByNEQ,omitempty"`
+	CreatedByIn    []int `json:"createdByIn,omitempty"`
+	CreatedByNotIn []int `json:"createdByNotIn,omitempty"`
+	CreatedByGT    *int  `json:"createdByGT,omitempty"`
+	CreatedByGTE   *int  `json:"createdByGTE,omitempty"`
+	CreatedByLT    *int  `json:"createdByLT,omitempty"`
+	CreatedByLTE   *int  `json:"createdByLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy       *int  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ    *int  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn     []int `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn  []int `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT     *int  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE    *int  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT     *int  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE    *int  `json:"updatedByLTE,omitempty"`
+	UpdatedByIsNil  bool  `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil bool  `json:"updatedByNotNil,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -121,28 +143,6 @@ type ContactWhereInput struct {
 	EmailNotNil       bool     `json:"emailNotNil,omitempty"`
 	EmailEqualFold    *string  `json:"emailEqualFold,omitempty"`
 	EmailContainsFold *string  `json:"emailContainsFold,omitempty"`
-
-	// "created_by" field predicates.
-	CreatedBy      *int  `json:"createdBy,omitempty"`
-	CreatedByNEQ   *int  `json:"createdByNEQ,omitempty"`
-	CreatedByIn    []int `json:"createdByIn,omitempty"`
-	CreatedByNotIn []int `json:"createdByNotIn,omitempty"`
-	CreatedByGT    *int  `json:"createdByGT,omitempty"`
-	CreatedByGTE   *int  `json:"createdByGTE,omitempty"`
-	CreatedByLT    *int  `json:"createdByLT,omitempty"`
-	CreatedByLTE   *int  `json:"createdByLTE,omitempty"`
-
-	// "updated_by" field predicates.
-	UpdatedBy       *int  `json:"updatedBy,omitempty"`
-	UpdatedByNEQ    *int  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn     []int `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn  []int `json:"updatedByNotIn,omitempty"`
-	UpdatedByGT     *int  `json:"updatedByGT,omitempty"`
-	UpdatedByGTE    *int  `json:"updatedByGTE,omitempty"`
-	UpdatedByLT     *int  `json:"updatedByLT,omitempty"`
-	UpdatedByLTE    *int  `json:"updatedByLTE,omitempty"`
-	UpdatedByIsNil  bool  `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil bool  `json:"updatedByNotNil,omitempty"`
 
 	// "customer" edge predicates.
 	HasCustomer     *bool                 `json:"hasCustomer,omitempty"`
@@ -303,6 +303,60 @@ func (i *ContactWhereInput) P() (predicate.Contact, error) {
 	}
 	if i.UpdatedAtNotNil {
 		predicates = append(predicates, contact.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, contact.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, contact.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, contact.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, contact.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, contact.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, contact.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, contact.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, contact.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, contact.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, contact.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, contact.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, contact.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, contact.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, contact.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, contact.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, contact.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, contact.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, contact.UpdatedByNotNil())
 	}
 	if i.Name != nil {
 		predicates = append(predicates, contact.NameEQ(*i.Name))
@@ -478,60 +532,6 @@ func (i *ContactWhereInput) P() (predicate.Contact, error) {
 	if i.EmailContainsFold != nil {
 		predicates = append(predicates, contact.EmailContainsFold(*i.EmailContainsFold))
 	}
-	if i.CreatedBy != nil {
-		predicates = append(predicates, contact.CreatedByEQ(*i.CreatedBy))
-	}
-	if i.CreatedByNEQ != nil {
-		predicates = append(predicates, contact.CreatedByNEQ(*i.CreatedByNEQ))
-	}
-	if len(i.CreatedByIn) > 0 {
-		predicates = append(predicates, contact.CreatedByIn(i.CreatedByIn...))
-	}
-	if len(i.CreatedByNotIn) > 0 {
-		predicates = append(predicates, contact.CreatedByNotIn(i.CreatedByNotIn...))
-	}
-	if i.CreatedByGT != nil {
-		predicates = append(predicates, contact.CreatedByGT(*i.CreatedByGT))
-	}
-	if i.CreatedByGTE != nil {
-		predicates = append(predicates, contact.CreatedByGTE(*i.CreatedByGTE))
-	}
-	if i.CreatedByLT != nil {
-		predicates = append(predicates, contact.CreatedByLT(*i.CreatedByLT))
-	}
-	if i.CreatedByLTE != nil {
-		predicates = append(predicates, contact.CreatedByLTE(*i.CreatedByLTE))
-	}
-	if i.UpdatedBy != nil {
-		predicates = append(predicates, contact.UpdatedByEQ(*i.UpdatedBy))
-	}
-	if i.UpdatedByNEQ != nil {
-		predicates = append(predicates, contact.UpdatedByNEQ(*i.UpdatedByNEQ))
-	}
-	if len(i.UpdatedByIn) > 0 {
-		predicates = append(predicates, contact.UpdatedByIn(i.UpdatedByIn...))
-	}
-	if len(i.UpdatedByNotIn) > 0 {
-		predicates = append(predicates, contact.UpdatedByNotIn(i.UpdatedByNotIn...))
-	}
-	if i.UpdatedByGT != nil {
-		predicates = append(predicates, contact.UpdatedByGT(*i.UpdatedByGT))
-	}
-	if i.UpdatedByGTE != nil {
-		predicates = append(predicates, contact.UpdatedByGTE(*i.UpdatedByGTE))
-	}
-	if i.UpdatedByLT != nil {
-		predicates = append(predicates, contact.UpdatedByLT(*i.UpdatedByLT))
-	}
-	if i.UpdatedByLTE != nil {
-		predicates = append(predicates, contact.UpdatedByLTE(*i.UpdatedByLTE))
-	}
-	if i.UpdatedByIsNil {
-		predicates = append(predicates, contact.UpdatedByIsNil())
-	}
-	if i.UpdatedByNotNil {
-		predicates = append(predicates, contact.UpdatedByNotNil())
-	}
 
 	if i.HasCustomer != nil {
 		p := contact.HasCustomer()
@@ -602,6 +602,28 @@ type ContractWhereInput struct {
 	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
 
+	// "created_by" field predicates.
+	CreatedBy      *int  `json:"createdBy,omitempty"`
+	CreatedByNEQ   *int  `json:"createdByNEQ,omitempty"`
+	CreatedByIn    []int `json:"createdByIn,omitempty"`
+	CreatedByNotIn []int `json:"createdByNotIn,omitempty"`
+	CreatedByGT    *int  `json:"createdByGT,omitempty"`
+	CreatedByGTE   *int  `json:"createdByGTE,omitempty"`
+	CreatedByLT    *int  `json:"createdByLT,omitempty"`
+	CreatedByLTE   *int  `json:"createdByLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy       *int  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ    *int  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn     []int `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn  []int `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT     *int  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE    *int  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT     *int  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE    *int  `json:"updatedByLTE,omitempty"`
+	UpdatedByIsNil  bool  `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil bool  `json:"updatedByNotNil,omitempty"`
+
 	// "contract_no" field predicates.
 	ContractNo             *string  `json:"contractNo,omitempty"`
 	ContractNoNEQ          *string  `json:"contractNoNEQ,omitempty"`
@@ -650,28 +672,6 @@ type ContractWhereInput struct {
 	EndAtLTE    *time.Time  `json:"endAtLTE,omitempty"`
 	EndAtIsNil  bool        `json:"endAtIsNil,omitempty"`
 	EndAtNotNil bool        `json:"endAtNotNil,omitempty"`
-
-	// "created_by" field predicates.
-	CreatedBy      *int  `json:"createdBy,omitempty"`
-	CreatedByNEQ   *int  `json:"createdByNEQ,omitempty"`
-	CreatedByIn    []int `json:"createdByIn,omitempty"`
-	CreatedByNotIn []int `json:"createdByNotIn,omitempty"`
-	CreatedByGT    *int  `json:"createdByGT,omitempty"`
-	CreatedByGTE   *int  `json:"createdByGTE,omitempty"`
-	CreatedByLT    *int  `json:"createdByLT,omitempty"`
-	CreatedByLTE   *int  `json:"createdByLTE,omitempty"`
-
-	// "updated_by" field predicates.
-	UpdatedBy       *int  `json:"updatedBy,omitempty"`
-	UpdatedByNEQ    *int  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn     []int `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn  []int `json:"updatedByNotIn,omitempty"`
-	UpdatedByGT     *int  `json:"updatedByGT,omitempty"`
-	UpdatedByGTE    *int  `json:"updatedByGTE,omitempty"`
-	UpdatedByLT     *int  `json:"updatedByLT,omitempty"`
-	UpdatedByLTE    *int  `json:"updatedByLTE,omitempty"`
-	UpdatedByIsNil  bool  `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil bool  `json:"updatedByNotNil,omitempty"`
 
 	// "customer" edge predicates.
 	HasCustomer     *bool                 `json:"hasCustomer,omitempty"`
@@ -837,6 +837,60 @@ func (i *ContractWhereInput) P() (predicate.Contract, error) {
 	if i.UpdatedAtNotNil {
 		predicates = append(predicates, contract.UpdatedAtNotNil())
 	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, contract.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, contract.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, contract.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, contract.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, contract.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, contract.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, contract.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, contract.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, contract.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, contract.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, contract.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, contract.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, contract.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, contract.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, contract.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, contract.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, contract.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, contract.UpdatedByNotNil())
+	}
 	if i.ContractNo != nil {
 		predicates = append(predicates, contract.ContractNoEQ(*i.ContractNo))
 	}
@@ -960,60 +1014,6 @@ func (i *ContractWhereInput) P() (predicate.Contract, error) {
 	if i.EndAtNotNil {
 		predicates = append(predicates, contract.EndAtNotNil())
 	}
-	if i.CreatedBy != nil {
-		predicates = append(predicates, contract.CreatedByEQ(*i.CreatedBy))
-	}
-	if i.CreatedByNEQ != nil {
-		predicates = append(predicates, contract.CreatedByNEQ(*i.CreatedByNEQ))
-	}
-	if len(i.CreatedByIn) > 0 {
-		predicates = append(predicates, contract.CreatedByIn(i.CreatedByIn...))
-	}
-	if len(i.CreatedByNotIn) > 0 {
-		predicates = append(predicates, contract.CreatedByNotIn(i.CreatedByNotIn...))
-	}
-	if i.CreatedByGT != nil {
-		predicates = append(predicates, contract.CreatedByGT(*i.CreatedByGT))
-	}
-	if i.CreatedByGTE != nil {
-		predicates = append(predicates, contract.CreatedByGTE(*i.CreatedByGTE))
-	}
-	if i.CreatedByLT != nil {
-		predicates = append(predicates, contract.CreatedByLT(*i.CreatedByLT))
-	}
-	if i.CreatedByLTE != nil {
-		predicates = append(predicates, contract.CreatedByLTE(*i.CreatedByLTE))
-	}
-	if i.UpdatedBy != nil {
-		predicates = append(predicates, contract.UpdatedByEQ(*i.UpdatedBy))
-	}
-	if i.UpdatedByNEQ != nil {
-		predicates = append(predicates, contract.UpdatedByNEQ(*i.UpdatedByNEQ))
-	}
-	if len(i.UpdatedByIn) > 0 {
-		predicates = append(predicates, contract.UpdatedByIn(i.UpdatedByIn...))
-	}
-	if len(i.UpdatedByNotIn) > 0 {
-		predicates = append(predicates, contract.UpdatedByNotIn(i.UpdatedByNotIn...))
-	}
-	if i.UpdatedByGT != nil {
-		predicates = append(predicates, contract.UpdatedByGT(*i.UpdatedByGT))
-	}
-	if i.UpdatedByGTE != nil {
-		predicates = append(predicates, contract.UpdatedByGTE(*i.UpdatedByGTE))
-	}
-	if i.UpdatedByLT != nil {
-		predicates = append(predicates, contract.UpdatedByLT(*i.UpdatedByLT))
-	}
-	if i.UpdatedByLTE != nil {
-		predicates = append(predicates, contract.UpdatedByLTE(*i.UpdatedByLTE))
-	}
-	if i.UpdatedByIsNil {
-		predicates = append(predicates, contract.UpdatedByIsNil())
-	}
-	if i.UpdatedByNotNil {
-		predicates = append(predicates, contract.UpdatedByNotNil())
-	}
 
 	if i.HasCustomer != nil {
 		p := contract.HasCustomer()
@@ -1102,6 +1102,28 @@ type CustomerWhereInput struct {
 	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
 
+	// "created_by" field predicates.
+	CreatedBy      *int  `json:"createdBy,omitempty"`
+	CreatedByNEQ   *int  `json:"createdByNEQ,omitempty"`
+	CreatedByIn    []int `json:"createdByIn,omitempty"`
+	CreatedByNotIn []int `json:"createdByNotIn,omitempty"`
+	CreatedByGT    *int  `json:"createdByGT,omitempty"`
+	CreatedByGTE   *int  `json:"createdByGTE,omitempty"`
+	CreatedByLT    *int  `json:"createdByLT,omitempty"`
+	CreatedByLTE   *int  `json:"createdByLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy       *int  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ    *int  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn     []int `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn  []int `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT     *int  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE    *int  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT     *int  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE    *int  `json:"updatedByLTE,omitempty"`
+	UpdatedByIsNil  bool  `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil bool  `json:"updatedByNotNil,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -1167,28 +1189,6 @@ type CustomerWhereInput struct {
 	LevelNotNil       bool     `json:"levelNotNil,omitempty"`
 	LevelEqualFold    *string  `json:"levelEqualFold,omitempty"`
 	LevelContainsFold *string  `json:"levelContainsFold,omitempty"`
-
-	// "created_by" field predicates.
-	CreatedBy      *int  `json:"createdBy,omitempty"`
-	CreatedByNEQ   *int  `json:"createdByNEQ,omitempty"`
-	CreatedByIn    []int `json:"createdByIn,omitempty"`
-	CreatedByNotIn []int `json:"createdByNotIn,omitempty"`
-	CreatedByGT    *int  `json:"createdByGT,omitempty"`
-	CreatedByGTE   *int  `json:"createdByGTE,omitempty"`
-	CreatedByLT    *int  `json:"createdByLT,omitempty"`
-	CreatedByLTE   *int  `json:"createdByLTE,omitempty"`
-
-	// "updated_by" field predicates.
-	UpdatedBy       *int  `json:"updatedBy,omitempty"`
-	UpdatedByNEQ    *int  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn     []int `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn  []int `json:"updatedByNotIn,omitempty"`
-	UpdatedByGT     *int  `json:"updatedByGT,omitempty"`
-	UpdatedByGTE    *int  `json:"updatedByGTE,omitempty"`
-	UpdatedByLT     *int  `json:"updatedByLT,omitempty"`
-	UpdatedByLTE    *int  `json:"updatedByLTE,omitempty"`
-	UpdatedByIsNil  bool  `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil bool  `json:"updatedByNotNil,omitempty"`
 
 	// "contacts" edge predicates.
 	HasContacts     *bool                `json:"hasContacts,omitempty"`
@@ -1357,6 +1357,60 @@ func (i *CustomerWhereInput) P() (predicate.Customer, error) {
 	}
 	if i.UpdatedAtNotNil {
 		predicates = append(predicates, customer.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, customer.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, customer.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, customer.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, customer.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, customer.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, customer.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, customer.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, customer.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, customer.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, customer.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, customer.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, customer.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, customer.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, customer.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, customer.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, customer.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, customer.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, customer.UpdatedByNotNil())
 	}
 	if i.Name != nil {
 		predicates = append(predicates, customer.NameEQ(*i.Name))
@@ -1532,60 +1586,6 @@ func (i *CustomerWhereInput) P() (predicate.Customer, error) {
 	if i.LevelContainsFold != nil {
 		predicates = append(predicates, customer.LevelContainsFold(*i.LevelContainsFold))
 	}
-	if i.CreatedBy != nil {
-		predicates = append(predicates, customer.CreatedByEQ(*i.CreatedBy))
-	}
-	if i.CreatedByNEQ != nil {
-		predicates = append(predicates, customer.CreatedByNEQ(*i.CreatedByNEQ))
-	}
-	if len(i.CreatedByIn) > 0 {
-		predicates = append(predicates, customer.CreatedByIn(i.CreatedByIn...))
-	}
-	if len(i.CreatedByNotIn) > 0 {
-		predicates = append(predicates, customer.CreatedByNotIn(i.CreatedByNotIn...))
-	}
-	if i.CreatedByGT != nil {
-		predicates = append(predicates, customer.CreatedByGT(*i.CreatedByGT))
-	}
-	if i.CreatedByGTE != nil {
-		predicates = append(predicates, customer.CreatedByGTE(*i.CreatedByGTE))
-	}
-	if i.CreatedByLT != nil {
-		predicates = append(predicates, customer.CreatedByLT(*i.CreatedByLT))
-	}
-	if i.CreatedByLTE != nil {
-		predicates = append(predicates, customer.CreatedByLTE(*i.CreatedByLTE))
-	}
-	if i.UpdatedBy != nil {
-		predicates = append(predicates, customer.UpdatedByEQ(*i.UpdatedBy))
-	}
-	if i.UpdatedByNEQ != nil {
-		predicates = append(predicates, customer.UpdatedByNEQ(*i.UpdatedByNEQ))
-	}
-	if len(i.UpdatedByIn) > 0 {
-		predicates = append(predicates, customer.UpdatedByIn(i.UpdatedByIn...))
-	}
-	if len(i.UpdatedByNotIn) > 0 {
-		predicates = append(predicates, customer.UpdatedByNotIn(i.UpdatedByNotIn...))
-	}
-	if i.UpdatedByGT != nil {
-		predicates = append(predicates, customer.UpdatedByGT(*i.UpdatedByGT))
-	}
-	if i.UpdatedByGTE != nil {
-		predicates = append(predicates, customer.UpdatedByGTE(*i.UpdatedByGTE))
-	}
-	if i.UpdatedByLT != nil {
-		predicates = append(predicates, customer.UpdatedByLT(*i.UpdatedByLT))
-	}
-	if i.UpdatedByLTE != nil {
-		predicates = append(predicates, customer.UpdatedByLTE(*i.UpdatedByLTE))
-	}
-	if i.UpdatedByIsNil {
-		predicates = append(predicates, customer.UpdatedByIsNil())
-	}
-	if i.UpdatedByNotNil {
-		predicates = append(predicates, customer.UpdatedByNotNil())
-	}
 
 	if i.HasContacts != nil {
 		p := customer.HasContacts()
@@ -1692,6 +1692,28 @@ type FollowUpWhereInput struct {
 	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
 
+	// "created_by" field predicates.
+	CreatedBy      *int  `json:"createdBy,omitempty"`
+	CreatedByNEQ   *int  `json:"createdByNEQ,omitempty"`
+	CreatedByIn    []int `json:"createdByIn,omitempty"`
+	CreatedByNotIn []int `json:"createdByNotIn,omitempty"`
+	CreatedByGT    *int  `json:"createdByGT,omitempty"`
+	CreatedByGTE   *int  `json:"createdByGTE,omitempty"`
+	CreatedByLT    *int  `json:"createdByLT,omitempty"`
+	CreatedByLTE   *int  `json:"createdByLTE,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy       *int  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ    *int  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn     []int `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn  []int `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT     *int  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE    *int  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT     *int  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE    *int  `json:"updatedByLTE,omitempty"`
+	UpdatedByIsNil  bool  `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil bool  `json:"updatedByNotNil,omitempty"`
+
 	// "type" field predicates.
 	Type      *followup.Type  `json:"type,omitempty"`
 	TypeNEQ   *followup.Type  `json:"typeNEQ,omitempty"`
@@ -1722,28 +1744,6 @@ type FollowUpWhereInput struct {
 	FollowedAtGTE   *time.Time  `json:"followedAtGTE,omitempty"`
 	FollowedAtLT    *time.Time  `json:"followedAtLT,omitempty"`
 	FollowedAtLTE   *time.Time  `json:"followedAtLTE,omitempty"`
-
-	// "created_by" field predicates.
-	CreatedBy      *int  `json:"createdBy,omitempty"`
-	CreatedByNEQ   *int  `json:"createdByNEQ,omitempty"`
-	CreatedByIn    []int `json:"createdByIn,omitempty"`
-	CreatedByNotIn []int `json:"createdByNotIn,omitempty"`
-	CreatedByGT    *int  `json:"createdByGT,omitempty"`
-	CreatedByGTE   *int  `json:"createdByGTE,omitempty"`
-	CreatedByLT    *int  `json:"createdByLT,omitempty"`
-	CreatedByLTE   *int  `json:"createdByLTE,omitempty"`
-
-	// "updated_by" field predicates.
-	UpdatedBy       *int  `json:"updatedBy,omitempty"`
-	UpdatedByNEQ    *int  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn     []int `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn  []int `json:"updatedByNotIn,omitempty"`
-	UpdatedByGT     *int  `json:"updatedByGT,omitempty"`
-	UpdatedByGTE    *int  `json:"updatedByGTE,omitempty"`
-	UpdatedByLT     *int  `json:"updatedByLT,omitempty"`
-	UpdatedByLTE    *int  `json:"updatedByLTE,omitempty"`
-	UpdatedByIsNil  bool  `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil bool  `json:"updatedByNotNil,omitempty"`
 
 	// "customer" edge predicates.
 	HasCustomer     *bool                 `json:"hasCustomer,omitempty"`
@@ -1905,6 +1905,60 @@ func (i *FollowUpWhereInput) P() (predicate.FollowUp, error) {
 	if i.UpdatedAtNotNil {
 		predicates = append(predicates, followup.UpdatedAtNotNil())
 	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, followup.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, followup.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, followup.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, followup.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, followup.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, followup.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, followup.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, followup.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, followup.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, followup.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, followup.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, followup.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, followup.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, followup.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, followup.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, followup.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, followup.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, followup.UpdatedByNotNil())
+	}
 	if i.Type != nil {
 		predicates = append(predicates, followup.TypeEQ(*i.Type))
 	}
@@ -1980,60 +2034,6 @@ func (i *FollowUpWhereInput) P() (predicate.FollowUp, error) {
 	if i.FollowedAtLTE != nil {
 		predicates = append(predicates, followup.FollowedAtLTE(*i.FollowedAtLTE))
 	}
-	if i.CreatedBy != nil {
-		predicates = append(predicates, followup.CreatedByEQ(*i.CreatedBy))
-	}
-	if i.CreatedByNEQ != nil {
-		predicates = append(predicates, followup.CreatedByNEQ(*i.CreatedByNEQ))
-	}
-	if len(i.CreatedByIn) > 0 {
-		predicates = append(predicates, followup.CreatedByIn(i.CreatedByIn...))
-	}
-	if len(i.CreatedByNotIn) > 0 {
-		predicates = append(predicates, followup.CreatedByNotIn(i.CreatedByNotIn...))
-	}
-	if i.CreatedByGT != nil {
-		predicates = append(predicates, followup.CreatedByGT(*i.CreatedByGT))
-	}
-	if i.CreatedByGTE != nil {
-		predicates = append(predicates, followup.CreatedByGTE(*i.CreatedByGTE))
-	}
-	if i.CreatedByLT != nil {
-		predicates = append(predicates, followup.CreatedByLT(*i.CreatedByLT))
-	}
-	if i.CreatedByLTE != nil {
-		predicates = append(predicates, followup.CreatedByLTE(*i.CreatedByLTE))
-	}
-	if i.UpdatedBy != nil {
-		predicates = append(predicates, followup.UpdatedByEQ(*i.UpdatedBy))
-	}
-	if i.UpdatedByNEQ != nil {
-		predicates = append(predicates, followup.UpdatedByNEQ(*i.UpdatedByNEQ))
-	}
-	if len(i.UpdatedByIn) > 0 {
-		predicates = append(predicates, followup.UpdatedByIn(i.UpdatedByIn...))
-	}
-	if len(i.UpdatedByNotIn) > 0 {
-		predicates = append(predicates, followup.UpdatedByNotIn(i.UpdatedByNotIn...))
-	}
-	if i.UpdatedByGT != nil {
-		predicates = append(predicates, followup.UpdatedByGT(*i.UpdatedByGT))
-	}
-	if i.UpdatedByGTE != nil {
-		predicates = append(predicates, followup.UpdatedByGTE(*i.UpdatedByGTE))
-	}
-	if i.UpdatedByLT != nil {
-		predicates = append(predicates, followup.UpdatedByLT(*i.UpdatedByLT))
-	}
-	if i.UpdatedByLTE != nil {
-		predicates = append(predicates, followup.UpdatedByLTE(*i.UpdatedByLTE))
-	}
-	if i.UpdatedByIsNil {
-		predicates = append(predicates, followup.UpdatedByIsNil())
-	}
-	if i.UpdatedByNotNil {
-		predicates = append(predicates, followup.UpdatedByNotNil())
-	}
 
 	if i.HasCustomer != nil {
 		p := followup.HasCustomer()
@@ -2104,28 +2104,6 @@ type PaymentWhereInput struct {
 	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
 	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
 
-	// "amount" field predicates.
-	Amount      *float64  `json:"amount,omitempty"`
-	AmountNEQ   *float64  `json:"amountNEQ,omitempty"`
-	AmountIn    []float64 `json:"amountIn,omitempty"`
-	AmountNotIn []float64 `json:"amountNotIn,omitempty"`
-	AmountGT    *float64  `json:"amountGT,omitempty"`
-	AmountGTE   *float64  `json:"amountGTE,omitempty"`
-	AmountLT    *float64  `json:"amountLT,omitempty"`
-	AmountLTE   *float64  `json:"amountLTE,omitempty"`
-
-	// "received_at" field predicates.
-	ReceivedAt       *time.Time  `json:"receivedAt,omitempty"`
-	ReceivedAtNEQ    *time.Time  `json:"receivedAtNEQ,omitempty"`
-	ReceivedAtIn     []time.Time `json:"receivedAtIn,omitempty"`
-	ReceivedAtNotIn  []time.Time `json:"receivedAtNotIn,omitempty"`
-	ReceivedAtGT     *time.Time  `json:"receivedAtGT,omitempty"`
-	ReceivedAtGTE    *time.Time  `json:"receivedAtGTE,omitempty"`
-	ReceivedAtLT     *time.Time  `json:"receivedAtLT,omitempty"`
-	ReceivedAtLTE    *time.Time  `json:"receivedAtLTE,omitempty"`
-	ReceivedAtIsNil  bool        `json:"receivedAtIsNil,omitempty"`
-	ReceivedAtNotNil bool        `json:"receivedAtNotNil,omitempty"`
-
 	// "created_by" field predicates.
 	CreatedBy      *int  `json:"createdBy,omitempty"`
 	CreatedByNEQ   *int  `json:"createdByNEQ,omitempty"`
@@ -2147,6 +2125,28 @@ type PaymentWhereInput struct {
 	UpdatedByLTE    *int  `json:"updatedByLTE,omitempty"`
 	UpdatedByIsNil  bool  `json:"updatedByIsNil,omitempty"`
 	UpdatedByNotNil bool  `json:"updatedByNotNil,omitempty"`
+
+	// "amount" field predicates.
+	Amount      *float64  `json:"amount,omitempty"`
+	AmountNEQ   *float64  `json:"amountNEQ,omitempty"`
+	AmountIn    []float64 `json:"amountIn,omitempty"`
+	AmountNotIn []float64 `json:"amountNotIn,omitempty"`
+	AmountGT    *float64  `json:"amountGT,omitempty"`
+	AmountGTE   *float64  `json:"amountGTE,omitempty"`
+	AmountLT    *float64  `json:"amountLT,omitempty"`
+	AmountLTE   *float64  `json:"amountLTE,omitempty"`
+
+	// "received_at" field predicates.
+	ReceivedAt       *time.Time  `json:"receivedAt,omitempty"`
+	ReceivedAtNEQ    *time.Time  `json:"receivedAtNEQ,omitempty"`
+	ReceivedAtIn     []time.Time `json:"receivedAtIn,omitempty"`
+	ReceivedAtNotIn  []time.Time `json:"receivedAtNotIn,omitempty"`
+	ReceivedAtGT     *time.Time  `json:"receivedAtGT,omitempty"`
+	ReceivedAtGTE    *time.Time  `json:"receivedAtGTE,omitempty"`
+	ReceivedAtLT     *time.Time  `json:"receivedAtLT,omitempty"`
+	ReceivedAtLTE    *time.Time  `json:"receivedAtLTE,omitempty"`
+	ReceivedAtIsNil  bool        `json:"receivedAtIsNil,omitempty"`
+	ReceivedAtNotNil bool        `json:"receivedAtNotNil,omitempty"`
 
 	// "contract" edge predicates.
 	HasContract     *bool                 `json:"hasContract,omitempty"`
@@ -2308,60 +2308,6 @@ func (i *PaymentWhereInput) P() (predicate.Payment, error) {
 	if i.UpdatedAtNotNil {
 		predicates = append(predicates, payment.UpdatedAtNotNil())
 	}
-	if i.Amount != nil {
-		predicates = append(predicates, payment.AmountEQ(*i.Amount))
-	}
-	if i.AmountNEQ != nil {
-		predicates = append(predicates, payment.AmountNEQ(*i.AmountNEQ))
-	}
-	if len(i.AmountIn) > 0 {
-		predicates = append(predicates, payment.AmountIn(i.AmountIn...))
-	}
-	if len(i.AmountNotIn) > 0 {
-		predicates = append(predicates, payment.AmountNotIn(i.AmountNotIn...))
-	}
-	if i.AmountGT != nil {
-		predicates = append(predicates, payment.AmountGT(*i.AmountGT))
-	}
-	if i.AmountGTE != nil {
-		predicates = append(predicates, payment.AmountGTE(*i.AmountGTE))
-	}
-	if i.AmountLT != nil {
-		predicates = append(predicates, payment.AmountLT(*i.AmountLT))
-	}
-	if i.AmountLTE != nil {
-		predicates = append(predicates, payment.AmountLTE(*i.AmountLTE))
-	}
-	if i.ReceivedAt != nil {
-		predicates = append(predicates, payment.ReceivedAtEQ(*i.ReceivedAt))
-	}
-	if i.ReceivedAtNEQ != nil {
-		predicates = append(predicates, payment.ReceivedAtNEQ(*i.ReceivedAtNEQ))
-	}
-	if len(i.ReceivedAtIn) > 0 {
-		predicates = append(predicates, payment.ReceivedAtIn(i.ReceivedAtIn...))
-	}
-	if len(i.ReceivedAtNotIn) > 0 {
-		predicates = append(predicates, payment.ReceivedAtNotIn(i.ReceivedAtNotIn...))
-	}
-	if i.ReceivedAtGT != nil {
-		predicates = append(predicates, payment.ReceivedAtGT(*i.ReceivedAtGT))
-	}
-	if i.ReceivedAtGTE != nil {
-		predicates = append(predicates, payment.ReceivedAtGTE(*i.ReceivedAtGTE))
-	}
-	if i.ReceivedAtLT != nil {
-		predicates = append(predicates, payment.ReceivedAtLT(*i.ReceivedAtLT))
-	}
-	if i.ReceivedAtLTE != nil {
-		predicates = append(predicates, payment.ReceivedAtLTE(*i.ReceivedAtLTE))
-	}
-	if i.ReceivedAtIsNil {
-		predicates = append(predicates, payment.ReceivedAtIsNil())
-	}
-	if i.ReceivedAtNotNil {
-		predicates = append(predicates, payment.ReceivedAtNotNil())
-	}
 	if i.CreatedBy != nil {
 		predicates = append(predicates, payment.CreatedByEQ(*i.CreatedBy))
 	}
@@ -2415,6 +2361,60 @@ func (i *PaymentWhereInput) P() (predicate.Payment, error) {
 	}
 	if i.UpdatedByNotNil {
 		predicates = append(predicates, payment.UpdatedByNotNil())
+	}
+	if i.Amount != nil {
+		predicates = append(predicates, payment.AmountEQ(*i.Amount))
+	}
+	if i.AmountNEQ != nil {
+		predicates = append(predicates, payment.AmountNEQ(*i.AmountNEQ))
+	}
+	if len(i.AmountIn) > 0 {
+		predicates = append(predicates, payment.AmountIn(i.AmountIn...))
+	}
+	if len(i.AmountNotIn) > 0 {
+		predicates = append(predicates, payment.AmountNotIn(i.AmountNotIn...))
+	}
+	if i.AmountGT != nil {
+		predicates = append(predicates, payment.AmountGT(*i.AmountGT))
+	}
+	if i.AmountGTE != nil {
+		predicates = append(predicates, payment.AmountGTE(*i.AmountGTE))
+	}
+	if i.AmountLT != nil {
+		predicates = append(predicates, payment.AmountLT(*i.AmountLT))
+	}
+	if i.AmountLTE != nil {
+		predicates = append(predicates, payment.AmountLTE(*i.AmountLTE))
+	}
+	if i.ReceivedAt != nil {
+		predicates = append(predicates, payment.ReceivedAtEQ(*i.ReceivedAt))
+	}
+	if i.ReceivedAtNEQ != nil {
+		predicates = append(predicates, payment.ReceivedAtNEQ(*i.ReceivedAtNEQ))
+	}
+	if len(i.ReceivedAtIn) > 0 {
+		predicates = append(predicates, payment.ReceivedAtIn(i.ReceivedAtIn...))
+	}
+	if len(i.ReceivedAtNotIn) > 0 {
+		predicates = append(predicates, payment.ReceivedAtNotIn(i.ReceivedAtNotIn...))
+	}
+	if i.ReceivedAtGT != nil {
+		predicates = append(predicates, payment.ReceivedAtGT(*i.ReceivedAtGT))
+	}
+	if i.ReceivedAtGTE != nil {
+		predicates = append(predicates, payment.ReceivedAtGTE(*i.ReceivedAtGTE))
+	}
+	if i.ReceivedAtLT != nil {
+		predicates = append(predicates, payment.ReceivedAtLT(*i.ReceivedAtLT))
+	}
+	if i.ReceivedAtLTE != nil {
+		predicates = append(predicates, payment.ReceivedAtLTE(*i.ReceivedAtLTE))
+	}
+	if i.ReceivedAtIsNil {
+		predicates = append(predicates, payment.ReceivedAtIsNil())
+	}
+	if i.ReceivedAtNotNil {
+		predicates = append(predicates, payment.ReceivedAtNotNil())
 	}
 
 	if i.HasContract != nil {

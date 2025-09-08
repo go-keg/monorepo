@@ -44,6 +44,33 @@ func (cu *CustomerUpdate) ClearUpdatedAt() *CustomerUpdate {
 	return cu
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (cu *CustomerUpdate) SetUpdatedBy(i int) *CustomerUpdate {
+	cu.mutation.ResetUpdatedBy()
+	cu.mutation.SetUpdatedBy(i)
+	return cu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cu *CustomerUpdate) SetNillableUpdatedBy(i *int) *CustomerUpdate {
+	if i != nil {
+		cu.SetUpdatedBy(*i)
+	}
+	return cu
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (cu *CustomerUpdate) AddUpdatedBy(i int) *CustomerUpdate {
+	cu.mutation.AddUpdatedBy(i)
+	return cu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (cu *CustomerUpdate) ClearUpdatedBy() *CustomerUpdate {
+	cu.mutation.ClearUpdatedBy()
+	return cu
+}
+
 // SetName sets the "name" field.
 func (cu *CustomerUpdate) SetName(s string) *CustomerUpdate {
 	cu.mutation.SetName(s)
@@ -127,33 +154,6 @@ func (cu *CustomerUpdate) SetMetadata(m map[string]interface{}) *CustomerUpdate 
 // ClearMetadata clears the value of the "metadata" field.
 func (cu *CustomerUpdate) ClearMetadata() *CustomerUpdate {
 	cu.mutation.ClearMetadata()
-	return cu
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (cu *CustomerUpdate) SetUpdatedBy(i int) *CustomerUpdate {
-	cu.mutation.ResetUpdatedBy()
-	cu.mutation.SetUpdatedBy(i)
-	return cu
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cu *CustomerUpdate) SetNillableUpdatedBy(i *int) *CustomerUpdate {
-	if i != nil {
-		cu.SetUpdatedBy(*i)
-	}
-	return cu
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (cu *CustomerUpdate) AddUpdatedBy(i int) *CustomerUpdate {
-	cu.mutation.AddUpdatedBy(i)
-	return cu
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cu *CustomerUpdate) ClearUpdatedBy() *CustomerUpdate {
-	cu.mutation.ClearUpdatedBy()
 	return cu
 }
 
@@ -343,6 +343,15 @@ func (cu *CustomerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(customer.FieldUpdatedAt, field.TypeTime)
 	}
+	if value, ok := cu.mutation.UpdatedBy(); ok {
+		_spec.SetField(customer.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := cu.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(customer.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if cu.mutation.UpdatedByCleared() {
+		_spec.ClearField(customer.FieldUpdatedBy, field.TypeInt)
+	}
 	if value, ok := cu.mutation.Name(); ok {
 		_spec.SetField(customer.FieldName, field.TypeString, value)
 	}
@@ -369,15 +378,6 @@ func (cu *CustomerUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.MetadataCleared() {
 		_spec.ClearField(customer.FieldMetadata, field.TypeJSON)
-	}
-	if value, ok := cu.mutation.UpdatedBy(); ok {
-		_spec.SetField(customer.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := cu.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(customer.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if cu.mutation.UpdatedByCleared() {
-		_spec.ClearField(customer.FieldUpdatedBy, field.TypeInt)
 	}
 	if cu.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -548,6 +548,33 @@ func (cuo *CustomerUpdateOne) ClearUpdatedAt() *CustomerUpdateOne {
 	return cuo
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (cuo *CustomerUpdateOne) SetUpdatedBy(i int) *CustomerUpdateOne {
+	cuo.mutation.ResetUpdatedBy()
+	cuo.mutation.SetUpdatedBy(i)
+	return cuo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cuo *CustomerUpdateOne) SetNillableUpdatedBy(i *int) *CustomerUpdateOne {
+	if i != nil {
+		cuo.SetUpdatedBy(*i)
+	}
+	return cuo
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (cuo *CustomerUpdateOne) AddUpdatedBy(i int) *CustomerUpdateOne {
+	cuo.mutation.AddUpdatedBy(i)
+	return cuo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (cuo *CustomerUpdateOne) ClearUpdatedBy() *CustomerUpdateOne {
+	cuo.mutation.ClearUpdatedBy()
+	return cuo
+}
+
 // SetName sets the "name" field.
 func (cuo *CustomerUpdateOne) SetName(s string) *CustomerUpdateOne {
 	cuo.mutation.SetName(s)
@@ -631,33 +658,6 @@ func (cuo *CustomerUpdateOne) SetMetadata(m map[string]interface{}) *CustomerUpd
 // ClearMetadata clears the value of the "metadata" field.
 func (cuo *CustomerUpdateOne) ClearMetadata() *CustomerUpdateOne {
 	cuo.mutation.ClearMetadata()
-	return cuo
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (cuo *CustomerUpdateOne) SetUpdatedBy(i int) *CustomerUpdateOne {
-	cuo.mutation.ResetUpdatedBy()
-	cuo.mutation.SetUpdatedBy(i)
-	return cuo
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cuo *CustomerUpdateOne) SetNillableUpdatedBy(i *int) *CustomerUpdateOne {
-	if i != nil {
-		cuo.SetUpdatedBy(*i)
-	}
-	return cuo
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (cuo *CustomerUpdateOne) AddUpdatedBy(i int) *CustomerUpdateOne {
-	cuo.mutation.AddUpdatedBy(i)
-	return cuo
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cuo *CustomerUpdateOne) ClearUpdatedBy() *CustomerUpdateOne {
-	cuo.mutation.ClearUpdatedBy()
 	return cuo
 }
 
@@ -877,6 +877,15 @@ func (cuo *CustomerUpdateOne) sqlSave(ctx context.Context) (_node *Customer, err
 	if cuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(customer.FieldUpdatedAt, field.TypeTime)
 	}
+	if value, ok := cuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(customer.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := cuo.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(customer.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if cuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(customer.FieldUpdatedBy, field.TypeInt)
+	}
 	if value, ok := cuo.mutation.Name(); ok {
 		_spec.SetField(customer.FieldName, field.TypeString, value)
 	}
@@ -903,15 +912,6 @@ func (cuo *CustomerUpdateOne) sqlSave(ctx context.Context) (_node *Customer, err
 	}
 	if cuo.mutation.MetadataCleared() {
 		_spec.ClearField(customer.FieldMetadata, field.TypeJSON)
-	}
-	if value, ok := cuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(customer.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := cuo.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(customer.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if cuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(customer.FieldUpdatedBy, field.TypeInt)
 	}
 	if cuo.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{

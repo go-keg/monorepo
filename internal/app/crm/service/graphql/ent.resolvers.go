@@ -28,7 +28,7 @@ func (r *queryResolver) Customers(ctx context.Context, after *entgql.Cursor[int]
 }
 
 // CustomerList is the resolver for the customerList field.
-func (r *queryResolver) CustomerList(ctx context.Context, offset int, limit int, orderBy *ent.CustomerOrder, where *ent.CustomerWhereInput) (*ent.CustomerConnection, error) {
+func (r *queryResolver) CustomerList(ctx context.Context, offset int, limit int, orderBy *ent.CustomerOrder, where *ent.CustomerWhereInput) (*ent.CustomerList, error) {
 	return r.client.Customer.Query().List(ctx, offset, limit, ent.WithCustomerFilter(where.Filter), ent.WithCustomerOrder(orderBy))
 }
 

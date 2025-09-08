@@ -53,6 +53,26 @@ func (cc *CustomerCreate) SetNillableUpdatedAt(t *time.Time) *CustomerCreate {
 	return cc
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (cc *CustomerCreate) SetCreatedBy(i int) *CustomerCreate {
+	cc.mutation.SetCreatedBy(i)
+	return cc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (cc *CustomerCreate) SetUpdatedBy(i int) *CustomerCreate {
+	cc.mutation.SetUpdatedBy(i)
+	return cc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cc *CustomerCreate) SetNillableUpdatedBy(i *int) *CustomerCreate {
+	if i != nil {
+		cc.SetUpdatedBy(*i)
+	}
+	return cc
+}
+
 // SetName sets the "name" field.
 func (cc *CustomerCreate) SetName(s string) *CustomerCreate {
 	cc.mutation.SetName(s)
@@ -104,26 +124,6 @@ func (cc *CustomerCreate) SetNillableLevel(s *string) *CustomerCreate {
 // SetMetadata sets the "metadata" field.
 func (cc *CustomerCreate) SetMetadata(m map[string]interface{}) *CustomerCreate {
 	cc.mutation.SetMetadata(m)
-	return cc
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (cc *CustomerCreate) SetCreatedBy(i int) *CustomerCreate {
-	cc.mutation.SetCreatedBy(i)
-	return cc
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (cc *CustomerCreate) SetUpdatedBy(i int) *CustomerCreate {
-	cc.mutation.SetUpdatedBy(i)
-	return cc
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cc *CustomerCreate) SetNillableUpdatedBy(i *int) *CustomerCreate {
-	if i != nil {
-		cc.SetUpdatedBy(*i)
-	}
 	return cc
 }
 
@@ -219,6 +219,9 @@ func (cc *CustomerCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (cc *CustomerCreate) check() error {
+	if _, ok := cc.mutation.CreatedBy(); !ok {
+		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "Customer.created_by"`)}
+	}
 	if _, ok := cc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Customer.name"`)}
 	}
@@ -226,9 +229,6 @@ func (cc *CustomerCreate) check() error {
 		if err := customer.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Customer.name": %w`, err)}
 		}
-	}
-	if _, ok := cc.mutation.CreatedBy(); !ok {
-		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "Customer.created_by"`)}
 	}
 	return nil
 }
@@ -265,6 +265,14 @@ func (cc *CustomerCreate) createSpec() (*Customer, *sqlgraph.CreateSpec) {
 		_spec.SetField(customer.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := cc.mutation.CreatedBy(); ok {
+		_spec.SetField(customer.FieldCreatedBy, field.TypeInt, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := cc.mutation.UpdatedBy(); ok {
+		_spec.SetField(customer.FieldUpdatedBy, field.TypeInt, value)
+		_node.UpdatedBy = value
+	}
 	if value, ok := cc.mutation.Name(); ok {
 		_spec.SetField(customer.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -284,14 +292,6 @@ func (cc *CustomerCreate) createSpec() (*Customer, *sqlgraph.CreateSpec) {
 	if value, ok := cc.mutation.Metadata(); ok {
 		_spec.SetField(customer.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
-	}
-	if value, ok := cc.mutation.CreatedBy(); ok {
-		_spec.SetField(customer.FieldCreatedBy, field.TypeInt, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := cc.mutation.UpdatedBy(); ok {
-		_spec.SetField(customer.FieldUpdatedBy, field.TypeInt, value)
-		_node.UpdatedBy = value
 	}
 	if nodes := cc.mutation.ContactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -411,6 +411,30 @@ func (u *CustomerUpsert) ClearUpdatedAt() *CustomerUpsert {
 	return u
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *CustomerUpsert) SetUpdatedBy(v int) *CustomerUpsert {
+	u.Set(customer.FieldUpdatedBy, v)
+	return u
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *CustomerUpsert) UpdateUpdatedBy() *CustomerUpsert {
+	u.SetExcluded(customer.FieldUpdatedBy)
+	return u
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *CustomerUpsert) AddUpdatedBy(v int) *CustomerUpsert {
+	u.Add(customer.FieldUpdatedBy, v)
+	return u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *CustomerUpsert) ClearUpdatedBy() *CustomerUpsert {
+	u.SetNull(customer.FieldUpdatedBy)
+	return u
+}
+
 // SetName sets the "name" field.
 func (u *CustomerUpsert) SetName(v string) *CustomerUpsert {
 	u.Set(customer.FieldName, v)
@@ -495,30 +519,6 @@ func (u *CustomerUpsert) ClearMetadata() *CustomerUpsert {
 	return u
 }
 
-// SetUpdatedBy sets the "updated_by" field.
-func (u *CustomerUpsert) SetUpdatedBy(v int) *CustomerUpsert {
-	u.Set(customer.FieldUpdatedBy, v)
-	return u
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *CustomerUpsert) UpdateUpdatedBy() *CustomerUpsert {
-	u.SetExcluded(customer.FieldUpdatedBy)
-	return u
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *CustomerUpsert) AddUpdatedBy(v int) *CustomerUpsert {
-	u.Add(customer.FieldUpdatedBy, v)
-	return u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *CustomerUpsert) ClearUpdatedBy() *CustomerUpsert {
-	u.SetNull(customer.FieldUpdatedBy)
-	return u
-}
-
 // UpdateNewValues updates the mutable fields using the new values that were set on create.
 // Using this option is equivalent to using:
 //
@@ -585,6 +585,34 @@ func (u *CustomerUpsertOne) UpdateUpdatedAt() *CustomerUpsertOne {
 func (u *CustomerUpsertOne) ClearUpdatedAt() *CustomerUpsertOne {
 	return u.Update(func(s *CustomerUpsert) {
 		s.ClearUpdatedAt()
+	})
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (u *CustomerUpsertOne) SetUpdatedBy(v int) *CustomerUpsertOne {
+	return u.Update(func(s *CustomerUpsert) {
+		s.SetUpdatedBy(v)
+	})
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *CustomerUpsertOne) AddUpdatedBy(v int) *CustomerUpsertOne {
+	return u.Update(func(s *CustomerUpsert) {
+		s.AddUpdatedBy(v)
+	})
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *CustomerUpsertOne) UpdateUpdatedBy() *CustomerUpsertOne {
+	return u.Update(func(s *CustomerUpsert) {
+		s.UpdateUpdatedBy()
+	})
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *CustomerUpsertOne) ClearUpdatedBy() *CustomerUpsertOne {
+	return u.Update(func(s *CustomerUpsert) {
+		s.ClearUpdatedBy()
 	})
 }
 
@@ -683,34 +711,6 @@ func (u *CustomerUpsertOne) UpdateMetadata() *CustomerUpsertOne {
 func (u *CustomerUpsertOne) ClearMetadata() *CustomerUpsertOne {
 	return u.Update(func(s *CustomerUpsert) {
 		s.ClearMetadata()
-	})
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *CustomerUpsertOne) SetUpdatedBy(v int) *CustomerUpsertOne {
-	return u.Update(func(s *CustomerUpsert) {
-		s.SetUpdatedBy(v)
-	})
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *CustomerUpsertOne) AddUpdatedBy(v int) *CustomerUpsertOne {
-	return u.Update(func(s *CustomerUpsert) {
-		s.AddUpdatedBy(v)
-	})
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *CustomerUpsertOne) UpdateUpdatedBy() *CustomerUpsertOne {
-	return u.Update(func(s *CustomerUpsert) {
-		s.UpdateUpdatedBy()
-	})
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *CustomerUpsertOne) ClearUpdatedBy() *CustomerUpsertOne {
-	return u.Update(func(s *CustomerUpsert) {
-		s.ClearUpdatedBy()
 	})
 }
 
@@ -949,6 +949,34 @@ func (u *CustomerUpsertBulk) ClearUpdatedAt() *CustomerUpsertBulk {
 	})
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *CustomerUpsertBulk) SetUpdatedBy(v int) *CustomerUpsertBulk {
+	return u.Update(func(s *CustomerUpsert) {
+		s.SetUpdatedBy(v)
+	})
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *CustomerUpsertBulk) AddUpdatedBy(v int) *CustomerUpsertBulk {
+	return u.Update(func(s *CustomerUpsert) {
+		s.AddUpdatedBy(v)
+	})
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *CustomerUpsertBulk) UpdateUpdatedBy() *CustomerUpsertBulk {
+	return u.Update(func(s *CustomerUpsert) {
+		s.UpdateUpdatedBy()
+	})
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *CustomerUpsertBulk) ClearUpdatedBy() *CustomerUpsertBulk {
+	return u.Update(func(s *CustomerUpsert) {
+		s.ClearUpdatedBy()
+	})
+}
+
 // SetName sets the "name" field.
 func (u *CustomerUpsertBulk) SetName(v string) *CustomerUpsertBulk {
 	return u.Update(func(s *CustomerUpsert) {
@@ -1044,34 +1072,6 @@ func (u *CustomerUpsertBulk) UpdateMetadata() *CustomerUpsertBulk {
 func (u *CustomerUpsertBulk) ClearMetadata() *CustomerUpsertBulk {
 	return u.Update(func(s *CustomerUpsert) {
 		s.ClearMetadata()
-	})
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *CustomerUpsertBulk) SetUpdatedBy(v int) *CustomerUpsertBulk {
-	return u.Update(func(s *CustomerUpsert) {
-		s.SetUpdatedBy(v)
-	})
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *CustomerUpsertBulk) AddUpdatedBy(v int) *CustomerUpsertBulk {
-	return u.Update(func(s *CustomerUpsert) {
-		s.AddUpdatedBy(v)
-	})
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *CustomerUpsertBulk) UpdateUpdatedBy() *CustomerUpsertBulk {
-	return u.Update(func(s *CustomerUpsert) {
-		s.UpdateUpdatedBy()
-	})
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *CustomerUpsertBulk) ClearUpdatedBy() *CustomerUpsertBulk {
-	return u.Update(func(s *CustomerUpsert) {
-		s.ClearUpdatedBy()
 	})
 }
 

@@ -1988,6 +1988,10 @@ type PermissionWhereInput struct {
 	SortLT    *int  `json:"sortLT,omitempty"`
 	SortLTE   *int  `json:"sortLTE,omitempty"`
 
+	// "is_system" field predicates.
+	IsSystem    *bool `json:"isSystem,omitempty"`
+	IsSystemNEQ *bool `json:"isSystemNEQ,omitempty"`
+
 	// "parent" edge predicates.
 	HasParent     *bool                   `json:"hasParent,omitempty"`
 	HasParentWith []*PermissionWhereInput `json:"hasParentWith,omitempty"`
@@ -2379,6 +2383,12 @@ func (i *PermissionWhereInput) P() (predicate.Permission, error) {
 	}
 	if i.SortLTE != nil {
 		predicates = append(predicates, permission.SortLTE(*i.SortLTE))
+	}
+	if i.IsSystem != nil {
+		predicates = append(predicates, permission.IsSystemEQ(*i.IsSystem))
+	}
+	if i.IsSystemNEQ != nil {
+		predicates = append(predicates, permission.IsSystemNEQ(*i.IsSystemNEQ))
 	}
 
 	if i.HasParent != nil {

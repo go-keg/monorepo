@@ -18,14 +18,14 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
-	// FieldAmount holds the string denoting the amount field in the database.
-	FieldAmount = "amount"
-	// FieldReceivedAt holds the string denoting the received_at field in the database.
-	FieldReceivedAt = "received_at"
 	// FieldCreatedBy holds the string denoting the created_by field in the database.
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
+	// FieldAmount holds the string denoting the amount field in the database.
+	FieldAmount = "amount"
+	// FieldReceivedAt holds the string denoting the received_at field in the database.
+	FieldReceivedAt = "received_at"
 	// EdgeContract holds the string denoting the contract edge name in mutations.
 	EdgeContract = "contract"
 	// Table holds the table name of the payment in the database.
@@ -44,10 +44,10 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
-	FieldAmount,
-	FieldReceivedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
+	FieldAmount,
+	FieldReceivedAt,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "payments"
@@ -100,16 +100,6 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
-// ByAmount orders the results by the amount field.
-func ByAmount(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAmount, opts...).ToFunc()
-}
-
-// ByReceivedAt orders the results by the received_at field.
-func ByReceivedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldReceivedAt, opts...).ToFunc()
-}
-
 // ByCreatedBy orders the results by the created_by field.
 func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
@@ -118,6 +108,16 @@ func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
+// ByAmount orders the results by the amount field.
+func ByAmount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAmount, opts...).ToFunc()
+}
+
+// ByReceivedAt orders the results by the received_at field.
+func ByReceivedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReceivedAt, opts...).ToFunc()
 }
 
 // ByContractField orders the results by contract field.

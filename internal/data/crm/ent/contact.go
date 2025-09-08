@@ -22,6 +22,10 @@ type Contact struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 创建人
+	CreatedBy int `json:"created_by,omitempty"`
+	// 修改人
+	UpdatedBy int `json:"updated_by,omitempty"`
 	// 联系人姓名
 	Name string `json:"name,omitempty"`
 	// 职位
@@ -30,10 +34,6 @@ type Contact struct {
 	Phone string `json:"phone,omitempty"`
 	// 邮箱
 	Email string `json:"email,omitempty"`
-	// 创建人
-	CreatedBy int `json:"created_by,omitempty"`
-	// 修改人
-	UpdatedBy int `json:"updated_by,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ContactQuery when eager-loading is set.
 	Edges             ContactEdges `json:"edges"`
@@ -109,6 +109,18 @@ func (c *Contact) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.UpdatedAt = value.Time
 			}
+		case contact.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				c.CreatedBy = int(value.Int64)
+			}
+		case contact.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				c.UpdatedBy = int(value.Int64)
+			}
 		case contact.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -132,18 +144,6 @@ func (c *Contact) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
 				c.Email = value.String
-			}
-		case contact.FieldCreatedBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
-			} else if value.Valid {
-				c.CreatedBy = int(value.Int64)
-			}
-		case contact.FieldUpdatedBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
-			} else if value.Valid {
-				c.UpdatedBy = int(value.Int64)
 			}
 		case contact.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -199,6 +199,12 @@ func (c *Contact) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(fmt.Sprintf("%v", c.CreatedBy))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(fmt.Sprintf("%v", c.UpdatedBy))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(c.Name)
 	builder.WriteString(", ")
@@ -210,12 +216,6 @@ func (c *Contact) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(c.Email)
-	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", c.CreatedBy))
-	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", c.UpdatedBy))
 	builder.WriteByte(')')
 	return builder.String()
 }

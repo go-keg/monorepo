@@ -42,6 +42,33 @@ func (cu *ContractUpdate) ClearUpdatedAt() *ContractUpdate {
 	return cu
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (cu *ContractUpdate) SetUpdatedBy(i int) *ContractUpdate {
+	cu.mutation.ResetUpdatedBy()
+	cu.mutation.SetUpdatedBy(i)
+	return cu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cu *ContractUpdate) SetNillableUpdatedBy(i *int) *ContractUpdate {
+	if i != nil {
+		cu.SetUpdatedBy(*i)
+	}
+	return cu
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (cu *ContractUpdate) AddUpdatedBy(i int) *ContractUpdate {
+	cu.mutation.AddUpdatedBy(i)
+	return cu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (cu *ContractUpdate) ClearUpdatedBy() *ContractUpdate {
+	cu.mutation.ClearUpdatedBy()
+	return cu
+}
+
 // SetContractNo sets the "contract_no" field.
 func (cu *ContractUpdate) SetContractNo(s string) *ContractUpdate {
 	cu.mutation.SetContractNo(s)
@@ -114,33 +141,6 @@ func (cu *ContractUpdate) SetNillableEndAt(t *time.Time) *ContractUpdate {
 // ClearEndAt clears the value of the "end_at" field.
 func (cu *ContractUpdate) ClearEndAt() *ContractUpdate {
 	cu.mutation.ClearEndAt()
-	return cu
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (cu *ContractUpdate) SetUpdatedBy(i int) *ContractUpdate {
-	cu.mutation.ResetUpdatedBy()
-	cu.mutation.SetUpdatedBy(i)
-	return cu
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cu *ContractUpdate) SetNillableUpdatedBy(i *int) *ContractUpdate {
-	if i != nil {
-		cu.SetUpdatedBy(*i)
-	}
-	return cu
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (cu *ContractUpdate) AddUpdatedBy(i int) *ContractUpdate {
-	cu.mutation.AddUpdatedBy(i)
-	return cu
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cu *ContractUpdate) ClearUpdatedBy() *ContractUpdate {
-	cu.mutation.ClearUpdatedBy()
 	return cu
 }
 
@@ -261,6 +261,15 @@ func (cu *ContractUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contract.FieldUpdatedAt, field.TypeTime)
 	}
+	if value, ok := cu.mutation.UpdatedBy(); ok {
+		_spec.SetField(contract.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := cu.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(contract.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if cu.mutation.UpdatedByCleared() {
+		_spec.ClearField(contract.FieldUpdatedBy, field.TypeInt)
+	}
 	if value, ok := cu.mutation.ContractNo(); ok {
 		_spec.SetField(contract.FieldContractNo, field.TypeString, value)
 	}
@@ -281,15 +290,6 @@ func (cu *ContractUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.EndAtCleared() {
 		_spec.ClearField(contract.FieldEndAt, field.TypeTime)
-	}
-	if value, ok := cu.mutation.UpdatedBy(); ok {
-		_spec.SetField(contract.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := cu.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(contract.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if cu.mutation.UpdatedByCleared() {
-		_spec.ClearField(contract.FieldUpdatedBy, field.TypeInt)
 	}
 	if cu.mutation.PaymentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -370,6 +370,33 @@ func (cuo *ContractUpdateOne) ClearUpdatedAt() *ContractUpdateOne {
 	return cuo
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (cuo *ContractUpdateOne) SetUpdatedBy(i int) *ContractUpdateOne {
+	cuo.mutation.ResetUpdatedBy()
+	cuo.mutation.SetUpdatedBy(i)
+	return cuo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cuo *ContractUpdateOne) SetNillableUpdatedBy(i *int) *ContractUpdateOne {
+	if i != nil {
+		cuo.SetUpdatedBy(*i)
+	}
+	return cuo
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (cuo *ContractUpdateOne) AddUpdatedBy(i int) *ContractUpdateOne {
+	cuo.mutation.AddUpdatedBy(i)
+	return cuo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (cuo *ContractUpdateOne) ClearUpdatedBy() *ContractUpdateOne {
+	cuo.mutation.ClearUpdatedBy()
+	return cuo
+}
+
 // SetContractNo sets the "contract_no" field.
 func (cuo *ContractUpdateOne) SetContractNo(s string) *ContractUpdateOne {
 	cuo.mutation.SetContractNo(s)
@@ -442,33 +469,6 @@ func (cuo *ContractUpdateOne) SetNillableEndAt(t *time.Time) *ContractUpdateOne 
 // ClearEndAt clears the value of the "end_at" field.
 func (cuo *ContractUpdateOne) ClearEndAt() *ContractUpdateOne {
 	cuo.mutation.ClearEndAt()
-	return cuo
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (cuo *ContractUpdateOne) SetUpdatedBy(i int) *ContractUpdateOne {
-	cuo.mutation.ResetUpdatedBy()
-	cuo.mutation.SetUpdatedBy(i)
-	return cuo
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cuo *ContractUpdateOne) SetNillableUpdatedBy(i *int) *ContractUpdateOne {
-	if i != nil {
-		cuo.SetUpdatedBy(*i)
-	}
-	return cuo
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (cuo *ContractUpdateOne) AddUpdatedBy(i int) *ContractUpdateOne {
-	cuo.mutation.AddUpdatedBy(i)
-	return cuo
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cuo *ContractUpdateOne) ClearUpdatedBy() *ContractUpdateOne {
-	cuo.mutation.ClearUpdatedBy()
 	return cuo
 }
 
@@ -619,6 +619,15 @@ func (cuo *ContractUpdateOne) sqlSave(ctx context.Context) (_node *Contract, err
 	if cuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contract.FieldUpdatedAt, field.TypeTime)
 	}
+	if value, ok := cuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(contract.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := cuo.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(contract.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if cuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(contract.FieldUpdatedBy, field.TypeInt)
+	}
 	if value, ok := cuo.mutation.ContractNo(); ok {
 		_spec.SetField(contract.FieldContractNo, field.TypeString, value)
 	}
@@ -639,15 +648,6 @@ func (cuo *ContractUpdateOne) sqlSave(ctx context.Context) (_node *Contract, err
 	}
 	if cuo.mutation.EndAtCleared() {
 		_spec.ClearField(contract.FieldEndAt, field.TypeTime)
-	}
-	if value, ok := cuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(contract.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := cuo.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(contract.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if cuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(contract.FieldUpdatedBy, field.TypeInt)
 	}
 	if cuo.mutation.PaymentsCleared() {
 		edge := &sqlgraph.EdgeSpec{

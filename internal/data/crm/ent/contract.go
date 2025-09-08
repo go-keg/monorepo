@@ -22,6 +22,10 @@ type Contract struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 创建人
+	CreatedBy int `json:"created_by,omitempty"`
+	// 修改人
+	UpdatedBy int `json:"updated_by,omitempty"`
 	// 合同编号
 	ContractNo string `json:"contract_no,omitempty"`
 	// 合同金额
@@ -30,10 +34,6 @@ type Contract struct {
 	SignedAt time.Time `json:"signed_at,omitempty"`
 	// 到期日期
 	EndAt time.Time `json:"end_at,omitempty"`
-	// 创建人
-	CreatedBy int `json:"created_by,omitempty"`
-	// 修改人
-	UpdatedBy int `json:"updated_by,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ContractQuery when eager-loading is set.
 	Edges              ContractEdges `json:"edges"`
@@ -124,6 +124,18 @@ func (c *Contract) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.UpdatedAt = value.Time
 			}
+		case contract.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				c.CreatedBy = int(value.Int64)
+			}
+		case contract.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				c.UpdatedBy = int(value.Int64)
+			}
 		case contract.FieldContractNo:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field contract_no", values[i])
@@ -147,18 +159,6 @@ func (c *Contract) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field end_at", values[i])
 			} else if value.Valid {
 				c.EndAt = value.Time
-			}
-		case contract.FieldCreatedBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
-			} else if value.Valid {
-				c.CreatedBy = int(value.Int64)
-			}
-		case contract.FieldUpdatedBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
-			} else if value.Valid {
-				c.UpdatedBy = int(value.Int64)
 			}
 		case contract.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -219,6 +219,12 @@ func (c *Contract) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(fmt.Sprintf("%v", c.CreatedBy))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(fmt.Sprintf("%v", c.UpdatedBy))
+	builder.WriteString(", ")
 	builder.WriteString("contract_no=")
 	builder.WriteString(c.ContractNo)
 	builder.WriteString(", ")
@@ -230,12 +236,6 @@ func (c *Contract) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("end_at=")
 	builder.WriteString(c.EndAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", c.CreatedBy))
-	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", c.UpdatedBy))
 	builder.WriteByte(')')
 	return builder.String()
 }

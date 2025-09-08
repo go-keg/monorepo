@@ -38,17 +38,17 @@ func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[int], fi
 }
 
 // PermissionList is the resolver for the permissionList field.
-func (r *queryResolver) PermissionList(ctx context.Context, offset int, limit int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) (*ent.PermissionConnection, error) {
+func (r *queryResolver) PermissionList(ctx context.Context, offset int, limit int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) (*ent.PermissionList, error) {
 	return r.ent.Permission.Query().List(ctx, offset, limit, ent.WithPermissionFilter(where.Filter), ent.WithPermissionOrder(orderBy))
 }
 
 // TenantRoleList is the resolver for the tenantRoleList field.
-func (r *queryResolver) TenantRoleList(ctx context.Context, offset int, limit int, orderBy *ent.TenantRoleOrder, where *ent.TenantRoleWhereInput) (*ent.TenantRoleConnection, error) {
+func (r *queryResolver) TenantRoleList(ctx context.Context, offset int, limit int, orderBy *ent.TenantRoleOrder, where *ent.TenantRoleWhereInput) (*ent.TenantRoleList, error) {
 	return r.ent.TenantRole.Query().List(ctx, offset, limit, ent.WithTenantRoleFilter(where.Filter), ent.WithTenantRoleOrder(orderBy))
 }
 
 // UserList is the resolver for the userList field.
-func (r *queryResolver) UserList(ctx context.Context, offset int, limit int, orderBy *ent.UserOrder, where *ent.UserWhereInput) (*ent.UserConnection, error) {
+func (r *queryResolver) UserList(ctx context.Context, offset int, limit int, orderBy *ent.UserOrder, where *ent.UserWhereInput) (*ent.UserList, error) {
 	return r.ent.User.Query().List(ctx, offset, limit, ent.WithUserFilter(where.Filter), ent.WithUserOrder(orderBy))
 }
 

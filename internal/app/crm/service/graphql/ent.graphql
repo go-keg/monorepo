@@ -5,6 +5,14 @@ type Contact implements Node {
   createdAt: Time
   updatedAt: Time
   """
+  创建人
+  """
+  createdBy: Int!
+  """
+  修改人
+  """
+  updatedBy: Int
+  """
   联系人姓名
   """
   name: String!
@@ -20,14 +28,6 @@ type Contact implements Node {
   邮箱
   """
   email: String
-  """
-  创建人
-  """
-  createdBy: Int!
-  """
-  修改人
-  """
-  updatedBy: Int
   customer: Customer!
 }
 """
@@ -63,6 +63,19 @@ type ContactEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+A connection to a list of items.
+"""
+type ContactList {
+  """
+  A list of nodes.
+  """
+  nodes: [Contact]
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
 }
 """
 Ordering options for Contact connections
@@ -129,6 +142,30 @@ input ContactWhereInput {
   updatedAtLTE: Time
   updatedAtIsNil: Boolean
   updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: Int
+  createdByNEQ: Int
+  createdByIn: [Int!]
+  createdByNotIn: [Int!]
+  createdByGT: Int
+  createdByGTE: Int
+  createdByLT: Int
+  createdByLTE: Int
+  """
+  updated_by field predicates
+  """
+  updatedBy: Int
+  updatedByNEQ: Int
+  updatedByIn: [Int!]
+  updatedByNotIn: [Int!]
+  updatedByGT: Int
+  updatedByGTE: Int
+  updatedByLT: Int
+  updatedByLTE: Int
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
   """
   name field predicates
   """
@@ -200,30 +237,6 @@ input ContactWhereInput {
   emailEqualFold: String
   emailContainsFold: String
   """
-  created_by field predicates
-  """
-  createdBy: Int
-  createdByNEQ: Int
-  createdByIn: [Int!]
-  createdByNotIn: [Int!]
-  createdByGT: Int
-  createdByGTE: Int
-  createdByLT: Int
-  createdByLTE: Int
-  """
-  updated_by field predicates
-  """
-  updatedBy: Int
-  updatedByNEQ: Int
-  updatedByIn: [Int!]
-  updatedByNotIn: [Int!]
-  updatedByGT: Int
-  updatedByGTE: Int
-  updatedByLT: Int
-  updatedByLTE: Int
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  """
   customer edge predicates
   """
   hasCustomer: Boolean
@@ -233,6 +246,14 @@ type Contract implements Node {
   id: ID!
   createdAt: Time
   updatedAt: Time
+  """
+  创建人
+  """
+  createdBy: Int!
+  """
+  修改人
+  """
+  updatedBy: Int
   """
   合同编号
   """
@@ -249,14 +270,6 @@ type Contract implements Node {
   到期日期
   """
   endAt: Time
-  """
-  创建人
-  """
-  createdBy: Int!
-  """
-  修改人
-  """
-  updatedBy: Int
   customer: Customer!
   payments: [Payment!]
 }
@@ -293,6 +306,19 @@ type ContractEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+A connection to a list of items.
+"""
+type ContractList {
+  """
+  A list of nodes.
+  """
+  nodes: [Contract]
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
 }
 """
 Ordering options for Contract connections
@@ -360,6 +386,30 @@ input ContractWhereInput {
   updatedAtIsNil: Boolean
   updatedAtNotNil: Boolean
   """
+  created_by field predicates
+  """
+  createdBy: Int
+  createdByNEQ: Int
+  createdByIn: [Int!]
+  createdByNotIn: [Int!]
+  createdByGT: Int
+  createdByGTE: Int
+  createdByLT: Int
+  createdByLTE: Int
+  """
+  updated_by field predicates
+  """
+  updatedBy: Int
+  updatedByNEQ: Int
+  updatedByIn: [Int!]
+  updatedByNotIn: [Int!]
+  updatedByGT: Int
+  updatedByGTE: Int
+  updatedByLT: Int
+  updatedByLTE: Int
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  """
   contract_no field predicates
   """
   contractNo: String
@@ -412,30 +462,6 @@ input ContractWhereInput {
   endAtLTE: Time
   endAtIsNil: Boolean
   endAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: Int
-  createdByNEQ: Int
-  createdByIn: [Int!]
-  createdByNotIn: [Int!]
-  createdByGT: Int
-  createdByGTE: Int
-  createdByLT: Int
-  createdByLTE: Int
-  """
-  updated_by field predicates
-  """
-  updatedBy: Int
-  updatedByNEQ: Int
-  updatedByIn: [Int!]
-  updatedByNotIn: [Int!]
-  updatedByGT: Int
-  updatedByGTE: Int
-  updatedByLT: Int
-  updatedByLTE: Int
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
   """
   customer edge predicates
   """
@@ -564,6 +590,14 @@ type Customer implements Node {
   createdAt: Time
   updatedAt: Time
   """
+  创建人
+  """
+  createdBy: Int!
+  """
+  修改人
+  """
+  updatedBy: Int
+  """
   客户名称
   """
   name: String!
@@ -583,14 +617,6 @@ type Customer implements Node {
   自定义扩展字段
   """
   metadata: Map
-  """
-  创建人
-  """
-  createdBy: Int!
-  """
-  修改人
-  """
-  updatedBy: Int
   contacts(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -720,6 +746,19 @@ type CustomerEdge {
   cursor: Cursor!
 }
 """
+A connection to a list of items.
+"""
+type CustomerList {
+  """
+  A list of nodes.
+  """
+  nodes: [Customer]
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
 Ordering options for Customer connections
 """
 input CustomerOrder {
@@ -784,6 +823,30 @@ input CustomerWhereInput {
   updatedAtLTE: Time
   updatedAtIsNil: Boolean
   updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: Int
+  createdByNEQ: Int
+  createdByIn: [Int!]
+  createdByNotIn: [Int!]
+  createdByGT: Int
+  createdByGTE: Int
+  createdByLT: Int
+  createdByLTE: Int
+  """
+  updated_by field predicates
+  """
+  updatedBy: Int
+  updatedByNEQ: Int
+  updatedByIn: [Int!]
+  updatedByNotIn: [Int!]
+  updatedByGT: Int
+  updatedByGTE: Int
+  updatedByLT: Int
+  updatedByLTE: Int
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
   """
   name field predicates
   """
@@ -855,30 +918,6 @@ input CustomerWhereInput {
   levelEqualFold: String
   levelContainsFold: String
   """
-  created_by field predicates
-  """
-  createdBy: Int
-  createdByNEQ: Int
-  createdByIn: [Int!]
-  createdByNotIn: [Int!]
-  createdByGT: Int
-  createdByGTE: Int
-  createdByLT: Int
-  createdByLTE: Int
-  """
-  updated_by field predicates
-  """
-  updatedBy: Int
-  updatedByNEQ: Int
-  updatedByIn: [Int!]
-  updatedByNotIn: [Int!]
-  updatedByGT: Int
-  updatedByGTE: Int
-  updatedByLT: Int
-  updatedByLTE: Int
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  """
   contacts edge predicates
   """
   hasContacts: Boolean
@@ -899,6 +938,14 @@ type FollowUp implements Node {
   createdAt: Time
   updatedAt: Time
   """
+  创建人
+  """
+  createdBy: Int!
+  """
+  修改人
+  """
+  updatedBy: Int
+  """
   跟进类型
   """
   type: FollowUpType!
@@ -910,14 +957,6 @@ type FollowUp implements Node {
   跟进时间
   """
   followedAt: Time!
-  """
-  创建人
-  """
-  createdBy: Int!
-  """
-  修改人
-  """
-  updatedBy: Int
   customer: Customer!
 }
 """
@@ -953,6 +992,19 @@ type FollowUpEdge {
   A cursor for use in pagination.
   """
   cursor: Cursor!
+}
+"""
+A connection to a list of items.
+"""
+type FollowUpList {
+  """
+  A list of nodes.
+  """
+  nodes: [FollowUp]
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
 }
 """
 Ordering options for FollowUp connections
@@ -1030,6 +1082,30 @@ input FollowUpWhereInput {
   updatedAtIsNil: Boolean
   updatedAtNotNil: Boolean
   """
+  created_by field predicates
+  """
+  createdBy: Int
+  createdByNEQ: Int
+  createdByIn: [Int!]
+  createdByNotIn: [Int!]
+  createdByGT: Int
+  createdByGTE: Int
+  createdByLT: Int
+  createdByLTE: Int
+  """
+  updated_by field predicates
+  """
+  updatedBy: Int
+  updatedByNEQ: Int
+  updatedByIn: [Int!]
+  updatedByNotIn: [Int!]
+  updatedByGT: Int
+  updatedByGTE: Int
+  updatedByLT: Int
+  updatedByLTE: Int
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  """
   type field predicates
   """
   type: FollowUpType
@@ -1063,30 +1139,6 @@ input FollowUpWhereInput {
   followedAtGTE: Time
   followedAtLT: Time
   followedAtLTE: Time
-  """
-  created_by field predicates
-  """
-  createdBy: Int
-  createdByNEQ: Int
-  createdByIn: [Int!]
-  createdByNotIn: [Int!]
-  createdByGT: Int
-  createdByGTE: Int
-  createdByLT: Int
-  createdByLTE: Int
-  """
-  updated_by field predicates
-  """
-  updatedBy: Int
-  updatedByNEQ: Int
-  updatedByIn: [Int!]
-  updatedByNotIn: [Int!]
-  updatedByGT: Int
-  updatedByGTE: Int
-  updatedByLT: Int
-  updatedByLTE: Int
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
   """
   customer edge predicates
   """
@@ -1147,14 +1199,6 @@ type Payment implements Node {
   createdAt: Time
   updatedAt: Time
   """
-  收款金额
-  """
-  amount: Float!
-  """
-  收款日期
-  """
-  receivedAt: Time
-  """
   创建人
   """
   createdBy: Int!
@@ -1162,6 +1206,14 @@ type Payment implements Node {
   修改人
   """
   updatedBy: Int
+  """
+  收款金额
+  """
+  amount: Float!
+  """
+  收款日期
+  """
+  receivedAt: Time
   contract: Contract!
 }
 """
@@ -1230,30 +1282,6 @@ input PaymentWhereInput {
   updatedAtIsNil: Boolean
   updatedAtNotNil: Boolean
   """
-  amount field predicates
-  """
-  amount: Float
-  amountNEQ: Float
-  amountIn: [Float!]
-  amountNotIn: [Float!]
-  amountGT: Float
-  amountGTE: Float
-  amountLT: Float
-  amountLTE: Float
-  """
-  received_at field predicates
-  """
-  receivedAt: Time
-  receivedAtNEQ: Time
-  receivedAtIn: [Time!]
-  receivedAtNotIn: [Time!]
-  receivedAtGT: Time
-  receivedAtGTE: Time
-  receivedAtLT: Time
-  receivedAtLTE: Time
-  receivedAtIsNil: Boolean
-  receivedAtNotNil: Boolean
-  """
   created_by field predicates
   """
   createdBy: Int
@@ -1277,6 +1305,30 @@ input PaymentWhereInput {
   updatedByLTE: Int
   updatedByIsNil: Boolean
   updatedByNotNil: Boolean
+  """
+  amount field predicates
+  """
+  amount: Float
+  amountNEQ: Float
+  amountIn: [Float!]
+  amountNotIn: [Float!]
+  amountGT: Float
+  amountGTE: Float
+  amountLT: Float
+  amountLTE: Float
+  """
+  received_at field predicates
+  """
+  receivedAt: Time
+  receivedAtNEQ: Time
+  receivedAtIn: [Time!]
+  receivedAtNotIn: [Time!]
+  receivedAtGT: Time
+  receivedAtGTE: Time
+  receivedAtLT: Time
+  receivedAtLTE: Time
+  receivedAtIsNil: Boolean
+  receivedAtNotNil: Boolean
   """
   contract edge predicates
   """
@@ -1353,7 +1405,7 @@ type Query {
     Filtering options for customer returned from the connection.
     """
     where: CustomerWhereInput
-  ): CustomerConnection!
+  ): CustomerList!
 }
 """
 The builtin Time type

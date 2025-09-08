@@ -391,7 +391,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
 		ID:     pe.ID,
 		Type:   "Permission",
-		Fields: make([]*Field, 10),
+		Fields: make([]*Field, 11),
 		Edges:  make([]*Edge, 2),
 	}
 	var buf []byte
@@ -473,6 +473,14 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 	node.Fields[9] = &Field{
 		Type:  "map[string]interface {}",
 		Name:  "attrs",
+		Value: string(buf),
+	}
+	if buf, err = json.Marshal(pe.IsSystem); err != nil {
+		return nil, err
+	}
+	node.Fields[10] = &Field{
+		Type:  "bool",
+		Name:  "is_system",
 		Value: string(buf),
 	}
 	node.Edges[0] = &Edge{

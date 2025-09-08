@@ -75,6 +75,11 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	ContactList struct {
+		Nodes      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
 	Contract struct {
 		Amount     func(childComplexity int) int
 		ContractNo func(childComplexity int) int
@@ -99,6 +104,11 @@ type ComplexityRoot struct {
 	ContractEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	ContractList struct {
+		Nodes      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
 	}
 
 	Customer struct {
@@ -129,6 +139,11 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	CustomerList struct {
+		Nodes      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
 	FollowUp struct {
 		Content    func(childComplexity int) int
 		CreatedAt  func(childComplexity int) int
@@ -151,6 +166,11 @@ type ComplexityRoot struct {
 	FollowUpEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	FollowUpList struct {
+		Nodes      func(childComplexity int) int
+		TotalCount func(childComplexity int) int
 	}
 
 	Mutation struct {
@@ -216,7 +236,7 @@ type QueryResolver interface {
 	Node(ctx context.Context, id int) (ent.Noder, error)
 	Nodes(ctx context.Context, ids []int) ([]ent.Noder, error)
 	Customers(ctx context.Context, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.CustomerOrder, where *ent.CustomerWhereInput) (*ent.CustomerConnection, error)
-	CustomerList(ctx context.Context, offset int, limit int, orderBy *ent.CustomerOrder, where *ent.CustomerWhereInput) (*ent.CustomerConnection, error)
+	CustomerList(ctx context.Context, offset int, limit int, orderBy *ent.CustomerOrder, where *ent.CustomerWhereInput) (*ent.CustomerList, error)
 }
 
 type executableSchema struct {
@@ -350,6 +370,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ContactEdge.Node(childComplexity), true
 
+	case "ContactList.nodes":
+		if e.complexity.ContactList.Nodes == nil {
+			break
+		}
+
+		return e.complexity.ContactList.Nodes(childComplexity), true
+
+	case "ContactList.totalCount":
+		if e.complexity.ContactList.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ContactList.TotalCount(childComplexity), true
+
 	case "Contract.amount":
 		if e.complexity.Contract.Amount == nil {
 			break
@@ -468,6 +502,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.ContractEdge.Node(childComplexity), true
+
+	case "ContractList.nodes":
+		if e.complexity.ContractList.Nodes == nil {
+			break
+		}
+
+		return e.complexity.ContractList.Nodes(childComplexity), true
+
+	case "ContractList.totalCount":
+		if e.complexity.ContractList.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.ContractList.TotalCount(childComplexity), true
 
 	case "Customer.contacts":
 		if e.complexity.Customer.Contacts == nil {
@@ -617,6 +665,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.CustomerEdge.Node(childComplexity), true
 
+	case "CustomerList.nodes":
+		if e.complexity.CustomerList.Nodes == nil {
+			break
+		}
+
+		return e.complexity.CustomerList.Nodes(childComplexity), true
+
+	case "CustomerList.totalCount":
+		if e.complexity.CustomerList.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.CustomerList.TotalCount(childComplexity), true
+
 	case "FollowUp.content":
 		if e.complexity.FollowUp.Content == nil {
 			break
@@ -721,6 +783,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.FollowUpEdge.Node(childComplexity), true
+
+	case "FollowUpList.nodes":
+		if e.complexity.FollowUpList.Nodes == nil {
+			break
+		}
+
+		return e.complexity.FollowUpList.Nodes(childComplexity), true
+
+	case "FollowUpList.totalCount":
+		if e.complexity.FollowUpList.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.FollowUpList.TotalCount(childComplexity), true
 
 	case "Mutation.createContact":
 		if e.complexity.Mutation.CreateContact == nil {
@@ -2673,6 +2749,91 @@ func (ec *executionContext) fieldContext_Contact_updatedAt(_ context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Contact_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.Contact) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Contact_createdBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Contact_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Contact",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Contact_updatedBy(ctx context.Context, field graphql.CollectedField, obj *ent.Contact) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Contact_updatedBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Contact_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Contact",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Contact_name(ctx context.Context, field graphql.CollectedField, obj *ent.Contact) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Contact_name(ctx, field)
 	if err != nil {
@@ -2840,91 +3001,6 @@ func (ec *executionContext) fieldContext_Contact_email(_ context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _Contact_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.Contact) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Contact_createdBy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CreatedBy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Contact_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Contact",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Contact_updatedBy(ctx context.Context, field graphql.CollectedField, obj *ent.Contact) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Contact_updatedBy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedBy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalOInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Contact_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Contact",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Contact_customer(ctx context.Context, field graphql.CollectedField, obj *ent.Contact) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Contact_customer(ctx, field)
 	if err != nil {
@@ -2970,6 +3046,10 @@ func (ec *executionContext) fieldContext_Contact_customer(_ context.Context, fie
 				return ec.fieldContext_Customer_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Customer_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Customer_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "name":
 				return ec.fieldContext_Customer_name(ctx, field)
 			case "industry":
@@ -2980,10 +3060,6 @@ func (ec *executionContext) fieldContext_Contact_customer(_ context.Context, fie
 				return ec.fieldContext_Customer_level(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Customer_metadata(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Customer_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Customer_contacts(ctx, field)
 			case "contracts":
@@ -3086,6 +3162,10 @@ func (ec *executionContext) fieldContext_ContactConnection_nodes(_ context.Conte
 				return ec.fieldContext_Contact_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contact_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contact_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			case "name":
 				return ec.fieldContext_Contact_name(ctx, field)
 			case "position":
@@ -3094,10 +3174,6 @@ func (ec *executionContext) fieldContext_ContactConnection_nodes(_ context.Conte
 				return ec.fieldContext_Contact_phone(ctx, field)
 			case "email":
 				return ec.fieldContext_Contact_email(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_Contact_customer(ctx, field)
 			}
@@ -3247,6 +3323,10 @@ func (ec *executionContext) fieldContext_ContactEdge_node(_ context.Context, fie
 				return ec.fieldContext_Contact_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contact_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contact_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			case "name":
 				return ec.fieldContext_Contact_name(ctx, field)
 			case "position":
@@ -3255,10 +3335,6 @@ func (ec *executionContext) fieldContext_ContactEdge_node(_ context.Context, fie
 				return ec.fieldContext_Contact_phone(ctx, field)
 			case "email":
 				return ec.fieldContext_Contact_email(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_Contact_customer(ctx, field)
 			}
@@ -3307,6 +3383,113 @@ func (ec *executionContext) fieldContext_ContactEdge_cursor(_ context.Context, f
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ContactList_nodes(ctx context.Context, field graphql.CollectedField, obj *ent.ContactList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ContactList_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Contact)
+	fc.Result = res
+	return ec.marshalOContact2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋcrmᚋentᚐContact(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ContactList_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ContactList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Contact_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Contact_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Contact_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contact_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contact_updatedBy(ctx, field)
+			case "name":
+				return ec.fieldContext_Contact_name(ctx, field)
+			case "position":
+				return ec.fieldContext_Contact_position(ctx, field)
+			case "phone":
+				return ec.fieldContext_Contact_phone(ctx, field)
+			case "email":
+				return ec.fieldContext_Contact_email(ctx, field)
+			case "customer":
+				return ec.fieldContext_Contact_customer(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Contact", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ContactList_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.ContactList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ContactList_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ContactList_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ContactList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3433,6 +3616,91 @@ func (ec *executionContext) fieldContext_Contract_updatedAt(_ context.Context, f
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Contract_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.Contract) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Contract_createdBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Contract_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Contract",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Contract_updatedBy(ctx context.Context, field graphql.CollectedField, obj *ent.Contract) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Contract_updatedBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Contract_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Contract",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -3608,91 +3876,6 @@ func (ec *executionContext) fieldContext_Contract_endAt(_ context.Context, field
 	return fc, nil
 }
 
-func (ec *executionContext) _Contract_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.Contract) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Contract_createdBy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CreatedBy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Contract_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Contract",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Contract_updatedBy(ctx context.Context, field graphql.CollectedField, obj *ent.Contract) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Contract_updatedBy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedBy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalOInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Contract_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Contract",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Contract_customer(ctx context.Context, field graphql.CollectedField, obj *ent.Contract) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Contract_customer(ctx, field)
 	if err != nil {
@@ -3738,6 +3921,10 @@ func (ec *executionContext) fieldContext_Contract_customer(_ context.Context, fi
 				return ec.fieldContext_Customer_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Customer_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Customer_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "name":
 				return ec.fieldContext_Customer_name(ctx, field)
 			case "industry":
@@ -3748,10 +3935,6 @@ func (ec *executionContext) fieldContext_Contract_customer(_ context.Context, fi
 				return ec.fieldContext_Customer_level(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Customer_metadata(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Customer_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Customer_contacts(ctx, field)
 			case "contracts":
@@ -3807,14 +3990,14 @@ func (ec *executionContext) fieldContext_Contract_payments(_ context.Context, fi
 				return ec.fieldContext_Payment_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Payment_updatedAt(ctx, field)
-			case "amount":
-				return ec.fieldContext_Payment_amount(ctx, field)
-			case "receivedAt":
-				return ec.fieldContext_Payment_receivedAt(ctx, field)
 			case "createdBy":
 				return ec.fieldContext_Payment_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Payment_updatedBy(ctx, field)
+			case "amount":
+				return ec.fieldContext_Payment_amount(ctx, field)
+			case "receivedAt":
+				return ec.fieldContext_Payment_receivedAt(ctx, field)
 			case "contract":
 				return ec.fieldContext_Payment_contract(ctx, field)
 			}
@@ -3913,6 +4096,10 @@ func (ec *executionContext) fieldContext_ContractConnection_nodes(_ context.Cont
 				return ec.fieldContext_Contract_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contract_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contract_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contract_updatedBy(ctx, field)
 			case "contractNo":
 				return ec.fieldContext_Contract_contractNo(ctx, field)
 			case "amount":
@@ -3921,10 +4108,6 @@ func (ec *executionContext) fieldContext_ContractConnection_nodes(_ context.Cont
 				return ec.fieldContext_Contract_signedAt(ctx, field)
 			case "endAt":
 				return ec.fieldContext_Contract_endAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contract_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contract_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_Contract_customer(ctx, field)
 			case "payments":
@@ -4076,6 +4259,10 @@ func (ec *executionContext) fieldContext_ContractEdge_node(_ context.Context, fi
 				return ec.fieldContext_Contract_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contract_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contract_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contract_updatedBy(ctx, field)
 			case "contractNo":
 				return ec.fieldContext_Contract_contractNo(ctx, field)
 			case "amount":
@@ -4084,10 +4271,6 @@ func (ec *executionContext) fieldContext_ContractEdge_node(_ context.Context, fi
 				return ec.fieldContext_Contract_signedAt(ctx, field)
 			case "endAt":
 				return ec.fieldContext_Contract_endAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contract_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contract_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_Contract_customer(ctx, field)
 			case "payments":
@@ -4138,6 +4321,115 @@ func (ec *executionContext) fieldContext_ContractEdge_cursor(_ context.Context, 
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ContractList_nodes(ctx context.Context, field graphql.CollectedField, obj *ent.ContractList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ContractList_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Contract)
+	fc.Result = res
+	return ec.marshalOContract2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋcrmᚋentᚐContract(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ContractList_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ContractList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Contract_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Contract_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Contract_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contract_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contract_updatedBy(ctx, field)
+			case "contractNo":
+				return ec.fieldContext_Contract_contractNo(ctx, field)
+			case "amount":
+				return ec.fieldContext_Contract_amount(ctx, field)
+			case "signedAt":
+				return ec.fieldContext_Contract_signedAt(ctx, field)
+			case "endAt":
+				return ec.fieldContext_Contract_endAt(ctx, field)
+			case "customer":
+				return ec.fieldContext_Contract_customer(ctx, field)
+			case "payments":
+				return ec.fieldContext_Contract_payments(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Contract", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _ContractList_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.ContractList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_ContractList_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_ContractList_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "ContractList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4264,6 +4556,91 @@ func (ec *executionContext) fieldContext_Customer_updatedAt(_ context.Context, f
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Customer_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.Customer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Customer_createdBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Customer_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Customer",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Customer_updatedBy(ctx context.Context, field graphql.CollectedField, obj *ent.Customer) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Customer_updatedBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Customer_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Customer",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4472,91 +4849,6 @@ func (ec *executionContext) fieldContext_Customer_metadata(_ context.Context, fi
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Map does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Customer_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.Customer) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Customer_createdBy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CreatedBy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Customer_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Customer",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Customer_updatedBy(ctx context.Context, field graphql.CollectedField, obj *ent.Customer) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Customer_updatedBy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedBy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalOInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Customer_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Customer",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -4846,6 +5138,10 @@ func (ec *executionContext) fieldContext_CustomerConnection_nodes(_ context.Cont
 				return ec.fieldContext_Customer_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Customer_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Customer_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "name":
 				return ec.fieldContext_Customer_name(ctx, field)
 			case "industry":
@@ -4856,10 +5152,6 @@ func (ec *executionContext) fieldContext_CustomerConnection_nodes(_ context.Cont
 				return ec.fieldContext_Customer_level(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Customer_metadata(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Customer_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Customer_contacts(ctx, field)
 			case "contracts":
@@ -5013,6 +5305,10 @@ func (ec *executionContext) fieldContext_CustomerEdge_node(_ context.Context, fi
 				return ec.fieldContext_Customer_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Customer_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Customer_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "name":
 				return ec.fieldContext_Customer_name(ctx, field)
 			case "industry":
@@ -5023,10 +5319,6 @@ func (ec *executionContext) fieldContext_CustomerEdge_node(_ context.Context, fi
 				return ec.fieldContext_Customer_level(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Customer_metadata(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Customer_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Customer_contacts(ctx, field)
 			case "contracts":
@@ -5079,6 +5371,119 @@ func (ec *executionContext) fieldContext_CustomerEdge_cursor(_ context.Context, 
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Cursor does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CustomerList_nodes(ctx context.Context, field graphql.CollectedField, obj *ent.CustomerList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CustomerList_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.Customer)
+	fc.Result = res
+	return ec.marshalOCustomer2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋcrmᚋentᚐCustomer(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CustomerList_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CustomerList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Customer_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Customer_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Customer_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Customer_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Customer_updatedBy(ctx, field)
+			case "name":
+				return ec.fieldContext_Customer_name(ctx, field)
+			case "industry":
+				return ec.fieldContext_Customer_industry(ctx, field)
+			case "source":
+				return ec.fieldContext_Customer_source(ctx, field)
+			case "level":
+				return ec.fieldContext_Customer_level(ctx, field)
+			case "metadata":
+				return ec.fieldContext_Customer_metadata(ctx, field)
+			case "contacts":
+				return ec.fieldContext_Customer_contacts(ctx, field)
+			case "contracts":
+				return ec.fieldContext_Customer_contracts(ctx, field)
+			case "followUps":
+				return ec.fieldContext_Customer_followUps(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Customer", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _CustomerList_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.CustomerList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CustomerList_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CustomerList_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CustomerList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5205,6 +5610,91 @@ func (ec *executionContext) fieldContext_FollowUp_updatedAt(_ context.Context, f
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FollowUp_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.FollowUp) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FollowUp_createdBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FollowUp_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FollowUp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FollowUp_updatedBy(ctx context.Context, field graphql.CollectedField, obj *ent.FollowUp) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FollowUp_updatedBy(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UpdatedBy, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalOInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FollowUp_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FollowUp",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5342,91 +5832,6 @@ func (ec *executionContext) fieldContext_FollowUp_followedAt(_ context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _FollowUp_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.FollowUp) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_FollowUp_createdBy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CreatedBy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_FollowUp_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "FollowUp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _FollowUp_updatedBy(ctx context.Context, field graphql.CollectedField, obj *ent.FollowUp) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_FollowUp_updatedBy(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.UpdatedBy, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalOInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_FollowUp_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "FollowUp",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _FollowUp_customer(ctx context.Context, field graphql.CollectedField, obj *ent.FollowUp) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_FollowUp_customer(ctx, field)
 	if err != nil {
@@ -5472,6 +5877,10 @@ func (ec *executionContext) fieldContext_FollowUp_customer(_ context.Context, fi
 				return ec.fieldContext_Customer_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Customer_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Customer_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "name":
 				return ec.fieldContext_Customer_name(ctx, field)
 			case "industry":
@@ -5482,10 +5891,6 @@ func (ec *executionContext) fieldContext_FollowUp_customer(_ context.Context, fi
 				return ec.fieldContext_Customer_level(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Customer_metadata(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Customer_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Customer_contacts(ctx, field)
 			case "contracts":
@@ -5588,16 +5993,16 @@ func (ec *executionContext) fieldContext_FollowUpConnection_nodes(_ context.Cont
 				return ec.fieldContext_FollowUp_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_FollowUp_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_FollowUp_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_FollowUp_updatedBy(ctx, field)
 			case "type":
 				return ec.fieldContext_FollowUp_type(ctx, field)
 			case "content":
 				return ec.fieldContext_FollowUp_content(ctx, field)
 			case "followedAt":
 				return ec.fieldContext_FollowUp_followedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_FollowUp_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_FollowUp_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_FollowUp_customer(ctx, field)
 			}
@@ -5747,16 +6152,16 @@ func (ec *executionContext) fieldContext_FollowUpEdge_node(_ context.Context, fi
 				return ec.fieldContext_FollowUp_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_FollowUp_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_FollowUp_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_FollowUp_updatedBy(ctx, field)
 			case "type":
 				return ec.fieldContext_FollowUp_type(ctx, field)
 			case "content":
 				return ec.fieldContext_FollowUp_content(ctx, field)
 			case "followedAt":
 				return ec.fieldContext_FollowUp_followedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_FollowUp_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_FollowUp_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_FollowUp_customer(ctx, field)
 			}
@@ -5810,6 +6215,111 @@ func (ec *executionContext) fieldContext_FollowUpEdge_cursor(_ context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _FollowUpList_nodes(ctx context.Context, field graphql.CollectedField, obj *ent.FollowUpList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FollowUpList_nodes(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nodes, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*ent.FollowUp)
+	fc.Result = res
+	return ec.marshalOFollowUp2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋcrmᚋentᚐFollowUp(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FollowUpList_nodes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FollowUpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_FollowUp_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_FollowUp_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_FollowUp_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_FollowUp_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_FollowUp_updatedBy(ctx, field)
+			case "type":
+				return ec.fieldContext_FollowUp_type(ctx, field)
+			case "content":
+				return ec.fieldContext_FollowUp_content(ctx, field)
+			case "followedAt":
+				return ec.fieldContext_FollowUp_followedAt(ctx, field)
+			case "customer":
+				return ec.fieldContext_FollowUp_customer(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type FollowUp", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _FollowUpList_totalCount(ctx context.Context, field graphql.CollectedField, obj *ent.FollowUpList) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_FollowUpList_totalCount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.TotalCount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_FollowUpList_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FollowUpList",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createCustomer(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createCustomer(ctx, field)
 	if err != nil {
@@ -5855,6 +6365,10 @@ func (ec *executionContext) fieldContext_Mutation_createCustomer(ctx context.Con
 				return ec.fieldContext_Customer_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Customer_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Customer_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "name":
 				return ec.fieldContext_Customer_name(ctx, field)
 			case "industry":
@@ -5865,10 +6379,6 @@ func (ec *executionContext) fieldContext_Mutation_createCustomer(ctx context.Con
 				return ec.fieldContext_Customer_level(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Customer_metadata(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Customer_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Customer_contacts(ctx, field)
 			case "contracts":
@@ -5938,6 +6448,10 @@ func (ec *executionContext) fieldContext_Mutation_updateCustomer(ctx context.Con
 				return ec.fieldContext_Customer_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Customer_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Customer_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "name":
 				return ec.fieldContext_Customer_name(ctx, field)
 			case "industry":
@@ -5948,10 +6462,6 @@ func (ec *executionContext) fieldContext_Mutation_updateCustomer(ctx context.Con
 				return ec.fieldContext_Customer_level(ctx, field)
 			case "metadata":
 				return ec.fieldContext_Customer_metadata(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Customer_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Customer_updatedBy(ctx, field)
 			case "contacts":
 				return ec.fieldContext_Customer_contacts(ctx, field)
 			case "contracts":
@@ -6021,6 +6531,10 @@ func (ec *executionContext) fieldContext_Mutation_createContact(ctx context.Cont
 				return ec.fieldContext_Contact_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contact_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contact_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			case "name":
 				return ec.fieldContext_Contact_name(ctx, field)
 			case "position":
@@ -6029,10 +6543,6 @@ func (ec *executionContext) fieldContext_Mutation_createContact(ctx context.Cont
 				return ec.fieldContext_Contact_phone(ctx, field)
 			case "email":
 				return ec.fieldContext_Contact_email(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_Contact_customer(ctx, field)
 			}
@@ -6098,6 +6608,10 @@ func (ec *executionContext) fieldContext_Mutation_updateContact(ctx context.Cont
 				return ec.fieldContext_Contact_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contact_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contact_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			case "name":
 				return ec.fieldContext_Contact_name(ctx, field)
 			case "position":
@@ -6106,10 +6620,6 @@ func (ec *executionContext) fieldContext_Mutation_updateContact(ctx context.Cont
 				return ec.fieldContext_Contact_phone(ctx, field)
 			case "email":
 				return ec.fieldContext_Contact_email(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contact_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contact_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_Contact_customer(ctx, field)
 			}
@@ -6230,6 +6740,10 @@ func (ec *executionContext) fieldContext_Mutation_createContract(ctx context.Con
 				return ec.fieldContext_Contract_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contract_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contract_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contract_updatedBy(ctx, field)
 			case "contractNo":
 				return ec.fieldContext_Contract_contractNo(ctx, field)
 			case "amount":
@@ -6238,10 +6752,6 @@ func (ec *executionContext) fieldContext_Mutation_createContract(ctx context.Con
 				return ec.fieldContext_Contract_signedAt(ctx, field)
 			case "endAt":
 				return ec.fieldContext_Contract_endAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contract_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contract_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_Contract_customer(ctx, field)
 			case "payments":
@@ -6309,6 +6819,10 @@ func (ec *executionContext) fieldContext_Mutation_updateContract(ctx context.Con
 				return ec.fieldContext_Contract_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contract_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contract_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contract_updatedBy(ctx, field)
 			case "contractNo":
 				return ec.fieldContext_Contract_contractNo(ctx, field)
 			case "amount":
@@ -6317,10 +6831,6 @@ func (ec *executionContext) fieldContext_Mutation_updateContract(ctx context.Con
 				return ec.fieldContext_Contract_signedAt(ctx, field)
 			case "endAt":
 				return ec.fieldContext_Contract_endAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contract_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contract_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_Contract_customer(ctx, field)
 			case "payments":
@@ -6443,16 +6953,16 @@ func (ec *executionContext) fieldContext_Mutation_createFollowUp(ctx context.Con
 				return ec.fieldContext_FollowUp_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_FollowUp_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_FollowUp_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_FollowUp_updatedBy(ctx, field)
 			case "type":
 				return ec.fieldContext_FollowUp_type(ctx, field)
 			case "content":
 				return ec.fieldContext_FollowUp_content(ctx, field)
 			case "followedAt":
 				return ec.fieldContext_FollowUp_followedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_FollowUp_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_FollowUp_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_FollowUp_customer(ctx, field)
 			}
@@ -6518,16 +7028,16 @@ func (ec *executionContext) fieldContext_Mutation_updateFollowUp(ctx context.Con
 				return ec.fieldContext_FollowUp_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_FollowUp_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_FollowUp_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_FollowUp_updatedBy(ctx, field)
 			case "type":
 				return ec.fieldContext_FollowUp_type(ctx, field)
 			case "content":
 				return ec.fieldContext_FollowUp_content(ctx, field)
 			case "followedAt":
 				return ec.fieldContext_FollowUp_followedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_FollowUp_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_FollowUp_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_FollowUp_customer(ctx, field)
 			}
@@ -6648,14 +7158,14 @@ func (ec *executionContext) fieldContext_Mutation_createPayment(ctx context.Cont
 				return ec.fieldContext_Payment_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Payment_updatedAt(ctx, field)
-			case "amount":
-				return ec.fieldContext_Payment_amount(ctx, field)
-			case "receivedAt":
-				return ec.fieldContext_Payment_receivedAt(ctx, field)
 			case "createdBy":
 				return ec.fieldContext_Payment_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Payment_updatedBy(ctx, field)
+			case "amount":
+				return ec.fieldContext_Payment_amount(ctx, field)
+			case "receivedAt":
+				return ec.fieldContext_Payment_receivedAt(ctx, field)
 			case "contract":
 				return ec.fieldContext_Payment_contract(ctx, field)
 			}
@@ -6721,14 +7231,14 @@ func (ec *executionContext) fieldContext_Mutation_updatePayment(ctx context.Cont
 				return ec.fieldContext_Payment_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Payment_updatedAt(ctx, field)
-			case "amount":
-				return ec.fieldContext_Payment_amount(ctx, field)
-			case "receivedAt":
-				return ec.fieldContext_Payment_receivedAt(ctx, field)
 			case "createdBy":
 				return ec.fieldContext_Payment_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Payment_updatedBy(ctx, field)
+			case "amount":
+				return ec.fieldContext_Payment_amount(ctx, field)
+			case "receivedAt":
+				return ec.fieldContext_Payment_receivedAt(ctx, field)
 			case "contract":
 				return ec.fieldContext_Payment_contract(ctx, field)
 			}
@@ -7100,91 +7610,6 @@ func (ec *executionContext) fieldContext_Payment_updatedAt(_ context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Payment_amount(ctx context.Context, field graphql.CollectedField, obj *ent.Payment) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Payment_amount(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Amount, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(float64)
-	fc.Result = res
-	return ec.marshalNFloat2float64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Payment_amount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Payment",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Float does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Payment_receivedAt(ctx context.Context, field graphql.CollectedField, obj *ent.Payment) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Payment_receivedAt(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ReceivedAt, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(time.Time)
-	fc.Result = res
-	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Payment_receivedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Payment",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Time does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Payment_createdBy(ctx context.Context, field graphql.CollectedField, obj *ent.Payment) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Payment_createdBy(ctx, field)
 	if err != nil {
@@ -7270,6 +7695,91 @@ func (ec *executionContext) fieldContext_Payment_updatedBy(_ context.Context, fi
 	return fc, nil
 }
 
+func (ec *executionContext) _Payment_amount(ctx context.Context, field graphql.CollectedField, obj *ent.Payment) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Payment_amount(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Amount, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Payment_amount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Payment",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Payment_receivedAt(ctx context.Context, field graphql.CollectedField, obj *ent.Payment) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Payment_receivedAt(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ReceivedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalOTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Payment_receivedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Payment",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Payment_contract(ctx context.Context, field graphql.CollectedField, obj *ent.Payment) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Payment_contract(ctx, field)
 	if err != nil {
@@ -7315,6 +7825,10 @@ func (ec *executionContext) fieldContext_Payment_contract(_ context.Context, fie
 				return ec.fieldContext_Contract_createdAt(ctx, field)
 			case "updatedAt":
 				return ec.fieldContext_Contract_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Contract_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Contract_updatedBy(ctx, field)
 			case "contractNo":
 				return ec.fieldContext_Contract_contractNo(ctx, field)
 			case "amount":
@@ -7323,10 +7837,6 @@ func (ec *executionContext) fieldContext_Payment_contract(_ context.Context, fie
 				return ec.fieldContext_Contract_signedAt(ctx, field)
 			case "endAt":
 				return ec.fieldContext_Contract_endAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_Contract_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_Contract_updatedBy(ctx, field)
 			case "customer":
 				return ec.fieldContext_Contract_customer(ctx, field)
 			case "payments":
@@ -7536,9 +8046,9 @@ func (ec *executionContext) _Query_customerList(ctx context.Context, field graph
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*ent.CustomerConnection)
+	res := resTmp.(*ent.CustomerList)
 	fc.Result = res
-	return ec.marshalNCustomerConnection2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋcrmᚋentᚐCustomerConnection(ctx, field.Selections, res)
+	return ec.marshalNCustomerList2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋcrmᚋentᚐCustomerList(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_customerList(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -7549,16 +8059,12 @@ func (ec *executionContext) fieldContext_Query_customerList(ctx context.Context,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "edges":
-				return ec.fieldContext_CustomerConnection_edges(ctx, field)
 			case "nodes":
-				return ec.fieldContext_CustomerConnection_nodes(ctx, field)
-			case "pageInfo":
-				return ec.fieldContext_CustomerConnection_pageInfo(ctx, field)
+				return ec.fieldContext_CustomerList_nodes(ctx, field)
 			case "totalCount":
-				return ec.fieldContext_CustomerConnection_totalCount(ctx, field)
+				return ec.fieldContext_CustomerList_totalCount(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type CustomerConnection", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type CustomerList", field.Name)
 		},
 	}
 	defer func() {
@@ -9702,7 +10208,7 @@ func (ec *executionContext) unmarshalInputContactWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "position", "positionNEQ", "positionIn", "positionNotIn", "positionGT", "positionGTE", "positionLT", "positionLTE", "positionContains", "positionHasPrefix", "positionHasSuffix", "positionIsNil", "positionNotNil", "positionEqualFold", "positionContainsFold", "phone", "phoneNEQ", "phoneIn", "phoneNotIn", "phoneGT", "phoneGTE", "phoneLT", "phoneLTE", "phoneContains", "phoneHasPrefix", "phoneHasSuffix", "phoneIsNil", "phoneNotNil", "phoneEqualFold", "phoneContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailGT", "emailGTE", "emailLT", "emailLTE", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailIsNil", "emailNotNil", "emailEqualFold", "emailContainsFold", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByIsNil", "updatedByNotNil", "hasCustomer", "hasCustomerWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByIsNil", "updatedByNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "position", "positionNEQ", "positionIn", "positionNotIn", "positionGT", "positionGTE", "positionLT", "positionLTE", "positionContains", "positionHasPrefix", "positionHasSuffix", "positionIsNil", "positionNotNil", "positionEqualFold", "positionContainsFold", "phone", "phoneNEQ", "phoneIn", "phoneNotIn", "phoneGT", "phoneGTE", "phoneLT", "phoneLTE", "phoneContains", "phoneHasPrefix", "phoneHasSuffix", "phoneIsNil", "phoneNotNil", "phoneEqualFold", "phoneContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailGT", "emailGTE", "emailLT", "emailLTE", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailIsNil", "emailNotNil", "emailEqualFold", "emailContainsFold", "hasCustomer", "hasCustomerWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -9926,6 +10432,132 @@ func (ec *executionContext) unmarshalInputContactWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGT = data
+		case "createdByGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGTE = data
+		case "createdByLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLT = data
+		case "createdByLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLTE = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGT = data
+		case "updatedByGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGTE = data
+		case "updatedByLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLT = data
+		case "updatedByLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLTE = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -10332,132 +10964,6 @@ func (ec *executionContext) unmarshalInputContactWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.EmailContainsFold = data
-		case "createdBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedBy = data
-		case "createdByNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNEQ = data
-		case "createdByIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByIn = data
-		case "createdByNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNotIn = data
-		case "createdByGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByGT = data
-		case "createdByGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByGTE = data
-		case "createdByLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByLT = data
-		case "createdByLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByLTE = data
-		case "updatedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedBy = data
-		case "updatedByNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNEQ = data
-		case "updatedByIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIn = data
-		case "updatedByNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotIn = data
-		case "updatedByGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByGT = data
-		case "updatedByGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByGTE = data
-		case "updatedByLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByLT = data
-		case "updatedByLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByLTE = data
-		case "updatedByIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIsNil = data
-		case "updatedByNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotNil = data
 		case "hasCustomer":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCustomer"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -10523,7 +11029,7 @@ func (ec *executionContext) unmarshalInputContractWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "contractNo", "contractNoNEQ", "contractNoIn", "contractNoNotIn", "contractNoGT", "contractNoGTE", "contractNoLT", "contractNoLTE", "contractNoContains", "contractNoHasPrefix", "contractNoHasSuffix", "contractNoEqualFold", "contractNoContainsFold", "amount", "amountNEQ", "amountIn", "amountNotIn", "amountGT", "amountGTE", "amountLT", "amountLTE", "signedAt", "signedAtNEQ", "signedAtIn", "signedAtNotIn", "signedAtGT", "signedAtGTE", "signedAtLT", "signedAtLTE", "signedAtIsNil", "signedAtNotNil", "endAt", "endAtNEQ", "endAtIn", "endAtNotIn", "endAtGT", "endAtGTE", "endAtLT", "endAtLTE", "endAtIsNil", "endAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByIsNil", "updatedByNotNil", "hasCustomer", "hasCustomerWith", "hasPayments", "hasPaymentsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByIsNil", "updatedByNotNil", "contractNo", "contractNoNEQ", "contractNoIn", "contractNoNotIn", "contractNoGT", "contractNoGTE", "contractNoLT", "contractNoLTE", "contractNoContains", "contractNoHasPrefix", "contractNoHasSuffix", "contractNoEqualFold", "contractNoContainsFold", "amount", "amountNEQ", "amountIn", "amountNotIn", "amountGT", "amountGTE", "amountLT", "amountLTE", "signedAt", "signedAtNEQ", "signedAtIn", "signedAtNotIn", "signedAtGT", "signedAtGTE", "signedAtLT", "signedAtLTE", "signedAtIsNil", "signedAtNotNil", "endAt", "endAtNEQ", "endAtIn", "endAtNotIn", "endAtGT", "endAtGTE", "endAtLT", "endAtLTE", "endAtIsNil", "endAtNotNil", "hasCustomer", "hasCustomerWith", "hasPayments", "hasPaymentsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -10747,6 +11253,132 @@ func (ec *executionContext) unmarshalInputContractWhereInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGT = data
+		case "createdByGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGTE = data
+		case "createdByLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLT = data
+		case "createdByLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLTE = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGT = data
+		case "updatedByGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGTE = data
+		case "updatedByLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLT = data
+		case "updatedByLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLTE = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
 		case "contractNo":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contractNo"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -11034,132 +11666,6 @@ func (ec *executionContext) unmarshalInputContractWhereInput(ctx context.Context
 				return it, err
 			}
 			it.EndAtNotNil = data
-		case "createdBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedBy = data
-		case "createdByNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNEQ = data
-		case "createdByIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByIn = data
-		case "createdByNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNotIn = data
-		case "createdByGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByGT = data
-		case "createdByGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByGTE = data
-		case "createdByLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByLT = data
-		case "createdByLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByLTE = data
-		case "updatedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedBy = data
-		case "updatedByNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNEQ = data
-		case "updatedByIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIn = data
-		case "updatedByNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotIn = data
-		case "updatedByGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByGT = data
-		case "updatedByGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByGTE = data
-		case "updatedByLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByLT = data
-		case "updatedByLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByLTE = data
-		case "updatedByIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIsNil = data
-		case "updatedByNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotNil = data
 		case "hasCustomer":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCustomer"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -11500,7 +12006,7 @@ func (ec *executionContext) unmarshalInputCustomerWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "industry", "industryNEQ", "industryIn", "industryNotIn", "industryGT", "industryGTE", "industryLT", "industryLTE", "industryContains", "industryHasPrefix", "industryHasSuffix", "industryIsNil", "industryNotNil", "industryEqualFold", "industryContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceGT", "sourceGTE", "sourceLT", "sourceLTE", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "level", "levelNEQ", "levelIn", "levelNotIn", "levelGT", "levelGTE", "levelLT", "levelLTE", "levelContains", "levelHasPrefix", "levelHasSuffix", "levelIsNil", "levelNotNil", "levelEqualFold", "levelContainsFold", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByIsNil", "updatedByNotNil", "hasContacts", "hasContactsWith", "hasContracts", "hasContractsWith", "hasFollowUps", "hasFollowUpsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByIsNil", "updatedByNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "industry", "industryNEQ", "industryIn", "industryNotIn", "industryGT", "industryGTE", "industryLT", "industryLTE", "industryContains", "industryHasPrefix", "industryHasSuffix", "industryIsNil", "industryNotNil", "industryEqualFold", "industryContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceGT", "sourceGTE", "sourceLT", "sourceLTE", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "level", "levelNEQ", "levelIn", "levelNotIn", "levelGT", "levelGTE", "levelLT", "levelLTE", "levelContains", "levelHasPrefix", "levelHasSuffix", "levelIsNil", "levelNotNil", "levelEqualFold", "levelContainsFold", "hasContacts", "hasContactsWith", "hasContracts", "hasContractsWith", "hasFollowUps", "hasFollowUpsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -11724,6 +12230,132 @@ func (ec *executionContext) unmarshalInputCustomerWhereInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGT = data
+		case "createdByGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGTE = data
+		case "createdByLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLT = data
+		case "createdByLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLTE = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGT = data
+		case "updatedByGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGTE = data
+		case "updatedByLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLT = data
+		case "updatedByLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLTE = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -12130,132 +12762,6 @@ func (ec *executionContext) unmarshalInputCustomerWhereInput(ctx context.Context
 				return it, err
 			}
 			it.LevelContainsFold = data
-		case "createdBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedBy = data
-		case "createdByNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNEQ = data
-		case "createdByIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByIn = data
-		case "createdByNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNotIn = data
-		case "createdByGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByGT = data
-		case "createdByGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByGTE = data
-		case "createdByLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByLT = data
-		case "createdByLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByLTE = data
-		case "updatedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedBy = data
-		case "updatedByNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNEQ = data
-		case "updatedByIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIn = data
-		case "updatedByNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotIn = data
-		case "updatedByGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByGT = data
-		case "updatedByGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByGTE = data
-		case "updatedByLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByLT = data
-		case "updatedByLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByLTE = data
-		case "updatedByIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIsNil = data
-		case "updatedByNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotNil = data
 		case "hasContacts":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasContacts"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -12349,7 +12855,7 @@ func (ec *executionContext) unmarshalInputFollowUpWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "type", "typeNEQ", "typeIn", "typeNotIn", "content", "contentNEQ", "contentIn", "contentNotIn", "contentGT", "contentGTE", "contentLT", "contentLTE", "contentContains", "contentHasPrefix", "contentHasSuffix", "contentEqualFold", "contentContainsFold", "followedAt", "followedAtNEQ", "followedAtIn", "followedAtNotIn", "followedAtGT", "followedAtGTE", "followedAtLT", "followedAtLTE", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByIsNil", "updatedByNotNil", "hasCustomer", "hasCustomerWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByIsNil", "updatedByNotNil", "type", "typeNEQ", "typeIn", "typeNotIn", "content", "contentNEQ", "contentIn", "contentNotIn", "contentGT", "contentGTE", "contentLT", "contentLTE", "contentContains", "contentHasPrefix", "contentHasSuffix", "contentEqualFold", "contentContainsFold", "followedAt", "followedAtNEQ", "followedAtIn", "followedAtNotIn", "followedAtGT", "followedAtGTE", "followedAtLT", "followedAtLTE", "hasCustomer", "hasCustomerWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -12573,6 +13079,132 @@ func (ec *executionContext) unmarshalInputFollowUpWhereInput(ctx context.Context
 				return it, err
 			}
 			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGT = data
+		case "createdByGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByGTE = data
+		case "createdByLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLT = data
+		case "createdByLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByLTE = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGT = data
+		case "updatedByGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByGTE = data
+		case "updatedByLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLT = data
+		case "updatedByLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByLTE = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
 		case "type":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
 			data, err := ec.unmarshalOFollowUpType2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋcrmᚋentᚋfollowupᚐType(ctx, v)
@@ -12748,132 +13380,6 @@ func (ec *executionContext) unmarshalInputFollowUpWhereInput(ctx context.Context
 				return it, err
 			}
 			it.FollowedAtLTE = data
-		case "createdBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedBy = data
-		case "createdByNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNEQ = data
-		case "createdByIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByIn = data
-		case "createdByNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByNotIn = data
-		case "createdByGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByGT = data
-		case "createdByGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByGTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByGTE = data
-		case "createdByLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByLT = data
-		case "createdByLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByLTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CreatedByLTE = data
-		case "updatedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedBy = data
-		case "updatedByNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNEQ = data
-		case "updatedByIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIn = data
-		case "updatedByNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotIn = data
-		case "updatedByGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByGT = data
-		case "updatedByGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByGTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByGTE = data
-		case "updatedByLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByLT = data
-		case "updatedByLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByLTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByLTE = data
-		case "updatedByIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByIsNil = data
-		case "updatedByNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.UpdatedByNotNil = data
 		case "hasCustomer":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasCustomer"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -12939,7 +13445,7 @@ func (ec *executionContext) unmarshalInputPaymentWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "amount", "amountNEQ", "amountIn", "amountNotIn", "amountGT", "amountGTE", "amountLT", "amountLTE", "receivedAt", "receivedAtNEQ", "receivedAtIn", "receivedAtNotIn", "receivedAtGT", "receivedAtGTE", "receivedAtLT", "receivedAtLTE", "receivedAtIsNil", "receivedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByIsNil", "updatedByNotNil", "hasContract", "hasContractWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByIsNil", "updatedByNotNil", "amount", "amountNEQ", "amountIn", "amountNotIn", "amountGT", "amountGTE", "amountLT", "amountLTE", "receivedAt", "receivedAtNEQ", "receivedAtIn", "receivedAtNotIn", "receivedAtGT", "receivedAtGTE", "receivedAtLT", "receivedAtLTE", "receivedAtIsNil", "receivedAtNotNil", "hasContract", "hasContractWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -13163,132 +13669,6 @@ func (ec *executionContext) unmarshalInputPaymentWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.UpdatedAtNotNil = data
-		case "amount":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amount"))
-			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.Amount = data
-		case "amountNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountNEQ"))
-			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AmountNEQ = data
-		case "amountIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountIn"))
-			data, err := ec.unmarshalOFloat2ᚕfloat64ᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AmountIn = data
-		case "amountNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountNotIn"))
-			data, err := ec.unmarshalOFloat2ᚕfloat64ᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AmountNotIn = data
-		case "amountGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountGT"))
-			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AmountGT = data
-		case "amountGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountGTE"))
-			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AmountGTE = data
-		case "amountLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountLT"))
-			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AmountLT = data
-		case "amountLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountLTE"))
-			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AmountLTE = data
-		case "receivedAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ReceivedAt = data
-		case "receivedAtNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtNEQ"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ReceivedAtNEQ = data
-		case "receivedAtIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtIn"))
-			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ReceivedAtIn = data
-		case "receivedAtNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtNotIn"))
-			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ReceivedAtNotIn = data
-		case "receivedAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ReceivedAtGT = data
-		case "receivedAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ReceivedAtGTE = data
-		case "receivedAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ReceivedAtLT = data
-		case "receivedAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ReceivedAtLTE = data
-		case "receivedAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ReceivedAtIsNil = data
-		case "receivedAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ReceivedAtNotNil = data
 		case "createdBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
 			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
@@ -13415,6 +13795,132 @@ func (ec *executionContext) unmarshalInputPaymentWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.UpdatedByNotNil = data
+		case "amount":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amount"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Amount = data
+		case "amountNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountNEQ"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AmountNEQ = data
+		case "amountIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountIn"))
+			data, err := ec.unmarshalOFloat2ᚕfloat64ᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AmountIn = data
+		case "amountNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountNotIn"))
+			data, err := ec.unmarshalOFloat2ᚕfloat64ᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AmountNotIn = data
+		case "amountGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountGT"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AmountGT = data
+		case "amountGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountGTE"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AmountGTE = data
+		case "amountLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountLT"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AmountLT = data
+		case "amountLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("amountLTE"))
+			data, err := ec.unmarshalOFloat2ᚖfloat64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AmountLTE = data
+		case "receivedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReceivedAt = data
+		case "receivedAtNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReceivedAtNEQ = data
+		case "receivedAtIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReceivedAtIn = data
+		case "receivedAtNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReceivedAtNotIn = data
+		case "receivedAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReceivedAtGT = data
+		case "receivedAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReceivedAtGTE = data
+		case "receivedAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReceivedAtLT = data
+		case "receivedAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReceivedAtLTE = data
+		case "receivedAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReceivedAtIsNil = data
+		case "receivedAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("receivedAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReceivedAtNotNil = data
 		case "hasContract":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasContract"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -13814,6 +14320,13 @@ func (ec *executionContext) _Contact(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Contact_createdAt(ctx, field, obj)
 		case "updatedAt":
 			out.Values[i] = ec._Contact_updatedAt(ctx, field, obj)
+		case "createdBy":
+			out.Values[i] = ec._Contact_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedBy":
+			out.Values[i] = ec._Contact_updatedBy(ctx, field, obj)
 		case "name":
 			out.Values[i] = ec._Contact_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -13825,13 +14338,6 @@ func (ec *executionContext) _Contact(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Contact_phone(ctx, field, obj)
 		case "email":
 			out.Values[i] = ec._Contact_email(ctx, field, obj)
-		case "createdBy":
-			out.Values[i] = ec._Contact_createdBy(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "updatedBy":
-			out.Values[i] = ec._Contact_updatedBy(ctx, field, obj)
 		case "customer":
 			field := field
 
@@ -13980,6 +14486,47 @@ func (ec *executionContext) _ContactEdge(ctx context.Context, sel ast.SelectionS
 	return out
 }
 
+var contactListImplementors = []string{"ContactList"}
+
+func (ec *executionContext) _ContactList(ctx context.Context, sel ast.SelectionSet, obj *ent.ContactList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, contactListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ContactList")
+		case "nodes":
+			out.Values[i] = ec._ContactList_nodes(ctx, field, obj)
+		case "totalCount":
+			out.Values[i] = ec._ContactList_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var contractImplementors = []string{"Contract", "Node"}
 
 func (ec *executionContext) _Contract(ctx context.Context, sel ast.SelectionSet, obj *ent.Contract) graphql.Marshaler {
@@ -14000,6 +14547,13 @@ func (ec *executionContext) _Contract(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Contract_createdAt(ctx, field, obj)
 		case "updatedAt":
 			out.Values[i] = ec._Contract_updatedAt(ctx, field, obj)
+		case "createdBy":
+			out.Values[i] = ec._Contract_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedBy":
+			out.Values[i] = ec._Contract_updatedBy(ctx, field, obj)
 		case "contractNo":
 			out.Values[i] = ec._Contract_contractNo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -14014,13 +14568,6 @@ func (ec *executionContext) _Contract(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Contract_signedAt(ctx, field, obj)
 		case "endAt":
 			out.Values[i] = ec._Contract_endAt(ctx, field, obj)
-		case "createdBy":
-			out.Values[i] = ec._Contract_createdBy(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "updatedBy":
-			out.Values[i] = ec._Contract_updatedBy(ctx, field, obj)
 		case "customer":
 			field := field
 
@@ -14202,6 +14749,47 @@ func (ec *executionContext) _ContractEdge(ctx context.Context, sel ast.Selection
 	return out
 }
 
+var contractListImplementors = []string{"ContractList"}
+
+func (ec *executionContext) _ContractList(ctx context.Context, sel ast.SelectionSet, obj *ent.ContractList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, contractListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ContractList")
+		case "nodes":
+			out.Values[i] = ec._ContractList_nodes(ctx, field, obj)
+		case "totalCount":
+			out.Values[i] = ec._ContractList_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var customerImplementors = []string{"Customer", "Node"}
 
 func (ec *executionContext) _Customer(ctx context.Context, sel ast.SelectionSet, obj *ent.Customer) graphql.Marshaler {
@@ -14222,6 +14810,13 @@ func (ec *executionContext) _Customer(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Customer_createdAt(ctx, field, obj)
 		case "updatedAt":
 			out.Values[i] = ec._Customer_updatedAt(ctx, field, obj)
+		case "createdBy":
+			out.Values[i] = ec._Customer_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedBy":
+			out.Values[i] = ec._Customer_updatedBy(ctx, field, obj)
 		case "name":
 			out.Values[i] = ec._Customer_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -14235,13 +14830,6 @@ func (ec *executionContext) _Customer(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._Customer_level(ctx, field, obj)
 		case "metadata":
 			out.Values[i] = ec._Customer_metadata(ctx, field, obj)
-		case "createdBy":
-			out.Values[i] = ec._Customer_createdBy(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "updatedBy":
-			out.Values[i] = ec._Customer_updatedBy(ctx, field, obj)
 		case "contacts":
 			field := field
 
@@ -14462,6 +15050,47 @@ func (ec *executionContext) _CustomerEdge(ctx context.Context, sel ast.Selection
 	return out
 }
 
+var customerListImplementors = []string{"CustomerList"}
+
+func (ec *executionContext) _CustomerList(ctx context.Context, sel ast.SelectionSet, obj *ent.CustomerList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, customerListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CustomerList")
+		case "nodes":
+			out.Values[i] = ec._CustomerList_nodes(ctx, field, obj)
+		case "totalCount":
+			out.Values[i] = ec._CustomerList_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var followUpImplementors = []string{"FollowUp", "Node"}
 
 func (ec *executionContext) _FollowUp(ctx context.Context, sel ast.SelectionSet, obj *ent.FollowUp) graphql.Marshaler {
@@ -14482,6 +15111,13 @@ func (ec *executionContext) _FollowUp(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = ec._FollowUp_createdAt(ctx, field, obj)
 		case "updatedAt":
 			out.Values[i] = ec._FollowUp_updatedAt(ctx, field, obj)
+		case "createdBy":
+			out.Values[i] = ec._FollowUp_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedBy":
+			out.Values[i] = ec._FollowUp_updatedBy(ctx, field, obj)
 		case "type":
 			out.Values[i] = ec._FollowUp_type(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -14497,13 +15133,6 @@ func (ec *executionContext) _FollowUp(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
-		case "createdBy":
-			out.Values[i] = ec._FollowUp_createdBy(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "updatedBy":
-			out.Values[i] = ec._FollowUp_updatedBy(ctx, field, obj)
 		case "customer":
 			field := field
 
@@ -14626,6 +15255,47 @@ func (ec *executionContext) _FollowUpEdge(ctx context.Context, sel ast.Selection
 			out.Values[i] = ec._FollowUpEdge_node(ctx, field, obj)
 		case "cursor":
 			out.Values[i] = ec._FollowUpEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var followUpListImplementors = []string{"FollowUpList"}
+
+func (ec *executionContext) _FollowUpList(ctx context.Context, sel ast.SelectionSet, obj *ent.FollowUpList) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, followUpListImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("FollowUpList")
+		case "nodes":
+			out.Values[i] = ec._FollowUpList_nodes(ctx, field, obj)
+		case "totalCount":
+			out.Values[i] = ec._FollowUpList_totalCount(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -14860,13 +15530,6 @@ func (ec *executionContext) _Payment(ctx context.Context, sel ast.SelectionSet, 
 			out.Values[i] = ec._Payment_createdAt(ctx, field, obj)
 		case "updatedAt":
 			out.Values[i] = ec._Payment_updatedAt(ctx, field, obj)
-		case "amount":
-			out.Values[i] = ec._Payment_amount(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "receivedAt":
-			out.Values[i] = ec._Payment_receivedAt(ctx, field, obj)
 		case "createdBy":
 			out.Values[i] = ec._Payment_createdBy(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -14874,6 +15537,13 @@ func (ec *executionContext) _Payment(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "updatedBy":
 			out.Values[i] = ec._Payment_updatedBy(ctx, field, obj)
+		case "amount":
+			out.Values[i] = ec._Payment_amount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "receivedAt":
+			out.Values[i] = ec._Payment_receivedAt(ctx, field, obj)
 		case "contract":
 			field := field
 
@@ -15569,6 +16239,20 @@ func (ec *executionContext) marshalNCustomerConnection2ᚖgithubᚗcomᚋgoᚑke
 		return graphql.Null
 	}
 	return ec._CustomerConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCustomerList2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋcrmᚋentᚐCustomerList(ctx context.Context, sel ast.SelectionSet, v ent.CustomerList) graphql.Marshaler {
+	return ec._CustomerList(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCustomerList2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋcrmᚋentᚐCustomerList(ctx context.Context, sel ast.SelectionSet, v *ent.CustomerList) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CustomerList(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNCustomerOrderField2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋcrmᚋentᚐCustomerOrderField(ctx context.Context, v any) (*ent.CustomerOrderField, error) {

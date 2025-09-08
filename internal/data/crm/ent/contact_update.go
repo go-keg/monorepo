@@ -41,6 +41,33 @@ func (cu *ContactUpdate) ClearUpdatedAt() *ContactUpdate {
 	return cu
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (cu *ContactUpdate) SetUpdatedBy(i int) *ContactUpdate {
+	cu.mutation.ResetUpdatedBy()
+	cu.mutation.SetUpdatedBy(i)
+	return cu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cu *ContactUpdate) SetNillableUpdatedBy(i *int) *ContactUpdate {
+	if i != nil {
+		cu.SetUpdatedBy(*i)
+	}
+	return cu
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (cu *ContactUpdate) AddUpdatedBy(i int) *ContactUpdate {
+	cu.mutation.AddUpdatedBy(i)
+	return cu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (cu *ContactUpdate) ClearUpdatedBy() *ContactUpdate {
+	cu.mutation.ClearUpdatedBy()
+	return cu
+}
+
 // SetName sets the "name" field.
 func (cu *ContactUpdate) SetName(s string) *ContactUpdate {
 	cu.mutation.SetName(s)
@@ -112,33 +139,6 @@ func (cu *ContactUpdate) SetNillableEmail(s *string) *ContactUpdate {
 // ClearEmail clears the value of the "email" field.
 func (cu *ContactUpdate) ClearEmail() *ContactUpdate {
 	cu.mutation.ClearEmail()
-	return cu
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (cu *ContactUpdate) SetUpdatedBy(i int) *ContactUpdate {
-	cu.mutation.ResetUpdatedBy()
-	cu.mutation.SetUpdatedBy(i)
-	return cu
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cu *ContactUpdate) SetNillableUpdatedBy(i *int) *ContactUpdate {
-	if i != nil {
-		cu.SetUpdatedBy(*i)
-	}
-	return cu
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (cu *ContactUpdate) AddUpdatedBy(i int) *ContactUpdate {
-	cu.mutation.AddUpdatedBy(i)
-	return cu
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cu *ContactUpdate) ClearUpdatedBy() *ContactUpdate {
-	cu.mutation.ClearUpdatedBy()
 	return cu
 }
 
@@ -223,6 +223,15 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if cu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contact.FieldUpdatedAt, field.TypeTime)
 	}
+	if value, ok := cu.mutation.UpdatedBy(); ok {
+		_spec.SetField(contact.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := cu.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(contact.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if cu.mutation.UpdatedByCleared() {
+		_spec.ClearField(contact.FieldUpdatedBy, field.TypeInt)
+	}
 	if value, ok := cu.mutation.Name(); ok {
 		_spec.SetField(contact.FieldName, field.TypeString, value)
 	}
@@ -243,15 +252,6 @@ func (cu *ContactUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if cu.mutation.EmailCleared() {
 		_spec.ClearField(contact.FieldEmail, field.TypeString)
-	}
-	if value, ok := cu.mutation.UpdatedBy(); ok {
-		_spec.SetField(contact.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := cu.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(contact.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if cu.mutation.UpdatedByCleared() {
-		_spec.ClearField(contact.FieldUpdatedBy, field.TypeInt)
 	}
 	_spec.AddModifiers(cu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
@@ -284,6 +284,33 @@ func (cuo *ContactUpdateOne) SetUpdatedAt(t time.Time) *ContactUpdateOne {
 // ClearUpdatedAt clears the value of the "updated_at" field.
 func (cuo *ContactUpdateOne) ClearUpdatedAt() *ContactUpdateOne {
 	cuo.mutation.ClearUpdatedAt()
+	return cuo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (cuo *ContactUpdateOne) SetUpdatedBy(i int) *ContactUpdateOne {
+	cuo.mutation.ResetUpdatedBy()
+	cuo.mutation.SetUpdatedBy(i)
+	return cuo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (cuo *ContactUpdateOne) SetNillableUpdatedBy(i *int) *ContactUpdateOne {
+	if i != nil {
+		cuo.SetUpdatedBy(*i)
+	}
+	return cuo
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (cuo *ContactUpdateOne) AddUpdatedBy(i int) *ContactUpdateOne {
+	cuo.mutation.AddUpdatedBy(i)
+	return cuo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (cuo *ContactUpdateOne) ClearUpdatedBy() *ContactUpdateOne {
+	cuo.mutation.ClearUpdatedBy()
 	return cuo
 }
 
@@ -358,33 +385,6 @@ func (cuo *ContactUpdateOne) SetNillableEmail(s *string) *ContactUpdateOne {
 // ClearEmail clears the value of the "email" field.
 func (cuo *ContactUpdateOne) ClearEmail() *ContactUpdateOne {
 	cuo.mutation.ClearEmail()
-	return cuo
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (cuo *ContactUpdateOne) SetUpdatedBy(i int) *ContactUpdateOne {
-	cuo.mutation.ResetUpdatedBy()
-	cuo.mutation.SetUpdatedBy(i)
-	return cuo
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (cuo *ContactUpdateOne) SetNillableUpdatedBy(i *int) *ContactUpdateOne {
-	if i != nil {
-		cuo.SetUpdatedBy(*i)
-	}
-	return cuo
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (cuo *ContactUpdateOne) AddUpdatedBy(i int) *ContactUpdateOne {
-	cuo.mutation.AddUpdatedBy(i)
-	return cuo
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (cuo *ContactUpdateOne) ClearUpdatedBy() *ContactUpdateOne {
-	cuo.mutation.ClearUpdatedBy()
 	return cuo
 }
 
@@ -499,6 +499,15 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 	if cuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contact.FieldUpdatedAt, field.TypeTime)
 	}
+	if value, ok := cuo.mutation.UpdatedBy(); ok {
+		_spec.SetField(contact.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := cuo.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(contact.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if cuo.mutation.UpdatedByCleared() {
+		_spec.ClearField(contact.FieldUpdatedBy, field.TypeInt)
+	}
 	if value, ok := cuo.mutation.Name(); ok {
 		_spec.SetField(contact.FieldName, field.TypeString, value)
 	}
@@ -519,15 +528,6 @@ func (cuo *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err e
 	}
 	if cuo.mutation.EmailCleared() {
 		_spec.ClearField(contact.FieldEmail, field.TypeString)
-	}
-	if value, ok := cuo.mutation.UpdatedBy(); ok {
-		_spec.SetField(contact.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := cuo.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(contact.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if cuo.mutation.UpdatedByCleared() {
-		_spec.ClearField(contact.FieldUpdatedBy, field.TypeInt)
 	}
 	_spec.AddModifiers(cuo.modifiers...)
 	_node = &Contact{config: cuo.config}

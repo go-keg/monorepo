@@ -6,55 +6,92 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"golang.org/x/exp/slices"
 )
 
+type customCollectFieldsArgs struct {
+	path   []string
+	fields []string
+}
+
+type CustomCollectFieldsOption func(args *customCollectFieldsArgs)
+
+func WithPath(path ...string) CustomCollectFieldsOption {
+	return func(args *customCollectFieldsArgs) {
+		args.path = path
+	}
+}
+
+func WithFields(fields ...string) CustomCollectFieldsOption {
+	return func(args *customCollectFieldsArgs) {
+		args.fields = fields
+	}
+}
+
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (c *ContactQuery) CustomCollectFields(ctx context.Context, path ...string) (*ContactQuery, error) {
+func (_c *ContactQuery) CustomCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) (*ContactQuery, error) {
+	args := customCollectFieldsArgs{}
+	for _, opt := range opts {
+		opt(&args)
+	}
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return c, nil
+		return _c, nil
 	}
-	if field := collectedField(ctx, path...); field != nil {
-		if err := c.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, path); err != nil {
+	if field := collectedField(ctx, args.path...); field != nil {
+		if err := _c.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, args.path); err != nil {
 			return nil, err
 		}
 	}
-	return c, nil
+	if len(args.fields) > 0 && len(_c.ctx.Fields) > 0 {
+		for _, field := range args.fields {
+			if !slices.Contains(_c.ctx.Fields, field) {
+				_c.ctx.Fields = append(_c.ctx.Fields, field)
+			}
+		}
+	}
+	return _c, nil
 }
 
 // AllCollectFields
-func (c *ContactQuery) AllCollectFields(ctx context.Context, path ...string) ([]*Contact, error) {
-	_query, err := c.CustomCollectFields(ctx, path...)
+func (_c *ContactQuery) AllCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) ([]*Contact, error) {
+	query, err := _c.CustomCollectFields(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return _query.All(ctx)
+	return query.All(ctx)
 }
 
 // FirstCollectFields
-func (c *ContactQuery) FirstCollectFields(ctx context.Context, path ...string) (*Contact, error) {
-	_query, err := c.CustomCollectFields(ctx, path...)
+func (_c *ContactQuery) FirstCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) (*Contact, error) {
+	query, err := _c.CustomCollectFields(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return _query.First(ctx)
+	return query.First(ctx)
+}
+
+// ContactList is the list to Contact.
+type ContactList struct {
+	Nodes      []*Contact `json:"nodes"`
+	TotalCount int        `json:"totalCount"`
 }
 
 // List executes the query and returns totalCount and nodes []*Contact.
-func (c *ContactQuery) List(ctx context.Context, offset, limit int, opts ...ContactPaginateOption) (*ContactConnection, error) {
+func (_c *ContactQuery) List(ctx context.Context, offset, limit int, opts ...ContactPaginateOption) (*ContactList, error) {
 	pager, err := newContactPager(opts, false)
 	if err != nil {
 		return nil, err
 	}
-	if _, err = pager.applyFilter(c); err != nil {
+	if _, err = pager.applyFilter(_c); err != nil {
 		return nil, err
 	}
-	conn := &ContactConnection{}
-	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
+	conn := &ContactList{}
+	ignoredNodes := !hasCollectedField(ctx, nodesField)
 	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := limit != 0
 		if hasPagination || ignoredNodes {
-			c := c.Clone()
+			c := _c.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -64,18 +101,13 @@ func (c *ContactQuery) List(ctx context.Context, offset, limit int, opts ...Cont
 	if ignoredNodes || (limit == 0) {
 		return conn, nil
 	}
-	c.Offset(offset).Limit(limit)
+	_c.Offset(offset).Limit(limit)
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err = c.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err = _c.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := c.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
-			return nil, err
-		}
-	}
-	conn.Nodes, err = pager.applyOrder(c).All(ctx)
+	conn.Nodes, err = pager.applyOrder(_c).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -83,52 +115,69 @@ func (c *ContactQuery) List(ctx context.Context, offset, limit int, opts ...Cont
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (c *ContractQuery) CustomCollectFields(ctx context.Context, path ...string) (*ContractQuery, error) {
+func (_c *ContractQuery) CustomCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) (*ContractQuery, error) {
+	args := customCollectFieldsArgs{}
+	for _, opt := range opts {
+		opt(&args)
+	}
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return c, nil
+		return _c, nil
 	}
-	if field := collectedField(ctx, path...); field != nil {
-		if err := c.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, path); err != nil {
+	if field := collectedField(ctx, args.path...); field != nil {
+		if err := _c.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, args.path); err != nil {
 			return nil, err
 		}
 	}
-	return c, nil
+	if len(args.fields) > 0 && len(_c.ctx.Fields) > 0 {
+		for _, field := range args.fields {
+			if !slices.Contains(_c.ctx.Fields, field) {
+				_c.ctx.Fields = append(_c.ctx.Fields, field)
+			}
+		}
+	}
+	return _c, nil
 }
 
 // AllCollectFields
-func (c *ContractQuery) AllCollectFields(ctx context.Context, path ...string) ([]*Contract, error) {
-	_query, err := c.CustomCollectFields(ctx, path...)
+func (_c *ContractQuery) AllCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) ([]*Contract, error) {
+	query, err := _c.CustomCollectFields(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return _query.All(ctx)
+	return query.All(ctx)
 }
 
 // FirstCollectFields
-func (c *ContractQuery) FirstCollectFields(ctx context.Context, path ...string) (*Contract, error) {
-	_query, err := c.CustomCollectFields(ctx, path...)
+func (_c *ContractQuery) FirstCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) (*Contract, error) {
+	query, err := _c.CustomCollectFields(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return _query.First(ctx)
+	return query.First(ctx)
+}
+
+// ContractList is the list to Contract.
+type ContractList struct {
+	Nodes      []*Contract `json:"nodes"`
+	TotalCount int         `json:"totalCount"`
 }
 
 // List executes the query and returns totalCount and nodes []*Contract.
-func (c *ContractQuery) List(ctx context.Context, offset, limit int, opts ...ContractPaginateOption) (*ContractConnection, error) {
+func (_c *ContractQuery) List(ctx context.Context, offset, limit int, opts ...ContractPaginateOption) (*ContractList, error) {
 	pager, err := newContractPager(opts, false)
 	if err != nil {
 		return nil, err
 	}
-	if _, err = pager.applyFilter(c); err != nil {
+	if _, err = pager.applyFilter(_c); err != nil {
 		return nil, err
 	}
-	conn := &ContractConnection{}
-	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
+	conn := &ContractList{}
+	ignoredNodes := !hasCollectedField(ctx, nodesField)
 	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := limit != 0
 		if hasPagination || ignoredNodes {
-			c := c.Clone()
+			c := _c.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -138,18 +187,13 @@ func (c *ContractQuery) List(ctx context.Context, offset, limit int, opts ...Con
 	if ignoredNodes || (limit == 0) {
 		return conn, nil
 	}
-	c.Offset(offset).Limit(limit)
+	_c.Offset(offset).Limit(limit)
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err = c.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err = _c.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := c.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
-			return nil, err
-		}
-	}
-	conn.Nodes, err = pager.applyOrder(c).All(ctx)
+	conn.Nodes, err = pager.applyOrder(_c).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -157,52 +201,69 @@ func (c *ContractQuery) List(ctx context.Context, offset, limit int, opts ...Con
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (c *CustomerQuery) CustomCollectFields(ctx context.Context, path ...string) (*CustomerQuery, error) {
+func (_c *CustomerQuery) CustomCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) (*CustomerQuery, error) {
+	args := customCollectFieldsArgs{}
+	for _, opt := range opts {
+		opt(&args)
+	}
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return c, nil
+		return _c, nil
 	}
-	if field := collectedField(ctx, path...); field != nil {
-		if err := c.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, path); err != nil {
+	if field := collectedField(ctx, args.path...); field != nil {
+		if err := _c.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, args.path); err != nil {
 			return nil, err
 		}
 	}
-	return c, nil
+	if len(args.fields) > 0 && len(_c.ctx.Fields) > 0 {
+		for _, field := range args.fields {
+			if !slices.Contains(_c.ctx.Fields, field) {
+				_c.ctx.Fields = append(_c.ctx.Fields, field)
+			}
+		}
+	}
+	return _c, nil
 }
 
 // AllCollectFields
-func (c *CustomerQuery) AllCollectFields(ctx context.Context, path ...string) ([]*Customer, error) {
-	_query, err := c.CustomCollectFields(ctx, path...)
+func (_c *CustomerQuery) AllCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) ([]*Customer, error) {
+	query, err := _c.CustomCollectFields(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return _query.All(ctx)
+	return query.All(ctx)
 }
 
 // FirstCollectFields
-func (c *CustomerQuery) FirstCollectFields(ctx context.Context, path ...string) (*Customer, error) {
-	_query, err := c.CustomCollectFields(ctx, path...)
+func (_c *CustomerQuery) FirstCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) (*Customer, error) {
+	query, err := _c.CustomCollectFields(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return _query.First(ctx)
+	return query.First(ctx)
+}
+
+// CustomerList is the list to Customer.
+type CustomerList struct {
+	Nodes      []*Customer `json:"nodes"`
+	TotalCount int         `json:"totalCount"`
 }
 
 // List executes the query and returns totalCount and nodes []*Customer.
-func (c *CustomerQuery) List(ctx context.Context, offset, limit int, opts ...CustomerPaginateOption) (*CustomerConnection, error) {
+func (_c *CustomerQuery) List(ctx context.Context, offset, limit int, opts ...CustomerPaginateOption) (*CustomerList, error) {
 	pager, err := newCustomerPager(opts, false)
 	if err != nil {
 		return nil, err
 	}
-	if _, err = pager.applyFilter(c); err != nil {
+	if _, err = pager.applyFilter(_c); err != nil {
 		return nil, err
 	}
-	conn := &CustomerConnection{}
-	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
+	conn := &CustomerList{}
+	ignoredNodes := !hasCollectedField(ctx, nodesField)
 	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := limit != 0
 		if hasPagination || ignoredNodes {
-			c := c.Clone()
+			c := _c.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -212,18 +273,13 @@ func (c *CustomerQuery) List(ctx context.Context, offset, limit int, opts ...Cus
 	if ignoredNodes || (limit == 0) {
 		return conn, nil
 	}
-	c.Offset(offset).Limit(limit)
+	_c.Offset(offset).Limit(limit)
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err = c.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err = _c.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := c.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
-			return nil, err
-		}
-	}
-	conn.Nodes, err = pager.applyOrder(c).All(ctx)
+	conn.Nodes, err = pager.applyOrder(_c).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -231,52 +287,69 @@ func (c *CustomerQuery) List(ctx context.Context, offset, limit int, opts ...Cus
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (fu *FollowUpQuery) CustomCollectFields(ctx context.Context, path ...string) (*FollowUpQuery, error) {
+func (_fu *FollowUpQuery) CustomCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) (*FollowUpQuery, error) {
+	args := customCollectFieldsArgs{}
+	for _, opt := range opts {
+		opt(&args)
+	}
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return fu, nil
+		return _fu, nil
 	}
-	if field := collectedField(ctx, path...); field != nil {
-		if err := fu.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, path); err != nil {
+	if field := collectedField(ctx, args.path...); field != nil {
+		if err := _fu.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, args.path); err != nil {
 			return nil, err
 		}
 	}
-	return fu, nil
+	if len(args.fields) > 0 && len(_fu.ctx.Fields) > 0 {
+		for _, field := range args.fields {
+			if !slices.Contains(_fu.ctx.Fields, field) {
+				_fu.ctx.Fields = append(_fu.ctx.Fields, field)
+			}
+		}
+	}
+	return _fu, nil
 }
 
 // AllCollectFields
-func (fu *FollowUpQuery) AllCollectFields(ctx context.Context, path ...string) ([]*FollowUp, error) {
-	_query, err := fu.CustomCollectFields(ctx, path...)
+func (_fu *FollowUpQuery) AllCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) ([]*FollowUp, error) {
+	query, err := _fu.CustomCollectFields(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return _query.All(ctx)
+	return query.All(ctx)
 }
 
 // FirstCollectFields
-func (fu *FollowUpQuery) FirstCollectFields(ctx context.Context, path ...string) (*FollowUp, error) {
-	_query, err := fu.CustomCollectFields(ctx, path...)
+func (_fu *FollowUpQuery) FirstCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) (*FollowUp, error) {
+	query, err := _fu.CustomCollectFields(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return _query.First(ctx)
+	return query.First(ctx)
+}
+
+// FollowUpList is the list to FollowUp.
+type FollowUpList struct {
+	Nodes      []*FollowUp `json:"nodes"`
+	TotalCount int         `json:"totalCount"`
 }
 
 // List executes the query and returns totalCount and nodes []*FollowUp.
-func (fu *FollowUpQuery) List(ctx context.Context, offset, limit int, opts ...FollowUpPaginateOption) (*FollowUpConnection, error) {
+func (_fu *FollowUpQuery) List(ctx context.Context, offset, limit int, opts ...FollowUpPaginateOption) (*FollowUpList, error) {
 	pager, err := newFollowUpPager(opts, false)
 	if err != nil {
 		return nil, err
 	}
-	if _, err = pager.applyFilter(fu); err != nil {
+	if _, err = pager.applyFilter(_fu); err != nil {
 		return nil, err
 	}
-	conn := &FollowUpConnection{}
-	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
+	conn := &FollowUpList{}
+	ignoredNodes := !hasCollectedField(ctx, nodesField)
 	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := limit != 0
 		if hasPagination || ignoredNodes {
-			c := fu.Clone()
+			c := _fu.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -286,18 +359,13 @@ func (fu *FollowUpQuery) List(ctx context.Context, offset, limit int, opts ...Fo
 	if ignoredNodes || (limit == 0) {
 		return conn, nil
 	}
-	fu.Offset(offset).Limit(limit)
+	_fu.Offset(offset).Limit(limit)
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err = fu.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err = _fu.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := fu.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
-			return nil, err
-		}
-	}
-	conn.Nodes, err = pager.applyOrder(fu).All(ctx)
+	conn.Nodes, err = pager.applyOrder(_fu).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -305,52 +373,69 @@ func (fu *FollowUpQuery) List(ctx context.Context, offset, limit int, opts ...Fo
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (pa *PaymentQuery) CustomCollectFields(ctx context.Context, path ...string) (*PaymentQuery, error) {
+func (_pa *PaymentQuery) CustomCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) (*PaymentQuery, error) {
+	args := customCollectFieldsArgs{}
+	for _, opt := range opts {
+		opt(&args)
+	}
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
-		return pa, nil
+		return _pa, nil
 	}
-	if field := collectedField(ctx, path...); field != nil {
-		if err := pa.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, path); err != nil {
+	if field := collectedField(ctx, args.path...); field != nil {
+		if err := _pa.collectField(ctx, true, graphql.GetOperationContext(ctx), *field, args.path); err != nil {
 			return nil, err
 		}
 	}
-	return pa, nil
+	if len(args.fields) > 0 && len(_pa.ctx.Fields) > 0 {
+		for _, field := range args.fields {
+			if !slices.Contains(_pa.ctx.Fields, field) {
+				_pa.ctx.Fields = append(_pa.ctx.Fields, field)
+			}
+		}
+	}
+	return _pa, nil
 }
 
 // AllCollectFields
-func (pa *PaymentQuery) AllCollectFields(ctx context.Context, path ...string) ([]*Payment, error) {
-	_query, err := pa.CustomCollectFields(ctx, path...)
+func (_pa *PaymentQuery) AllCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) ([]*Payment, error) {
+	query, err := _pa.CustomCollectFields(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return _query.All(ctx)
+	return query.All(ctx)
 }
 
 // FirstCollectFields
-func (pa *PaymentQuery) FirstCollectFields(ctx context.Context, path ...string) (*Payment, error) {
-	_query, err := pa.CustomCollectFields(ctx, path...)
+func (_pa *PaymentQuery) FirstCollectFields(ctx context.Context, opts ...CustomCollectFieldsOption) (*Payment, error) {
+	query, err := _pa.CustomCollectFields(ctx, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return _query.First(ctx)
+	return query.First(ctx)
+}
+
+// PaymentList is the list to Payment.
+type PaymentList struct {
+	Nodes      []*Payment `json:"nodes"`
+	TotalCount int        `json:"totalCount"`
 }
 
 // List executes the query and returns totalCount and nodes []*Payment.
-func (pa *PaymentQuery) List(ctx context.Context, offset, limit int, opts ...PaymentPaginateOption) (*PaymentConnection, error) {
+func (_pa *PaymentQuery) List(ctx context.Context, offset, limit int, opts ...PaymentPaginateOption) (*PaymentList, error) {
 	pager, err := newPaymentPager(opts, false)
 	if err != nil {
 		return nil, err
 	}
-	if _, err = pager.applyFilter(pa); err != nil {
+	if _, err = pager.applyFilter(_pa); err != nil {
 		return nil, err
 	}
-	conn := &PaymentConnection{}
-	ignoredNodes := !hasCollectedField(ctx, edgesField, nodeField) && !hasCollectedField(ctx, nodesField)
+	conn := &PaymentList{}
+	ignoredNodes := !hasCollectedField(ctx, nodesField)
 	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := limit != 0
 		if hasPagination || ignoredNodes {
-			c := pa.Clone()
+			c := _pa.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -360,18 +445,13 @@ func (pa *PaymentQuery) List(ctx context.Context, offset, limit int, opts ...Pay
 	if ignoredNodes || (limit == 0) {
 		return conn, nil
 	}
-	pa.Offset(offset).Limit(limit)
+	_pa.Offset(offset).Limit(limit)
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err = pa.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err = _pa.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := pa.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
-			return nil, err
-		}
-	}
-	conn.Nodes, err = pager.applyOrder(pa).All(ctx)
+	conn.Nodes, err = pager.applyOrder(_pa).All(ctx)
 	if err != nil {
 		return nil, err
 	}

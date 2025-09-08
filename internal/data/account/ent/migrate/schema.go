@@ -155,6 +155,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "sort", Type: field.TypeInt, Default: 1000},
 		{Name: "attrs", Type: field.TypeJSON, Nullable: true, Comment: "自定义属性"},
+		{Name: "is_system", Type: field.TypeBool, Comment: "是否是系统级权限", Default: false},
 		{Name: "parent_id", Type: field.TypeInt, Nullable: true},
 	}
 	// PermissionsTable holds the schema information for the "permissions" table.
@@ -166,7 +167,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "permissions_permissions_children",
-				Columns:    []*schema.Column{PermissionsColumns[10]},
+				Columns:    []*schema.Column{PermissionsColumns[11]},
 				RefColumns: []*schema.Column{PermissionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

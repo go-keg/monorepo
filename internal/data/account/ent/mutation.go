@@ -3444,6 +3444,7 @@ type PermissionMutation struct {
 	sort            *int
 	addsort         *int
 	attrs           *map[string]interface{}
+	is_system       *bool
 	clearedFields   map[string]struct{}
 	roles           map[int]struct{}
 	removedroles    map[int]struct{}
@@ -4033,6 +4034,42 @@ func (m *PermissionMutation) ResetAttrs() {
 	delete(m.clearedFields, permission.FieldAttrs)
 }
 
+// SetIsSystem sets the "is_system" field.
+func (m *PermissionMutation) SetIsSystem(b bool) {
+	m.is_system = &b
+}
+
+// IsSystem returns the value of the "is_system" field in the mutation.
+func (m *PermissionMutation) IsSystem() (r bool, exists bool) {
+	v := m.is_system
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsSystem returns the old "is_system" field's value of the Permission entity.
+// If the Permission object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PermissionMutation) OldIsSystem(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsSystem is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsSystem requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsSystem: %w", err)
+	}
+	return oldValue.IsSystem, nil
+}
+
+// ResetIsSystem resets all changes to the "is_system" field.
+func (m *PermissionMutation) ResetIsSystem() {
+	m.is_system = nil
+}
+
 // AddRoleIDs adds the "roles" edge to the TenantRole entity by ids.
 func (m *PermissionMutation) AddRoleIDs(ids ...int) {
 	if m.roles == nil {
@@ -4202,7 +4239,7 @@ func (m *PermissionMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PermissionMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.created_at != nil {
 		fields = append(fields, permission.FieldCreatedAt)
 	}
@@ -4233,6 +4270,9 @@ func (m *PermissionMutation) Fields() []string {
 	if m.attrs != nil {
 		fields = append(fields, permission.FieldAttrs)
 	}
+	if m.is_system != nil {
+		fields = append(fields, permission.FieldIsSystem)
+	}
 	return fields
 }
 
@@ -4261,6 +4301,8 @@ func (m *PermissionMutation) Field(name string) (ent.Value, bool) {
 		return m.Sort()
 	case permission.FieldAttrs:
 		return m.Attrs()
+	case permission.FieldIsSystem:
+		return m.IsSystem()
 	}
 	return nil, false
 }
@@ -4290,6 +4332,8 @@ func (m *PermissionMutation) OldField(ctx context.Context, name string) (ent.Val
 		return m.OldSort(ctx)
 	case permission.FieldAttrs:
 		return m.OldAttrs(ctx)
+	case permission.FieldIsSystem:
+		return m.OldIsSystem(ctx)
 	}
 	return nil, fmt.Errorf("unknown Permission field %s", name)
 }
@@ -4368,6 +4412,13 @@ func (m *PermissionMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAttrs(v)
+		return nil
+	case permission.FieldIsSystem:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsSystem(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Permission field %s", name)
@@ -4507,6 +4558,9 @@ func (m *PermissionMutation) ResetField(name string) error {
 		return nil
 	case permission.FieldAttrs:
 		m.ResetAttrs()
+		return nil
+	case permission.FieldIsSystem:
+		m.ResetIsSystem()
 		return nil
 	}
 	return fmt.Errorf("unknown Permission field %s", name)

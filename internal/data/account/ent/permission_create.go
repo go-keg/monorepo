@@ -139,6 +139,20 @@ func (pc *PermissionCreate) SetAttrs(m map[string]interface{}) *PermissionCreate
 	return pc
 }
 
+// SetIsSystem sets the "is_system" field.
+func (pc *PermissionCreate) SetIsSystem(b bool) *PermissionCreate {
+	pc.mutation.SetIsSystem(b)
+	return pc
+}
+
+// SetNillableIsSystem sets the "is_system" field if the given value is not nil.
+func (pc *PermissionCreate) SetNillableIsSystem(b *bool) *PermissionCreate {
+	if b != nil {
+		pc.SetIsSystem(*b)
+	}
+	return pc
+}
+
 // SetID sets the "id" field.
 func (pc *PermissionCreate) SetID(i int) *PermissionCreate {
 	pc.mutation.SetID(i)
@@ -227,6 +241,10 @@ func (pc *PermissionCreate) defaults() {
 		v := permission.DefaultSort
 		pc.mutation.SetSort(v)
 	}
+	if _, ok := pc.mutation.IsSystem(); !ok {
+		v := permission.DefaultIsSystem
+		pc.mutation.SetIsSystem(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -244,6 +262,9 @@ func (pc *PermissionCreate) check() error {
 	}
 	if _, ok := pc.mutation.Sort(); !ok {
 		return &ValidationError{Name: "sort", err: errors.New(`ent: missing required field "Permission.sort"`)}
+	}
+	if _, ok := pc.mutation.IsSystem(); !ok {
+		return &ValidationError{Name: "is_system", err: errors.New(`ent: missing required field "Permission.is_system"`)}
 	}
 	return nil
 }
@@ -313,6 +334,10 @@ func (pc *PermissionCreate) createSpec() (*Permission, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Attrs(); ok {
 		_spec.SetField(permission.FieldAttrs, field.TypeJSON, value)
 		_node.Attrs = value
+	}
+	if value, ok := pc.mutation.IsSystem(); ok {
+		_spec.SetField(permission.FieldIsSystem, field.TypeBool, value)
+		_node.IsSystem = value
 	}
 	if nodes := pc.mutation.RolesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -565,6 +590,18 @@ func (u *PermissionUpsert) ClearAttrs() *PermissionUpsert {
 	return u
 }
 
+// SetIsSystem sets the "is_system" field.
+func (u *PermissionUpsert) SetIsSystem(v bool) *PermissionUpsert {
+	u.Set(permission.FieldIsSystem, v)
+	return u
+}
+
+// UpdateIsSystem sets the "is_system" field to the value that was provided on create.
+func (u *PermissionUpsert) UpdateIsSystem() *PermissionUpsert {
+	u.SetExcluded(permission.FieldIsSystem)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -788,6 +825,20 @@ func (u *PermissionUpsertOne) UpdateAttrs() *PermissionUpsertOne {
 func (u *PermissionUpsertOne) ClearAttrs() *PermissionUpsertOne {
 	return u.Update(func(s *PermissionUpsert) {
 		s.ClearAttrs()
+	})
+}
+
+// SetIsSystem sets the "is_system" field.
+func (u *PermissionUpsertOne) SetIsSystem(v bool) *PermissionUpsertOne {
+	return u.Update(func(s *PermissionUpsert) {
+		s.SetIsSystem(v)
+	})
+}
+
+// UpdateIsSystem sets the "is_system" field to the value that was provided on create.
+func (u *PermissionUpsertOne) UpdateIsSystem() *PermissionUpsertOne {
+	return u.Update(func(s *PermissionUpsert) {
+		s.UpdateIsSystem()
 	})
 }
 
@@ -1180,6 +1231,20 @@ func (u *PermissionUpsertBulk) UpdateAttrs() *PermissionUpsertBulk {
 func (u *PermissionUpsertBulk) ClearAttrs() *PermissionUpsertBulk {
 	return u.Update(func(s *PermissionUpsert) {
 		s.ClearAttrs()
+	})
+}
+
+// SetIsSystem sets the "is_system" field.
+func (u *PermissionUpsertBulk) SetIsSystem(v bool) *PermissionUpsertBulk {
+	return u.Update(func(s *PermissionUpsert) {
+		s.SetIsSystem(v)
+	})
+}
+
+// UpdateIsSystem sets the "is_system" field to the value that was provided on create.
+func (u *PermissionUpsertBulk) UpdateIsSystem() *PermissionUpsertBulk {
+	return u.Update(func(s *PermissionUpsert) {
+		s.UpdateIsSystem()
 	})
 }
 

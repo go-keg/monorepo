@@ -41,6 +41,33 @@ func (pu *PaymentUpdate) ClearUpdatedAt() *PaymentUpdate {
 	return pu
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (pu *PaymentUpdate) SetUpdatedBy(i int) *PaymentUpdate {
+	pu.mutation.ResetUpdatedBy()
+	pu.mutation.SetUpdatedBy(i)
+	return pu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (pu *PaymentUpdate) SetNillableUpdatedBy(i *int) *PaymentUpdate {
+	if i != nil {
+		pu.SetUpdatedBy(*i)
+	}
+	return pu
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (pu *PaymentUpdate) AddUpdatedBy(i int) *PaymentUpdate {
+	pu.mutation.AddUpdatedBy(i)
+	return pu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (pu *PaymentUpdate) ClearUpdatedBy() *PaymentUpdate {
+	pu.mutation.ClearUpdatedBy()
+	return pu
+}
+
 // SetAmount sets the "amount" field.
 func (pu *PaymentUpdate) SetAmount(f float64) *PaymentUpdate {
 	pu.mutation.ResetAmount()
@@ -79,33 +106,6 @@ func (pu *PaymentUpdate) SetNillableReceivedAt(t *time.Time) *PaymentUpdate {
 // ClearReceivedAt clears the value of the "received_at" field.
 func (pu *PaymentUpdate) ClearReceivedAt() *PaymentUpdate {
 	pu.mutation.ClearReceivedAt()
-	return pu
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (pu *PaymentUpdate) SetUpdatedBy(i int) *PaymentUpdate {
-	pu.mutation.ResetUpdatedBy()
-	pu.mutation.SetUpdatedBy(i)
-	return pu
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (pu *PaymentUpdate) SetNillableUpdatedBy(i *int) *PaymentUpdate {
-	if i != nil {
-		pu.SetUpdatedBy(*i)
-	}
-	return pu
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (pu *PaymentUpdate) AddUpdatedBy(i int) *PaymentUpdate {
-	pu.mutation.AddUpdatedBy(i)
-	return pu
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (pu *PaymentUpdate) ClearUpdatedBy() *PaymentUpdate {
-	pu.mutation.ClearUpdatedBy()
 	return pu
 }
 
@@ -185,6 +185,15 @@ func (pu *PaymentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if pu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(payment.FieldUpdatedAt, field.TypeTime)
 	}
+	if value, ok := pu.mutation.UpdatedBy(); ok {
+		_spec.SetField(payment.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := pu.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(payment.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if pu.mutation.UpdatedByCleared() {
+		_spec.ClearField(payment.FieldUpdatedBy, field.TypeInt)
+	}
 	if value, ok := pu.mutation.Amount(); ok {
 		_spec.SetField(payment.FieldAmount, field.TypeFloat64, value)
 	}
@@ -196,15 +205,6 @@ func (pu *PaymentUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.ReceivedAtCleared() {
 		_spec.ClearField(payment.FieldReceivedAt, field.TypeTime)
-	}
-	if value, ok := pu.mutation.UpdatedBy(); ok {
-		_spec.SetField(payment.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := pu.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(payment.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if pu.mutation.UpdatedByCleared() {
-		_spec.ClearField(payment.FieldUpdatedBy, field.TypeInt)
 	}
 	_spec.AddModifiers(pu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, pu.driver, _spec); err != nil {
@@ -237,6 +237,33 @@ func (puo *PaymentUpdateOne) SetUpdatedAt(t time.Time) *PaymentUpdateOne {
 // ClearUpdatedAt clears the value of the "updated_at" field.
 func (puo *PaymentUpdateOne) ClearUpdatedAt() *PaymentUpdateOne {
 	puo.mutation.ClearUpdatedAt()
+	return puo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (puo *PaymentUpdateOne) SetUpdatedBy(i int) *PaymentUpdateOne {
+	puo.mutation.ResetUpdatedBy()
+	puo.mutation.SetUpdatedBy(i)
+	return puo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (puo *PaymentUpdateOne) SetNillableUpdatedBy(i *int) *PaymentUpdateOne {
+	if i != nil {
+		puo.SetUpdatedBy(*i)
+	}
+	return puo
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (puo *PaymentUpdateOne) AddUpdatedBy(i int) *PaymentUpdateOne {
+	puo.mutation.AddUpdatedBy(i)
+	return puo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (puo *PaymentUpdateOne) ClearUpdatedBy() *PaymentUpdateOne {
+	puo.mutation.ClearUpdatedBy()
 	return puo
 }
 
@@ -278,33 +305,6 @@ func (puo *PaymentUpdateOne) SetNillableReceivedAt(t *time.Time) *PaymentUpdateO
 // ClearReceivedAt clears the value of the "received_at" field.
 func (puo *PaymentUpdateOne) ClearReceivedAt() *PaymentUpdateOne {
 	puo.mutation.ClearReceivedAt()
-	return puo
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (puo *PaymentUpdateOne) SetUpdatedBy(i int) *PaymentUpdateOne {
-	puo.mutation.ResetUpdatedBy()
-	puo.mutation.SetUpdatedBy(i)
-	return puo
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (puo *PaymentUpdateOne) SetNillableUpdatedBy(i *int) *PaymentUpdateOne {
-	if i != nil {
-		puo.SetUpdatedBy(*i)
-	}
-	return puo
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (puo *PaymentUpdateOne) AddUpdatedBy(i int) *PaymentUpdateOne {
-	puo.mutation.AddUpdatedBy(i)
-	return puo
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (puo *PaymentUpdateOne) ClearUpdatedBy() *PaymentUpdateOne {
-	puo.mutation.ClearUpdatedBy()
 	return puo
 }
 
@@ -414,6 +414,15 @@ func (puo *PaymentUpdateOne) sqlSave(ctx context.Context) (_node *Payment, err e
 	if puo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(payment.FieldUpdatedAt, field.TypeTime)
 	}
+	if value, ok := puo.mutation.UpdatedBy(); ok {
+		_spec.SetField(payment.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if value, ok := puo.mutation.AddedUpdatedBy(); ok {
+		_spec.AddField(payment.FieldUpdatedBy, field.TypeInt, value)
+	}
+	if puo.mutation.UpdatedByCleared() {
+		_spec.ClearField(payment.FieldUpdatedBy, field.TypeInt)
+	}
 	if value, ok := puo.mutation.Amount(); ok {
 		_spec.SetField(payment.FieldAmount, field.TypeFloat64, value)
 	}
@@ -425,15 +434,6 @@ func (puo *PaymentUpdateOne) sqlSave(ctx context.Context) (_node *Payment, err e
 	}
 	if puo.mutation.ReceivedAtCleared() {
 		_spec.ClearField(payment.FieldReceivedAt, field.TypeTime)
-	}
-	if value, ok := puo.mutation.UpdatedBy(); ok {
-		_spec.SetField(payment.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if value, ok := puo.mutation.AddedUpdatedBy(); ok {
-		_spec.AddField(payment.FieldUpdatedBy, field.TypeInt, value)
-	}
-	if puo.mutation.UpdatedByCleared() {
-		_spec.ClearField(payment.FieldUpdatedBy, field.TypeInt)
 	}
 	_spec.AddModifiers(puo.modifiers...)
 	_node = &Payment{config: puo.config}

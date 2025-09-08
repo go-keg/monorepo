@@ -51,6 +51,26 @@ func (fuc *FollowUpCreate) SetNillableUpdatedAt(t *time.Time) *FollowUpCreate {
 	return fuc
 }
 
+// SetCreatedBy sets the "created_by" field.
+func (fuc *FollowUpCreate) SetCreatedBy(i int) *FollowUpCreate {
+	fuc.mutation.SetCreatedBy(i)
+	return fuc
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (fuc *FollowUpCreate) SetUpdatedBy(i int) *FollowUpCreate {
+	fuc.mutation.SetUpdatedBy(i)
+	return fuc
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (fuc *FollowUpCreate) SetNillableUpdatedBy(i *int) *FollowUpCreate {
+	if i != nil {
+		fuc.SetUpdatedBy(*i)
+	}
+	return fuc
+}
+
 // SetType sets the "type" field.
 func (fuc *FollowUpCreate) SetType(f followup.Type) *FollowUpCreate {
 	fuc.mutation.SetType(f)
@@ -81,26 +101,6 @@ func (fuc *FollowUpCreate) SetFollowedAt(t time.Time) *FollowUpCreate {
 func (fuc *FollowUpCreate) SetNillableFollowedAt(t *time.Time) *FollowUpCreate {
 	if t != nil {
 		fuc.SetFollowedAt(*t)
-	}
-	return fuc
-}
-
-// SetCreatedBy sets the "created_by" field.
-func (fuc *FollowUpCreate) SetCreatedBy(i int) *FollowUpCreate {
-	fuc.mutation.SetCreatedBy(i)
-	return fuc
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (fuc *FollowUpCreate) SetUpdatedBy(i int) *FollowUpCreate {
-	fuc.mutation.SetUpdatedBy(i)
-	return fuc
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fuc *FollowUpCreate) SetNillableUpdatedBy(i *int) *FollowUpCreate {
-	if i != nil {
-		fuc.SetUpdatedBy(*i)
 	}
 	return fuc
 }
@@ -171,6 +171,9 @@ func (fuc *FollowUpCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (fuc *FollowUpCreate) check() error {
+	if _, ok := fuc.mutation.CreatedBy(); !ok {
+		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "FollowUp.created_by"`)}
+	}
 	if _, ok := fuc.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "FollowUp.type"`)}
 	}
@@ -189,9 +192,6 @@ func (fuc *FollowUpCreate) check() error {
 	}
 	if _, ok := fuc.mutation.FollowedAt(); !ok {
 		return &ValidationError{Name: "followed_at", err: errors.New(`ent: missing required field "FollowUp.followed_at"`)}
-	}
-	if _, ok := fuc.mutation.CreatedBy(); !ok {
-		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "FollowUp.created_by"`)}
 	}
 	if len(fuc.mutation.CustomerIDs()) == 0 {
 		return &ValidationError{Name: "customer", err: errors.New(`ent: missing required edge "FollowUp.customer"`)}
@@ -231,6 +231,14 @@ func (fuc *FollowUpCreate) createSpec() (*FollowUp, *sqlgraph.CreateSpec) {
 		_spec.SetField(followup.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
+	if value, ok := fuc.mutation.CreatedBy(); ok {
+		_spec.SetField(followup.FieldCreatedBy, field.TypeInt, value)
+		_node.CreatedBy = value
+	}
+	if value, ok := fuc.mutation.UpdatedBy(); ok {
+		_spec.SetField(followup.FieldUpdatedBy, field.TypeInt, value)
+		_node.UpdatedBy = value
+	}
 	if value, ok := fuc.mutation.GetType(); ok {
 		_spec.SetField(followup.FieldType, field.TypeEnum, value)
 		_node.Type = value
@@ -242,14 +250,6 @@ func (fuc *FollowUpCreate) createSpec() (*FollowUp, *sqlgraph.CreateSpec) {
 	if value, ok := fuc.mutation.FollowedAt(); ok {
 		_spec.SetField(followup.FieldFollowedAt, field.TypeTime, value)
 		_node.FollowedAt = value
-	}
-	if value, ok := fuc.mutation.CreatedBy(); ok {
-		_spec.SetField(followup.FieldCreatedBy, field.TypeInt, value)
-		_node.CreatedBy = value
-	}
-	if value, ok := fuc.mutation.UpdatedBy(); ok {
-		_spec.SetField(followup.FieldUpdatedBy, field.TypeInt, value)
-		_node.UpdatedBy = value
 	}
 	if nodes := fuc.mutation.CustomerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -338,6 +338,30 @@ func (u *FollowUpUpsert) ClearUpdatedAt() *FollowUpUpsert {
 	return u
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *FollowUpUpsert) SetUpdatedBy(v int) *FollowUpUpsert {
+	u.Set(followup.FieldUpdatedBy, v)
+	return u
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *FollowUpUpsert) UpdateUpdatedBy() *FollowUpUpsert {
+	u.SetExcluded(followup.FieldUpdatedBy)
+	return u
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *FollowUpUpsert) AddUpdatedBy(v int) *FollowUpUpsert {
+	u.Add(followup.FieldUpdatedBy, v)
+	return u
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *FollowUpUpsert) ClearUpdatedBy() *FollowUpUpsert {
+	u.SetNull(followup.FieldUpdatedBy)
+	return u
+}
+
 // SetType sets the "type" field.
 func (u *FollowUpUpsert) SetType(v followup.Type) *FollowUpUpsert {
 	u.Set(followup.FieldType, v)
@@ -371,30 +395,6 @@ func (u *FollowUpUpsert) SetFollowedAt(v time.Time) *FollowUpUpsert {
 // UpdateFollowedAt sets the "followed_at" field to the value that was provided on create.
 func (u *FollowUpUpsert) UpdateFollowedAt() *FollowUpUpsert {
 	u.SetExcluded(followup.FieldFollowedAt)
-	return u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *FollowUpUpsert) SetUpdatedBy(v int) *FollowUpUpsert {
-	u.Set(followup.FieldUpdatedBy, v)
-	return u
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *FollowUpUpsert) UpdateUpdatedBy() *FollowUpUpsert {
-	u.SetExcluded(followup.FieldUpdatedBy)
-	return u
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *FollowUpUpsert) AddUpdatedBy(v int) *FollowUpUpsert {
-	u.Add(followup.FieldUpdatedBy, v)
-	return u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *FollowUpUpsert) ClearUpdatedBy() *FollowUpUpsert {
-	u.SetNull(followup.FieldUpdatedBy)
 	return u
 }
 
@@ -467,6 +467,34 @@ func (u *FollowUpUpsertOne) ClearUpdatedAt() *FollowUpUpsertOne {
 	})
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *FollowUpUpsertOne) SetUpdatedBy(v int) *FollowUpUpsertOne {
+	return u.Update(func(s *FollowUpUpsert) {
+		s.SetUpdatedBy(v)
+	})
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *FollowUpUpsertOne) AddUpdatedBy(v int) *FollowUpUpsertOne {
+	return u.Update(func(s *FollowUpUpsert) {
+		s.AddUpdatedBy(v)
+	})
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *FollowUpUpsertOne) UpdateUpdatedBy() *FollowUpUpsertOne {
+	return u.Update(func(s *FollowUpUpsert) {
+		s.UpdateUpdatedBy()
+	})
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *FollowUpUpsertOne) ClearUpdatedBy() *FollowUpUpsertOne {
+	return u.Update(func(s *FollowUpUpsert) {
+		s.ClearUpdatedBy()
+	})
+}
+
 // SetType sets the "type" field.
 func (u *FollowUpUpsertOne) SetType(v followup.Type) *FollowUpUpsertOne {
 	return u.Update(func(s *FollowUpUpsert) {
@@ -506,34 +534,6 @@ func (u *FollowUpUpsertOne) SetFollowedAt(v time.Time) *FollowUpUpsertOne {
 func (u *FollowUpUpsertOne) UpdateFollowedAt() *FollowUpUpsertOne {
 	return u.Update(func(s *FollowUpUpsert) {
 		s.UpdateFollowedAt()
-	})
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *FollowUpUpsertOne) SetUpdatedBy(v int) *FollowUpUpsertOne {
-	return u.Update(func(s *FollowUpUpsert) {
-		s.SetUpdatedBy(v)
-	})
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *FollowUpUpsertOne) AddUpdatedBy(v int) *FollowUpUpsertOne {
-	return u.Update(func(s *FollowUpUpsert) {
-		s.AddUpdatedBy(v)
-	})
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *FollowUpUpsertOne) UpdateUpdatedBy() *FollowUpUpsertOne {
-	return u.Update(func(s *FollowUpUpsert) {
-		s.UpdateUpdatedBy()
-	})
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *FollowUpUpsertOne) ClearUpdatedBy() *FollowUpUpsertOne {
-	return u.Update(func(s *FollowUpUpsert) {
-		s.ClearUpdatedBy()
 	})
 }
 
@@ -772,6 +772,34 @@ func (u *FollowUpUpsertBulk) ClearUpdatedAt() *FollowUpUpsertBulk {
 	})
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (u *FollowUpUpsertBulk) SetUpdatedBy(v int) *FollowUpUpsertBulk {
+	return u.Update(func(s *FollowUpUpsert) {
+		s.SetUpdatedBy(v)
+	})
+}
+
+// AddUpdatedBy adds v to the "updated_by" field.
+func (u *FollowUpUpsertBulk) AddUpdatedBy(v int) *FollowUpUpsertBulk {
+	return u.Update(func(s *FollowUpUpsert) {
+		s.AddUpdatedBy(v)
+	})
+}
+
+// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
+func (u *FollowUpUpsertBulk) UpdateUpdatedBy() *FollowUpUpsertBulk {
+	return u.Update(func(s *FollowUpUpsert) {
+		s.UpdateUpdatedBy()
+	})
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (u *FollowUpUpsertBulk) ClearUpdatedBy() *FollowUpUpsertBulk {
+	return u.Update(func(s *FollowUpUpsert) {
+		s.ClearUpdatedBy()
+	})
+}
+
 // SetType sets the "type" field.
 func (u *FollowUpUpsertBulk) SetType(v followup.Type) *FollowUpUpsertBulk {
 	return u.Update(func(s *FollowUpUpsert) {
@@ -811,34 +839,6 @@ func (u *FollowUpUpsertBulk) SetFollowedAt(v time.Time) *FollowUpUpsertBulk {
 func (u *FollowUpUpsertBulk) UpdateFollowedAt() *FollowUpUpsertBulk {
 	return u.Update(func(s *FollowUpUpsert) {
 		s.UpdateFollowedAt()
-	})
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (u *FollowUpUpsertBulk) SetUpdatedBy(v int) *FollowUpUpsertBulk {
-	return u.Update(func(s *FollowUpUpsert) {
-		s.SetUpdatedBy(v)
-	})
-}
-
-// AddUpdatedBy adds v to the "updated_by" field.
-func (u *FollowUpUpsertBulk) AddUpdatedBy(v int) *FollowUpUpsertBulk {
-	return u.Update(func(s *FollowUpUpsert) {
-		s.AddUpdatedBy(v)
-	})
-}
-
-// UpdateUpdatedBy sets the "updated_by" field to the value that was provided on create.
-func (u *FollowUpUpsertBulk) UpdateUpdatedBy() *FollowUpUpsertBulk {
-	return u.Update(func(s *FollowUpUpsert) {
-		s.UpdateUpdatedBy()
-	})
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (u *FollowUpUpsertBulk) ClearUpdatedBy() *FollowUpUpsertBulk {
-	return u.Update(func(s *FollowUpUpsert) {
-		s.ClearUpdatedBy()
 	})
 }
 

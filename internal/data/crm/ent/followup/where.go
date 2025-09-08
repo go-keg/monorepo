@@ -65,16 +65,6 @@ func UpdatedAt(v time.Time) predicate.FollowUp {
 	return predicate.FollowUp(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// Content applies equality check predicate on the "content" field. It's identical to ContentEQ.
-func Content(v string) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldEQ(FieldContent, v))
-}
-
-// FollowedAt applies equality check predicate on the "followed_at" field. It's identical to FollowedAtEQ.
-func FollowedAt(v time.Time) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldEQ(FieldFollowedAt, v))
-}
-
 // CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
 func CreatedBy(v int) predicate.FollowUp {
 	return predicate.FollowUp(sql.FieldEQ(FieldCreatedBy, v))
@@ -83,6 +73,16 @@ func CreatedBy(v int) predicate.FollowUp {
 // UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
 func UpdatedBy(v int) predicate.FollowUp {
 	return predicate.FollowUp(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// Content applies equality check predicate on the "content" field. It's identical to ContentEQ.
+func Content(v string) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldEQ(FieldContent, v))
+}
+
+// FollowedAt applies equality check predicate on the "followed_at" field. It's identical to FollowedAtEQ.
+func FollowedAt(v time.Time) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldEQ(FieldFollowedAt, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -183,6 +183,96 @@ func UpdatedAtIsNil() predicate.FollowUp {
 // UpdatedAtNotNil applies the NotNil predicate on the "updated_at" field.
 func UpdatedAtNotNil() predicate.FollowUp {
 	return predicate.FollowUp(sql.FieldNotNull(FieldUpdatedAt))
+}
+
+// CreatedByEQ applies the EQ predicate on the "created_by" field.
+func CreatedByEQ(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldEQ(FieldCreatedBy, v))
+}
+
+// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
+func CreatedByNEQ(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldNEQ(FieldCreatedBy, v))
+}
+
+// CreatedByIn applies the In predicate on the "created_by" field.
+func CreatedByIn(vs ...int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
+func CreatedByNotIn(vs ...int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldNotIn(FieldCreatedBy, vs...))
+}
+
+// CreatedByGT applies the GT predicate on the "created_by" field.
+func CreatedByGT(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldGT(FieldCreatedBy, v))
+}
+
+// CreatedByGTE applies the GTE predicate on the "created_by" field.
+func CreatedByGTE(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldGTE(FieldCreatedBy, v))
+}
+
+// CreatedByLT applies the LT predicate on the "created_by" field.
+func CreatedByLT(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldLT(FieldCreatedBy, v))
+}
+
+// CreatedByLTE applies the LTE predicate on the "created_by" field.
+func CreatedByLTE(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldLTE(FieldCreatedBy, v))
+}
+
+// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
+func UpdatedByEQ(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
+func UpdatedByNEQ(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldNEQ(FieldUpdatedBy, v))
+}
+
+// UpdatedByIn applies the In predicate on the "updated_by" field.
+func UpdatedByIn(vs ...int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
+func UpdatedByNotIn(vs ...int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldNotIn(FieldUpdatedBy, vs...))
+}
+
+// UpdatedByGT applies the GT predicate on the "updated_by" field.
+func UpdatedByGT(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldGT(FieldUpdatedBy, v))
+}
+
+// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
+func UpdatedByGTE(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldGTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByLT applies the LT predicate on the "updated_by" field.
+func UpdatedByLT(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldLT(FieldUpdatedBy, v))
+}
+
+// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
+func UpdatedByLTE(v int) predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldLTE(FieldUpdatedBy, v))
+}
+
+// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
+func UpdatedByIsNil() predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldIsNull(FieldUpdatedBy))
+}
+
+// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
+func UpdatedByNotNil() predicate.FollowUp {
+	return predicate.FollowUp(sql.FieldNotNull(FieldUpdatedBy))
 }
 
 // TypeEQ applies the EQ predicate on the "type" field.
@@ -308,96 +398,6 @@ func FollowedAtLT(v time.Time) predicate.FollowUp {
 // FollowedAtLTE applies the LTE predicate on the "followed_at" field.
 func FollowedAtLTE(v time.Time) predicate.FollowUp {
 	return predicate.FollowUp(sql.FieldLTE(FieldFollowedAt, v))
-}
-
-// CreatedByEQ applies the EQ predicate on the "created_by" field.
-func CreatedByEQ(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldEQ(FieldCreatedBy, v))
-}
-
-// CreatedByNEQ applies the NEQ predicate on the "created_by" field.
-func CreatedByNEQ(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldNEQ(FieldCreatedBy, v))
-}
-
-// CreatedByIn applies the In predicate on the "created_by" field.
-func CreatedByIn(vs ...int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldIn(FieldCreatedBy, vs...))
-}
-
-// CreatedByNotIn applies the NotIn predicate on the "created_by" field.
-func CreatedByNotIn(vs ...int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldNotIn(FieldCreatedBy, vs...))
-}
-
-// CreatedByGT applies the GT predicate on the "created_by" field.
-func CreatedByGT(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldGT(FieldCreatedBy, v))
-}
-
-// CreatedByGTE applies the GTE predicate on the "created_by" field.
-func CreatedByGTE(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldGTE(FieldCreatedBy, v))
-}
-
-// CreatedByLT applies the LT predicate on the "created_by" field.
-func CreatedByLT(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldLT(FieldCreatedBy, v))
-}
-
-// CreatedByLTE applies the LTE predicate on the "created_by" field.
-func CreatedByLTE(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldLTE(FieldCreatedBy, v))
-}
-
-// UpdatedByEQ applies the EQ predicate on the "updated_by" field.
-func UpdatedByEQ(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldEQ(FieldUpdatedBy, v))
-}
-
-// UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
-func UpdatedByNEQ(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldNEQ(FieldUpdatedBy, v))
-}
-
-// UpdatedByIn applies the In predicate on the "updated_by" field.
-func UpdatedByIn(vs ...int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldIn(FieldUpdatedBy, vs...))
-}
-
-// UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
-func UpdatedByNotIn(vs ...int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldNotIn(FieldUpdatedBy, vs...))
-}
-
-// UpdatedByGT applies the GT predicate on the "updated_by" field.
-func UpdatedByGT(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldGT(FieldUpdatedBy, v))
-}
-
-// UpdatedByGTE applies the GTE predicate on the "updated_by" field.
-func UpdatedByGTE(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldGTE(FieldUpdatedBy, v))
-}
-
-// UpdatedByLT applies the LT predicate on the "updated_by" field.
-func UpdatedByLT(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldLT(FieldUpdatedBy, v))
-}
-
-// UpdatedByLTE applies the LTE predicate on the "updated_by" field.
-func UpdatedByLTE(v int) predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldLTE(FieldUpdatedBy, v))
-}
-
-// UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
-func UpdatedByIsNil() predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldIsNull(FieldUpdatedBy))
-}
-
-// UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
-func UpdatedByNotNil() predicate.FollowUp {
-	return predicate.FollowUp(sql.FieldNotNull(FieldUpdatedBy))
 }
 
 // HasCustomer applies the HasEdge predicate on the "customer" edge.

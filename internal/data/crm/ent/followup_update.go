@@ -41,6 +41,33 @@ func (fuu *FollowUpUpdate) ClearUpdatedAt() *FollowUpUpdate {
 	return fuu
 }
 
+// SetUpdatedBy sets the "updated_by" field.
+func (fuu *FollowUpUpdate) SetUpdatedBy(i int) *FollowUpUpdate {
+	fuu.mutation.ResetUpdatedBy()
+	fuu.mutation.SetUpdatedBy(i)
+	return fuu
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (fuu *FollowUpUpdate) SetNillableUpdatedBy(i *int) *FollowUpUpdate {
+	if i != nil {
+		fuu.SetUpdatedBy(*i)
+	}
+	return fuu
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (fuu *FollowUpUpdate) AddUpdatedBy(i int) *FollowUpUpdate {
+	fuu.mutation.AddUpdatedBy(i)
+	return fuu
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (fuu *FollowUpUpdate) ClearUpdatedBy() *FollowUpUpdate {
+	fuu.mutation.ClearUpdatedBy()
+	return fuu
+}
+
 // SetType sets the "type" field.
 func (fuu *FollowUpUpdate) SetType(f followup.Type) *FollowUpUpdate {
 	fuu.mutation.SetType(f)
@@ -80,33 +107,6 @@ func (fuu *FollowUpUpdate) SetNillableFollowedAt(t *time.Time) *FollowUpUpdate {
 	if t != nil {
 		fuu.SetFollowedAt(*t)
 	}
-	return fuu
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (fuu *FollowUpUpdate) SetUpdatedBy(i int) *FollowUpUpdate {
-	fuu.mutation.ResetUpdatedBy()
-	fuu.mutation.SetUpdatedBy(i)
-	return fuu
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fuu *FollowUpUpdate) SetNillableUpdatedBy(i *int) *FollowUpUpdate {
-	if i != nil {
-		fuu.SetUpdatedBy(*i)
-	}
-	return fuu
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (fuu *FollowUpUpdate) AddUpdatedBy(i int) *FollowUpUpdate {
-	fuu.mutation.AddUpdatedBy(i)
-	return fuu
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (fuu *FollowUpUpdate) ClearUpdatedBy() *FollowUpUpdate {
-	fuu.mutation.ClearUpdatedBy()
 	return fuu
 }
 
@@ -196,15 +196,6 @@ func (fuu *FollowUpUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if fuu.mutation.UpdatedAtCleared() {
 		_spec.ClearField(followup.FieldUpdatedAt, field.TypeTime)
 	}
-	if value, ok := fuu.mutation.GetType(); ok {
-		_spec.SetField(followup.FieldType, field.TypeEnum, value)
-	}
-	if value, ok := fuu.mutation.Content(); ok {
-		_spec.SetField(followup.FieldContent, field.TypeString, value)
-	}
-	if value, ok := fuu.mutation.FollowedAt(); ok {
-		_spec.SetField(followup.FieldFollowedAt, field.TypeTime, value)
-	}
 	if value, ok := fuu.mutation.UpdatedBy(); ok {
 		_spec.SetField(followup.FieldUpdatedBy, field.TypeInt, value)
 	}
@@ -213,6 +204,15 @@ func (fuu *FollowUpUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if fuu.mutation.UpdatedByCleared() {
 		_spec.ClearField(followup.FieldUpdatedBy, field.TypeInt)
+	}
+	if value, ok := fuu.mutation.GetType(); ok {
+		_spec.SetField(followup.FieldType, field.TypeEnum, value)
+	}
+	if value, ok := fuu.mutation.Content(); ok {
+		_spec.SetField(followup.FieldContent, field.TypeString, value)
+	}
+	if value, ok := fuu.mutation.FollowedAt(); ok {
+		_spec.SetField(followup.FieldFollowedAt, field.TypeTime, value)
 	}
 	_spec.AddModifiers(fuu.modifiers...)
 	if n, err = sqlgraph.UpdateNodes(ctx, fuu.driver, _spec); err != nil {
@@ -245,6 +245,33 @@ func (fuuo *FollowUpUpdateOne) SetUpdatedAt(t time.Time) *FollowUpUpdateOne {
 // ClearUpdatedAt clears the value of the "updated_at" field.
 func (fuuo *FollowUpUpdateOne) ClearUpdatedAt() *FollowUpUpdateOne {
 	fuuo.mutation.ClearUpdatedAt()
+	return fuuo
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (fuuo *FollowUpUpdateOne) SetUpdatedBy(i int) *FollowUpUpdateOne {
+	fuuo.mutation.ResetUpdatedBy()
+	fuuo.mutation.SetUpdatedBy(i)
+	return fuuo
+}
+
+// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
+func (fuuo *FollowUpUpdateOne) SetNillableUpdatedBy(i *int) *FollowUpUpdateOne {
+	if i != nil {
+		fuuo.SetUpdatedBy(*i)
+	}
+	return fuuo
+}
+
+// AddUpdatedBy adds i to the "updated_by" field.
+func (fuuo *FollowUpUpdateOne) AddUpdatedBy(i int) *FollowUpUpdateOne {
+	fuuo.mutation.AddUpdatedBy(i)
+	return fuuo
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (fuuo *FollowUpUpdateOne) ClearUpdatedBy() *FollowUpUpdateOne {
+	fuuo.mutation.ClearUpdatedBy()
 	return fuuo
 }
 
@@ -287,33 +314,6 @@ func (fuuo *FollowUpUpdateOne) SetNillableFollowedAt(t *time.Time) *FollowUpUpda
 	if t != nil {
 		fuuo.SetFollowedAt(*t)
 	}
-	return fuuo
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (fuuo *FollowUpUpdateOne) SetUpdatedBy(i int) *FollowUpUpdateOne {
-	fuuo.mutation.ResetUpdatedBy()
-	fuuo.mutation.SetUpdatedBy(i)
-	return fuuo
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (fuuo *FollowUpUpdateOne) SetNillableUpdatedBy(i *int) *FollowUpUpdateOne {
-	if i != nil {
-		fuuo.SetUpdatedBy(*i)
-	}
-	return fuuo
-}
-
-// AddUpdatedBy adds i to the "updated_by" field.
-func (fuuo *FollowUpUpdateOne) AddUpdatedBy(i int) *FollowUpUpdateOne {
-	fuuo.mutation.AddUpdatedBy(i)
-	return fuuo
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (fuuo *FollowUpUpdateOne) ClearUpdatedBy() *FollowUpUpdateOne {
-	fuuo.mutation.ClearUpdatedBy()
 	return fuuo
 }
 
@@ -433,15 +433,6 @@ func (fuuo *FollowUpUpdateOne) sqlSave(ctx context.Context) (_node *FollowUp, er
 	if fuuo.mutation.UpdatedAtCleared() {
 		_spec.ClearField(followup.FieldUpdatedAt, field.TypeTime)
 	}
-	if value, ok := fuuo.mutation.GetType(); ok {
-		_spec.SetField(followup.FieldType, field.TypeEnum, value)
-	}
-	if value, ok := fuuo.mutation.Content(); ok {
-		_spec.SetField(followup.FieldContent, field.TypeString, value)
-	}
-	if value, ok := fuuo.mutation.FollowedAt(); ok {
-		_spec.SetField(followup.FieldFollowedAt, field.TypeTime, value)
-	}
 	if value, ok := fuuo.mutation.UpdatedBy(); ok {
 		_spec.SetField(followup.FieldUpdatedBy, field.TypeInt, value)
 	}
@@ -450,6 +441,15 @@ func (fuuo *FollowUpUpdateOne) sqlSave(ctx context.Context) (_node *FollowUp, er
 	}
 	if fuuo.mutation.UpdatedByCleared() {
 		_spec.ClearField(followup.FieldUpdatedBy, field.TypeInt)
+	}
+	if value, ok := fuuo.mutation.GetType(); ok {
+		_spec.SetField(followup.FieldType, field.TypeEnum, value)
+	}
+	if value, ok := fuuo.mutation.Content(); ok {
+		_spec.SetField(followup.FieldContent, field.TypeString, value)
+	}
+	if value, ok := fuuo.mutation.FollowedAt(); ok {
+		_spec.SetField(followup.FieldFollowedAt, field.TypeTime, value)
 	}
 	_spec.AddModifiers(fuuo.modifiers...)
 	_node = &FollowUp{config: fuuo.config}

@@ -18,6 +18,10 @@ const (
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
 	FieldUpdatedAt = "updated_at"
+	// FieldCreatedBy holds the string denoting the created_by field in the database.
+	FieldCreatedBy = "created_by"
+	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
+	FieldUpdatedBy = "updated_by"
 	// FieldContractNo holds the string denoting the contract_no field in the database.
 	FieldContractNo = "contract_no"
 	// FieldAmount holds the string denoting the amount field in the database.
@@ -26,10 +30,6 @@ const (
 	FieldSignedAt = "signed_at"
 	// FieldEndAt holds the string denoting the end_at field in the database.
 	FieldEndAt = "end_at"
-	// FieldCreatedBy holds the string denoting the created_by field in the database.
-	FieldCreatedBy = "created_by"
-	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
-	FieldUpdatedBy = "updated_by"
 	// EdgeCustomer holds the string denoting the customer edge name in mutations.
 	EdgeCustomer = "customer"
 	// EdgePayments holds the string denoting the payments edge name in mutations.
@@ -57,12 +57,12 @@ var Columns = []string{
 	FieldID,
 	FieldCreatedAt,
 	FieldUpdatedAt,
+	FieldCreatedBy,
+	FieldUpdatedBy,
 	FieldContractNo,
 	FieldAmount,
 	FieldSignedAt,
 	FieldEndAt,
-	FieldCreatedBy,
-	FieldUpdatedBy,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "contracts"
@@ -117,6 +117,16 @@ func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
 }
 
+// ByCreatedBy orders the results by the created_by field.
+func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByUpdatedBy orders the results by the updated_by field.
+func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
+}
+
 // ByContractNo orders the results by the contract_no field.
 func ByContractNo(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldContractNo, opts...).ToFunc()
@@ -135,16 +145,6 @@ func BySignedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByEndAt orders the results by the end_at field.
 func ByEndAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEndAt, opts...).ToFunc()
-}
-
-// ByCreatedBy orders the results by the created_by field.
-func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
-}
-
-// ByUpdatedBy orders the results by the updated_by field.
-func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
 // ByCustomerField orders the results by customer field.

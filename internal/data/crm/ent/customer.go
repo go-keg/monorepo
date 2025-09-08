@@ -22,6 +22,10 @@ type Customer struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	// 创建人
+	CreatedBy int `json:"created_by,omitempty"`
+	// 修改人
+	UpdatedBy int `json:"updated_by,omitempty"`
 	// 客户名称
 	Name string `json:"name,omitempty"`
 	// 所属行业
@@ -32,10 +36,6 @@ type Customer struct {
 	Level string `json:"level,omitempty"`
 	// 自定义扩展字段
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
-	// 创建人
-	CreatedBy int `json:"created_by,omitempty"`
-	// 修改人
-	UpdatedBy int `json:"updated_by,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CustomerQuery when eager-loading is set.
 	Edges        CustomerEdges `json:"edges"`
@@ -134,6 +134,18 @@ func (c *Customer) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				c.UpdatedAt = value.Time
 			}
+		case customer.FieldCreatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_by", values[i])
+			} else if value.Valid {
+				c.CreatedBy = int(value.Int64)
+			}
+		case customer.FieldUpdatedBy:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
+			} else if value.Valid {
+				c.UpdatedBy = int(value.Int64)
+			}
 		case customer.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -165,18 +177,6 @@ func (c *Customer) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &c.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
-			}
-		case customer.FieldCreatedBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field created_by", values[i])
-			} else if value.Valid {
-				c.CreatedBy = int(value.Int64)
-			}
-		case customer.FieldUpdatedBy:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
-			} else if value.Valid {
-				c.UpdatedBy = int(value.Int64)
 			}
 		default:
 			c.selectValues.Set(columns[i], values[i])
@@ -235,6 +235,12 @@ func (c *Customer) String() string {
 	builder.WriteString("updated_at=")
 	builder.WriteString(c.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
+	builder.WriteString("created_by=")
+	builder.WriteString(fmt.Sprintf("%v", c.CreatedBy))
+	builder.WriteString(", ")
+	builder.WriteString("updated_by=")
+	builder.WriteString(fmt.Sprintf("%v", c.UpdatedBy))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(c.Name)
 	builder.WriteString(", ")
@@ -249,12 +255,6 @@ func (c *Customer) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", c.Metadata))
-	builder.WriteString(", ")
-	builder.WriteString("created_by=")
-	builder.WriteString(fmt.Sprintf("%v", c.CreatedBy))
-	builder.WriteString(", ")
-	builder.WriteString("updated_by=")
-	builder.WriteString(fmt.Sprintf("%v", c.UpdatedBy))
 	builder.WriteByte(')')
 	return builder.String()
 }

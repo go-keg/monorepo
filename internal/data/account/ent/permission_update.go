@@ -183,6 +183,20 @@ func (pu *PermissionUpdate) ClearAttrs() *PermissionUpdate {
 	return pu
 }
 
+// SetIsSystem sets the "is_system" field.
+func (pu *PermissionUpdate) SetIsSystem(b bool) *PermissionUpdate {
+	pu.mutation.SetIsSystem(b)
+	return pu
+}
+
+// SetNillableIsSystem sets the "is_system" field if the given value is not nil.
+func (pu *PermissionUpdate) SetNillableIsSystem(b *bool) *PermissionUpdate {
+	if b != nil {
+		pu.SetIsSystem(*b)
+	}
+	return pu
+}
+
 // AddRoleIDs adds the "roles" edge to the TenantRole entity by IDs.
 func (pu *PermissionUpdate) AddRoleIDs(ids ...int) *PermissionUpdate {
 	pu.mutation.AddRoleIDs(ids...)
@@ -379,6 +393,9 @@ func (pu *PermissionUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if pu.mutation.AttrsCleared() {
 		_spec.ClearField(permission.FieldAttrs, field.TypeJSON)
+	}
+	if value, ok := pu.mutation.IsSystem(); ok {
+		_spec.SetField(permission.FieldIsSystem, field.TypeBool, value)
 	}
 	if pu.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -674,6 +691,20 @@ func (puo *PermissionUpdateOne) ClearAttrs() *PermissionUpdateOne {
 	return puo
 }
 
+// SetIsSystem sets the "is_system" field.
+func (puo *PermissionUpdateOne) SetIsSystem(b bool) *PermissionUpdateOne {
+	puo.mutation.SetIsSystem(b)
+	return puo
+}
+
+// SetNillableIsSystem sets the "is_system" field if the given value is not nil.
+func (puo *PermissionUpdateOne) SetNillableIsSystem(b *bool) *PermissionUpdateOne {
+	if b != nil {
+		puo.SetIsSystem(*b)
+	}
+	return puo
+}
+
 // AddRoleIDs adds the "roles" edge to the TenantRole entity by IDs.
 func (puo *PermissionUpdateOne) AddRoleIDs(ids ...int) *PermissionUpdateOne {
 	puo.mutation.AddRoleIDs(ids...)
@@ -900,6 +931,9 @@ func (puo *PermissionUpdateOne) sqlSave(ctx context.Context) (_node *Permission,
 	}
 	if puo.mutation.AttrsCleared() {
 		_spec.ClearField(permission.FieldAttrs, field.TypeJSON)
+	}
+	if value, ok := puo.mutation.IsSystem(); ok {
+		_spec.SetField(permission.FieldIsSystem, field.TypeBool, value)
 	}
 	if puo.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{

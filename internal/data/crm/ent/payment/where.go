@@ -65,16 +65,6 @@ func UpdatedAt(v time.Time) predicate.Payment {
 	return predicate.Payment(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
-// Amount applies equality check predicate on the "amount" field. It's identical to AmountEQ.
-func Amount(v float64) predicate.Payment {
-	return predicate.Payment(sql.FieldEQ(FieldAmount, v))
-}
-
-// ReceivedAt applies equality check predicate on the "received_at" field. It's identical to ReceivedAtEQ.
-func ReceivedAt(v time.Time) predicate.Payment {
-	return predicate.Payment(sql.FieldEQ(FieldReceivedAt, v))
-}
-
 // CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
 func CreatedBy(v int) predicate.Payment {
 	return predicate.Payment(sql.FieldEQ(FieldCreatedBy, v))
@@ -83,6 +73,16 @@ func CreatedBy(v int) predicate.Payment {
 // UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
 func UpdatedBy(v int) predicate.Payment {
 	return predicate.Payment(sql.FieldEQ(FieldUpdatedBy, v))
+}
+
+// Amount applies equality check predicate on the "amount" field. It's identical to AmountEQ.
+func Amount(v float64) predicate.Payment {
+	return predicate.Payment(sql.FieldEQ(FieldAmount, v))
+}
+
+// ReceivedAt applies equality check predicate on the "received_at" field. It's identical to ReceivedAtEQ.
+func ReceivedAt(v time.Time) predicate.Payment {
+	return predicate.Payment(sql.FieldEQ(FieldReceivedAt, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -185,96 +185,6 @@ func UpdatedAtNotNil() predicate.Payment {
 	return predicate.Payment(sql.FieldNotNull(FieldUpdatedAt))
 }
 
-// AmountEQ applies the EQ predicate on the "amount" field.
-func AmountEQ(v float64) predicate.Payment {
-	return predicate.Payment(sql.FieldEQ(FieldAmount, v))
-}
-
-// AmountNEQ applies the NEQ predicate on the "amount" field.
-func AmountNEQ(v float64) predicate.Payment {
-	return predicate.Payment(sql.FieldNEQ(FieldAmount, v))
-}
-
-// AmountIn applies the In predicate on the "amount" field.
-func AmountIn(vs ...float64) predicate.Payment {
-	return predicate.Payment(sql.FieldIn(FieldAmount, vs...))
-}
-
-// AmountNotIn applies the NotIn predicate on the "amount" field.
-func AmountNotIn(vs ...float64) predicate.Payment {
-	return predicate.Payment(sql.FieldNotIn(FieldAmount, vs...))
-}
-
-// AmountGT applies the GT predicate on the "amount" field.
-func AmountGT(v float64) predicate.Payment {
-	return predicate.Payment(sql.FieldGT(FieldAmount, v))
-}
-
-// AmountGTE applies the GTE predicate on the "amount" field.
-func AmountGTE(v float64) predicate.Payment {
-	return predicate.Payment(sql.FieldGTE(FieldAmount, v))
-}
-
-// AmountLT applies the LT predicate on the "amount" field.
-func AmountLT(v float64) predicate.Payment {
-	return predicate.Payment(sql.FieldLT(FieldAmount, v))
-}
-
-// AmountLTE applies the LTE predicate on the "amount" field.
-func AmountLTE(v float64) predicate.Payment {
-	return predicate.Payment(sql.FieldLTE(FieldAmount, v))
-}
-
-// ReceivedAtEQ applies the EQ predicate on the "received_at" field.
-func ReceivedAtEQ(v time.Time) predicate.Payment {
-	return predicate.Payment(sql.FieldEQ(FieldReceivedAt, v))
-}
-
-// ReceivedAtNEQ applies the NEQ predicate on the "received_at" field.
-func ReceivedAtNEQ(v time.Time) predicate.Payment {
-	return predicate.Payment(sql.FieldNEQ(FieldReceivedAt, v))
-}
-
-// ReceivedAtIn applies the In predicate on the "received_at" field.
-func ReceivedAtIn(vs ...time.Time) predicate.Payment {
-	return predicate.Payment(sql.FieldIn(FieldReceivedAt, vs...))
-}
-
-// ReceivedAtNotIn applies the NotIn predicate on the "received_at" field.
-func ReceivedAtNotIn(vs ...time.Time) predicate.Payment {
-	return predicate.Payment(sql.FieldNotIn(FieldReceivedAt, vs...))
-}
-
-// ReceivedAtGT applies the GT predicate on the "received_at" field.
-func ReceivedAtGT(v time.Time) predicate.Payment {
-	return predicate.Payment(sql.FieldGT(FieldReceivedAt, v))
-}
-
-// ReceivedAtGTE applies the GTE predicate on the "received_at" field.
-func ReceivedAtGTE(v time.Time) predicate.Payment {
-	return predicate.Payment(sql.FieldGTE(FieldReceivedAt, v))
-}
-
-// ReceivedAtLT applies the LT predicate on the "received_at" field.
-func ReceivedAtLT(v time.Time) predicate.Payment {
-	return predicate.Payment(sql.FieldLT(FieldReceivedAt, v))
-}
-
-// ReceivedAtLTE applies the LTE predicate on the "received_at" field.
-func ReceivedAtLTE(v time.Time) predicate.Payment {
-	return predicate.Payment(sql.FieldLTE(FieldReceivedAt, v))
-}
-
-// ReceivedAtIsNil applies the IsNil predicate on the "received_at" field.
-func ReceivedAtIsNil() predicate.Payment {
-	return predicate.Payment(sql.FieldIsNull(FieldReceivedAt))
-}
-
-// ReceivedAtNotNil applies the NotNil predicate on the "received_at" field.
-func ReceivedAtNotNil() predicate.Payment {
-	return predicate.Payment(sql.FieldNotNull(FieldReceivedAt))
-}
-
 // CreatedByEQ applies the EQ predicate on the "created_by" field.
 func CreatedByEQ(v int) predicate.Payment {
 	return predicate.Payment(sql.FieldEQ(FieldCreatedBy, v))
@@ -363,6 +273,96 @@ func UpdatedByIsNil() predicate.Payment {
 // UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
 func UpdatedByNotNil() predicate.Payment {
 	return predicate.Payment(sql.FieldNotNull(FieldUpdatedBy))
+}
+
+// AmountEQ applies the EQ predicate on the "amount" field.
+func AmountEQ(v float64) predicate.Payment {
+	return predicate.Payment(sql.FieldEQ(FieldAmount, v))
+}
+
+// AmountNEQ applies the NEQ predicate on the "amount" field.
+func AmountNEQ(v float64) predicate.Payment {
+	return predicate.Payment(sql.FieldNEQ(FieldAmount, v))
+}
+
+// AmountIn applies the In predicate on the "amount" field.
+func AmountIn(vs ...float64) predicate.Payment {
+	return predicate.Payment(sql.FieldIn(FieldAmount, vs...))
+}
+
+// AmountNotIn applies the NotIn predicate on the "amount" field.
+func AmountNotIn(vs ...float64) predicate.Payment {
+	return predicate.Payment(sql.FieldNotIn(FieldAmount, vs...))
+}
+
+// AmountGT applies the GT predicate on the "amount" field.
+func AmountGT(v float64) predicate.Payment {
+	return predicate.Payment(sql.FieldGT(FieldAmount, v))
+}
+
+// AmountGTE applies the GTE predicate on the "amount" field.
+func AmountGTE(v float64) predicate.Payment {
+	return predicate.Payment(sql.FieldGTE(FieldAmount, v))
+}
+
+// AmountLT applies the LT predicate on the "amount" field.
+func AmountLT(v float64) predicate.Payment {
+	return predicate.Payment(sql.FieldLT(FieldAmount, v))
+}
+
+// AmountLTE applies the LTE predicate on the "amount" field.
+func AmountLTE(v float64) predicate.Payment {
+	return predicate.Payment(sql.FieldLTE(FieldAmount, v))
+}
+
+// ReceivedAtEQ applies the EQ predicate on the "received_at" field.
+func ReceivedAtEQ(v time.Time) predicate.Payment {
+	return predicate.Payment(sql.FieldEQ(FieldReceivedAt, v))
+}
+
+// ReceivedAtNEQ applies the NEQ predicate on the "received_at" field.
+func ReceivedAtNEQ(v time.Time) predicate.Payment {
+	return predicate.Payment(sql.FieldNEQ(FieldReceivedAt, v))
+}
+
+// ReceivedAtIn applies the In predicate on the "received_at" field.
+func ReceivedAtIn(vs ...time.Time) predicate.Payment {
+	return predicate.Payment(sql.FieldIn(FieldReceivedAt, vs...))
+}
+
+// ReceivedAtNotIn applies the NotIn predicate on the "received_at" field.
+func ReceivedAtNotIn(vs ...time.Time) predicate.Payment {
+	return predicate.Payment(sql.FieldNotIn(FieldReceivedAt, vs...))
+}
+
+// ReceivedAtGT applies the GT predicate on the "received_at" field.
+func ReceivedAtGT(v time.Time) predicate.Payment {
+	return predicate.Payment(sql.FieldGT(FieldReceivedAt, v))
+}
+
+// ReceivedAtGTE applies the GTE predicate on the "received_at" field.
+func ReceivedAtGTE(v time.Time) predicate.Payment {
+	return predicate.Payment(sql.FieldGTE(FieldReceivedAt, v))
+}
+
+// ReceivedAtLT applies the LT predicate on the "received_at" field.
+func ReceivedAtLT(v time.Time) predicate.Payment {
+	return predicate.Payment(sql.FieldLT(FieldReceivedAt, v))
+}
+
+// ReceivedAtLTE applies the LTE predicate on the "received_at" field.
+func ReceivedAtLTE(v time.Time) predicate.Payment {
+	return predicate.Payment(sql.FieldLTE(FieldReceivedAt, v))
+}
+
+// ReceivedAtIsNil applies the IsNil predicate on the "received_at" field.
+func ReceivedAtIsNil() predicate.Payment {
+	return predicate.Payment(sql.FieldIsNull(FieldReceivedAt))
+}
+
+// ReceivedAtNotNil applies the NotNil predicate on the "received_at" field.
+func ReceivedAtNotNil() predicate.Payment {
+	return predicate.Payment(sql.FieldNotNull(FieldReceivedAt))
 }
 
 // HasContract applies the HasEdge predicate on the "contract" edge.

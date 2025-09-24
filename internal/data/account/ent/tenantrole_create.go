@@ -26,128 +26,128 @@ type TenantRoleCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (trc *TenantRoleCreate) SetCreatedAt(t time.Time) *TenantRoleCreate {
-	trc.mutation.SetCreatedAt(t)
-	return trc
+func (_c *TenantRoleCreate) SetCreatedAt(v time.Time) *TenantRoleCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (trc *TenantRoleCreate) SetNillableCreatedAt(t *time.Time) *TenantRoleCreate {
-	if t != nil {
-		trc.SetCreatedAt(*t)
+func (_c *TenantRoleCreate) SetNillableCreatedAt(v *time.Time) *TenantRoleCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return trc
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (trc *TenantRoleCreate) SetUpdatedAt(t time.Time) *TenantRoleCreate {
-	trc.mutation.SetUpdatedAt(t)
-	return trc
+func (_c *TenantRoleCreate) SetUpdatedAt(v time.Time) *TenantRoleCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (trc *TenantRoleCreate) SetNillableUpdatedAt(t *time.Time) *TenantRoleCreate {
-	if t != nil {
-		trc.SetUpdatedAt(*t)
+func (_c *TenantRoleCreate) SetNillableUpdatedAt(v *time.Time) *TenantRoleCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return trc
+	return _c
 }
 
 // SetTenantID sets the "tenant_id" field.
-func (trc *TenantRoleCreate) SetTenantID(i int) *TenantRoleCreate {
-	trc.mutation.SetTenantID(i)
-	return trc
+func (_c *TenantRoleCreate) SetTenantID(v int) *TenantRoleCreate {
+	_c.mutation.SetTenantID(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (trc *TenantRoleCreate) SetName(s string) *TenantRoleCreate {
-	trc.mutation.SetName(s)
-	return trc
+func (_c *TenantRoleCreate) SetName(v string) *TenantRoleCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetDescription sets the "description" field.
-func (trc *TenantRoleCreate) SetDescription(s string) *TenantRoleCreate {
-	trc.mutation.SetDescription(s)
-	return trc
+func (_c *TenantRoleCreate) SetDescription(v string) *TenantRoleCreate {
+	_c.mutation.SetDescription(v)
+	return _c
 }
 
 // SetNillableDescription sets the "description" field if the given value is not nil.
-func (trc *TenantRoleCreate) SetNillableDescription(s *string) *TenantRoleCreate {
-	if s != nil {
-		trc.SetDescription(*s)
+func (_c *TenantRoleCreate) SetNillableDescription(v *string) *TenantRoleCreate {
+	if v != nil {
+		_c.SetDescription(*v)
 	}
-	return trc
+	return _c
 }
 
 // SetSort sets the "sort" field.
-func (trc *TenantRoleCreate) SetSort(i int) *TenantRoleCreate {
-	trc.mutation.SetSort(i)
-	return trc
+func (_c *TenantRoleCreate) SetSort(v int) *TenantRoleCreate {
+	_c.mutation.SetSort(v)
+	return _c
 }
 
 // SetNillableSort sets the "sort" field if the given value is not nil.
-func (trc *TenantRoleCreate) SetNillableSort(i *int) *TenantRoleCreate {
-	if i != nil {
-		trc.SetSort(*i)
+func (_c *TenantRoleCreate) SetNillableSort(v *int) *TenantRoleCreate {
+	if v != nil {
+		_c.SetSort(*v)
 	}
-	return trc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (trc *TenantRoleCreate) SetID(i int) *TenantRoleCreate {
-	trc.mutation.SetID(i)
-	return trc
+func (_c *TenantRoleCreate) SetID(v int) *TenantRoleCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // AddPermissionIDs adds the "permissions" edge to the Permission entity by IDs.
-func (trc *TenantRoleCreate) AddPermissionIDs(ids ...int) *TenantRoleCreate {
-	trc.mutation.AddPermissionIDs(ids...)
-	return trc
+func (_c *TenantRoleCreate) AddPermissionIDs(ids ...int) *TenantRoleCreate {
+	_c.mutation.AddPermissionIDs(ids...)
+	return _c
 }
 
 // AddPermissions adds the "permissions" edges to the Permission entity.
-func (trc *TenantRoleCreate) AddPermissions(p ...*Permission) *TenantRoleCreate {
-	ids := make([]int, len(p))
-	for i := range p {
-		ids[i] = p[i].ID
+func (_c *TenantRoleCreate) AddPermissions(v ...*Permission) *TenantRoleCreate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return trc.AddPermissionIDs(ids...)
+	return _c.AddPermissionIDs(ids...)
 }
 
 // AddTenantUserIDs adds the "tenant_users" edge to the TenantUser entity by IDs.
-func (trc *TenantRoleCreate) AddTenantUserIDs(ids ...int) *TenantRoleCreate {
-	trc.mutation.AddTenantUserIDs(ids...)
-	return trc
+func (_c *TenantRoleCreate) AddTenantUserIDs(ids ...int) *TenantRoleCreate {
+	_c.mutation.AddTenantUserIDs(ids...)
+	return _c
 }
 
 // AddTenantUsers adds the "tenant_users" edges to the TenantUser entity.
-func (trc *TenantRoleCreate) AddTenantUsers(t ...*TenantUser) *TenantRoleCreate {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *TenantRoleCreate) AddTenantUsers(v ...*TenantUser) *TenantRoleCreate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return trc.AddTenantUserIDs(ids...)
+	return _c.AddTenantUserIDs(ids...)
 }
 
 // SetTenant sets the "tenant" edge to the Tenant entity.
-func (trc *TenantRoleCreate) SetTenant(t *Tenant) *TenantRoleCreate {
-	return trc.SetTenantID(t.ID)
+func (_c *TenantRoleCreate) SetTenant(v *Tenant) *TenantRoleCreate {
+	return _c.SetTenantID(v.ID)
 }
 
 // Mutation returns the TenantRoleMutation object of the builder.
-func (trc *TenantRoleCreate) Mutation() *TenantRoleMutation {
-	return trc.mutation
+func (_c *TenantRoleCreate) Mutation() *TenantRoleMutation {
+	return _c.mutation
 }
 
 // Save creates the TenantRole in the database.
-func (trc *TenantRoleCreate) Save(ctx context.Context) (*TenantRole, error) {
-	trc.defaults()
-	return withHooks(ctx, trc.sqlSave, trc.mutation, trc.hooks)
+func (_c *TenantRoleCreate) Save(ctx context.Context) (*TenantRole, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (trc *TenantRoleCreate) SaveX(ctx context.Context) *TenantRole {
-	v, err := trc.Save(ctx)
+func (_c *TenantRoleCreate) SaveX(ctx context.Context) *TenantRole {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -155,62 +155,62 @@ func (trc *TenantRoleCreate) SaveX(ctx context.Context) *TenantRole {
 }
 
 // Exec executes the query.
-func (trc *TenantRoleCreate) Exec(ctx context.Context) error {
-	_, err := trc.Save(ctx)
+func (_c *TenantRoleCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (trc *TenantRoleCreate) ExecX(ctx context.Context) {
-	if err := trc.Exec(ctx); err != nil {
+func (_c *TenantRoleCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (trc *TenantRoleCreate) defaults() {
-	if _, ok := trc.mutation.CreatedAt(); !ok {
+func (_c *TenantRoleCreate) defaults() {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := tenantrole.DefaultCreatedAt()
-		trc.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := trc.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := tenantrole.DefaultUpdatedAt()
-		trc.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
-	if _, ok := trc.mutation.Sort(); !ok {
+	if _, ok := _c.mutation.Sort(); !ok {
 		v := tenantrole.DefaultSort
-		trc.mutation.SetSort(v)
+		_c.mutation.SetSort(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (trc *TenantRoleCreate) check() error {
-	if _, ok := trc.mutation.TenantID(); !ok {
+func (_c *TenantRoleCreate) check() error {
+	if _, ok := _c.mutation.TenantID(); !ok {
 		return &ValidationError{Name: "tenant_id", err: errors.New(`ent: missing required field "TenantRole.tenant_id"`)}
 	}
-	if _, ok := trc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "TenantRole.name"`)}
 	}
-	if v, ok := trc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := tenantrole.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "TenantRole.name": %w`, err)}
 		}
 	}
-	if _, ok := trc.mutation.Sort(); !ok {
+	if _, ok := _c.mutation.Sort(); !ok {
 		return &ValidationError{Name: "sort", err: errors.New(`ent: missing required field "TenantRole.sort"`)}
 	}
-	if len(trc.mutation.TenantIDs()) == 0 {
+	if len(_c.mutation.TenantIDs()) == 0 {
 		return &ValidationError{Name: "tenant", err: errors.New(`ent: missing required edge "TenantRole.tenant"`)}
 	}
 	return nil
 }
 
-func (trc *TenantRoleCreate) sqlSave(ctx context.Context) (*TenantRole, error) {
-	if err := trc.check(); err != nil {
+func (_c *TenantRoleCreate) sqlSave(ctx context.Context) (*TenantRole, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := trc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, trc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -220,42 +220,42 @@ func (trc *TenantRoleCreate) sqlSave(ctx context.Context) (*TenantRole, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int(id)
 	}
-	trc.mutation.id = &_node.ID
-	trc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (trc *TenantRoleCreate) createSpec() (*TenantRole, *sqlgraph.CreateSpec) {
+func (_c *TenantRoleCreate) createSpec() (*TenantRole, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TenantRole{config: trc.config}
+		_node = &TenantRole{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(tenantrole.Table, sqlgraph.NewFieldSpec(tenantrole.FieldID, field.TypeInt))
 	)
-	_spec.OnConflict = trc.conflict
-	if id, ok := trc.mutation.ID(); ok {
+	_spec.OnConflict = _c.conflict
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := trc.mutation.CreatedAt(); ok {
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(tenantrole.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := trc.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(tenantrole.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := trc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(tenantrole.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := trc.mutation.Description(); ok {
+	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(tenantrole.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := trc.mutation.Sort(); ok {
+	if value, ok := _c.mutation.Sort(); ok {
 		_spec.SetField(tenantrole.FieldSort, field.TypeInt, value)
 		_node.Sort = value
 	}
-	if nodes := trc.mutation.PermissionsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.PermissionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -271,7 +271,7 @@ func (trc *TenantRoleCreate) createSpec() (*TenantRole, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := trc.mutation.TenantUsersIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TenantUsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: true,
@@ -287,7 +287,7 @@ func (trc *TenantRoleCreate) createSpec() (*TenantRole, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := trc.mutation.TenantIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -323,10 +323,10 @@ func (trc *TenantRoleCreate) createSpec() (*TenantRole, *sqlgraph.CreateSpec) {
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
-func (trc *TenantRoleCreate) OnConflict(opts ...sql.ConflictOption) *TenantRoleUpsertOne {
-	trc.conflict = opts
+func (_c *TenantRoleCreate) OnConflict(opts ...sql.ConflictOption) *TenantRoleUpsertOne {
+	_c.conflict = opts
 	return &TenantRoleUpsertOne{
-		create: trc,
+		create: _c,
 	}
 }
 
@@ -336,10 +336,10 @@ func (trc *TenantRoleCreate) OnConflict(opts ...sql.ConflictOption) *TenantRoleU
 //	client.TenantRole.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
-func (trc *TenantRoleCreate) OnConflictColumns(columns ...string) *TenantRoleUpsertOne {
-	trc.conflict = append(trc.conflict, sql.ConflictColumns(columns...))
+func (_c *TenantRoleCreate) OnConflictColumns(columns ...string) *TenantRoleUpsertOne {
+	_c.conflict = append(_c.conflict, sql.ConflictColumns(columns...))
 	return &TenantRoleUpsertOne{
-		create: trc,
+		create: _c,
 	}
 }
 
@@ -595,16 +595,16 @@ type TenantRoleCreateBulk struct {
 }
 
 // Save creates the TenantRole entities in the database.
-func (trcb *TenantRoleCreateBulk) Save(ctx context.Context) ([]*TenantRole, error) {
-	if trcb.err != nil {
-		return nil, trcb.err
+func (_c *TenantRoleCreateBulk) Save(ctx context.Context) ([]*TenantRole, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(trcb.builders))
-	nodes := make([]*TenantRole, len(trcb.builders))
-	mutators := make([]Mutator, len(trcb.builders))
-	for i := range trcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TenantRole, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := trcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TenantRoleMutation)
@@ -618,12 +618,12 @@ func (trcb *TenantRoleCreateBulk) Save(ctx context.Context) ([]*TenantRole, erro
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, trcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
-					spec.OnConflict = trcb.conflict
+					spec.OnConflict = _c.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, trcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -647,7 +647,7 @@ func (trcb *TenantRoleCreateBulk) Save(ctx context.Context) ([]*TenantRole, erro
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, trcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -655,8 +655,8 @@ func (trcb *TenantRoleCreateBulk) Save(ctx context.Context) ([]*TenantRole, erro
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (trcb *TenantRoleCreateBulk) SaveX(ctx context.Context) []*TenantRole {
-	v, err := trcb.Save(ctx)
+func (_c *TenantRoleCreateBulk) SaveX(ctx context.Context) []*TenantRole {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -664,14 +664,14 @@ func (trcb *TenantRoleCreateBulk) SaveX(ctx context.Context) []*TenantRole {
 }
 
 // Exec executes the query.
-func (trcb *TenantRoleCreateBulk) Exec(ctx context.Context) error {
-	_, err := trcb.Save(ctx)
+func (_c *TenantRoleCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (trcb *TenantRoleCreateBulk) ExecX(ctx context.Context) {
-	if err := trcb.Exec(ctx); err != nil {
+func (_c *TenantRoleCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
@@ -691,10 +691,10 @@ func (trcb *TenantRoleCreateBulk) ExecX(ctx context.Context) {
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
-func (trcb *TenantRoleCreateBulk) OnConflict(opts ...sql.ConflictOption) *TenantRoleUpsertBulk {
-	trcb.conflict = opts
+func (_c *TenantRoleCreateBulk) OnConflict(opts ...sql.ConflictOption) *TenantRoleUpsertBulk {
+	_c.conflict = opts
 	return &TenantRoleUpsertBulk{
-		create: trcb,
+		create: _c,
 	}
 }
 
@@ -704,10 +704,10 @@ func (trcb *TenantRoleCreateBulk) OnConflict(opts ...sql.ConflictOption) *Tenant
 //	client.TenantRole.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
-func (trcb *TenantRoleCreateBulk) OnConflictColumns(columns ...string) *TenantRoleUpsertBulk {
-	trcb.conflict = append(trcb.conflict, sql.ConflictColumns(columns...))
+func (_c *TenantRoleCreateBulk) OnConflictColumns(columns ...string) *TenantRoleUpsertBulk {
+	_c.conflict = append(_c.conflict, sql.ConflictColumns(columns...))
 	return &TenantRoleUpsertBulk{
-		create: trcb,
+		create: _c,
 	}
 }
 

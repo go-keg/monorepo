@@ -25,162 +25,162 @@ type OAuthAccountUpdate struct {
 }
 
 // Where appends a list predicates to the OAuthAccountUpdate builder.
-func (oau *OAuthAccountUpdate) Where(ps ...predicate.OAuthAccount) *OAuthAccountUpdate {
-	oau.mutation.Where(ps...)
-	return oau
+func (_u *OAuthAccountUpdate) Where(ps ...predicate.OAuthAccount) *OAuthAccountUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (oau *OAuthAccountUpdate) SetUpdatedAt(t time.Time) *OAuthAccountUpdate {
-	oau.mutation.SetUpdatedAt(t)
-	return oau
+func (_u *OAuthAccountUpdate) SetUpdatedAt(v time.Time) *OAuthAccountUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (oau *OAuthAccountUpdate) ClearUpdatedAt() *OAuthAccountUpdate {
-	oau.mutation.ClearUpdatedAt()
-	return oau
+func (_u *OAuthAccountUpdate) ClearUpdatedAt() *OAuthAccountUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (oau *OAuthAccountUpdate) SetUserID(i int) *OAuthAccountUpdate {
-	oau.mutation.SetUserID(i)
-	return oau
+func (_u *OAuthAccountUpdate) SetUserID(v int) *OAuthAccountUpdate {
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (oau *OAuthAccountUpdate) SetNillableUserID(i *int) *OAuthAccountUpdate {
-	if i != nil {
-		oau.SetUserID(*i)
+func (_u *OAuthAccountUpdate) SetNillableUserID(v *int) *OAuthAccountUpdate {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return oau
+	return _u
 }
 
 // SetProvider sets the "provider" field.
-func (oau *OAuthAccountUpdate) SetProvider(s string) *OAuthAccountUpdate {
-	oau.mutation.SetProvider(s)
-	return oau
+func (_u *OAuthAccountUpdate) SetProvider(v string) *OAuthAccountUpdate {
+	_u.mutation.SetProvider(v)
+	return _u
 }
 
 // SetNillableProvider sets the "provider" field if the given value is not nil.
-func (oau *OAuthAccountUpdate) SetNillableProvider(s *string) *OAuthAccountUpdate {
-	if s != nil {
-		oau.SetProvider(*s)
+func (_u *OAuthAccountUpdate) SetNillableProvider(v *string) *OAuthAccountUpdate {
+	if v != nil {
+		_u.SetProvider(*v)
 	}
-	return oau
+	return _u
 }
 
 // SetProviderUserID sets the "provider_user_id" field.
-func (oau *OAuthAccountUpdate) SetProviderUserID(s string) *OAuthAccountUpdate {
-	oau.mutation.SetProviderUserID(s)
-	return oau
+func (_u *OAuthAccountUpdate) SetProviderUserID(v string) *OAuthAccountUpdate {
+	_u.mutation.SetProviderUserID(v)
+	return _u
 }
 
 // SetNillableProviderUserID sets the "provider_user_id" field if the given value is not nil.
-func (oau *OAuthAccountUpdate) SetNillableProviderUserID(s *string) *OAuthAccountUpdate {
-	if s != nil {
-		oau.SetProviderUserID(*s)
+func (_u *OAuthAccountUpdate) SetNillableProviderUserID(v *string) *OAuthAccountUpdate {
+	if v != nil {
+		_u.SetProviderUserID(*v)
 	}
-	return oau
+	return _u
 }
 
 // SetAccessToken sets the "access_token" field.
-func (oau *OAuthAccountUpdate) SetAccessToken(s string) *OAuthAccountUpdate {
-	oau.mutation.SetAccessToken(s)
-	return oau
+func (_u *OAuthAccountUpdate) SetAccessToken(v string) *OAuthAccountUpdate {
+	_u.mutation.SetAccessToken(v)
+	return _u
 }
 
 // SetNillableAccessToken sets the "access_token" field if the given value is not nil.
-func (oau *OAuthAccountUpdate) SetNillableAccessToken(s *string) *OAuthAccountUpdate {
-	if s != nil {
-		oau.SetAccessToken(*s)
+func (_u *OAuthAccountUpdate) SetNillableAccessToken(v *string) *OAuthAccountUpdate {
+	if v != nil {
+		_u.SetAccessToken(*v)
 	}
-	return oau
+	return _u
 }
 
 // ClearAccessToken clears the value of the "access_token" field.
-func (oau *OAuthAccountUpdate) ClearAccessToken() *OAuthAccountUpdate {
-	oau.mutation.ClearAccessToken()
-	return oau
+func (_u *OAuthAccountUpdate) ClearAccessToken() *OAuthAccountUpdate {
+	_u.mutation.ClearAccessToken()
+	return _u
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (oau *OAuthAccountUpdate) SetRefreshToken(s string) *OAuthAccountUpdate {
-	oau.mutation.SetRefreshToken(s)
-	return oau
+func (_u *OAuthAccountUpdate) SetRefreshToken(v string) *OAuthAccountUpdate {
+	_u.mutation.SetRefreshToken(v)
+	return _u
 }
 
 // SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
-func (oau *OAuthAccountUpdate) SetNillableRefreshToken(s *string) *OAuthAccountUpdate {
-	if s != nil {
-		oau.SetRefreshToken(*s)
+func (_u *OAuthAccountUpdate) SetNillableRefreshToken(v *string) *OAuthAccountUpdate {
+	if v != nil {
+		_u.SetRefreshToken(*v)
 	}
-	return oau
+	return _u
 }
 
 // ClearRefreshToken clears the value of the "refresh_token" field.
-func (oau *OAuthAccountUpdate) ClearRefreshToken() *OAuthAccountUpdate {
-	oau.mutation.ClearRefreshToken()
-	return oau
+func (_u *OAuthAccountUpdate) ClearRefreshToken() *OAuthAccountUpdate {
+	_u.mutation.ClearRefreshToken()
+	return _u
 }
 
 // SetTokenExpiry sets the "token_expiry" field.
-func (oau *OAuthAccountUpdate) SetTokenExpiry(t time.Time) *OAuthAccountUpdate {
-	oau.mutation.SetTokenExpiry(t)
-	return oau
+func (_u *OAuthAccountUpdate) SetTokenExpiry(v time.Time) *OAuthAccountUpdate {
+	_u.mutation.SetTokenExpiry(v)
+	return _u
 }
 
 // SetNillableTokenExpiry sets the "token_expiry" field if the given value is not nil.
-func (oau *OAuthAccountUpdate) SetNillableTokenExpiry(t *time.Time) *OAuthAccountUpdate {
-	if t != nil {
-		oau.SetTokenExpiry(*t)
+func (_u *OAuthAccountUpdate) SetNillableTokenExpiry(v *time.Time) *OAuthAccountUpdate {
+	if v != nil {
+		_u.SetTokenExpiry(*v)
 	}
-	return oau
+	return _u
 }
 
 // ClearTokenExpiry clears the value of the "token_expiry" field.
-func (oau *OAuthAccountUpdate) ClearTokenExpiry() *OAuthAccountUpdate {
-	oau.mutation.ClearTokenExpiry()
-	return oau
+func (_u *OAuthAccountUpdate) ClearTokenExpiry() *OAuthAccountUpdate {
+	_u.mutation.ClearTokenExpiry()
+	return _u
 }
 
 // SetProfile sets the "profile" field.
-func (oau *OAuthAccountUpdate) SetProfile(m map[string]interface{}) *OAuthAccountUpdate {
-	oau.mutation.SetProfile(m)
-	return oau
+func (_u *OAuthAccountUpdate) SetProfile(v map[string]interface{}) *OAuthAccountUpdate {
+	_u.mutation.SetProfile(v)
+	return _u
 }
 
 // ClearProfile clears the value of the "profile" field.
-func (oau *OAuthAccountUpdate) ClearProfile() *OAuthAccountUpdate {
-	oau.mutation.ClearProfile()
-	return oau
+func (_u *OAuthAccountUpdate) ClearProfile() *OAuthAccountUpdate {
+	_u.mutation.ClearProfile()
+	return _u
 }
 
 // SetUser sets the "user" edge to the User entity.
-func (oau *OAuthAccountUpdate) SetUser(u *User) *OAuthAccountUpdate {
-	return oau.SetUserID(u.ID)
+func (_u *OAuthAccountUpdate) SetUser(v *User) *OAuthAccountUpdate {
+	return _u.SetUserID(v.ID)
 }
 
 // Mutation returns the OAuthAccountMutation object of the builder.
-func (oau *OAuthAccountUpdate) Mutation() *OAuthAccountMutation {
-	return oau.mutation
+func (_u *OAuthAccountUpdate) Mutation() *OAuthAccountMutation {
+	return _u.mutation
 }
 
 // ClearUser clears the "user" edge to the User entity.
-func (oau *OAuthAccountUpdate) ClearUser() *OAuthAccountUpdate {
-	oau.mutation.ClearUser()
-	return oau
+func (_u *OAuthAccountUpdate) ClearUser() *OAuthAccountUpdate {
+	_u.mutation.ClearUser()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (oau *OAuthAccountUpdate) Save(ctx context.Context) (int, error) {
-	oau.defaults()
-	return withHooks(ctx, oau.sqlSave, oau.mutation, oau.hooks)
+func (_u *OAuthAccountUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (oau *OAuthAccountUpdate) SaveX(ctx context.Context) int {
-	affected, err := oau.Save(ctx)
+func (_u *OAuthAccountUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -188,97 +188,97 @@ func (oau *OAuthAccountUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (oau *OAuthAccountUpdate) Exec(ctx context.Context) error {
-	_, err := oau.Save(ctx)
+func (_u *OAuthAccountUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oau *OAuthAccountUpdate) ExecX(ctx context.Context) {
-	if err := oau.Exec(ctx); err != nil {
+func (_u *OAuthAccountUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (oau *OAuthAccountUpdate) defaults() {
-	if _, ok := oau.mutation.UpdatedAt(); !ok && !oau.mutation.UpdatedAtCleared() {
+func (_u *OAuthAccountUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		v := oauthaccount.UpdateDefaultUpdatedAt()
-		oau.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (oau *OAuthAccountUpdate) check() error {
-	if v, ok := oau.mutation.Provider(); ok {
+func (_u *OAuthAccountUpdate) check() error {
+	if v, ok := _u.mutation.Provider(); ok {
 		if err := oauthaccount.ProviderValidator(v); err != nil {
 			return &ValidationError{Name: "provider", err: fmt.Errorf(`ent: validator failed for field "OAuthAccount.provider": %w`, err)}
 		}
 	}
-	if oau.mutation.UserCleared() && len(oau.mutation.UserIDs()) > 0 {
+	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "OAuthAccount.user"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (oau *OAuthAccountUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OAuthAccountUpdate {
-	oau.modifiers = append(oau.modifiers, modifiers...)
-	return oau
+func (_u *OAuthAccountUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OAuthAccountUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (oau *OAuthAccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := oau.check(); err != nil {
-		return n, err
+func (_u *OAuthAccountUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(oauthaccount.Table, oauthaccount.Columns, sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeInt))
-	if ps := oau.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if oau.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(oauthaccount.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := oau.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(oauthaccount.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if oau.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(oauthaccount.FieldUpdatedAt, field.TypeTime)
 	}
-	if value, ok := oau.mutation.Provider(); ok {
+	if value, ok := _u.mutation.Provider(); ok {
 		_spec.SetField(oauthaccount.FieldProvider, field.TypeString, value)
 	}
-	if value, ok := oau.mutation.ProviderUserID(); ok {
+	if value, ok := _u.mutation.ProviderUserID(); ok {
 		_spec.SetField(oauthaccount.FieldProviderUserID, field.TypeString, value)
 	}
-	if value, ok := oau.mutation.AccessToken(); ok {
+	if value, ok := _u.mutation.AccessToken(); ok {
 		_spec.SetField(oauthaccount.FieldAccessToken, field.TypeString, value)
 	}
-	if oau.mutation.AccessTokenCleared() {
+	if _u.mutation.AccessTokenCleared() {
 		_spec.ClearField(oauthaccount.FieldAccessToken, field.TypeString)
 	}
-	if value, ok := oau.mutation.RefreshToken(); ok {
+	if value, ok := _u.mutation.RefreshToken(); ok {
 		_spec.SetField(oauthaccount.FieldRefreshToken, field.TypeString, value)
 	}
-	if oau.mutation.RefreshTokenCleared() {
+	if _u.mutation.RefreshTokenCleared() {
 		_spec.ClearField(oauthaccount.FieldRefreshToken, field.TypeString)
 	}
-	if value, ok := oau.mutation.TokenExpiry(); ok {
+	if value, ok := _u.mutation.TokenExpiry(); ok {
 		_spec.SetField(oauthaccount.FieldTokenExpiry, field.TypeTime, value)
 	}
-	if oau.mutation.TokenExpiryCleared() {
+	if _u.mutation.TokenExpiryCleared() {
 		_spec.ClearField(oauthaccount.FieldTokenExpiry, field.TypeTime)
 	}
-	if value, ok := oau.mutation.Profile(); ok {
+	if value, ok := _u.mutation.Profile(); ok {
 		_spec.SetField(oauthaccount.FieldProfile, field.TypeJSON, value)
 	}
-	if oau.mutation.ProfileCleared() {
+	if _u.mutation.ProfileCleared() {
 		_spec.ClearField(oauthaccount.FieldProfile, field.TypeJSON)
 	}
-	if oau.mutation.UserCleared() {
+	if _u.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -291,7 +291,7 @@ func (oau *OAuthAccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := oau.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -307,8 +307,8 @@ func (oau *OAuthAccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(oau.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, oau.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{oauthaccount.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -316,8 +316,8 @@ func (oau *OAuthAccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	oau.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OAuthAccountUpdateOne is the builder for updating a single OAuthAccount entity.
@@ -330,169 +330,169 @@ type OAuthAccountUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (oauo *OAuthAccountUpdateOne) SetUpdatedAt(t time.Time) *OAuthAccountUpdateOne {
-	oauo.mutation.SetUpdatedAt(t)
-	return oauo
+func (_u *OAuthAccountUpdateOne) SetUpdatedAt(v time.Time) *OAuthAccountUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (oauo *OAuthAccountUpdateOne) ClearUpdatedAt() *OAuthAccountUpdateOne {
-	oauo.mutation.ClearUpdatedAt()
-	return oauo
+func (_u *OAuthAccountUpdateOne) ClearUpdatedAt() *OAuthAccountUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetUserID sets the "user_id" field.
-func (oauo *OAuthAccountUpdateOne) SetUserID(i int) *OAuthAccountUpdateOne {
-	oauo.mutation.SetUserID(i)
-	return oauo
+func (_u *OAuthAccountUpdateOne) SetUserID(v int) *OAuthAccountUpdateOne {
+	_u.mutation.SetUserID(v)
+	return _u
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (oauo *OAuthAccountUpdateOne) SetNillableUserID(i *int) *OAuthAccountUpdateOne {
-	if i != nil {
-		oauo.SetUserID(*i)
+func (_u *OAuthAccountUpdateOne) SetNillableUserID(v *int) *OAuthAccountUpdateOne {
+	if v != nil {
+		_u.SetUserID(*v)
 	}
-	return oauo
+	return _u
 }
 
 // SetProvider sets the "provider" field.
-func (oauo *OAuthAccountUpdateOne) SetProvider(s string) *OAuthAccountUpdateOne {
-	oauo.mutation.SetProvider(s)
-	return oauo
+func (_u *OAuthAccountUpdateOne) SetProvider(v string) *OAuthAccountUpdateOne {
+	_u.mutation.SetProvider(v)
+	return _u
 }
 
 // SetNillableProvider sets the "provider" field if the given value is not nil.
-func (oauo *OAuthAccountUpdateOne) SetNillableProvider(s *string) *OAuthAccountUpdateOne {
-	if s != nil {
-		oauo.SetProvider(*s)
+func (_u *OAuthAccountUpdateOne) SetNillableProvider(v *string) *OAuthAccountUpdateOne {
+	if v != nil {
+		_u.SetProvider(*v)
 	}
-	return oauo
+	return _u
 }
 
 // SetProviderUserID sets the "provider_user_id" field.
-func (oauo *OAuthAccountUpdateOne) SetProviderUserID(s string) *OAuthAccountUpdateOne {
-	oauo.mutation.SetProviderUserID(s)
-	return oauo
+func (_u *OAuthAccountUpdateOne) SetProviderUserID(v string) *OAuthAccountUpdateOne {
+	_u.mutation.SetProviderUserID(v)
+	return _u
 }
 
 // SetNillableProviderUserID sets the "provider_user_id" field if the given value is not nil.
-func (oauo *OAuthAccountUpdateOne) SetNillableProviderUserID(s *string) *OAuthAccountUpdateOne {
-	if s != nil {
-		oauo.SetProviderUserID(*s)
+func (_u *OAuthAccountUpdateOne) SetNillableProviderUserID(v *string) *OAuthAccountUpdateOne {
+	if v != nil {
+		_u.SetProviderUserID(*v)
 	}
-	return oauo
+	return _u
 }
 
 // SetAccessToken sets the "access_token" field.
-func (oauo *OAuthAccountUpdateOne) SetAccessToken(s string) *OAuthAccountUpdateOne {
-	oauo.mutation.SetAccessToken(s)
-	return oauo
+func (_u *OAuthAccountUpdateOne) SetAccessToken(v string) *OAuthAccountUpdateOne {
+	_u.mutation.SetAccessToken(v)
+	return _u
 }
 
 // SetNillableAccessToken sets the "access_token" field if the given value is not nil.
-func (oauo *OAuthAccountUpdateOne) SetNillableAccessToken(s *string) *OAuthAccountUpdateOne {
-	if s != nil {
-		oauo.SetAccessToken(*s)
+func (_u *OAuthAccountUpdateOne) SetNillableAccessToken(v *string) *OAuthAccountUpdateOne {
+	if v != nil {
+		_u.SetAccessToken(*v)
 	}
-	return oauo
+	return _u
 }
 
 // ClearAccessToken clears the value of the "access_token" field.
-func (oauo *OAuthAccountUpdateOne) ClearAccessToken() *OAuthAccountUpdateOne {
-	oauo.mutation.ClearAccessToken()
-	return oauo
+func (_u *OAuthAccountUpdateOne) ClearAccessToken() *OAuthAccountUpdateOne {
+	_u.mutation.ClearAccessToken()
+	return _u
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (oauo *OAuthAccountUpdateOne) SetRefreshToken(s string) *OAuthAccountUpdateOne {
-	oauo.mutation.SetRefreshToken(s)
-	return oauo
+func (_u *OAuthAccountUpdateOne) SetRefreshToken(v string) *OAuthAccountUpdateOne {
+	_u.mutation.SetRefreshToken(v)
+	return _u
 }
 
 // SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
-func (oauo *OAuthAccountUpdateOne) SetNillableRefreshToken(s *string) *OAuthAccountUpdateOne {
-	if s != nil {
-		oauo.SetRefreshToken(*s)
+func (_u *OAuthAccountUpdateOne) SetNillableRefreshToken(v *string) *OAuthAccountUpdateOne {
+	if v != nil {
+		_u.SetRefreshToken(*v)
 	}
-	return oauo
+	return _u
 }
 
 // ClearRefreshToken clears the value of the "refresh_token" field.
-func (oauo *OAuthAccountUpdateOne) ClearRefreshToken() *OAuthAccountUpdateOne {
-	oauo.mutation.ClearRefreshToken()
-	return oauo
+func (_u *OAuthAccountUpdateOne) ClearRefreshToken() *OAuthAccountUpdateOne {
+	_u.mutation.ClearRefreshToken()
+	return _u
 }
 
 // SetTokenExpiry sets the "token_expiry" field.
-func (oauo *OAuthAccountUpdateOne) SetTokenExpiry(t time.Time) *OAuthAccountUpdateOne {
-	oauo.mutation.SetTokenExpiry(t)
-	return oauo
+func (_u *OAuthAccountUpdateOne) SetTokenExpiry(v time.Time) *OAuthAccountUpdateOne {
+	_u.mutation.SetTokenExpiry(v)
+	return _u
 }
 
 // SetNillableTokenExpiry sets the "token_expiry" field if the given value is not nil.
-func (oauo *OAuthAccountUpdateOne) SetNillableTokenExpiry(t *time.Time) *OAuthAccountUpdateOne {
-	if t != nil {
-		oauo.SetTokenExpiry(*t)
+func (_u *OAuthAccountUpdateOne) SetNillableTokenExpiry(v *time.Time) *OAuthAccountUpdateOne {
+	if v != nil {
+		_u.SetTokenExpiry(*v)
 	}
-	return oauo
+	return _u
 }
 
 // ClearTokenExpiry clears the value of the "token_expiry" field.
-func (oauo *OAuthAccountUpdateOne) ClearTokenExpiry() *OAuthAccountUpdateOne {
-	oauo.mutation.ClearTokenExpiry()
-	return oauo
+func (_u *OAuthAccountUpdateOne) ClearTokenExpiry() *OAuthAccountUpdateOne {
+	_u.mutation.ClearTokenExpiry()
+	return _u
 }
 
 // SetProfile sets the "profile" field.
-func (oauo *OAuthAccountUpdateOne) SetProfile(m map[string]interface{}) *OAuthAccountUpdateOne {
-	oauo.mutation.SetProfile(m)
-	return oauo
+func (_u *OAuthAccountUpdateOne) SetProfile(v map[string]interface{}) *OAuthAccountUpdateOne {
+	_u.mutation.SetProfile(v)
+	return _u
 }
 
 // ClearProfile clears the value of the "profile" field.
-func (oauo *OAuthAccountUpdateOne) ClearProfile() *OAuthAccountUpdateOne {
-	oauo.mutation.ClearProfile()
-	return oauo
+func (_u *OAuthAccountUpdateOne) ClearProfile() *OAuthAccountUpdateOne {
+	_u.mutation.ClearProfile()
+	return _u
 }
 
 // SetUser sets the "user" edge to the User entity.
-func (oauo *OAuthAccountUpdateOne) SetUser(u *User) *OAuthAccountUpdateOne {
-	return oauo.SetUserID(u.ID)
+func (_u *OAuthAccountUpdateOne) SetUser(v *User) *OAuthAccountUpdateOne {
+	return _u.SetUserID(v.ID)
 }
 
 // Mutation returns the OAuthAccountMutation object of the builder.
-func (oauo *OAuthAccountUpdateOne) Mutation() *OAuthAccountMutation {
-	return oauo.mutation
+func (_u *OAuthAccountUpdateOne) Mutation() *OAuthAccountMutation {
+	return _u.mutation
 }
 
 // ClearUser clears the "user" edge to the User entity.
-func (oauo *OAuthAccountUpdateOne) ClearUser() *OAuthAccountUpdateOne {
-	oauo.mutation.ClearUser()
-	return oauo
+func (_u *OAuthAccountUpdateOne) ClearUser() *OAuthAccountUpdateOne {
+	_u.mutation.ClearUser()
+	return _u
 }
 
 // Where appends a list predicates to the OAuthAccountUpdate builder.
-func (oauo *OAuthAccountUpdateOne) Where(ps ...predicate.OAuthAccount) *OAuthAccountUpdateOne {
-	oauo.mutation.Where(ps...)
-	return oauo
+func (_u *OAuthAccountUpdateOne) Where(ps ...predicate.OAuthAccount) *OAuthAccountUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (oauo *OAuthAccountUpdateOne) Select(field string, fields ...string) *OAuthAccountUpdateOne {
-	oauo.fields = append([]string{field}, fields...)
-	return oauo
+func (_u *OAuthAccountUpdateOne) Select(field string, fields ...string) *OAuthAccountUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated OAuthAccount entity.
-func (oauo *OAuthAccountUpdateOne) Save(ctx context.Context) (*OAuthAccount, error) {
-	oauo.defaults()
-	return withHooks(ctx, oauo.sqlSave, oauo.mutation, oauo.hooks)
+func (_u *OAuthAccountUpdateOne) Save(ctx context.Context) (*OAuthAccount, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (oauo *OAuthAccountUpdateOne) SaveX(ctx context.Context) *OAuthAccount {
-	node, err := oauo.Save(ctx)
+func (_u *OAuthAccountUpdateOne) SaveX(ctx context.Context) *OAuthAccount {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -500,56 +500,56 @@ func (oauo *OAuthAccountUpdateOne) SaveX(ctx context.Context) *OAuthAccount {
 }
 
 // Exec executes the query on the entity.
-func (oauo *OAuthAccountUpdateOne) Exec(ctx context.Context) error {
-	_, err := oauo.Save(ctx)
+func (_u *OAuthAccountUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oauo *OAuthAccountUpdateOne) ExecX(ctx context.Context) {
-	if err := oauo.Exec(ctx); err != nil {
+func (_u *OAuthAccountUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (oauo *OAuthAccountUpdateOne) defaults() {
-	if _, ok := oauo.mutation.UpdatedAt(); !ok && !oauo.mutation.UpdatedAtCleared() {
+func (_u *OAuthAccountUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		v := oauthaccount.UpdateDefaultUpdatedAt()
-		oauo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (oauo *OAuthAccountUpdateOne) check() error {
-	if v, ok := oauo.mutation.Provider(); ok {
+func (_u *OAuthAccountUpdateOne) check() error {
+	if v, ok := _u.mutation.Provider(); ok {
 		if err := oauthaccount.ProviderValidator(v); err != nil {
 			return &ValidationError{Name: "provider", err: fmt.Errorf(`ent: validator failed for field "OAuthAccount.provider": %w`, err)}
 		}
 	}
-	if oauo.mutation.UserCleared() && len(oauo.mutation.UserIDs()) > 0 {
+	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "OAuthAccount.user"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (oauo *OAuthAccountUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OAuthAccountUpdateOne {
-	oauo.modifiers = append(oauo.modifiers, modifiers...)
-	return oauo
+func (_u *OAuthAccountUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OAuthAccountUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (oauo *OAuthAccountUpdateOne) sqlSave(ctx context.Context) (_node *OAuthAccount, err error) {
-	if err := oauo.check(); err != nil {
+func (_u *OAuthAccountUpdateOne) sqlSave(ctx context.Context) (_node *OAuthAccount, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(oauthaccount.Table, oauthaccount.Columns, sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeInt))
-	id, ok := oauo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "OAuthAccount.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := oauo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, oauthaccount.FieldID)
 		for _, f := range fields {
@@ -561,53 +561,53 @@ func (oauo *OAuthAccountUpdateOne) sqlSave(ctx context.Context) (_node *OAuthAcc
 			}
 		}
 	}
-	if ps := oauo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if oauo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(oauthaccount.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := oauo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(oauthaccount.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if oauo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(oauthaccount.FieldUpdatedAt, field.TypeTime)
 	}
-	if value, ok := oauo.mutation.Provider(); ok {
+	if value, ok := _u.mutation.Provider(); ok {
 		_spec.SetField(oauthaccount.FieldProvider, field.TypeString, value)
 	}
-	if value, ok := oauo.mutation.ProviderUserID(); ok {
+	if value, ok := _u.mutation.ProviderUserID(); ok {
 		_spec.SetField(oauthaccount.FieldProviderUserID, field.TypeString, value)
 	}
-	if value, ok := oauo.mutation.AccessToken(); ok {
+	if value, ok := _u.mutation.AccessToken(); ok {
 		_spec.SetField(oauthaccount.FieldAccessToken, field.TypeString, value)
 	}
-	if oauo.mutation.AccessTokenCleared() {
+	if _u.mutation.AccessTokenCleared() {
 		_spec.ClearField(oauthaccount.FieldAccessToken, field.TypeString)
 	}
-	if value, ok := oauo.mutation.RefreshToken(); ok {
+	if value, ok := _u.mutation.RefreshToken(); ok {
 		_spec.SetField(oauthaccount.FieldRefreshToken, field.TypeString, value)
 	}
-	if oauo.mutation.RefreshTokenCleared() {
+	if _u.mutation.RefreshTokenCleared() {
 		_spec.ClearField(oauthaccount.FieldRefreshToken, field.TypeString)
 	}
-	if value, ok := oauo.mutation.TokenExpiry(); ok {
+	if value, ok := _u.mutation.TokenExpiry(); ok {
 		_spec.SetField(oauthaccount.FieldTokenExpiry, field.TypeTime, value)
 	}
-	if oauo.mutation.TokenExpiryCleared() {
+	if _u.mutation.TokenExpiryCleared() {
 		_spec.ClearField(oauthaccount.FieldTokenExpiry, field.TypeTime)
 	}
-	if value, ok := oauo.mutation.Profile(); ok {
+	if value, ok := _u.mutation.Profile(); ok {
 		_spec.SetField(oauthaccount.FieldProfile, field.TypeJSON, value)
 	}
-	if oauo.mutation.ProfileCleared() {
+	if _u.mutation.ProfileCleared() {
 		_spec.ClearField(oauthaccount.FieldProfile, field.TypeJSON)
 	}
-	if oauo.mutation.UserCleared() {
+	if _u.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -620,7 +620,7 @@ func (oauo *OAuthAccountUpdateOne) sqlSave(ctx context.Context) (_node *OAuthAcc
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := oauo.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -636,11 +636,11 @@ func (oauo *OAuthAccountUpdateOne) sqlSave(ctx context.Context) (_node *OAuthAcc
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(oauo.modifiers...)
-	_node = &OAuthAccount{config: oauo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &OAuthAccount{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, oauo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{oauthaccount.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -648,6 +648,6 @@ func (oauo *OAuthAccountUpdateOne) sqlSave(ctx context.Context) (_node *OAuthAcc
 		}
 		return nil, err
 	}
-	oauo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

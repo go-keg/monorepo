@@ -24,51 +24,51 @@ type MembershipUpdate struct {
 }
 
 // Where appends a list predicates to the MembershipUpdate builder.
-func (mu *MembershipUpdate) Where(ps ...predicate.Membership) *MembershipUpdate {
-	mu.mutation.Where(ps...)
-	return mu
+func (_u *MembershipUpdate) Where(ps ...predicate.Membership) *MembershipUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (mu *MembershipUpdate) SetUpdatedAt(t time.Time) *MembershipUpdate {
-	mu.mutation.SetUpdatedAt(t)
-	return mu
+func (_u *MembershipUpdate) SetUpdatedAt(v time.Time) *MembershipUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (mu *MembershipUpdate) ClearUpdatedAt() *MembershipUpdate {
-	mu.mutation.ClearUpdatedAt()
-	return mu
+func (_u *MembershipUpdate) ClearUpdatedAt() *MembershipUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetIsLeader sets the "is_leader" field.
-func (mu *MembershipUpdate) SetIsLeader(b bool) *MembershipUpdate {
-	mu.mutation.SetIsLeader(b)
-	return mu
+func (_u *MembershipUpdate) SetIsLeader(v bool) *MembershipUpdate {
+	_u.mutation.SetIsLeader(v)
+	return _u
 }
 
 // SetNillableIsLeader sets the "is_leader" field if the given value is not nil.
-func (mu *MembershipUpdate) SetNillableIsLeader(b *bool) *MembershipUpdate {
-	if b != nil {
-		mu.SetIsLeader(*b)
+func (_u *MembershipUpdate) SetNillableIsLeader(v *bool) *MembershipUpdate {
+	if v != nil {
+		_u.SetIsLeader(*v)
 	}
-	return mu
+	return _u
 }
 
 // Mutation returns the MembershipMutation object of the builder.
-func (mu *MembershipUpdate) Mutation() *MembershipMutation {
-	return mu.mutation
+func (_u *MembershipUpdate) Mutation() *MembershipMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (mu *MembershipUpdate) Save(ctx context.Context) (int, error) {
-	mu.defaults()
-	return withHooks(ctx, mu.sqlSave, mu.mutation, mu.hooks)
+func (_u *MembershipUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (mu *MembershipUpdate) SaveX(ctx context.Context) int {
-	affected, err := mu.Save(ctx)
+func (_u *MembershipUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -76,69 +76,69 @@ func (mu *MembershipUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (mu *MembershipUpdate) Exec(ctx context.Context) error {
-	_, err := mu.Save(ctx)
+func (_u *MembershipUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (mu *MembershipUpdate) ExecX(ctx context.Context) {
-	if err := mu.Exec(ctx); err != nil {
+func (_u *MembershipUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (mu *MembershipUpdate) defaults() {
-	if _, ok := mu.mutation.UpdatedAt(); !ok && !mu.mutation.UpdatedAtCleared() {
+func (_u *MembershipUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		v := membership.UpdateDefaultUpdatedAt()
-		mu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (mu *MembershipUpdate) check() error {
-	if mu.mutation.TenantUserCleared() && len(mu.mutation.TenantUserIDs()) > 0 {
+func (_u *MembershipUpdate) check() error {
+	if _u.mutation.TenantUserCleared() && len(_u.mutation.TenantUserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Membership.tenant_user"`)
 	}
-	if mu.mutation.OrganizationCleared() && len(mu.mutation.OrganizationIDs()) > 0 {
+	if _u.mutation.OrganizationCleared() && len(_u.mutation.OrganizationIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Membership.organization"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (mu *MembershipUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MembershipUpdate {
-	mu.modifiers = append(mu.modifiers, modifiers...)
-	return mu
+func (_u *MembershipUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MembershipUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (mu *MembershipUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := mu.check(); err != nil {
-		return n, err
+func (_u *MembershipUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(membership.Table, membership.Columns, sqlgraph.NewFieldSpec(membership.FieldID, field.TypeInt))
-	if ps := mu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if mu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(membership.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := mu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(membership.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if mu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(membership.FieldUpdatedAt, field.TypeTime)
 	}
-	if value, ok := mu.mutation.IsLeader(); ok {
+	if value, ok := _u.mutation.IsLeader(); ok {
 		_spec.SetField(membership.FieldIsLeader, field.TypeBool, value)
 	}
-	_spec.AddModifiers(mu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, mu.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{membership.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -146,8 +146,8 @@ func (mu *MembershipUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	mu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // MembershipUpdateOne is the builder for updating a single Membership entity.
@@ -160,58 +160,58 @@ type MembershipUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (muo *MembershipUpdateOne) SetUpdatedAt(t time.Time) *MembershipUpdateOne {
-	muo.mutation.SetUpdatedAt(t)
-	return muo
+func (_u *MembershipUpdateOne) SetUpdatedAt(v time.Time) *MembershipUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (muo *MembershipUpdateOne) ClearUpdatedAt() *MembershipUpdateOne {
-	muo.mutation.ClearUpdatedAt()
-	return muo
+func (_u *MembershipUpdateOne) ClearUpdatedAt() *MembershipUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetIsLeader sets the "is_leader" field.
-func (muo *MembershipUpdateOne) SetIsLeader(b bool) *MembershipUpdateOne {
-	muo.mutation.SetIsLeader(b)
-	return muo
+func (_u *MembershipUpdateOne) SetIsLeader(v bool) *MembershipUpdateOne {
+	_u.mutation.SetIsLeader(v)
+	return _u
 }
 
 // SetNillableIsLeader sets the "is_leader" field if the given value is not nil.
-func (muo *MembershipUpdateOne) SetNillableIsLeader(b *bool) *MembershipUpdateOne {
-	if b != nil {
-		muo.SetIsLeader(*b)
+func (_u *MembershipUpdateOne) SetNillableIsLeader(v *bool) *MembershipUpdateOne {
+	if v != nil {
+		_u.SetIsLeader(*v)
 	}
-	return muo
+	return _u
 }
 
 // Mutation returns the MembershipMutation object of the builder.
-func (muo *MembershipUpdateOne) Mutation() *MembershipMutation {
-	return muo.mutation
+func (_u *MembershipUpdateOne) Mutation() *MembershipMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the MembershipUpdate builder.
-func (muo *MembershipUpdateOne) Where(ps ...predicate.Membership) *MembershipUpdateOne {
-	muo.mutation.Where(ps...)
-	return muo
+func (_u *MembershipUpdateOne) Where(ps ...predicate.Membership) *MembershipUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (muo *MembershipUpdateOne) Select(field string, fields ...string) *MembershipUpdateOne {
-	muo.fields = append([]string{field}, fields...)
-	return muo
+func (_u *MembershipUpdateOne) Select(field string, fields ...string) *MembershipUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Membership entity.
-func (muo *MembershipUpdateOne) Save(ctx context.Context) (*Membership, error) {
-	muo.defaults()
-	return withHooks(ctx, muo.sqlSave, muo.mutation, muo.hooks)
+func (_u *MembershipUpdateOne) Save(ctx context.Context) (*Membership, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (muo *MembershipUpdateOne) SaveX(ctx context.Context) *Membership {
-	node, err := muo.Save(ctx)
+func (_u *MembershipUpdateOne) SaveX(ctx context.Context) *Membership {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -219,54 +219,54 @@ func (muo *MembershipUpdateOne) SaveX(ctx context.Context) *Membership {
 }
 
 // Exec executes the query on the entity.
-func (muo *MembershipUpdateOne) Exec(ctx context.Context) error {
-	_, err := muo.Save(ctx)
+func (_u *MembershipUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (muo *MembershipUpdateOne) ExecX(ctx context.Context) {
-	if err := muo.Exec(ctx); err != nil {
+func (_u *MembershipUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (muo *MembershipUpdateOne) defaults() {
-	if _, ok := muo.mutation.UpdatedAt(); !ok && !muo.mutation.UpdatedAtCleared() {
+func (_u *MembershipUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		v := membership.UpdateDefaultUpdatedAt()
-		muo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (muo *MembershipUpdateOne) check() error {
-	if muo.mutation.TenantUserCleared() && len(muo.mutation.TenantUserIDs()) > 0 {
+func (_u *MembershipUpdateOne) check() error {
+	if _u.mutation.TenantUserCleared() && len(_u.mutation.TenantUserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Membership.tenant_user"`)
 	}
-	if muo.mutation.OrganizationCleared() && len(muo.mutation.OrganizationIDs()) > 0 {
+	if _u.mutation.OrganizationCleared() && len(_u.mutation.OrganizationIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "Membership.organization"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (muo *MembershipUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MembershipUpdateOne {
-	muo.modifiers = append(muo.modifiers, modifiers...)
-	return muo
+func (_u *MembershipUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MembershipUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (muo *MembershipUpdateOne) sqlSave(ctx context.Context) (_node *Membership, err error) {
-	if err := muo.check(); err != nil {
+func (_u *MembershipUpdateOne) sqlSave(ctx context.Context) (_node *Membership, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(membership.Table, membership.Columns, sqlgraph.NewFieldSpec(membership.FieldID, field.TypeInt))
-	id, ok := muo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Membership.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := muo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, membership.FieldID)
 		for _, f := range fields {
@@ -278,30 +278,30 @@ func (muo *MembershipUpdateOne) sqlSave(ctx context.Context) (_node *Membership,
 			}
 		}
 	}
-	if ps := muo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if muo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(membership.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := muo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(membership.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if muo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(membership.FieldUpdatedAt, field.TypeTime)
 	}
-	if value, ok := muo.mutation.IsLeader(); ok {
+	if value, ok := _u.mutation.IsLeader(); ok {
 		_spec.SetField(membership.FieldIsLeader, field.TypeBool, value)
 	}
-	_spec.AddModifiers(muo.modifiers...)
-	_node = &Membership{config: muo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Membership{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, muo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{membership.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -309,6 +309,6 @@ func (muo *MembershipUpdateOne) sqlSave(ctx context.Context) (_node *Membership,
 		}
 		return nil, err
 	}
-	muo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

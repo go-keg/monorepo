@@ -20,56 +20,56 @@ type TenantRoleDelete struct {
 }
 
 // Where appends a list predicates to the TenantRoleDelete builder.
-func (trd *TenantRoleDelete) Where(ps ...predicate.TenantRole) *TenantRoleDelete {
-	trd.mutation.Where(ps...)
-	return trd
+func (_d *TenantRoleDelete) Where(ps ...predicate.TenantRole) *TenantRoleDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (trd *TenantRoleDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, trd.sqlExec, trd.mutation, trd.hooks)
+func (_d *TenantRoleDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (trd *TenantRoleDelete) ExecX(ctx context.Context) int {
-	n, err := trd.Exec(ctx)
+func (_d *TenantRoleDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (trd *TenantRoleDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TenantRoleDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(tenantrole.Table, sqlgraph.NewFieldSpec(tenantrole.FieldID, field.TypeInt))
-	if ps := trd.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, trd.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	trd.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TenantRoleDeleteOne is the builder for deleting a single TenantRole entity.
 type TenantRoleDeleteOne struct {
-	trd *TenantRoleDelete
+	_d *TenantRoleDelete
 }
 
 // Where appends a list predicates to the TenantRoleDelete builder.
-func (trdo *TenantRoleDeleteOne) Where(ps ...predicate.TenantRole) *TenantRoleDeleteOne {
-	trdo.trd.mutation.Where(ps...)
-	return trdo
+func (_d *TenantRoleDeleteOne) Where(ps ...predicate.TenantRole) *TenantRoleDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (trdo *TenantRoleDeleteOne) Exec(ctx context.Context) error {
-	n, err := trdo.trd.Exec(ctx)
+func (_d *TenantRoleDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (trdo *TenantRoleDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (trdo *TenantRoleDeleteOne) ExecX(ctx context.Context) {
-	if err := trdo.Exec(ctx); err != nil {
+func (_d *TenantRoleDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

@@ -116,7 +116,7 @@ func (*Organization) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Organization fields.
-func (o *Organization) assignValues(columns []string, values []any) error {
+func (_m *Organization) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -127,46 +127,46 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			o.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case organization.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				o.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case organization.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				o.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case organization.FieldTenantID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
 			} else if value.Valid {
-				o.TenantID = int(value.Int64)
+				_m.TenantID = int(value.Int64)
 			}
 		case organization.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				o.Name = value.String
+				_m.Name = value.String
 			}
 		case organization.FieldParentID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field parent_id", values[i])
 			} else if value.Valid {
-				o.ParentID = new(int)
-				*o.ParentID = int(value.Int64)
+				_m.ParentID = new(int)
+				*_m.ParentID = int(value.Int64)
 			}
 		case organization.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				o.Type = organization.Type(value.String)
+				_m.Type = organization.Type(value.String)
 			}
 		default:
-			o.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -174,121 +174,121 @@ func (o *Organization) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Organization.
 // This includes values selected through modifiers, order, etc.
-func (o *Organization) Value(name string) (ent.Value, error) {
-	return o.selectValues.Get(name)
+func (_m *Organization) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryTenant queries the "tenant" edge of the Organization entity.
-func (o *Organization) QueryTenant() *TenantQuery {
-	return NewOrganizationClient(o.config).QueryTenant(o)
+func (_m *Organization) QueryTenant() *TenantQuery {
+	return NewOrganizationClient(_m.config).QueryTenant(_m)
 }
 
 // QueryParent queries the "parent" edge of the Organization entity.
-func (o *Organization) QueryParent() *OrganizationQuery {
-	return NewOrganizationClient(o.config).QueryParent(o)
+func (_m *Organization) QueryParent() *OrganizationQuery {
+	return NewOrganizationClient(_m.config).QueryParent(_m)
 }
 
 // QueryChildren queries the "children" edge of the Organization entity.
-func (o *Organization) QueryChildren() *OrganizationQuery {
-	return NewOrganizationClient(o.config).QueryChildren(o)
+func (_m *Organization) QueryChildren() *OrganizationQuery {
+	return NewOrganizationClient(_m.config).QueryChildren(_m)
 }
 
 // QueryMemberships queries the "memberships" edge of the Organization entity.
-func (o *Organization) QueryMemberships() *MembershipQuery {
-	return NewOrganizationClient(o.config).QueryMemberships(o)
+func (_m *Organization) QueryMemberships() *MembershipQuery {
+	return NewOrganizationClient(_m.config).QueryMemberships(_m)
 }
 
 // Update returns a builder for updating this Organization.
 // Note that you need to call Organization.Unwrap() before calling this method if this Organization
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (o *Organization) Update() *OrganizationUpdateOne {
-	return NewOrganizationClient(o.config).UpdateOne(o)
+func (_m *Organization) Update() *OrganizationUpdateOne {
+	return NewOrganizationClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Organization entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (o *Organization) Unwrap() *Organization {
-	_tx, ok := o.config.driver.(*txDriver)
+func (_m *Organization) Unwrap() *Organization {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Organization is not a transactional entity")
 	}
-	o.config.driver = _tx.drv
-	return o
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (o *Organization) String() string {
+func (_m *Organization) String() string {
 	var builder strings.Builder
 	builder.WriteString("Organization(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", o.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(o.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(o.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("tenant_id=")
-	builder.WriteString(fmt.Sprintf("%v", o.TenantID))
+	builder.WriteString(fmt.Sprintf("%v", _m.TenantID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(o.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
-	if v := o.ParentID; v != nil {
+	if v := _m.ParentID; v != nil {
 		builder.WriteString("parent_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("type=")
-	builder.WriteString(fmt.Sprintf("%v", o.Type))
+	builder.WriteString(fmt.Sprintf("%v", _m.Type))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedChildren returns the Children named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedChildren(name string) ([]*Organization, error) {
-	if o.Edges.namedChildren == nil {
+func (_m *Organization) NamedChildren(name string) ([]*Organization, error) {
+	if _m.Edges.namedChildren == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedChildren[name]
+	nodes, ok := _m.Edges.namedChildren[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedChildren(name string, edges ...*Organization) {
-	if o.Edges.namedChildren == nil {
-		o.Edges.namedChildren = make(map[string][]*Organization)
+func (_m *Organization) appendNamedChildren(name string, edges ...*Organization) {
+	if _m.Edges.namedChildren == nil {
+		_m.Edges.namedChildren = make(map[string][]*Organization)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedChildren[name] = []*Organization{}
+		_m.Edges.namedChildren[name] = []*Organization{}
 	} else {
-		o.Edges.namedChildren[name] = append(o.Edges.namedChildren[name], edges...)
+		_m.Edges.namedChildren[name] = append(_m.Edges.namedChildren[name], edges...)
 	}
 }
 
 // NamedMemberships returns the Memberships named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (o *Organization) NamedMemberships(name string) ([]*Membership, error) {
-	if o.Edges.namedMemberships == nil {
+func (_m *Organization) NamedMemberships(name string) ([]*Membership, error) {
+	if _m.Edges.namedMemberships == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := o.Edges.namedMemberships[name]
+	nodes, ok := _m.Edges.namedMemberships[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (o *Organization) appendNamedMemberships(name string, edges ...*Membership) {
-	if o.Edges.namedMemberships == nil {
-		o.Edges.namedMemberships = make(map[string][]*Membership)
+func (_m *Organization) appendNamedMemberships(name string, edges ...*Membership) {
+	if _m.Edges.namedMemberships == nil {
+		_m.Edges.namedMemberships = make(map[string][]*Membership)
 	}
 	if len(edges) == 0 {
-		o.Edges.namedMemberships[name] = []*Membership{}
+		_m.Edges.namedMemberships[name] = []*Membership{}
 	} else {
-		o.Edges.namedMemberships[name] = append(o.Edges.namedMemberships[name], edges...)
+		_m.Edges.namedMemberships[name] = append(_m.Edges.namedMemberships[name], edges...)
 	}
 }
 

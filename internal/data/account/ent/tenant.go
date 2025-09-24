@@ -102,7 +102,7 @@ func (*Tenant) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Tenant fields.
-func (t *Tenant) assignValues(columns []string, values []any) error {
+func (_m *Tenant) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -113,41 +113,41 @@ func (t *Tenant) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			t.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case tenant.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				t.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case tenant.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				t.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case tenant.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				t.Name = value.String
+				_m.Name = value.String
 			}
 		case tenant.FieldMaxUsers:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field max_users", values[i])
 			} else if value.Valid {
-				t.MaxUsers = int(value.Int64)
+				_m.MaxUsers = int(value.Int64)
 			}
 		case tenant.FieldFeatures:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field features", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &t.Features); err != nil {
+				if err := json.Unmarshal(*value, &_m.Features); err != nil {
 					return fmt.Errorf("unmarshal field features: %w", err)
 				}
 			}
 		default:
-			t.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -155,135 +155,135 @@ func (t *Tenant) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Tenant.
 // This includes values selected through modifiers, order, etc.
-func (t *Tenant) Value(name string) (ent.Value, error) {
-	return t.selectValues.Get(name)
+func (_m *Tenant) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryTenantUsers queries the "tenant_users" edge of the Tenant entity.
-func (t *Tenant) QueryTenantUsers() *TenantUserQuery {
-	return NewTenantClient(t.config).QueryTenantUsers(t)
+func (_m *Tenant) QueryTenantUsers() *TenantUserQuery {
+	return NewTenantClient(_m.config).QueryTenantUsers(_m)
 }
 
 // QueryRoles queries the "roles" edge of the Tenant entity.
-func (t *Tenant) QueryRoles() *TenantRoleQuery {
-	return NewTenantClient(t.config).QueryRoles(t)
+func (_m *Tenant) QueryRoles() *TenantRoleQuery {
+	return NewTenantClient(_m.config).QueryRoles(_m)
 }
 
 // QueryOrganizations queries the "organizations" edge of the Tenant entity.
-func (t *Tenant) QueryOrganizations() *OrganizationQuery {
-	return NewTenantClient(t.config).QueryOrganizations(t)
+func (_m *Tenant) QueryOrganizations() *OrganizationQuery {
+	return NewTenantClient(_m.config).QueryOrganizations(_m)
 }
 
 // Update returns a builder for updating this Tenant.
 // Note that you need to call Tenant.Unwrap() before calling this method if this Tenant
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (t *Tenant) Update() *TenantUpdateOne {
-	return NewTenantClient(t.config).UpdateOne(t)
+func (_m *Tenant) Update() *TenantUpdateOne {
+	return NewTenantClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Tenant entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (t *Tenant) Unwrap() *Tenant {
-	_tx, ok := t.config.driver.(*txDriver)
+func (_m *Tenant) Unwrap() *Tenant {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Tenant is not a transactional entity")
 	}
-	t.config.driver = _tx.drv
-	return t
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (t *Tenant) String() string {
+func (_m *Tenant) String() string {
 	var builder strings.Builder
 	builder.WriteString("Tenant(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", t.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(t.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(t.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(t.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("max_users=")
-	builder.WriteString(fmt.Sprintf("%v", t.MaxUsers))
+	builder.WriteString(fmt.Sprintf("%v", _m.MaxUsers))
 	builder.WriteString(", ")
 	builder.WriteString("features=")
-	builder.WriteString(fmt.Sprintf("%v", t.Features))
+	builder.WriteString(fmt.Sprintf("%v", _m.Features))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedTenantUsers returns the TenantUsers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Tenant) NamedTenantUsers(name string) ([]*TenantUser, error) {
-	if t.Edges.namedTenantUsers == nil {
+func (_m *Tenant) NamedTenantUsers(name string) ([]*TenantUser, error) {
+	if _m.Edges.namedTenantUsers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedTenantUsers[name]
+	nodes, ok := _m.Edges.namedTenantUsers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Tenant) appendNamedTenantUsers(name string, edges ...*TenantUser) {
-	if t.Edges.namedTenantUsers == nil {
-		t.Edges.namedTenantUsers = make(map[string][]*TenantUser)
+func (_m *Tenant) appendNamedTenantUsers(name string, edges ...*TenantUser) {
+	if _m.Edges.namedTenantUsers == nil {
+		_m.Edges.namedTenantUsers = make(map[string][]*TenantUser)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedTenantUsers[name] = []*TenantUser{}
+		_m.Edges.namedTenantUsers[name] = []*TenantUser{}
 	} else {
-		t.Edges.namedTenantUsers[name] = append(t.Edges.namedTenantUsers[name], edges...)
+		_m.Edges.namedTenantUsers[name] = append(_m.Edges.namedTenantUsers[name], edges...)
 	}
 }
 
 // NamedRoles returns the Roles named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Tenant) NamedRoles(name string) ([]*TenantRole, error) {
-	if t.Edges.namedRoles == nil {
+func (_m *Tenant) NamedRoles(name string) ([]*TenantRole, error) {
+	if _m.Edges.namedRoles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedRoles[name]
+	nodes, ok := _m.Edges.namedRoles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Tenant) appendNamedRoles(name string, edges ...*TenantRole) {
-	if t.Edges.namedRoles == nil {
-		t.Edges.namedRoles = make(map[string][]*TenantRole)
+func (_m *Tenant) appendNamedRoles(name string, edges ...*TenantRole) {
+	if _m.Edges.namedRoles == nil {
+		_m.Edges.namedRoles = make(map[string][]*TenantRole)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedRoles[name] = []*TenantRole{}
+		_m.Edges.namedRoles[name] = []*TenantRole{}
 	} else {
-		t.Edges.namedRoles[name] = append(t.Edges.namedRoles[name], edges...)
+		_m.Edges.namedRoles[name] = append(_m.Edges.namedRoles[name], edges...)
 	}
 }
 
 // NamedOrganizations returns the Organizations named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (t *Tenant) NamedOrganizations(name string) ([]*Organization, error) {
-	if t.Edges.namedOrganizations == nil {
+func (_m *Tenant) NamedOrganizations(name string) ([]*Organization, error) {
+	if _m.Edges.namedOrganizations == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := t.Edges.namedOrganizations[name]
+	nodes, ok := _m.Edges.namedOrganizations[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (t *Tenant) appendNamedOrganizations(name string, edges ...*Organization) {
-	if t.Edges.namedOrganizations == nil {
-		t.Edges.namedOrganizations = make(map[string][]*Organization)
+func (_m *Tenant) appendNamedOrganizations(name string, edges ...*Organization) {
+	if _m.Edges.namedOrganizations == nil {
+		_m.Edges.namedOrganizations = make(map[string][]*Organization)
 	}
 	if len(edges) == 0 {
-		t.Edges.namedOrganizations[name] = []*Organization{}
+		_m.Edges.namedOrganizations[name] = []*Organization{}
 	} else {
-		t.Edges.namedOrganizations[name] = append(t.Edges.namedOrganizations[name], edges...)
+		_m.Edges.namedOrganizations[name] = append(_m.Edges.namedOrganizations[name], edges...)
 	}
 }
 

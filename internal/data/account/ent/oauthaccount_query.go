@@ -32,44 +32,44 @@ type OAuthAccountQuery struct {
 }
 
 // Where adds a new predicate for the OAuthAccountQuery builder.
-func (oaq *OAuthAccountQuery) Where(ps ...predicate.OAuthAccount) *OAuthAccountQuery {
-	oaq.predicates = append(oaq.predicates, ps...)
-	return oaq
+func (_q *OAuthAccountQuery) Where(ps ...predicate.OAuthAccount) *OAuthAccountQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (oaq *OAuthAccountQuery) Limit(limit int) *OAuthAccountQuery {
-	oaq.ctx.Limit = &limit
-	return oaq
+func (_q *OAuthAccountQuery) Limit(limit int) *OAuthAccountQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (oaq *OAuthAccountQuery) Offset(offset int) *OAuthAccountQuery {
-	oaq.ctx.Offset = &offset
-	return oaq
+func (_q *OAuthAccountQuery) Offset(offset int) *OAuthAccountQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (oaq *OAuthAccountQuery) Unique(unique bool) *OAuthAccountQuery {
-	oaq.ctx.Unique = &unique
-	return oaq
+func (_q *OAuthAccountQuery) Unique(unique bool) *OAuthAccountQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (oaq *OAuthAccountQuery) Order(o ...oauthaccount.OrderOption) *OAuthAccountQuery {
-	oaq.order = append(oaq.order, o...)
-	return oaq
+func (_q *OAuthAccountQuery) Order(o ...oauthaccount.OrderOption) *OAuthAccountQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryUser chains the current query on the "user" edge.
-func (oaq *OAuthAccountQuery) QueryUser() *UserQuery {
-	query := (&UserClient{config: oaq.config}).Query()
+func (_q *OAuthAccountQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := oaq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := oaq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -78,7 +78,7 @@ func (oaq *OAuthAccountQuery) QueryUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, oauthaccount.UserTable, oauthaccount.UserColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(oaq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -86,8 +86,8 @@ func (oaq *OAuthAccountQuery) QueryUser() *UserQuery {
 
 // First returns the first OAuthAccount entity from the query.
 // Returns a *NotFoundError when no OAuthAccount was found.
-func (oaq *OAuthAccountQuery) First(ctx context.Context) (*OAuthAccount, error) {
-	nodes, err := oaq.Limit(1).All(setContextOp(ctx, oaq.ctx, ent.OpQueryFirst))
+func (_q *OAuthAccountQuery) First(ctx context.Context) (*OAuthAccount, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -98,8 +98,8 @@ func (oaq *OAuthAccountQuery) First(ctx context.Context) (*OAuthAccount, error) 
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (oaq *OAuthAccountQuery) FirstX(ctx context.Context) *OAuthAccount {
-	node, err := oaq.First(ctx)
+func (_q *OAuthAccountQuery) FirstX(ctx context.Context) *OAuthAccount {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -108,9 +108,9 @@ func (oaq *OAuthAccountQuery) FirstX(ctx context.Context) *OAuthAccount {
 
 // FirstID returns the first OAuthAccount ID from the query.
 // Returns a *NotFoundError when no OAuthAccount ID was found.
-func (oaq *OAuthAccountQuery) FirstID(ctx context.Context) (id int, err error) {
+func (_q *OAuthAccountQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = oaq.Limit(1).IDs(setContextOp(ctx, oaq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -121,8 +121,8 @@ func (oaq *OAuthAccountQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (oaq *OAuthAccountQuery) FirstIDX(ctx context.Context) int {
-	id, err := oaq.FirstID(ctx)
+func (_q *OAuthAccountQuery) FirstIDX(ctx context.Context) int {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -132,8 +132,8 @@ func (oaq *OAuthAccountQuery) FirstIDX(ctx context.Context) int {
 // Only returns a single OAuthAccount entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one OAuthAccount entity is found.
 // Returns a *NotFoundError when no OAuthAccount entities are found.
-func (oaq *OAuthAccountQuery) Only(ctx context.Context) (*OAuthAccount, error) {
-	nodes, err := oaq.Limit(2).All(setContextOp(ctx, oaq.ctx, ent.OpQueryOnly))
+func (_q *OAuthAccountQuery) Only(ctx context.Context) (*OAuthAccount, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -148,8 +148,8 @@ func (oaq *OAuthAccountQuery) Only(ctx context.Context) (*OAuthAccount, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (oaq *OAuthAccountQuery) OnlyX(ctx context.Context) *OAuthAccount {
-	node, err := oaq.Only(ctx)
+func (_q *OAuthAccountQuery) OnlyX(ctx context.Context) *OAuthAccount {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -159,9 +159,9 @@ func (oaq *OAuthAccountQuery) OnlyX(ctx context.Context) *OAuthAccount {
 // OnlyID is like Only, but returns the only OAuthAccount ID in the query.
 // Returns a *NotSingularError when more than one OAuthAccount ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (oaq *OAuthAccountQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (_q *OAuthAccountQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = oaq.Limit(2).IDs(setContextOp(ctx, oaq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -176,8 +176,8 @@ func (oaq *OAuthAccountQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (oaq *OAuthAccountQuery) OnlyIDX(ctx context.Context) int {
-	id, err := oaq.OnlyID(ctx)
+func (_q *OAuthAccountQuery) OnlyIDX(ctx context.Context) int {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -185,18 +185,18 @@ func (oaq *OAuthAccountQuery) OnlyIDX(ctx context.Context) int {
 }
 
 // All executes the query and returns a list of OAuthAccounts.
-func (oaq *OAuthAccountQuery) All(ctx context.Context) ([]*OAuthAccount, error) {
-	ctx = setContextOp(ctx, oaq.ctx, ent.OpQueryAll)
-	if err := oaq.prepareQuery(ctx); err != nil {
+func (_q *OAuthAccountQuery) All(ctx context.Context) ([]*OAuthAccount, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*OAuthAccount, *OAuthAccountQuery]()
-	return withInterceptors[[]*OAuthAccount](ctx, oaq, qr, oaq.inters)
+	return withInterceptors[[]*OAuthAccount](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (oaq *OAuthAccountQuery) AllX(ctx context.Context) []*OAuthAccount {
-	nodes, err := oaq.All(ctx)
+func (_q *OAuthAccountQuery) AllX(ctx context.Context) []*OAuthAccount {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -204,20 +204,20 @@ func (oaq *OAuthAccountQuery) AllX(ctx context.Context) []*OAuthAccount {
 }
 
 // IDs executes the query and returns a list of OAuthAccount IDs.
-func (oaq *OAuthAccountQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if oaq.ctx.Unique == nil && oaq.path != nil {
-		oaq.Unique(true)
+func (_q *OAuthAccountQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, oaq.ctx, ent.OpQueryIDs)
-	if err = oaq.Select(oauthaccount.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(oauthaccount.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (oaq *OAuthAccountQuery) IDsX(ctx context.Context) []int {
-	ids, err := oaq.IDs(ctx)
+func (_q *OAuthAccountQuery) IDsX(ctx context.Context) []int {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -225,17 +225,17 @@ func (oaq *OAuthAccountQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (oaq *OAuthAccountQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, oaq.ctx, ent.OpQueryCount)
-	if err := oaq.prepareQuery(ctx); err != nil {
+func (_q *OAuthAccountQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, oaq, querierCount[*OAuthAccountQuery](), oaq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*OAuthAccountQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (oaq *OAuthAccountQuery) CountX(ctx context.Context) int {
-	count, err := oaq.Count(ctx)
+func (_q *OAuthAccountQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -243,9 +243,9 @@ func (oaq *OAuthAccountQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (oaq *OAuthAccountQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, oaq.ctx, ent.OpQueryExist)
-	switch _, err := oaq.FirstID(ctx); {
+func (_q *OAuthAccountQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -256,8 +256,8 @@ func (oaq *OAuthAccountQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (oaq *OAuthAccountQuery) ExistX(ctx context.Context) bool {
-	exist, err := oaq.Exist(ctx)
+func (_q *OAuthAccountQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -266,33 +266,33 @@ func (oaq *OAuthAccountQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the OAuthAccountQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (oaq *OAuthAccountQuery) Clone() *OAuthAccountQuery {
-	if oaq == nil {
+func (_q *OAuthAccountQuery) Clone() *OAuthAccountQuery {
+	if _q == nil {
 		return nil
 	}
 	return &OAuthAccountQuery{
-		config:     oaq.config,
-		ctx:        oaq.ctx.Clone(),
-		order:      append([]oauthaccount.OrderOption{}, oaq.order...),
-		inters:     append([]Interceptor{}, oaq.inters...),
-		predicates: append([]predicate.OAuthAccount{}, oaq.predicates...),
-		withUser:   oaq.withUser.Clone(),
+		config:     _q.config,
+		ctx:        _q.ctx.Clone(),
+		order:      append([]oauthaccount.OrderOption{}, _q.order...),
+		inters:     append([]Interceptor{}, _q.inters...),
+		predicates: append([]predicate.OAuthAccount{}, _q.predicates...),
+		withUser:   _q.withUser.Clone(),
 		// clone intermediate query.
-		sql:       oaq.sql.Clone(),
-		path:      oaq.path,
-		modifiers: append([]func(*sql.Selector){}, oaq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithUser tells the query-builder to eager-load the nodes that are connected to
 // the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (oaq *OAuthAccountQuery) WithUser(opts ...func(*UserQuery)) *OAuthAccountQuery {
-	query := (&UserClient{config: oaq.config}).Query()
+func (_q *OAuthAccountQuery) WithUser(opts ...func(*UserQuery)) *OAuthAccountQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	oaq.withUser = query
-	return oaq
+	_q.withUser = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -309,10 +309,10 @@ func (oaq *OAuthAccountQuery) WithUser(opts ...func(*UserQuery)) *OAuthAccountQu
 //		GroupBy(oauthaccount.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (oaq *OAuthAccountQuery) GroupBy(field string, fields ...string) *OAuthAccountGroupBy {
-	oaq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &OAuthAccountGroupBy{build: oaq}
-	grbuild.flds = &oaq.ctx.Fields
+func (_q *OAuthAccountQuery) GroupBy(field string, fields ...string) *OAuthAccountGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &OAuthAccountGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = oauthaccount.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -330,89 +330,89 @@ func (oaq *OAuthAccountQuery) GroupBy(field string, fields ...string) *OAuthAcco
 //	client.OAuthAccount.Query().
 //		Select(oauthaccount.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (oaq *OAuthAccountQuery) Select(fields ...string) *OAuthAccountSelect {
-	oaq.ctx.Fields = append(oaq.ctx.Fields, fields...)
-	sbuild := &OAuthAccountSelect{OAuthAccountQuery: oaq}
+func (_q *OAuthAccountQuery) Select(fields ...string) *OAuthAccountSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &OAuthAccountSelect{OAuthAccountQuery: _q}
 	sbuild.label = oauthaccount.Label
-	sbuild.flds, sbuild.scan = &oaq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a OAuthAccountSelect configured with the given aggregations.
-func (oaq *OAuthAccountQuery) Aggregate(fns ...AggregateFunc) *OAuthAccountSelect {
-	return oaq.Select().Aggregate(fns...)
+func (_q *OAuthAccountQuery) Aggregate(fns ...AggregateFunc) *OAuthAccountSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (oaq *OAuthAccountQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range oaq.inters {
+func (_q *OAuthAccountQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, oaq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range oaq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !oauthaccount.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if oaq.path != nil {
-		prev, err := oaq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		oaq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (oaq *OAuthAccountQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OAuthAccount, error) {
+func (_q *OAuthAccountQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*OAuthAccount, error) {
 	var (
 		nodes       = []*OAuthAccount{}
-		_spec       = oaq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [1]bool{
-			oaq.withUser != nil,
+			_q.withUser != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*OAuthAccount).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &OAuthAccount{config: oaq.config}
+		node := &OAuthAccount{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(oaq.modifiers) > 0 {
-		_spec.Modifiers = oaq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, oaq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := oaq.withUser; query != nil {
-		if err := oaq.loadUser(ctx, query, nodes, nil,
+	if query := _q.withUser; query != nil {
+		if err := _q.loadUser(ctx, query, nodes, nil,
 			func(n *OAuthAccount, e *User) { n.Edges.User = e }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range oaq.loadTotal {
-		if err := oaq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (oaq *OAuthAccountQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*OAuthAccount, init func(*OAuthAccount), assign func(*OAuthAccount, *User)) error {
+func (_q *OAuthAccountQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*OAuthAccount, init func(*OAuthAccount), assign func(*OAuthAccount, *User)) error {
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*OAuthAccount)
 	for i := range nodes {
@@ -442,27 +442,27 @@ func (oaq *OAuthAccountQuery) loadUser(ctx context.Context, query *UserQuery, no
 	return nil
 }
 
-func (oaq *OAuthAccountQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := oaq.querySpec()
-	if len(oaq.modifiers) > 0 {
-		_spec.Modifiers = oaq.modifiers
+func (_q *OAuthAccountQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = oaq.ctx.Fields
-	if len(oaq.ctx.Fields) > 0 {
-		_spec.Unique = oaq.ctx.Unique != nil && *oaq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, oaq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (oaq *OAuthAccountQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *OAuthAccountQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(oauthaccount.Table, oauthaccount.Columns, sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeInt))
-	_spec.From = oaq.sql
-	if unique := oaq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if oaq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := oaq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, oauthaccount.FieldID)
 		for i := range fields {
@@ -470,24 +470,24 @@ func (oaq *OAuthAccountQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if oaq.withUser != nil {
+		if _q.withUser != nil {
 			_spec.Node.AddColumnOnce(oauthaccount.FieldUserID)
 		}
 	}
-	if ps := oaq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := oaq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := oaq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := oaq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -497,45 +497,45 @@ func (oaq *OAuthAccountQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (oaq *OAuthAccountQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(oaq.driver.Dialect())
+func (_q *OAuthAccountQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(oauthaccount.Table)
-	columns := oaq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = oauthaccount.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if oaq.sql != nil {
-		selector = oaq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if oaq.ctx.Unique != nil && *oaq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range oaq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range oaq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range oaq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := oaq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := oaq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (oaq *OAuthAccountQuery) Modify(modifiers ...func(s *sql.Selector)) *OAuthAccountSelect {
-	oaq.modifiers = append(oaq.modifiers, modifiers...)
-	return oaq.Select()
+func (_q *OAuthAccountQuery) Modify(modifiers ...func(s *sql.Selector)) *OAuthAccountSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // OAuthAccountGroupBy is the group-by builder for OAuthAccount entities.
@@ -545,41 +545,41 @@ type OAuthAccountGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (oagb *OAuthAccountGroupBy) Aggregate(fns ...AggregateFunc) *OAuthAccountGroupBy {
-	oagb.fns = append(oagb.fns, fns...)
-	return oagb
+func (_g *OAuthAccountGroupBy) Aggregate(fns ...AggregateFunc) *OAuthAccountGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (oagb *OAuthAccountGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, oagb.build.ctx, ent.OpQueryGroupBy)
-	if err := oagb.build.prepareQuery(ctx); err != nil {
+func (_g *OAuthAccountGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OAuthAccountQuery, *OAuthAccountGroupBy](ctx, oagb.build, oagb, oagb.build.inters, v)
+	return scanWithInterceptors[*OAuthAccountQuery, *OAuthAccountGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (oagb *OAuthAccountGroupBy) sqlScan(ctx context.Context, root *OAuthAccountQuery, v any) error {
+func (_g *OAuthAccountGroupBy) sqlScan(ctx context.Context, root *OAuthAccountQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(oagb.fns))
-	for _, fn := range oagb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*oagb.flds)+len(oagb.fns))
-		for _, f := range *oagb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*oagb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := oagb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -593,27 +593,27 @@ type OAuthAccountSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (oas *OAuthAccountSelect) Aggregate(fns ...AggregateFunc) *OAuthAccountSelect {
-	oas.fns = append(oas.fns, fns...)
-	return oas
+func (_s *OAuthAccountSelect) Aggregate(fns ...AggregateFunc) *OAuthAccountSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (oas *OAuthAccountSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, oas.ctx, ent.OpQuerySelect)
-	if err := oas.prepareQuery(ctx); err != nil {
+func (_s *OAuthAccountSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*OAuthAccountQuery, *OAuthAccountSelect](ctx, oas.OAuthAccountQuery, oas, oas.inters, v)
+	return scanWithInterceptors[*OAuthAccountQuery, *OAuthAccountSelect](ctx, _s.OAuthAccountQuery, _s, _s.inters, v)
 }
 
-func (oas *OAuthAccountSelect) sqlScan(ctx context.Context, root *OAuthAccountQuery, v any) error {
+func (_s *OAuthAccountSelect) sqlScan(ctx context.Context, root *OAuthAccountQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(oas.fns))
-	for _, fn := range oas.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*oas.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -621,7 +621,7 @@ func (oas *OAuthAccountSelect) sqlScan(ctx context.Context, root *OAuthAccountQu
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := oas.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -629,7 +629,7 @@ func (oas *OAuthAccountSelect) sqlScan(ctx context.Context, root *OAuthAccountQu
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (oas *OAuthAccountSelect) Modify(modifiers ...func(s *sql.Selector)) *OAuthAccountSelect {
-	oas.modifiers = append(oas.modifiers, modifiers...)
-	return oas
+func (_s *OAuthAccountSelect) Modify(modifiers ...func(s *sql.Selector)) *OAuthAccountSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

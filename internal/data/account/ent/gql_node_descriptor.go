@@ -39,15 +39,15 @@ type Edge struct {
 }
 
 // Node implements Noder interface
-func (m *Membership) Node(ctx context.Context) (node *Node, err error) {
+func (_m *Membership) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
-		ID:     m.ID,
+		ID:     _m.ID,
 		Type:   "Membership",
 		Fields: make([]*Field, 5),
 		Edges:  make([]*Edge, 2),
 	}
 	var buf []byte
-	if buf, err = json.Marshal(m.CreatedAt); err != nil {
+	if buf, err = json.Marshal(_m.CreatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[0] = &Field{
@@ -55,7 +55,7 @@ func (m *Membership) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "created_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(m.UpdatedAt); err != nil {
+	if buf, err = json.Marshal(_m.UpdatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[1] = &Field{
@@ -63,7 +63,7 @@ func (m *Membership) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "updated_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(m.OrganizationID); err != nil {
+	if buf, err = json.Marshal(_m.OrganizationID); err != nil {
 		return nil, err
 	}
 	node.Fields[2] = &Field{
@@ -71,7 +71,7 @@ func (m *Membership) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "organization_id",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(m.TenantUserID); err != nil {
+	if buf, err = json.Marshal(_m.TenantUserID); err != nil {
 		return nil, err
 	}
 	node.Fields[3] = &Field{
@@ -79,7 +79,7 @@ func (m *Membership) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "tenant_user_id",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(m.IsLeader); err != nil {
+	if buf, err = json.Marshal(_m.IsLeader); err != nil {
 		return nil, err
 	}
 	node.Fields[4] = &Field{
@@ -91,7 +91,7 @@ func (m *Membership) Node(ctx context.Context) (node *Node, err error) {
 		Type: "TenantUser",
 		Name: "tenant_user",
 	}
-	err = m.QueryTenantUser().
+	err = _m.QueryTenantUser().
 		Select(tenantuser.FieldID).
 		Scan(ctx, &node.Edges[0].IDs)
 	if err != nil {
@@ -101,7 +101,7 @@ func (m *Membership) Node(ctx context.Context) (node *Node, err error) {
 		Type: "Organization",
 		Name: "organization",
 	}
-	err = m.QueryOrganization().
+	err = _m.QueryOrganization().
 		Select(organization.FieldID).
 		Scan(ctx, &node.Edges[1].IDs)
 	if err != nil {
@@ -111,15 +111,15 @@ func (m *Membership) Node(ctx context.Context) (node *Node, err error) {
 }
 
 // Node implements Noder interface
-func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
+func (_m *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
-		ID:     oa.ID,
+		ID:     _m.ID,
 		Type:   "OAuthAccount",
 		Fields: make([]*Field, 9),
 		Edges:  make([]*Edge, 1),
 	}
 	var buf []byte
-	if buf, err = json.Marshal(oa.CreatedAt); err != nil {
+	if buf, err = json.Marshal(_m.CreatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[0] = &Field{
@@ -127,7 +127,7 @@ func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "created_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(oa.UpdatedAt); err != nil {
+	if buf, err = json.Marshal(_m.UpdatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[1] = &Field{
@@ -135,7 +135,7 @@ func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "updated_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(oa.UserID); err != nil {
+	if buf, err = json.Marshal(_m.UserID); err != nil {
 		return nil, err
 	}
 	node.Fields[2] = &Field{
@@ -143,7 +143,7 @@ func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "user_id",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(oa.Provider); err != nil {
+	if buf, err = json.Marshal(_m.Provider); err != nil {
 		return nil, err
 	}
 	node.Fields[3] = &Field{
@@ -151,7 +151,7 @@ func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "provider",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(oa.ProviderUserID); err != nil {
+	if buf, err = json.Marshal(_m.ProviderUserID); err != nil {
 		return nil, err
 	}
 	node.Fields[4] = &Field{
@@ -159,7 +159,7 @@ func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "provider_user_id",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(oa.AccessToken); err != nil {
+	if buf, err = json.Marshal(_m.AccessToken); err != nil {
 		return nil, err
 	}
 	node.Fields[5] = &Field{
@@ -167,7 +167,7 @@ func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "access_token",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(oa.RefreshToken); err != nil {
+	if buf, err = json.Marshal(_m.RefreshToken); err != nil {
 		return nil, err
 	}
 	node.Fields[6] = &Field{
@@ -175,7 +175,7 @@ func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "refresh_token",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(oa.TokenExpiry); err != nil {
+	if buf, err = json.Marshal(_m.TokenExpiry); err != nil {
 		return nil, err
 	}
 	node.Fields[7] = &Field{
@@ -183,7 +183,7 @@ func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "token_expiry",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(oa.Profile); err != nil {
+	if buf, err = json.Marshal(_m.Profile); err != nil {
 		return nil, err
 	}
 	node.Fields[8] = &Field{
@@ -195,7 +195,7 @@ func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 		Type: "User",
 		Name: "user",
 	}
-	err = oa.QueryUser().
+	err = _m.QueryUser().
 		Select(user.FieldID).
 		Scan(ctx, &node.Edges[0].IDs)
 	if err != nil {
@@ -205,15 +205,15 @@ func (oa *OAuthAccount) Node(ctx context.Context) (node *Node, err error) {
 }
 
 // Node implements Noder interface
-func (op *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
+func (_m *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
-		ID:     op.ID,
+		ID:     _m.ID,
 		Type:   "OAuthProvider",
 		Fields: make([]*Field, 10),
 		Edges:  make([]*Edge, 0),
 	}
 	var buf []byte
-	if buf, err = json.Marshal(op.Provider); err != nil {
+	if buf, err = json.Marshal(_m.Provider); err != nil {
 		return nil, err
 	}
 	node.Fields[0] = &Field{
@@ -221,7 +221,7 @@ func (op *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "provider",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(op.Name); err != nil {
+	if buf, err = json.Marshal(_m.Name); err != nil {
 		return nil, err
 	}
 	node.Fields[1] = &Field{
@@ -229,7 +229,7 @@ func (op *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "name",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(op.ClientID); err != nil {
+	if buf, err = json.Marshal(_m.ClientID); err != nil {
 		return nil, err
 	}
 	node.Fields[2] = &Field{
@@ -237,7 +237,7 @@ func (op *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "client_id",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(op.ClientSecret); err != nil {
+	if buf, err = json.Marshal(_m.ClientSecret); err != nil {
 		return nil, err
 	}
 	node.Fields[3] = &Field{
@@ -245,7 +245,7 @@ func (op *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "client_secret",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(op.AuthURL); err != nil {
+	if buf, err = json.Marshal(_m.AuthURL); err != nil {
 		return nil, err
 	}
 	node.Fields[4] = &Field{
@@ -253,7 +253,7 @@ func (op *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "auth_url",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(op.TokenURL); err != nil {
+	if buf, err = json.Marshal(_m.TokenURL); err != nil {
 		return nil, err
 	}
 	node.Fields[5] = &Field{
@@ -261,7 +261,7 @@ func (op *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "token_url",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(op.UserInfoURL); err != nil {
+	if buf, err = json.Marshal(_m.UserInfoURL); err != nil {
 		return nil, err
 	}
 	node.Fields[6] = &Field{
@@ -269,7 +269,7 @@ func (op *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "user_info_url",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(op.RedirectURI); err != nil {
+	if buf, err = json.Marshal(_m.RedirectURI); err != nil {
 		return nil, err
 	}
 	node.Fields[7] = &Field{
@@ -277,7 +277,7 @@ func (op *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "redirect_uri",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(op.Scopes); err != nil {
+	if buf, err = json.Marshal(_m.Scopes); err != nil {
 		return nil, err
 	}
 	node.Fields[8] = &Field{
@@ -285,7 +285,7 @@ func (op *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "scopes",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(op.Enabled); err != nil {
+	if buf, err = json.Marshal(_m.Enabled); err != nil {
 		return nil, err
 	}
 	node.Fields[9] = &Field{
@@ -297,15 +297,15 @@ func (op *OAuthProvider) Node(ctx context.Context) (node *Node, err error) {
 }
 
 // Node implements Noder interface
-func (o *Organization) Node(ctx context.Context) (node *Node, err error) {
+func (_m *Organization) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
-		ID:     o.ID,
+		ID:     _m.ID,
 		Type:   "Organization",
 		Fields: make([]*Field, 6),
 		Edges:  make([]*Edge, 3),
 	}
 	var buf []byte
-	if buf, err = json.Marshal(o.CreatedAt); err != nil {
+	if buf, err = json.Marshal(_m.CreatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[0] = &Field{
@@ -313,7 +313,7 @@ func (o *Organization) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "created_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(o.UpdatedAt); err != nil {
+	if buf, err = json.Marshal(_m.UpdatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[1] = &Field{
@@ -321,7 +321,7 @@ func (o *Organization) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "updated_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(o.TenantID); err != nil {
+	if buf, err = json.Marshal(_m.TenantID); err != nil {
 		return nil, err
 	}
 	node.Fields[2] = &Field{
@@ -329,7 +329,7 @@ func (o *Organization) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "tenant_id",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(o.Name); err != nil {
+	if buf, err = json.Marshal(_m.Name); err != nil {
 		return nil, err
 	}
 	node.Fields[3] = &Field{
@@ -337,7 +337,7 @@ func (o *Organization) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "name",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(o.ParentID); err != nil {
+	if buf, err = json.Marshal(_m.ParentID); err != nil {
 		return nil, err
 	}
 	node.Fields[4] = &Field{
@@ -345,7 +345,7 @@ func (o *Organization) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "parent_id",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(o.Type); err != nil {
+	if buf, err = json.Marshal(_m.Type); err != nil {
 		return nil, err
 	}
 	node.Fields[5] = &Field{
@@ -357,7 +357,7 @@ func (o *Organization) Node(ctx context.Context) (node *Node, err error) {
 		Type: "Organization",
 		Name: "parent",
 	}
-	err = o.QueryParent().
+	err = _m.QueryParent().
 		Select(organization.FieldID).
 		Scan(ctx, &node.Edges[0].IDs)
 	if err != nil {
@@ -367,7 +367,7 @@ func (o *Organization) Node(ctx context.Context) (node *Node, err error) {
 		Type: "Organization",
 		Name: "children",
 	}
-	err = o.QueryChildren().
+	err = _m.QueryChildren().
 		Select(organization.FieldID).
 		Scan(ctx, &node.Edges[1].IDs)
 	if err != nil {
@@ -377,7 +377,7 @@ func (o *Organization) Node(ctx context.Context) (node *Node, err error) {
 		Type: "Membership",
 		Name: "memberships",
 	}
-	err = o.QueryMemberships().
+	err = _m.QueryMemberships().
 		Select(membership.FieldID).
 		Scan(ctx, &node.Edges[2].IDs)
 	if err != nil {
@@ -387,15 +387,15 @@ func (o *Organization) Node(ctx context.Context) (node *Node, err error) {
 }
 
 // Node implements Noder interface
-func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
+func (_m *Permission) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
-		ID:     pe.ID,
+		ID:     _m.ID,
 		Type:   "Permission",
 		Fields: make([]*Field, 11),
 		Edges:  make([]*Edge, 2),
 	}
 	var buf []byte
-	if buf, err = json.Marshal(pe.CreatedAt); err != nil {
+	if buf, err = json.Marshal(_m.CreatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[0] = &Field{
@@ -403,7 +403,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "created_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(pe.UpdatedAt); err != nil {
+	if buf, err = json.Marshal(_m.UpdatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[1] = &Field{
@@ -411,7 +411,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "updated_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(pe.ParentID); err != nil {
+	if buf, err = json.Marshal(_m.ParentID); err != nil {
 		return nil, err
 	}
 	node.Fields[2] = &Field{
@@ -419,7 +419,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "parent_id",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(pe.Name); err != nil {
+	if buf, err = json.Marshal(_m.Name); err != nil {
 		return nil, err
 	}
 	node.Fields[3] = &Field{
@@ -427,7 +427,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "name",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(pe.Key); err != nil {
+	if buf, err = json.Marshal(_m.Key); err != nil {
 		return nil, err
 	}
 	node.Fields[4] = &Field{
@@ -435,7 +435,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "key",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(pe.Type); err != nil {
+	if buf, err = json.Marshal(_m.Type); err != nil {
 		return nil, err
 	}
 	node.Fields[5] = &Field{
@@ -443,7 +443,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "type",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(pe.Path); err != nil {
+	if buf, err = json.Marshal(_m.Path); err != nil {
 		return nil, err
 	}
 	node.Fields[6] = &Field{
@@ -451,7 +451,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "path",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(pe.Description); err != nil {
+	if buf, err = json.Marshal(_m.Description); err != nil {
 		return nil, err
 	}
 	node.Fields[7] = &Field{
@@ -459,7 +459,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "description",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(pe.Sort); err != nil {
+	if buf, err = json.Marshal(_m.Sort); err != nil {
 		return nil, err
 	}
 	node.Fields[8] = &Field{
@@ -467,7 +467,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "sort",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(pe.Attrs); err != nil {
+	if buf, err = json.Marshal(_m.Attrs); err != nil {
 		return nil, err
 	}
 	node.Fields[9] = &Field{
@@ -475,7 +475,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "attrs",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(pe.IsSystem); err != nil {
+	if buf, err = json.Marshal(_m.IsSystem); err != nil {
 		return nil, err
 	}
 	node.Fields[10] = &Field{
@@ -487,7 +487,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Type: "Permission",
 		Name: "parent",
 	}
-	err = pe.QueryParent().
+	err = _m.QueryParent().
 		Select(permission.FieldID).
 		Scan(ctx, &node.Edges[0].IDs)
 	if err != nil {
@@ -497,7 +497,7 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 		Type: "Permission",
 		Name: "children",
 	}
-	err = pe.QueryChildren().
+	err = _m.QueryChildren().
 		Select(permission.FieldID).
 		Scan(ctx, &node.Edges[1].IDs)
 	if err != nil {
@@ -507,15 +507,15 @@ func (pe *Permission) Node(ctx context.Context) (node *Node, err error) {
 }
 
 // Node implements Noder interface
-func (t *Tenant) Node(ctx context.Context) (node *Node, err error) {
+func (_m *Tenant) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
-		ID:     t.ID,
+		ID:     _m.ID,
 		Type:   "Tenant",
 		Fields: make([]*Field, 5),
 		Edges:  make([]*Edge, 3),
 	}
 	var buf []byte
-	if buf, err = json.Marshal(t.CreatedAt); err != nil {
+	if buf, err = json.Marshal(_m.CreatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[0] = &Field{
@@ -523,7 +523,7 @@ func (t *Tenant) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "created_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(t.UpdatedAt); err != nil {
+	if buf, err = json.Marshal(_m.UpdatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[1] = &Field{
@@ -531,7 +531,7 @@ func (t *Tenant) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "updated_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(t.Name); err != nil {
+	if buf, err = json.Marshal(_m.Name); err != nil {
 		return nil, err
 	}
 	node.Fields[2] = &Field{
@@ -539,7 +539,7 @@ func (t *Tenant) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "name",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(t.MaxUsers); err != nil {
+	if buf, err = json.Marshal(_m.MaxUsers); err != nil {
 		return nil, err
 	}
 	node.Fields[3] = &Field{
@@ -547,7 +547,7 @@ func (t *Tenant) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "max_users",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(t.Features); err != nil {
+	if buf, err = json.Marshal(_m.Features); err != nil {
 		return nil, err
 	}
 	node.Fields[4] = &Field{
@@ -559,7 +559,7 @@ func (t *Tenant) Node(ctx context.Context) (node *Node, err error) {
 		Type: "TenantUser",
 		Name: "tenant_users",
 	}
-	err = t.QueryTenantUsers().
+	err = _m.QueryTenantUsers().
 		Select(tenantuser.FieldID).
 		Scan(ctx, &node.Edges[0].IDs)
 	if err != nil {
@@ -569,7 +569,7 @@ func (t *Tenant) Node(ctx context.Context) (node *Node, err error) {
 		Type: "TenantRole",
 		Name: "roles",
 	}
-	err = t.QueryRoles().
+	err = _m.QueryRoles().
 		Select(tenantrole.FieldID).
 		Scan(ctx, &node.Edges[1].IDs)
 	if err != nil {
@@ -579,7 +579,7 @@ func (t *Tenant) Node(ctx context.Context) (node *Node, err error) {
 		Type: "Organization",
 		Name: "organizations",
 	}
-	err = t.QueryOrganizations().
+	err = _m.QueryOrganizations().
 		Select(organization.FieldID).
 		Scan(ctx, &node.Edges[2].IDs)
 	if err != nil {
@@ -589,15 +589,15 @@ func (t *Tenant) Node(ctx context.Context) (node *Node, err error) {
 }
 
 // Node implements Noder interface
-func (tr *TenantRole) Node(ctx context.Context) (node *Node, err error) {
+func (_m *TenantRole) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
-		ID:     tr.ID,
+		ID:     _m.ID,
 		Type:   "TenantRole",
 		Fields: make([]*Field, 6),
 		Edges:  make([]*Edge, 1),
 	}
 	var buf []byte
-	if buf, err = json.Marshal(tr.CreatedAt); err != nil {
+	if buf, err = json.Marshal(_m.CreatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[0] = &Field{
@@ -605,7 +605,7 @@ func (tr *TenantRole) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "created_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(tr.UpdatedAt); err != nil {
+	if buf, err = json.Marshal(_m.UpdatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[1] = &Field{
@@ -613,7 +613,7 @@ func (tr *TenantRole) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "updated_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(tr.TenantID); err != nil {
+	if buf, err = json.Marshal(_m.TenantID); err != nil {
 		return nil, err
 	}
 	node.Fields[2] = &Field{
@@ -621,7 +621,7 @@ func (tr *TenantRole) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "tenant_id",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(tr.Name); err != nil {
+	if buf, err = json.Marshal(_m.Name); err != nil {
 		return nil, err
 	}
 	node.Fields[3] = &Field{
@@ -629,7 +629,7 @@ func (tr *TenantRole) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "name",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(tr.Description); err != nil {
+	if buf, err = json.Marshal(_m.Description); err != nil {
 		return nil, err
 	}
 	node.Fields[4] = &Field{
@@ -637,7 +637,7 @@ func (tr *TenantRole) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "description",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(tr.Sort); err != nil {
+	if buf, err = json.Marshal(_m.Sort); err != nil {
 		return nil, err
 	}
 	node.Fields[5] = &Field{
@@ -649,7 +649,7 @@ func (tr *TenantRole) Node(ctx context.Context) (node *Node, err error) {
 		Type: "Permission",
 		Name: "permissions",
 	}
-	err = tr.QueryPermissions().
+	err = _m.QueryPermissions().
 		Select(permission.FieldID).
 		Scan(ctx, &node.Edges[0].IDs)
 	if err != nil {
@@ -659,15 +659,15 @@ func (tr *TenantRole) Node(ctx context.Context) (node *Node, err error) {
 }
 
 // Node implements Noder interface
-func (tu *TenantUser) Node(ctx context.Context) (node *Node, err error) {
+func (_m *TenantUser) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
-		ID:     tu.ID,
+		ID:     _m.ID,
 		Type:   "TenantUser",
 		Fields: make([]*Field, 6),
 		Edges:  make([]*Edge, 4),
 	}
 	var buf []byte
-	if buf, err = json.Marshal(tu.TenantID); err != nil {
+	if buf, err = json.Marshal(_m.TenantID); err != nil {
 		return nil, err
 	}
 	node.Fields[0] = &Field{
@@ -675,7 +675,7 @@ func (tu *TenantUser) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "tenant_id",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(tu.UserID); err != nil {
+	if buf, err = json.Marshal(_m.UserID); err != nil {
 		return nil, err
 	}
 	node.Fields[1] = &Field{
@@ -683,7 +683,7 @@ func (tu *TenantUser) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "user_id",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(tu.IsOwner); err != nil {
+	if buf, err = json.Marshal(_m.IsOwner); err != nil {
 		return nil, err
 	}
 	node.Fields[2] = &Field{
@@ -691,7 +691,7 @@ func (tu *TenantUser) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "is_owner",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(tu.IsActive); err != nil {
+	if buf, err = json.Marshal(_m.IsActive); err != nil {
 		return nil, err
 	}
 	node.Fields[3] = &Field{
@@ -699,7 +699,7 @@ func (tu *TenantUser) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "is_active",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(tu.LastLoginTenant); err != nil {
+	if buf, err = json.Marshal(_m.LastLoginTenant); err != nil {
 		return nil, err
 	}
 	node.Fields[4] = &Field{
@@ -707,7 +707,7 @@ func (tu *TenantUser) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "last_login_tenant",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(tu.LastLoginAt); err != nil {
+	if buf, err = json.Marshal(_m.LastLoginAt); err != nil {
 		return nil, err
 	}
 	node.Fields[5] = &Field{
@@ -719,7 +719,7 @@ func (tu *TenantUser) Node(ctx context.Context) (node *Node, err error) {
 		Type: "User",
 		Name: "user",
 	}
-	err = tu.QueryUser().
+	err = _m.QueryUser().
 		Select(user.FieldID).
 		Scan(ctx, &node.Edges[0].IDs)
 	if err != nil {
@@ -729,7 +729,7 @@ func (tu *TenantUser) Node(ctx context.Context) (node *Node, err error) {
 		Type: "Tenant",
 		Name: "tenant",
 	}
-	err = tu.QueryTenant().
+	err = _m.QueryTenant().
 		Select(tenant.FieldID).
 		Scan(ctx, &node.Edges[1].IDs)
 	if err != nil {
@@ -739,7 +739,7 @@ func (tu *TenantUser) Node(ctx context.Context) (node *Node, err error) {
 		Type: "TenantRole",
 		Name: "roles",
 	}
-	err = tu.QueryRoles().
+	err = _m.QueryRoles().
 		Select(tenantrole.FieldID).
 		Scan(ctx, &node.Edges[2].IDs)
 	if err != nil {
@@ -749,7 +749,7 @@ func (tu *TenantUser) Node(ctx context.Context) (node *Node, err error) {
 		Type: "Membership",
 		Name: "memberships",
 	}
-	err = tu.QueryMemberships().
+	err = _m.QueryMemberships().
 		Select(membership.FieldID).
 		Scan(ctx, &node.Edges[3].IDs)
 	if err != nil {
@@ -759,15 +759,15 @@ func (tu *TenantUser) Node(ctx context.Context) (node *Node, err error) {
 }
 
 // Node implements Noder interface
-func (u *User) Node(ctx context.Context) (node *Node, err error) {
+func (_m *User) Node(ctx context.Context) (node *Node, err error) {
 	node = &Node{
-		ID:     u.ID,
+		ID:     _m.ID,
 		Type:   "User",
 		Fields: make([]*Field, 8),
 		Edges:  make([]*Edge, 1),
 	}
 	var buf []byte
-	if buf, err = json.Marshal(u.CreatedAt); err != nil {
+	if buf, err = json.Marshal(_m.CreatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[0] = &Field{
@@ -775,7 +775,7 @@ func (u *User) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "created_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(u.UpdatedAt); err != nil {
+	if buf, err = json.Marshal(_m.UpdatedAt); err != nil {
 		return nil, err
 	}
 	node.Fields[1] = &Field{
@@ -783,7 +783,7 @@ func (u *User) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "updated_at",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(u.Email); err != nil {
+	if buf, err = json.Marshal(_m.Email); err != nil {
 		return nil, err
 	}
 	node.Fields[2] = &Field{
@@ -791,7 +791,7 @@ func (u *User) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "email",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(u.Nickname); err != nil {
+	if buf, err = json.Marshal(_m.Nickname); err != nil {
 		return nil, err
 	}
 	node.Fields[3] = &Field{
@@ -799,7 +799,7 @@ func (u *User) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "nickname",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(u.Avatar); err != nil {
+	if buf, err = json.Marshal(_m.Avatar); err != nil {
 		return nil, err
 	}
 	node.Fields[4] = &Field{
@@ -807,7 +807,7 @@ func (u *User) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "avatar",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(u.Password); err != nil {
+	if buf, err = json.Marshal(_m.Password); err != nil {
 		return nil, err
 	}
 	node.Fields[5] = &Field{
@@ -815,7 +815,7 @@ func (u *User) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "password",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(u.Status); err != nil {
+	if buf, err = json.Marshal(_m.Status); err != nil {
 		return nil, err
 	}
 	node.Fields[6] = &Field{
@@ -823,7 +823,7 @@ func (u *User) Node(ctx context.Context) (node *Node, err error) {
 		Name:  "status",
 		Value: string(buf),
 	}
-	if buf, err = json.Marshal(u.IsAdmin); err != nil {
+	if buf, err = json.Marshal(_m.IsAdmin); err != nil {
 		return nil, err
 	}
 	node.Fields[7] = &Field{
@@ -835,7 +835,7 @@ func (u *User) Node(ctx context.Context) (node *Node, err error) {
 		Type: "OAuthAccount",
 		Name: "oauth_accounts",
 	}
-	err = u.QueryOauthAccounts().
+	err = _m.QueryOauthAccounts().
 		Select(oauthaccount.FieldID).
 		Scan(ctx, &node.Edges[0].IDs)
 	if err != nil {

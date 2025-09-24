@@ -87,7 +87,7 @@ func (*OAuthAccount) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the OAuthAccount fields.
-func (oa *OAuthAccount) assignValues(columns []string, values []any) error {
+func (_m *OAuthAccount) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -98,65 +98,65 @@ func (oa *OAuthAccount) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			oa.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case oauthaccount.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				oa.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case oauthaccount.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				oa.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case oauthaccount.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				oa.UserID = int(value.Int64)
+				_m.UserID = int(value.Int64)
 			}
 		case oauthaccount.FieldProvider:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field provider", values[i])
 			} else if value.Valid {
-				oa.Provider = value.String
+				_m.Provider = value.String
 			}
 		case oauthaccount.FieldProviderUserID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field provider_user_id", values[i])
 			} else if value.Valid {
-				oa.ProviderUserID = value.String
+				_m.ProviderUserID = value.String
 			}
 		case oauthaccount.FieldAccessToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field access_token", values[i])
 			} else if value.Valid {
-				oa.AccessToken = value.String
+				_m.AccessToken = value.String
 			}
 		case oauthaccount.FieldRefreshToken:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field refresh_token", values[i])
 			} else if value.Valid {
-				oa.RefreshToken = value.String
+				_m.RefreshToken = value.String
 			}
 		case oauthaccount.FieldTokenExpiry:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field token_expiry", values[i])
 			} else if value.Valid {
-				oa.TokenExpiry = value.Time
+				_m.TokenExpiry = value.Time
 			}
 		case oauthaccount.FieldProfile:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field profile", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &oa.Profile); err != nil {
+				if err := json.Unmarshal(*value, &_m.Profile); err != nil {
 					return fmt.Errorf("unmarshal field profile: %w", err)
 				}
 			}
 		default:
-			oa.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -164,64 +164,64 @@ func (oa *OAuthAccount) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the OAuthAccount.
 // This includes values selected through modifiers, order, etc.
-func (oa *OAuthAccount) Value(name string) (ent.Value, error) {
-	return oa.selectValues.Get(name)
+func (_m *OAuthAccount) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryUser queries the "user" edge of the OAuthAccount entity.
-func (oa *OAuthAccount) QueryUser() *UserQuery {
-	return NewOAuthAccountClient(oa.config).QueryUser(oa)
+func (_m *OAuthAccount) QueryUser() *UserQuery {
+	return NewOAuthAccountClient(_m.config).QueryUser(_m)
 }
 
 // Update returns a builder for updating this OAuthAccount.
 // Note that you need to call OAuthAccount.Unwrap() before calling this method if this OAuthAccount
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (oa *OAuthAccount) Update() *OAuthAccountUpdateOne {
-	return NewOAuthAccountClient(oa.config).UpdateOne(oa)
+func (_m *OAuthAccount) Update() *OAuthAccountUpdateOne {
+	return NewOAuthAccountClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the OAuthAccount entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (oa *OAuthAccount) Unwrap() *OAuthAccount {
-	_tx, ok := oa.config.driver.(*txDriver)
+func (_m *OAuthAccount) Unwrap() *OAuthAccount {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: OAuthAccount is not a transactional entity")
 	}
-	oa.config.driver = _tx.drv
-	return oa
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (oa *OAuthAccount) String() string {
+func (_m *OAuthAccount) String() string {
 	var builder strings.Builder
 	builder.WriteString("OAuthAccount(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", oa.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(oa.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(oa.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", oa.UserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("provider=")
-	builder.WriteString(oa.Provider)
+	builder.WriteString(_m.Provider)
 	builder.WriteString(", ")
 	builder.WriteString("provider_user_id=")
-	builder.WriteString(oa.ProviderUserID)
+	builder.WriteString(_m.ProviderUserID)
 	builder.WriteString(", ")
 	builder.WriteString("access_token=")
-	builder.WriteString(oa.AccessToken)
+	builder.WriteString(_m.AccessToken)
 	builder.WriteString(", ")
 	builder.WriteString("refresh_token=")
-	builder.WriteString(oa.RefreshToken)
+	builder.WriteString(_m.RefreshToken)
 	builder.WriteString(", ")
 	builder.WriteString("token_expiry=")
-	builder.WriteString(oa.TokenExpiry.Format(time.ANSIC))
+	builder.WriteString(_m.TokenExpiry.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("profile=")
-	builder.WriteString(fmt.Sprintf("%v", oa.Profile))
+	builder.WriteString(fmt.Sprintf("%v", _m.Profile))
 	builder.WriteByte(')')
 	return builder.String()
 }

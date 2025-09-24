@@ -218,8 +218,8 @@ func (p *membershipPager) applyFilter(query *MembershipQuery) (*MembershipQuery,
 	return query, nil
 }
 
-func (p *membershipPager) toCursor(m *Membership) Cursor {
-	return p.order.Field.toCursor(m)
+func (p *membershipPager) toCursor(_m *Membership) Cursor {
+	return p.order.Field.toCursor(_m)
 }
 
 func (p *membershipPager) applyCursors(query *MembershipQuery, after, before *Cursor) (*MembershipQuery, error) {
@@ -265,7 +265,7 @@ func (p *membershipPager) orderExpr(query *MembershipQuery) sql.Querier {
 }
 
 // Paginate executes the query and returns a relay based cursor connection to Membership.
-func (m *MembershipQuery) Paginate(
+func (_m *MembershipQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
 	before *Cursor, last *int, opts ...MembershipPaginateOption,
 ) (*MembershipConnection, error) {
@@ -276,7 +276,7 @@ func (m *MembershipQuery) Paginate(
 	if err != nil {
 		return nil, err
 	}
-	if m, err = pager.applyFilter(m); err != nil {
+	if _m, err = pager.applyFilter(_m); err != nil {
 		return nil, err
 	}
 	conn := &MembershipConnection{Edges: []*MembershipEdge{}}
@@ -284,7 +284,7 @@ func (m *MembershipQuery) Paginate(
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
-			c := m.Clone()
+			c := _m.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -296,25 +296,25 @@ func (m *MembershipQuery) Paginate(
 	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
-	if m, err = pager.applyCursors(m, after, before); err != nil {
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
 	limit := paginateLimit(first, last)
 	if limit != 0 {
-		m.Limit(limit)
+		_m.Limit(limit)
 	}
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err := m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	m = pager.applyOrder(m)
-	nodes, err := m.All(ctx)
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -325,29 +325,29 @@ func (m *MembershipQuery) Paginate(
 var (
 	// MembershipOrderFieldCreatedAt orders Membership by created_at.
 	MembershipOrderFieldCreatedAt = &MembershipOrderField{
-		Value: func(m *Membership) (ent.Value, error) {
-			return m.CreatedAt, nil
+		Value: func(_m *Membership) (ent.Value, error) {
+			return _m.CreatedAt, nil
 		},
 		column: membership.FieldCreatedAt,
 		toTerm: membership.ByCreatedAt,
-		toCursor: func(m *Membership) Cursor {
+		toCursor: func(_m *Membership) Cursor {
 			return Cursor{
-				ID:    m.ID,
-				Value: m.CreatedAt,
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
 			}
 		},
 	}
 	// MembershipOrderFieldUpdatedAt orders Membership by updated_at.
 	MembershipOrderFieldUpdatedAt = &MembershipOrderField{
-		Value: func(m *Membership) (ent.Value, error) {
-			return m.UpdatedAt, nil
+		Value: func(_m *Membership) (ent.Value, error) {
+			return _m.UpdatedAt, nil
 		},
 		column: membership.FieldUpdatedAt,
 		toTerm: membership.ByUpdatedAt,
-		toCursor: func(m *Membership) Cursor {
+		toCursor: func(_m *Membership) Cursor {
 			return Cursor{
-				ID:    m.ID,
-				Value: m.UpdatedAt,
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
 			}
 		},
 	}
@@ -406,25 +406,25 @@ type MembershipOrder struct {
 var DefaultMembershipOrder = &MembershipOrder{
 	Direction: entgql.OrderDirectionAsc,
 	Field: &MembershipOrderField{
-		Value: func(m *Membership) (ent.Value, error) {
-			return m.ID, nil
+		Value: func(_m *Membership) (ent.Value, error) {
+			return _m.ID, nil
 		},
 		column: membership.FieldID,
 		toTerm: membership.ByID,
-		toCursor: func(m *Membership) Cursor {
-			return Cursor{ID: m.ID}
+		toCursor: func(_m *Membership) Cursor {
+			return Cursor{ID: _m.ID}
 		},
 	},
 }
 
 // ToEdge converts Membership into MembershipEdge.
-func (m *Membership) ToEdge(order *MembershipOrder) *MembershipEdge {
+func (_m *Membership) ToEdge(order *MembershipOrder) *MembershipEdge {
 	if order == nil {
 		order = DefaultMembershipOrder
 	}
 	return &MembershipEdge{
-		Node:   m,
-		Cursor: order.Field.toCursor(m),
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
 	}
 }
 
@@ -539,8 +539,8 @@ func (p *oauthaccountPager) applyFilter(query *OAuthAccountQuery) (*OAuthAccount
 	return query, nil
 }
 
-func (p *oauthaccountPager) toCursor(oa *OAuthAccount) Cursor {
-	return p.order.Field.toCursor(oa)
+func (p *oauthaccountPager) toCursor(_m *OAuthAccount) Cursor {
+	return p.order.Field.toCursor(_m)
 }
 
 func (p *oauthaccountPager) applyCursors(query *OAuthAccountQuery, after, before *Cursor) (*OAuthAccountQuery, error) {
@@ -586,7 +586,7 @@ func (p *oauthaccountPager) orderExpr(query *OAuthAccountQuery) sql.Querier {
 }
 
 // Paginate executes the query and returns a relay based cursor connection to OAuthAccount.
-func (oa *OAuthAccountQuery) Paginate(
+func (_m *OAuthAccountQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
 	before *Cursor, last *int, opts ...OAuthAccountPaginateOption,
 ) (*OAuthAccountConnection, error) {
@@ -597,7 +597,7 @@ func (oa *OAuthAccountQuery) Paginate(
 	if err != nil {
 		return nil, err
 	}
-	if oa, err = pager.applyFilter(oa); err != nil {
+	if _m, err = pager.applyFilter(_m); err != nil {
 		return nil, err
 	}
 	conn := &OAuthAccountConnection{Edges: []*OAuthAccountEdge{}}
@@ -605,7 +605,7 @@ func (oa *OAuthAccountQuery) Paginate(
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
-			c := oa.Clone()
+			c := _m.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -617,25 +617,25 @@ func (oa *OAuthAccountQuery) Paginate(
 	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
-	if oa, err = pager.applyCursors(oa, after, before); err != nil {
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
 	limit := paginateLimit(first, last)
 	if limit != 0 {
-		oa.Limit(limit)
+		_m.Limit(limit)
 	}
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := oa.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err := oa.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	oa = pager.applyOrder(oa)
-	nodes, err := oa.All(ctx)
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -646,29 +646,29 @@ func (oa *OAuthAccountQuery) Paginate(
 var (
 	// OAuthAccountOrderFieldCreatedAt orders OAuthAccount by created_at.
 	OAuthAccountOrderFieldCreatedAt = &OAuthAccountOrderField{
-		Value: func(oa *OAuthAccount) (ent.Value, error) {
-			return oa.CreatedAt, nil
+		Value: func(_m *OAuthAccount) (ent.Value, error) {
+			return _m.CreatedAt, nil
 		},
 		column: oauthaccount.FieldCreatedAt,
 		toTerm: oauthaccount.ByCreatedAt,
-		toCursor: func(oa *OAuthAccount) Cursor {
+		toCursor: func(_m *OAuthAccount) Cursor {
 			return Cursor{
-				ID:    oa.ID,
-				Value: oa.CreatedAt,
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
 			}
 		},
 	}
 	// OAuthAccountOrderFieldUpdatedAt orders OAuthAccount by updated_at.
 	OAuthAccountOrderFieldUpdatedAt = &OAuthAccountOrderField{
-		Value: func(oa *OAuthAccount) (ent.Value, error) {
-			return oa.UpdatedAt, nil
+		Value: func(_m *OAuthAccount) (ent.Value, error) {
+			return _m.UpdatedAt, nil
 		},
 		column: oauthaccount.FieldUpdatedAt,
 		toTerm: oauthaccount.ByUpdatedAt,
-		toCursor: func(oa *OAuthAccount) Cursor {
+		toCursor: func(_m *OAuthAccount) Cursor {
 			return Cursor{
-				ID:    oa.ID,
-				Value: oa.UpdatedAt,
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
 			}
 		},
 	}
@@ -727,25 +727,25 @@ type OAuthAccountOrder struct {
 var DefaultOAuthAccountOrder = &OAuthAccountOrder{
 	Direction: entgql.OrderDirectionAsc,
 	Field: &OAuthAccountOrderField{
-		Value: func(oa *OAuthAccount) (ent.Value, error) {
-			return oa.ID, nil
+		Value: func(_m *OAuthAccount) (ent.Value, error) {
+			return _m.ID, nil
 		},
 		column: oauthaccount.FieldID,
 		toTerm: oauthaccount.ByID,
-		toCursor: func(oa *OAuthAccount) Cursor {
-			return Cursor{ID: oa.ID}
+		toCursor: func(_m *OAuthAccount) Cursor {
+			return Cursor{ID: _m.ID}
 		},
 	},
 }
 
 // ToEdge converts OAuthAccount into OAuthAccountEdge.
-func (oa *OAuthAccount) ToEdge(order *OAuthAccountOrder) *OAuthAccountEdge {
+func (_m *OAuthAccount) ToEdge(order *OAuthAccountOrder) *OAuthAccountEdge {
 	if order == nil {
 		order = DefaultOAuthAccountOrder
 	}
 	return &OAuthAccountEdge{
-		Node:   oa,
-		Cursor: order.Field.toCursor(oa),
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
 	}
 }
 
@@ -860,8 +860,8 @@ func (p *oauthproviderPager) applyFilter(query *OAuthProviderQuery) (*OAuthProvi
 	return query, nil
 }
 
-func (p *oauthproviderPager) toCursor(op *OAuthProvider) Cursor {
-	return p.order.Field.toCursor(op)
+func (p *oauthproviderPager) toCursor(_m *OAuthProvider) Cursor {
+	return p.order.Field.toCursor(_m)
 }
 
 func (p *oauthproviderPager) applyCursors(query *OAuthProviderQuery, after, before *Cursor) (*OAuthProviderQuery, error) {
@@ -907,7 +907,7 @@ func (p *oauthproviderPager) orderExpr(query *OAuthProviderQuery) sql.Querier {
 }
 
 // Paginate executes the query and returns a relay based cursor connection to OAuthProvider.
-func (op *OAuthProviderQuery) Paginate(
+func (_m *OAuthProviderQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
 	before *Cursor, last *int, opts ...OAuthProviderPaginateOption,
 ) (*OAuthProviderConnection, error) {
@@ -918,7 +918,7 @@ func (op *OAuthProviderQuery) Paginate(
 	if err != nil {
 		return nil, err
 	}
-	if op, err = pager.applyFilter(op); err != nil {
+	if _m, err = pager.applyFilter(_m); err != nil {
 		return nil, err
 	}
 	conn := &OAuthProviderConnection{Edges: []*OAuthProviderEdge{}}
@@ -926,7 +926,7 @@ func (op *OAuthProviderQuery) Paginate(
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
-			c := op.Clone()
+			c := _m.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -938,25 +938,25 @@ func (op *OAuthProviderQuery) Paginate(
 	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
-	if op, err = pager.applyCursors(op, after, before); err != nil {
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
 	limit := paginateLimit(first, last)
 	if limit != 0 {
-		op.Limit(limit)
+		_m.Limit(limit)
 	}
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := op.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err := op.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	op = pager.applyOrder(op)
-	nodes, err := op.All(ctx)
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -983,25 +983,25 @@ type OAuthProviderOrder struct {
 var DefaultOAuthProviderOrder = &OAuthProviderOrder{
 	Direction: entgql.OrderDirectionAsc,
 	Field: &OAuthProviderOrderField{
-		Value: func(op *OAuthProvider) (ent.Value, error) {
-			return op.ID, nil
+		Value: func(_m *OAuthProvider) (ent.Value, error) {
+			return _m.ID, nil
 		},
 		column: oauthprovider.FieldID,
 		toTerm: oauthprovider.ByID,
-		toCursor: func(op *OAuthProvider) Cursor {
-			return Cursor{ID: op.ID}
+		toCursor: func(_m *OAuthProvider) Cursor {
+			return Cursor{ID: _m.ID}
 		},
 	},
 }
 
 // ToEdge converts OAuthProvider into OAuthProviderEdge.
-func (op *OAuthProvider) ToEdge(order *OAuthProviderOrder) *OAuthProviderEdge {
+func (_m *OAuthProvider) ToEdge(order *OAuthProviderOrder) *OAuthProviderEdge {
 	if order == nil {
 		order = DefaultOAuthProviderOrder
 	}
 	return &OAuthProviderEdge{
-		Node:   op,
-		Cursor: order.Field.toCursor(op),
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
 	}
 }
 
@@ -1116,8 +1116,8 @@ func (p *organizationPager) applyFilter(query *OrganizationQuery) (*Organization
 	return query, nil
 }
 
-func (p *organizationPager) toCursor(o *Organization) Cursor {
-	return p.order.Field.toCursor(o)
+func (p *organizationPager) toCursor(_m *Organization) Cursor {
+	return p.order.Field.toCursor(_m)
 }
 
 func (p *organizationPager) applyCursors(query *OrganizationQuery, after, before *Cursor) (*OrganizationQuery, error) {
@@ -1163,7 +1163,7 @@ func (p *organizationPager) orderExpr(query *OrganizationQuery) sql.Querier {
 }
 
 // Paginate executes the query and returns a relay based cursor connection to Organization.
-func (o *OrganizationQuery) Paginate(
+func (_m *OrganizationQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
 	before *Cursor, last *int, opts ...OrganizationPaginateOption,
 ) (*OrganizationConnection, error) {
@@ -1174,7 +1174,7 @@ func (o *OrganizationQuery) Paginate(
 	if err != nil {
 		return nil, err
 	}
-	if o, err = pager.applyFilter(o); err != nil {
+	if _m, err = pager.applyFilter(_m); err != nil {
 		return nil, err
 	}
 	conn := &OrganizationConnection{Edges: []*OrganizationEdge{}}
@@ -1182,7 +1182,7 @@ func (o *OrganizationQuery) Paginate(
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
-			c := o.Clone()
+			c := _m.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -1194,25 +1194,25 @@ func (o *OrganizationQuery) Paginate(
 	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
-	if o, err = pager.applyCursors(o, after, before); err != nil {
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
 	limit := paginateLimit(first, last)
 	if limit != 0 {
-		o.Limit(limit)
+		_m.Limit(limit)
 	}
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := o.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err := o.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	o = pager.applyOrder(o)
-	nodes, err := o.All(ctx)
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -1223,29 +1223,29 @@ func (o *OrganizationQuery) Paginate(
 var (
 	// OrganizationOrderFieldCreatedAt orders Organization by created_at.
 	OrganizationOrderFieldCreatedAt = &OrganizationOrderField{
-		Value: func(o *Organization) (ent.Value, error) {
-			return o.CreatedAt, nil
+		Value: func(_m *Organization) (ent.Value, error) {
+			return _m.CreatedAt, nil
 		},
 		column: organization.FieldCreatedAt,
 		toTerm: organization.ByCreatedAt,
-		toCursor: func(o *Organization) Cursor {
+		toCursor: func(_m *Organization) Cursor {
 			return Cursor{
-				ID:    o.ID,
-				Value: o.CreatedAt,
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
 			}
 		},
 	}
 	// OrganizationOrderFieldUpdatedAt orders Organization by updated_at.
 	OrganizationOrderFieldUpdatedAt = &OrganizationOrderField{
-		Value: func(o *Organization) (ent.Value, error) {
-			return o.UpdatedAt, nil
+		Value: func(_m *Organization) (ent.Value, error) {
+			return _m.UpdatedAt, nil
 		},
 		column: organization.FieldUpdatedAt,
 		toTerm: organization.ByUpdatedAt,
-		toCursor: func(o *Organization) Cursor {
+		toCursor: func(_m *Organization) Cursor {
 			return Cursor{
-				ID:    o.ID,
-				Value: o.UpdatedAt,
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
 			}
 		},
 	}
@@ -1304,25 +1304,25 @@ type OrganizationOrder struct {
 var DefaultOrganizationOrder = &OrganizationOrder{
 	Direction: entgql.OrderDirectionAsc,
 	Field: &OrganizationOrderField{
-		Value: func(o *Organization) (ent.Value, error) {
-			return o.ID, nil
+		Value: func(_m *Organization) (ent.Value, error) {
+			return _m.ID, nil
 		},
 		column: organization.FieldID,
 		toTerm: organization.ByID,
-		toCursor: func(o *Organization) Cursor {
-			return Cursor{ID: o.ID}
+		toCursor: func(_m *Organization) Cursor {
+			return Cursor{ID: _m.ID}
 		},
 	},
 }
 
 // ToEdge converts Organization into OrganizationEdge.
-func (o *Organization) ToEdge(order *OrganizationOrder) *OrganizationEdge {
+func (_m *Organization) ToEdge(order *OrganizationOrder) *OrganizationEdge {
 	if order == nil {
 		order = DefaultOrganizationOrder
 	}
 	return &OrganizationEdge{
-		Node:   o,
-		Cursor: order.Field.toCursor(o),
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
 	}
 }
 
@@ -1437,8 +1437,8 @@ func (p *permissionPager) applyFilter(query *PermissionQuery) (*PermissionQuery,
 	return query, nil
 }
 
-func (p *permissionPager) toCursor(pe *Permission) Cursor {
-	return p.order.Field.toCursor(pe)
+func (p *permissionPager) toCursor(_m *Permission) Cursor {
+	return p.order.Field.toCursor(_m)
 }
 
 func (p *permissionPager) applyCursors(query *PermissionQuery, after, before *Cursor) (*PermissionQuery, error) {
@@ -1484,7 +1484,7 @@ func (p *permissionPager) orderExpr(query *PermissionQuery) sql.Querier {
 }
 
 // Paginate executes the query and returns a relay based cursor connection to Permission.
-func (pe *PermissionQuery) Paginate(
+func (_m *PermissionQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
 	before *Cursor, last *int, opts ...PermissionPaginateOption,
 ) (*PermissionConnection, error) {
@@ -1495,7 +1495,7 @@ func (pe *PermissionQuery) Paginate(
 	if err != nil {
 		return nil, err
 	}
-	if pe, err = pager.applyFilter(pe); err != nil {
+	if _m, err = pager.applyFilter(_m); err != nil {
 		return nil, err
 	}
 	conn := &PermissionConnection{Edges: []*PermissionEdge{}}
@@ -1503,7 +1503,7 @@ func (pe *PermissionQuery) Paginate(
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
-			c := pe.Clone()
+			c := _m.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -1515,25 +1515,25 @@ func (pe *PermissionQuery) Paginate(
 	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
-	if pe, err = pager.applyCursors(pe, after, before); err != nil {
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
 	limit := paginateLimit(first, last)
 	if limit != 0 {
-		pe.Limit(limit)
+		_m.Limit(limit)
 	}
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := pe.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err := pe.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	pe = pager.applyOrder(pe)
-	nodes, err := pe.All(ctx)
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -1544,57 +1544,57 @@ func (pe *PermissionQuery) Paginate(
 var (
 	// PermissionOrderFieldCreatedAt orders Permission by created_at.
 	PermissionOrderFieldCreatedAt = &PermissionOrderField{
-		Value: func(pe *Permission) (ent.Value, error) {
-			return pe.CreatedAt, nil
+		Value: func(_m *Permission) (ent.Value, error) {
+			return _m.CreatedAt, nil
 		},
 		column: permission.FieldCreatedAt,
 		toTerm: permission.ByCreatedAt,
-		toCursor: func(pe *Permission) Cursor {
+		toCursor: func(_m *Permission) Cursor {
 			return Cursor{
-				ID:    pe.ID,
-				Value: pe.CreatedAt,
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
 			}
 		},
 	}
 	// PermissionOrderFieldUpdatedAt orders Permission by updated_at.
 	PermissionOrderFieldUpdatedAt = &PermissionOrderField{
-		Value: func(pe *Permission) (ent.Value, error) {
-			return pe.UpdatedAt, nil
+		Value: func(_m *Permission) (ent.Value, error) {
+			return _m.UpdatedAt, nil
 		},
 		column: permission.FieldUpdatedAt,
 		toTerm: permission.ByUpdatedAt,
-		toCursor: func(pe *Permission) Cursor {
+		toCursor: func(_m *Permission) Cursor {
 			return Cursor{
-				ID:    pe.ID,
-				Value: pe.UpdatedAt,
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
 			}
 		},
 	}
 	// PermissionOrderFieldName orders Permission by name.
 	PermissionOrderFieldName = &PermissionOrderField{
-		Value: func(pe *Permission) (ent.Value, error) {
-			return pe.Name, nil
+		Value: func(_m *Permission) (ent.Value, error) {
+			return _m.Name, nil
 		},
 		column: permission.FieldName,
 		toTerm: permission.ByName,
-		toCursor: func(pe *Permission) Cursor {
+		toCursor: func(_m *Permission) Cursor {
 			return Cursor{
-				ID:    pe.ID,
-				Value: pe.Name,
+				ID:    _m.ID,
+				Value: _m.Name,
 			}
 		},
 	}
 	// PermissionOrderFieldSort orders Permission by sort.
 	PermissionOrderFieldSort = &PermissionOrderField{
-		Value: func(pe *Permission) (ent.Value, error) {
-			return pe.Sort, nil
+		Value: func(_m *Permission) (ent.Value, error) {
+			return _m.Sort, nil
 		},
 		column: permission.FieldSort,
 		toTerm: permission.BySort,
-		toCursor: func(pe *Permission) Cursor {
+		toCursor: func(_m *Permission) Cursor {
 			return Cursor{
-				ID:    pe.ID,
-				Value: pe.Sort,
+				ID:    _m.ID,
+				Value: _m.Sort,
 			}
 		},
 	}
@@ -1661,25 +1661,25 @@ type PermissionOrder struct {
 var DefaultPermissionOrder = &PermissionOrder{
 	Direction: entgql.OrderDirectionAsc,
 	Field: &PermissionOrderField{
-		Value: func(pe *Permission) (ent.Value, error) {
-			return pe.ID, nil
+		Value: func(_m *Permission) (ent.Value, error) {
+			return _m.ID, nil
 		},
 		column: permission.FieldID,
 		toTerm: permission.ByID,
-		toCursor: func(pe *Permission) Cursor {
-			return Cursor{ID: pe.ID}
+		toCursor: func(_m *Permission) Cursor {
+			return Cursor{ID: _m.ID}
 		},
 	},
 }
 
 // ToEdge converts Permission into PermissionEdge.
-func (pe *Permission) ToEdge(order *PermissionOrder) *PermissionEdge {
+func (_m *Permission) ToEdge(order *PermissionOrder) *PermissionEdge {
 	if order == nil {
 		order = DefaultPermissionOrder
 	}
 	return &PermissionEdge{
-		Node:   pe,
-		Cursor: order.Field.toCursor(pe),
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
 	}
 }
 
@@ -1794,8 +1794,8 @@ func (p *tenantPager) applyFilter(query *TenantQuery) (*TenantQuery, error) {
 	return query, nil
 }
 
-func (p *tenantPager) toCursor(t *Tenant) Cursor {
-	return p.order.Field.toCursor(t)
+func (p *tenantPager) toCursor(_m *Tenant) Cursor {
+	return p.order.Field.toCursor(_m)
 }
 
 func (p *tenantPager) applyCursors(query *TenantQuery, after, before *Cursor) (*TenantQuery, error) {
@@ -1841,7 +1841,7 @@ func (p *tenantPager) orderExpr(query *TenantQuery) sql.Querier {
 }
 
 // Paginate executes the query and returns a relay based cursor connection to Tenant.
-func (t *TenantQuery) Paginate(
+func (_m *TenantQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
 	before *Cursor, last *int, opts ...TenantPaginateOption,
 ) (*TenantConnection, error) {
@@ -1852,7 +1852,7 @@ func (t *TenantQuery) Paginate(
 	if err != nil {
 		return nil, err
 	}
-	if t, err = pager.applyFilter(t); err != nil {
+	if _m, err = pager.applyFilter(_m); err != nil {
 		return nil, err
 	}
 	conn := &TenantConnection{Edges: []*TenantEdge{}}
@@ -1860,7 +1860,7 @@ func (t *TenantQuery) Paginate(
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
-			c := t.Clone()
+			c := _m.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -1872,25 +1872,25 @@ func (t *TenantQuery) Paginate(
 	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
-	if t, err = pager.applyCursors(t, after, before); err != nil {
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
 	limit := paginateLimit(first, last)
 	if limit != 0 {
-		t.Limit(limit)
+		_m.Limit(limit)
 	}
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := t.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err := t.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	t = pager.applyOrder(t)
-	nodes, err := t.All(ctx)
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -1901,29 +1901,29 @@ func (t *TenantQuery) Paginate(
 var (
 	// TenantOrderFieldCreatedAt orders Tenant by created_at.
 	TenantOrderFieldCreatedAt = &TenantOrderField{
-		Value: func(t *Tenant) (ent.Value, error) {
-			return t.CreatedAt, nil
+		Value: func(_m *Tenant) (ent.Value, error) {
+			return _m.CreatedAt, nil
 		},
 		column: tenant.FieldCreatedAt,
 		toTerm: tenant.ByCreatedAt,
-		toCursor: func(t *Tenant) Cursor {
+		toCursor: func(_m *Tenant) Cursor {
 			return Cursor{
-				ID:    t.ID,
-				Value: t.CreatedAt,
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
 			}
 		},
 	}
 	// TenantOrderFieldUpdatedAt orders Tenant by updated_at.
 	TenantOrderFieldUpdatedAt = &TenantOrderField{
-		Value: func(t *Tenant) (ent.Value, error) {
-			return t.UpdatedAt, nil
+		Value: func(_m *Tenant) (ent.Value, error) {
+			return _m.UpdatedAt, nil
 		},
 		column: tenant.FieldUpdatedAt,
 		toTerm: tenant.ByUpdatedAt,
-		toCursor: func(t *Tenant) Cursor {
+		toCursor: func(_m *Tenant) Cursor {
 			return Cursor{
-				ID:    t.ID,
-				Value: t.UpdatedAt,
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
 			}
 		},
 	}
@@ -1982,25 +1982,25 @@ type TenantOrder struct {
 var DefaultTenantOrder = &TenantOrder{
 	Direction: entgql.OrderDirectionAsc,
 	Field: &TenantOrderField{
-		Value: func(t *Tenant) (ent.Value, error) {
-			return t.ID, nil
+		Value: func(_m *Tenant) (ent.Value, error) {
+			return _m.ID, nil
 		},
 		column: tenant.FieldID,
 		toTerm: tenant.ByID,
-		toCursor: func(t *Tenant) Cursor {
-			return Cursor{ID: t.ID}
+		toCursor: func(_m *Tenant) Cursor {
+			return Cursor{ID: _m.ID}
 		},
 	},
 }
 
 // ToEdge converts Tenant into TenantEdge.
-func (t *Tenant) ToEdge(order *TenantOrder) *TenantEdge {
+func (_m *Tenant) ToEdge(order *TenantOrder) *TenantEdge {
 	if order == nil {
 		order = DefaultTenantOrder
 	}
 	return &TenantEdge{
-		Node:   t,
-		Cursor: order.Field.toCursor(t),
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
 	}
 }
 
@@ -2115,8 +2115,8 @@ func (p *tenantrolePager) applyFilter(query *TenantRoleQuery) (*TenantRoleQuery,
 	return query, nil
 }
 
-func (p *tenantrolePager) toCursor(tr *TenantRole) Cursor {
-	return p.order.Field.toCursor(tr)
+func (p *tenantrolePager) toCursor(_m *TenantRole) Cursor {
+	return p.order.Field.toCursor(_m)
 }
 
 func (p *tenantrolePager) applyCursors(query *TenantRoleQuery, after, before *Cursor) (*TenantRoleQuery, error) {
@@ -2162,7 +2162,7 @@ func (p *tenantrolePager) orderExpr(query *TenantRoleQuery) sql.Querier {
 }
 
 // Paginate executes the query and returns a relay based cursor connection to TenantRole.
-func (tr *TenantRoleQuery) Paginate(
+func (_m *TenantRoleQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
 	before *Cursor, last *int, opts ...TenantRolePaginateOption,
 ) (*TenantRoleConnection, error) {
@@ -2173,7 +2173,7 @@ func (tr *TenantRoleQuery) Paginate(
 	if err != nil {
 		return nil, err
 	}
-	if tr, err = pager.applyFilter(tr); err != nil {
+	if _m, err = pager.applyFilter(_m); err != nil {
 		return nil, err
 	}
 	conn := &TenantRoleConnection{Edges: []*TenantRoleEdge{}}
@@ -2181,7 +2181,7 @@ func (tr *TenantRoleQuery) Paginate(
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
-			c := tr.Clone()
+			c := _m.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -2193,25 +2193,25 @@ func (tr *TenantRoleQuery) Paginate(
 	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
-	if tr, err = pager.applyCursors(tr, after, before); err != nil {
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
 	limit := paginateLimit(first, last)
 	if limit != 0 {
-		tr.Limit(limit)
+		_m.Limit(limit)
 	}
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := tr.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err := tr.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	tr = pager.applyOrder(tr)
-	nodes, err := tr.All(ctx)
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -2222,57 +2222,57 @@ func (tr *TenantRoleQuery) Paginate(
 var (
 	// TenantRoleOrderFieldCreatedAt orders TenantRole by created_at.
 	TenantRoleOrderFieldCreatedAt = &TenantRoleOrderField{
-		Value: func(tr *TenantRole) (ent.Value, error) {
-			return tr.CreatedAt, nil
+		Value: func(_m *TenantRole) (ent.Value, error) {
+			return _m.CreatedAt, nil
 		},
 		column: tenantrole.FieldCreatedAt,
 		toTerm: tenantrole.ByCreatedAt,
-		toCursor: func(tr *TenantRole) Cursor {
+		toCursor: func(_m *TenantRole) Cursor {
 			return Cursor{
-				ID:    tr.ID,
-				Value: tr.CreatedAt,
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
 			}
 		},
 	}
 	// TenantRoleOrderFieldUpdatedAt orders TenantRole by updated_at.
 	TenantRoleOrderFieldUpdatedAt = &TenantRoleOrderField{
-		Value: func(tr *TenantRole) (ent.Value, error) {
-			return tr.UpdatedAt, nil
+		Value: func(_m *TenantRole) (ent.Value, error) {
+			return _m.UpdatedAt, nil
 		},
 		column: tenantrole.FieldUpdatedAt,
 		toTerm: tenantrole.ByUpdatedAt,
-		toCursor: func(tr *TenantRole) Cursor {
+		toCursor: func(_m *TenantRole) Cursor {
 			return Cursor{
-				ID:    tr.ID,
-				Value: tr.UpdatedAt,
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
 			}
 		},
 	}
 	// TenantRoleOrderFieldName orders TenantRole by name.
 	TenantRoleOrderFieldName = &TenantRoleOrderField{
-		Value: func(tr *TenantRole) (ent.Value, error) {
-			return tr.Name, nil
+		Value: func(_m *TenantRole) (ent.Value, error) {
+			return _m.Name, nil
 		},
 		column: tenantrole.FieldName,
 		toTerm: tenantrole.ByName,
-		toCursor: func(tr *TenantRole) Cursor {
+		toCursor: func(_m *TenantRole) Cursor {
 			return Cursor{
-				ID:    tr.ID,
-				Value: tr.Name,
+				ID:    _m.ID,
+				Value: _m.Name,
 			}
 		},
 	}
 	// TenantRoleOrderFieldSort orders TenantRole by sort.
 	TenantRoleOrderFieldSort = &TenantRoleOrderField{
-		Value: func(tr *TenantRole) (ent.Value, error) {
-			return tr.Sort, nil
+		Value: func(_m *TenantRole) (ent.Value, error) {
+			return _m.Sort, nil
 		},
 		column: tenantrole.FieldSort,
 		toTerm: tenantrole.BySort,
-		toCursor: func(tr *TenantRole) Cursor {
+		toCursor: func(_m *TenantRole) Cursor {
 			return Cursor{
-				ID:    tr.ID,
-				Value: tr.Sort,
+				ID:    _m.ID,
+				Value: _m.Sort,
 			}
 		},
 	}
@@ -2339,25 +2339,25 @@ type TenantRoleOrder struct {
 var DefaultTenantRoleOrder = &TenantRoleOrder{
 	Direction: entgql.OrderDirectionAsc,
 	Field: &TenantRoleOrderField{
-		Value: func(tr *TenantRole) (ent.Value, error) {
-			return tr.ID, nil
+		Value: func(_m *TenantRole) (ent.Value, error) {
+			return _m.ID, nil
 		},
 		column: tenantrole.FieldID,
 		toTerm: tenantrole.ByID,
-		toCursor: func(tr *TenantRole) Cursor {
-			return Cursor{ID: tr.ID}
+		toCursor: func(_m *TenantRole) Cursor {
+			return Cursor{ID: _m.ID}
 		},
 	},
 }
 
 // ToEdge converts TenantRole into TenantRoleEdge.
-func (tr *TenantRole) ToEdge(order *TenantRoleOrder) *TenantRoleEdge {
+func (_m *TenantRole) ToEdge(order *TenantRoleOrder) *TenantRoleEdge {
 	if order == nil {
 		order = DefaultTenantRoleOrder
 	}
 	return &TenantRoleEdge{
-		Node:   tr,
-		Cursor: order.Field.toCursor(tr),
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
 	}
 }
 
@@ -2472,8 +2472,8 @@ func (p *tenantuserPager) applyFilter(query *TenantUserQuery) (*TenantUserQuery,
 	return query, nil
 }
 
-func (p *tenantuserPager) toCursor(tu *TenantUser) Cursor {
-	return p.order.Field.toCursor(tu)
+func (p *tenantuserPager) toCursor(_m *TenantUser) Cursor {
+	return p.order.Field.toCursor(_m)
 }
 
 func (p *tenantuserPager) applyCursors(query *TenantUserQuery, after, before *Cursor) (*TenantUserQuery, error) {
@@ -2519,7 +2519,7 @@ func (p *tenantuserPager) orderExpr(query *TenantUserQuery) sql.Querier {
 }
 
 // Paginate executes the query and returns a relay based cursor connection to TenantUser.
-func (tu *TenantUserQuery) Paginate(
+func (_m *TenantUserQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
 	before *Cursor, last *int, opts ...TenantUserPaginateOption,
 ) (*TenantUserConnection, error) {
@@ -2530,7 +2530,7 @@ func (tu *TenantUserQuery) Paginate(
 	if err != nil {
 		return nil, err
 	}
-	if tu, err = pager.applyFilter(tu); err != nil {
+	if _m, err = pager.applyFilter(_m); err != nil {
 		return nil, err
 	}
 	conn := &TenantUserConnection{Edges: []*TenantUserEdge{}}
@@ -2538,7 +2538,7 @@ func (tu *TenantUserQuery) Paginate(
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
-			c := tu.Clone()
+			c := _m.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -2550,25 +2550,25 @@ func (tu *TenantUserQuery) Paginate(
 	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
-	if tu, err = pager.applyCursors(tu, after, before); err != nil {
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
 	limit := paginateLimit(first, last)
 	if limit != 0 {
-		tu.Limit(limit)
+		_m.Limit(limit)
 	}
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := tu.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err := tu.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	tu = pager.applyOrder(tu)
-	nodes, err := tu.All(ctx)
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -2595,25 +2595,25 @@ type TenantUserOrder struct {
 var DefaultTenantUserOrder = &TenantUserOrder{
 	Direction: entgql.OrderDirectionAsc,
 	Field: &TenantUserOrderField{
-		Value: func(tu *TenantUser) (ent.Value, error) {
-			return tu.ID, nil
+		Value: func(_m *TenantUser) (ent.Value, error) {
+			return _m.ID, nil
 		},
 		column: tenantuser.FieldID,
 		toTerm: tenantuser.ByID,
-		toCursor: func(tu *TenantUser) Cursor {
-			return Cursor{ID: tu.ID}
+		toCursor: func(_m *TenantUser) Cursor {
+			return Cursor{ID: _m.ID}
 		},
 	},
 }
 
 // ToEdge converts TenantUser into TenantUserEdge.
-func (tu *TenantUser) ToEdge(order *TenantUserOrder) *TenantUserEdge {
+func (_m *TenantUser) ToEdge(order *TenantUserOrder) *TenantUserEdge {
 	if order == nil {
 		order = DefaultTenantUserOrder
 	}
 	return &TenantUserEdge{
-		Node:   tu,
-		Cursor: order.Field.toCursor(tu),
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
 	}
 }
 
@@ -2728,8 +2728,8 @@ func (p *userPager) applyFilter(query *UserQuery) (*UserQuery, error) {
 	return query, nil
 }
 
-func (p *userPager) toCursor(u *User) Cursor {
-	return p.order.Field.toCursor(u)
+func (p *userPager) toCursor(_m *User) Cursor {
+	return p.order.Field.toCursor(_m)
 }
 
 func (p *userPager) applyCursors(query *UserQuery, after, before *Cursor) (*UserQuery, error) {
@@ -2775,7 +2775,7 @@ func (p *userPager) orderExpr(query *UserQuery) sql.Querier {
 }
 
 // Paginate executes the query and returns a relay based cursor connection to User.
-func (u *UserQuery) Paginate(
+func (_m *UserQuery) Paginate(
 	ctx context.Context, after *Cursor, first *int,
 	before *Cursor, last *int, opts ...UserPaginateOption,
 ) (*UserConnection, error) {
@@ -2786,7 +2786,7 @@ func (u *UserQuery) Paginate(
 	if err != nil {
 		return nil, err
 	}
-	if u, err = pager.applyFilter(u); err != nil {
+	if _m, err = pager.applyFilter(_m); err != nil {
 		return nil, err
 	}
 	conn := &UserConnection{Edges: []*UserEdge{}}
@@ -2794,7 +2794,7 @@ func (u *UserQuery) Paginate(
 	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
-			c := u.Clone()
+			c := _m.Clone()
 			c.ctx.Fields = nil
 			if conn.TotalCount, err = c.Count(ctx); err != nil {
 				return nil, err
@@ -2806,25 +2806,25 @@ func (u *UserQuery) Paginate(
 	if ignoredEdges || (first != nil && *first == 0) || (last != nil && *last == 0) {
 		return conn, nil
 	}
-	if u, err = pager.applyCursors(u, after, before); err != nil {
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
 	limit := paginateLimit(first, last)
 	if limit != 0 {
-		u.Limit(limit)
+		_m.Limit(limit)
 	}
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := u.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	if field := collectedField(ctx, nodesField); field != nil {
-		if err := u.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{nodesField}); err != nil {
 			return nil, err
 		}
 	}
-	u = pager.applyOrder(u)
-	nodes, err := u.All(ctx)
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -2835,43 +2835,43 @@ func (u *UserQuery) Paginate(
 var (
 	// UserOrderFieldCreatedAt orders User by created_at.
 	UserOrderFieldCreatedAt = &UserOrderField{
-		Value: func(u *User) (ent.Value, error) {
-			return u.CreatedAt, nil
+		Value: func(_m *User) (ent.Value, error) {
+			return _m.CreatedAt, nil
 		},
 		column: user.FieldCreatedAt,
 		toTerm: user.ByCreatedAt,
-		toCursor: func(u *User) Cursor {
+		toCursor: func(_m *User) Cursor {
 			return Cursor{
-				ID:    u.ID,
-				Value: u.CreatedAt,
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
 			}
 		},
 	}
 	// UserOrderFieldUpdatedAt orders User by updated_at.
 	UserOrderFieldUpdatedAt = &UserOrderField{
-		Value: func(u *User) (ent.Value, error) {
-			return u.UpdatedAt, nil
+		Value: func(_m *User) (ent.Value, error) {
+			return _m.UpdatedAt, nil
 		},
 		column: user.FieldUpdatedAt,
 		toTerm: user.ByUpdatedAt,
-		toCursor: func(u *User) Cursor {
+		toCursor: func(_m *User) Cursor {
 			return Cursor{
-				ID:    u.ID,
-				Value: u.UpdatedAt,
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
 			}
 		},
 	}
 	// UserOrderFieldEmail orders User by email.
 	UserOrderFieldEmail = &UserOrderField{
-		Value: func(u *User) (ent.Value, error) {
-			return u.Email, nil
+		Value: func(_m *User) (ent.Value, error) {
+			return _m.Email, nil
 		},
 		column: user.FieldEmail,
 		toTerm: user.ByEmail,
-		toCursor: func(u *User) Cursor {
+		toCursor: func(_m *User) Cursor {
 			return Cursor{
-				ID:    u.ID,
-				Value: u.Email,
+				ID:    _m.ID,
+				Value: _m.Email,
 			}
 		},
 	}
@@ -2934,24 +2934,24 @@ type UserOrder struct {
 var DefaultUserOrder = &UserOrder{
 	Direction: entgql.OrderDirectionAsc,
 	Field: &UserOrderField{
-		Value: func(u *User) (ent.Value, error) {
-			return u.ID, nil
+		Value: func(_m *User) (ent.Value, error) {
+			return _m.ID, nil
 		},
 		column: user.FieldID,
 		toTerm: user.ByID,
-		toCursor: func(u *User) Cursor {
-			return Cursor{ID: u.ID}
+		toCursor: func(_m *User) Cursor {
+			return Cursor{ID: _m.ID}
 		},
 	},
 }
 
 // ToEdge converts User into UserEdge.
-func (u *User) ToEdge(order *UserOrder) *UserEdge {
+func (_m *User) ToEdge(order *UserOrder) *UserEdge {
 	if order == nil {
 		order = DefaultUserOrder
 	}
 	return &UserEdge{
-		Node:   u,
-		Cursor: order.Field.toCursor(u),
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
 	}
 }

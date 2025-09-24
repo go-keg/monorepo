@@ -28,4 +28,3 @@ func NewEntDatabase(cfg *conf.Config) (*ent.Database, error) {
 	}
 	return ent.NewDatabase(ent.Driver(drv)), nil
 }
-

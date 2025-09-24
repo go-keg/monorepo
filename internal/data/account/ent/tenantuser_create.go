@@ -27,133 +27,133 @@ type TenantUserCreate struct {
 }
 
 // SetTenantID sets the "tenant_id" field.
-func (tuc *TenantUserCreate) SetTenantID(i int) *TenantUserCreate {
-	tuc.mutation.SetTenantID(i)
-	return tuc
+func (_c *TenantUserCreate) SetTenantID(v int) *TenantUserCreate {
+	_c.mutation.SetTenantID(v)
+	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (tuc *TenantUserCreate) SetUserID(i int) *TenantUserCreate {
-	tuc.mutation.SetUserID(i)
-	return tuc
+func (_c *TenantUserCreate) SetUserID(v int) *TenantUserCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetIsOwner sets the "is_owner" field.
-func (tuc *TenantUserCreate) SetIsOwner(b bool) *TenantUserCreate {
-	tuc.mutation.SetIsOwner(b)
-	return tuc
+func (_c *TenantUserCreate) SetIsOwner(v bool) *TenantUserCreate {
+	_c.mutation.SetIsOwner(v)
+	return _c
 }
 
 // SetNillableIsOwner sets the "is_owner" field if the given value is not nil.
-func (tuc *TenantUserCreate) SetNillableIsOwner(b *bool) *TenantUserCreate {
-	if b != nil {
-		tuc.SetIsOwner(*b)
+func (_c *TenantUserCreate) SetNillableIsOwner(v *bool) *TenantUserCreate {
+	if v != nil {
+		_c.SetIsOwner(*v)
 	}
-	return tuc
+	return _c
 }
 
 // SetIsActive sets the "is_active" field.
-func (tuc *TenantUserCreate) SetIsActive(b bool) *TenantUserCreate {
-	tuc.mutation.SetIsActive(b)
-	return tuc
+func (_c *TenantUserCreate) SetIsActive(v bool) *TenantUserCreate {
+	_c.mutation.SetIsActive(v)
+	return _c
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (tuc *TenantUserCreate) SetNillableIsActive(b *bool) *TenantUserCreate {
-	if b != nil {
-		tuc.SetIsActive(*b)
+func (_c *TenantUserCreate) SetNillableIsActive(v *bool) *TenantUserCreate {
+	if v != nil {
+		_c.SetIsActive(*v)
 	}
-	return tuc
+	return _c
 }
 
 // SetLastLoginTenant sets the "last_login_tenant" field.
-func (tuc *TenantUserCreate) SetLastLoginTenant(b bool) *TenantUserCreate {
-	tuc.mutation.SetLastLoginTenant(b)
-	return tuc
+func (_c *TenantUserCreate) SetLastLoginTenant(v bool) *TenantUserCreate {
+	_c.mutation.SetLastLoginTenant(v)
+	return _c
 }
 
 // SetNillableLastLoginTenant sets the "last_login_tenant" field if the given value is not nil.
-func (tuc *TenantUserCreate) SetNillableLastLoginTenant(b *bool) *TenantUserCreate {
-	if b != nil {
-		tuc.SetLastLoginTenant(*b)
+func (_c *TenantUserCreate) SetNillableLastLoginTenant(v *bool) *TenantUserCreate {
+	if v != nil {
+		_c.SetLastLoginTenant(*v)
 	}
-	return tuc
+	return _c
 }
 
 // SetLastLoginAt sets the "last_login_at" field.
-func (tuc *TenantUserCreate) SetLastLoginAt(t time.Time) *TenantUserCreate {
-	tuc.mutation.SetLastLoginAt(t)
-	return tuc
+func (_c *TenantUserCreate) SetLastLoginAt(v time.Time) *TenantUserCreate {
+	_c.mutation.SetLastLoginAt(v)
+	return _c
 }
 
 // SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
-func (tuc *TenantUserCreate) SetNillableLastLoginAt(t *time.Time) *TenantUserCreate {
-	if t != nil {
-		tuc.SetLastLoginAt(*t)
+func (_c *TenantUserCreate) SetNillableLastLoginAt(v *time.Time) *TenantUserCreate {
+	if v != nil {
+		_c.SetLastLoginAt(*v)
 	}
-	return tuc
+	return _c
 }
 
 // SetID sets the "id" field.
-func (tuc *TenantUserCreate) SetID(i int) *TenantUserCreate {
-	tuc.mutation.SetID(i)
-	return tuc
+func (_c *TenantUserCreate) SetID(v int) *TenantUserCreate {
+	_c.mutation.SetID(v)
+	return _c
 }
 
 // SetUser sets the "user" edge to the User entity.
-func (tuc *TenantUserCreate) SetUser(u *User) *TenantUserCreate {
-	return tuc.SetUserID(u.ID)
+func (_c *TenantUserCreate) SetUser(v *User) *TenantUserCreate {
+	return _c.SetUserID(v.ID)
 }
 
 // SetTenant sets the "tenant" edge to the Tenant entity.
-func (tuc *TenantUserCreate) SetTenant(t *Tenant) *TenantUserCreate {
-	return tuc.SetTenantID(t.ID)
+func (_c *TenantUserCreate) SetTenant(v *Tenant) *TenantUserCreate {
+	return _c.SetTenantID(v.ID)
 }
 
 // AddRoleIDs adds the "roles" edge to the TenantRole entity by IDs.
-func (tuc *TenantUserCreate) AddRoleIDs(ids ...int) *TenantUserCreate {
-	tuc.mutation.AddRoleIDs(ids...)
-	return tuc
+func (_c *TenantUserCreate) AddRoleIDs(ids ...int) *TenantUserCreate {
+	_c.mutation.AddRoleIDs(ids...)
+	return _c
 }
 
 // AddRoles adds the "roles" edges to the TenantRole entity.
-func (tuc *TenantUserCreate) AddRoles(t ...*TenantRole) *TenantUserCreate {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_c *TenantUserCreate) AddRoles(v ...*TenantRole) *TenantUserCreate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuc.AddRoleIDs(ids...)
+	return _c.AddRoleIDs(ids...)
 }
 
 // AddMembershipIDs adds the "memberships" edge to the Membership entity by IDs.
-func (tuc *TenantUserCreate) AddMembershipIDs(ids ...int) *TenantUserCreate {
-	tuc.mutation.AddMembershipIDs(ids...)
-	return tuc
+func (_c *TenantUserCreate) AddMembershipIDs(ids ...int) *TenantUserCreate {
+	_c.mutation.AddMembershipIDs(ids...)
+	return _c
 }
 
 // AddMemberships adds the "memberships" edges to the Membership entity.
-func (tuc *TenantUserCreate) AddMemberships(m ...*Membership) *TenantUserCreate {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_c *TenantUserCreate) AddMemberships(v ...*Membership) *TenantUserCreate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuc.AddMembershipIDs(ids...)
+	return _c.AddMembershipIDs(ids...)
 }
 
 // Mutation returns the TenantUserMutation object of the builder.
-func (tuc *TenantUserCreate) Mutation() *TenantUserMutation {
-	return tuc.mutation
+func (_c *TenantUserCreate) Mutation() *TenantUserMutation {
+	return _c.mutation
 }
 
 // Save creates the TenantUser in the database.
-func (tuc *TenantUserCreate) Save(ctx context.Context) (*TenantUser, error) {
-	tuc.defaults()
-	return withHooks(ctx, tuc.sqlSave, tuc.mutation, tuc.hooks)
+func (_c *TenantUserCreate) Save(ctx context.Context) (*TenantUser, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (tuc *TenantUserCreate) SaveX(ctx context.Context) *TenantUser {
-	v, err := tuc.Save(ctx)
+func (_c *TenantUserCreate) SaveX(ctx context.Context) *TenantUser {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -161,66 +161,66 @@ func (tuc *TenantUserCreate) SaveX(ctx context.Context) *TenantUser {
 }
 
 // Exec executes the query.
-func (tuc *TenantUserCreate) Exec(ctx context.Context) error {
-	_, err := tuc.Save(ctx)
+func (_c *TenantUserCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tuc *TenantUserCreate) ExecX(ctx context.Context) {
-	if err := tuc.Exec(ctx); err != nil {
+func (_c *TenantUserCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tuc *TenantUserCreate) defaults() {
-	if _, ok := tuc.mutation.IsOwner(); !ok {
+func (_c *TenantUserCreate) defaults() {
+	if _, ok := _c.mutation.IsOwner(); !ok {
 		v := tenantuser.DefaultIsOwner
-		tuc.mutation.SetIsOwner(v)
+		_c.mutation.SetIsOwner(v)
 	}
-	if _, ok := tuc.mutation.IsActive(); !ok {
+	if _, ok := _c.mutation.IsActive(); !ok {
 		v := tenantuser.DefaultIsActive
-		tuc.mutation.SetIsActive(v)
+		_c.mutation.SetIsActive(v)
 	}
-	if _, ok := tuc.mutation.LastLoginTenant(); !ok {
+	if _, ok := _c.mutation.LastLoginTenant(); !ok {
 		v := tenantuser.DefaultLastLoginTenant
-		tuc.mutation.SetLastLoginTenant(v)
+		_c.mutation.SetLastLoginTenant(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tuc *TenantUserCreate) check() error {
-	if _, ok := tuc.mutation.TenantID(); !ok {
+func (_c *TenantUserCreate) check() error {
+	if _, ok := _c.mutation.TenantID(); !ok {
 		return &ValidationError{Name: "tenant_id", err: errors.New(`ent: missing required field "TenantUser.tenant_id"`)}
 	}
-	if _, ok := tuc.mutation.UserID(); !ok {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "TenantUser.user_id"`)}
 	}
-	if _, ok := tuc.mutation.IsOwner(); !ok {
+	if _, ok := _c.mutation.IsOwner(); !ok {
 		return &ValidationError{Name: "is_owner", err: errors.New(`ent: missing required field "TenantUser.is_owner"`)}
 	}
-	if _, ok := tuc.mutation.IsActive(); !ok {
+	if _, ok := _c.mutation.IsActive(); !ok {
 		return &ValidationError{Name: "is_active", err: errors.New(`ent: missing required field "TenantUser.is_active"`)}
 	}
-	if _, ok := tuc.mutation.LastLoginTenant(); !ok {
+	if _, ok := _c.mutation.LastLoginTenant(); !ok {
 		return &ValidationError{Name: "last_login_tenant", err: errors.New(`ent: missing required field "TenantUser.last_login_tenant"`)}
 	}
-	if len(tuc.mutation.UserIDs()) == 0 {
+	if len(_c.mutation.UserIDs()) == 0 {
 		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "TenantUser.user"`)}
 	}
-	if len(tuc.mutation.TenantIDs()) == 0 {
+	if len(_c.mutation.TenantIDs()) == 0 {
 		return &ValidationError{Name: "tenant", err: errors.New(`ent: missing required edge "TenantUser.tenant"`)}
 	}
 	return nil
 }
 
-func (tuc *TenantUserCreate) sqlSave(ctx context.Context) (*TenantUser, error) {
-	if err := tuc.check(); err != nil {
+func (_c *TenantUserCreate) sqlSave(ctx context.Context) (*TenantUser, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := tuc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, tuc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -230,38 +230,38 @@ func (tuc *TenantUserCreate) sqlSave(ctx context.Context) (*TenantUser, error) {
 		id := _spec.ID.Value.(int64)
 		_node.ID = int(id)
 	}
-	tuc.mutation.id = &_node.ID
-	tuc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (tuc *TenantUserCreate) createSpec() (*TenantUser, *sqlgraph.CreateSpec) {
+func (_c *TenantUserCreate) createSpec() (*TenantUser, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TenantUser{config: tuc.config}
+		_node = &TenantUser{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(tenantuser.Table, sqlgraph.NewFieldSpec(tenantuser.FieldID, field.TypeInt))
 	)
-	_spec.OnConflict = tuc.conflict
-	if id, ok := tuc.mutation.ID(); ok {
+	_spec.OnConflict = _c.conflict
+	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := tuc.mutation.IsOwner(); ok {
+	if value, ok := _c.mutation.IsOwner(); ok {
 		_spec.SetField(tenantuser.FieldIsOwner, field.TypeBool, value)
 		_node.IsOwner = value
 	}
-	if value, ok := tuc.mutation.IsActive(); ok {
+	if value, ok := _c.mutation.IsActive(); ok {
 		_spec.SetField(tenantuser.FieldIsActive, field.TypeBool, value)
 		_node.IsActive = value
 	}
-	if value, ok := tuc.mutation.LastLoginTenant(); ok {
+	if value, ok := _c.mutation.LastLoginTenant(); ok {
 		_spec.SetField(tenantuser.FieldLastLoginTenant, field.TypeBool, value)
 		_node.LastLoginTenant = value
 	}
-	if value, ok := tuc.mutation.LastLoginAt(); ok {
+	if value, ok := _c.mutation.LastLoginAt(); ok {
 		_spec.SetField(tenantuser.FieldLastLoginAt, field.TypeTime, value)
 		_node.LastLoginAt = value
 	}
-	if nodes := tuc.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -278,7 +278,7 @@ func (tuc *TenantUserCreate) createSpec() (*TenantUser, *sqlgraph.CreateSpec) {
 		_node.UserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tuc.mutation.TenantIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TenantIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -295,7 +295,7 @@ func (tuc *TenantUserCreate) createSpec() (*TenantUser, *sqlgraph.CreateSpec) {
 		_node.TenantID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tuc.mutation.RolesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.RolesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -311,7 +311,7 @@ func (tuc *TenantUserCreate) createSpec() (*TenantUser, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := tuc.mutation.MembershipsIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.MembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -346,10 +346,10 @@ func (tuc *TenantUserCreate) createSpec() (*TenantUser, *sqlgraph.CreateSpec) {
 //			SetTenantID(v+v).
 //		}).
 //		Exec(ctx)
-func (tuc *TenantUserCreate) OnConflict(opts ...sql.ConflictOption) *TenantUserUpsertOne {
-	tuc.conflict = opts
+func (_c *TenantUserCreate) OnConflict(opts ...sql.ConflictOption) *TenantUserUpsertOne {
+	_c.conflict = opts
 	return &TenantUserUpsertOne{
-		create: tuc,
+		create: _c,
 	}
 }
 
@@ -359,10 +359,10 @@ func (tuc *TenantUserCreate) OnConflict(opts ...sql.ConflictOption) *TenantUserU
 //	client.TenantUser.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
-func (tuc *TenantUserCreate) OnConflictColumns(columns ...string) *TenantUserUpsertOne {
-	tuc.conflict = append(tuc.conflict, sql.ConflictColumns(columns...))
+func (_c *TenantUserCreate) OnConflictColumns(columns ...string) *TenantUserUpsertOne {
+	_c.conflict = append(_c.conflict, sql.ConflictColumns(columns...))
 	return &TenantUserUpsertOne{
-		create: tuc,
+		create: _c,
 	}
 }
 
@@ -592,16 +592,16 @@ type TenantUserCreateBulk struct {
 }
 
 // Save creates the TenantUser entities in the database.
-func (tucb *TenantUserCreateBulk) Save(ctx context.Context) ([]*TenantUser, error) {
-	if tucb.err != nil {
-		return nil, tucb.err
+func (_c *TenantUserCreateBulk) Save(ctx context.Context) ([]*TenantUser, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(tucb.builders))
-	nodes := make([]*TenantUser, len(tucb.builders))
-	mutators := make([]Mutator, len(tucb.builders))
-	for i := range tucb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*TenantUser, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := tucb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TenantUserMutation)
@@ -615,12 +615,12 @@ func (tucb *TenantUserCreateBulk) Save(ctx context.Context) ([]*TenantUser, erro
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, tucb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
-					spec.OnConflict = tucb.conflict
+					spec.OnConflict = _c.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, tucb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -644,7 +644,7 @@ func (tucb *TenantUserCreateBulk) Save(ctx context.Context) ([]*TenantUser, erro
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, tucb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -652,8 +652,8 @@ func (tucb *TenantUserCreateBulk) Save(ctx context.Context) ([]*TenantUser, erro
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tucb *TenantUserCreateBulk) SaveX(ctx context.Context) []*TenantUser {
-	v, err := tucb.Save(ctx)
+func (_c *TenantUserCreateBulk) SaveX(ctx context.Context) []*TenantUser {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -661,14 +661,14 @@ func (tucb *TenantUserCreateBulk) SaveX(ctx context.Context) []*TenantUser {
 }
 
 // Exec executes the query.
-func (tucb *TenantUserCreateBulk) Exec(ctx context.Context) error {
-	_, err := tucb.Save(ctx)
+func (_c *TenantUserCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tucb *TenantUserCreateBulk) ExecX(ctx context.Context) {
-	if err := tucb.Exec(ctx); err != nil {
+func (_c *TenantUserCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
@@ -688,10 +688,10 @@ func (tucb *TenantUserCreateBulk) ExecX(ctx context.Context) {
 //			SetTenantID(v+v).
 //		}).
 //		Exec(ctx)
-func (tucb *TenantUserCreateBulk) OnConflict(opts ...sql.ConflictOption) *TenantUserUpsertBulk {
-	tucb.conflict = opts
+func (_c *TenantUserCreateBulk) OnConflict(opts ...sql.ConflictOption) *TenantUserUpsertBulk {
+	_c.conflict = opts
 	return &TenantUserUpsertBulk{
-		create: tucb,
+		create: _c,
 	}
 }
 
@@ -701,10 +701,10 @@ func (tucb *TenantUserCreateBulk) OnConflict(opts ...sql.ConflictOption) *Tenant
 //	client.TenantUser.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
-func (tucb *TenantUserCreateBulk) OnConflictColumns(columns ...string) *TenantUserUpsertBulk {
-	tucb.conflict = append(tucb.conflict, sql.ConflictColumns(columns...))
+func (_c *TenantUserCreateBulk) OnConflictColumns(columns ...string) *TenantUserUpsertBulk {
+	_c.conflict = append(_c.conflict, sql.ConflictColumns(columns...))
 	return &TenantUserUpsertBulk{
-		create: tucb,
+		create: _c,
 	}
 }
 

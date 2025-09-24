@@ -1,62 +1,8 @@
-run: # https://golangci-lint.run/usage/configuration/#run-configuration
-  go: '1.23'
-  timeout: 3m
-linters-settings: # https://golangci-lint.run/usage/configuration/#linters-settings-configuration
-  dupl:
-    # Tokens count to trigger issue.
-    threshold: 150
-  funlen:
-    lines: 200
-    statements: 200
-  stylecheck: # https://golangci-lint.run/usage/linters/#stylecheck
-    checks: [ "-ST1000" ]
-  gocyclo:
-    min-complexity: 36
-  gosec:
-    excludes:
-      - G115 # Potential integer overflow when converting between integer types
-  gofmt:
-    # Simplify code: gofmt with `-s` option.
-    # Default: true
-    simplify: true
-    # Apply the rewrite rules to the source before reformatting.
-    # https://pkg.go.dev/cmd/gofmt
-    # Default: []
-    rewrite-rules:
-      - pattern: 'interface{}'
-        replacement: 'any'
-      - pattern: 'a[b:len(a)]'
-        replacement: 'a[b:]'
-  revive:
-    enable-all-rules: false
-    rules:
-      - name: empty-lines
-      - name: use-any
-      - name: struct-tag
-      - name: context-as-argument
-      - name: context-keys-type
-      - name: error-return
-      - name: error-naming
-      - name: exported
-        disabled: true
-      - name: if-return
-      - name: increment-decrement
-      - name: var-declaration
-      - name: package-comments
-        disabled: true
-      - name: range
-      - name: receiver-naming
-      - name: time-naming
-      - name: unexported-return
-      - name: indent-error-flow
-      - name: errorf
-      - name: superfluous-else
-      - name: unused-parameter
-        disabled: true
-      - name: unreachable-code
-      - name: redefines-builtin-id
-linters: # https://golangci-lint.run/usage/linters/
-  disable-all: true
+version: "2"
+run:
+  go: "1.25"
+linters:
+  default: none
   enable:
     - asasalint
     - asciicheck
@@ -65,40 +11,102 @@ linters: # https://golangci-lint.run/usage/linters/
     - contextcheck
     - copyloopvar
     - dogsled
-    #    - dupl
     - errcheck
     - fatcontext
     - funlen
-    - gci
-    - gocyclo
     - gocritic
-    - gofmt
+    - gocyclo
     - goheader
-    - goimports
     - gosec
-    - gosimple
     - govet
     - ineffassign
-    #    - lll
-    - prealloc
-    - misspell
     - mirror
+    - misspell
+    - prealloc
+    - protogetter
+    - revive
     - staticcheck
-    - stylecheck
-    - typecheck
+    - tagalign
     - unconvert
     - unused
     - whitespace
-    - revive
-    - protogetter
-    - tagalign
-
-issues: # https://golangci-lint.run/usage/configuration/#issues-configuration
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - dupl
-        - funlen
-        - gosec
-        - gocritic
-        - errcheck
+  settings:
+    dupl:
+      threshold: 150
+    funlen:
+      lines: 200
+      statements: 200
+    gocyclo:
+      min-complexity: 36
+    gosec:
+      excludes:
+        - G115
+    revive:
+      enable-all-rules: false
+      rules:
+        - name: empty-lines
+        - name: use-any
+        - name: struct-tag
+        - name: context-as-argument
+        - name: context-keys-type
+        - name: error-return
+        - name: error-naming
+        - name: exported
+          disabled: true
+        - name: if-return
+        - name: increment-decrement
+        - name: var-declaration
+        - name: package-comments
+          disabled: true
+        - name: range
+        - name: receiver-naming
+        - name: time-naming
+        - name: unexported-return
+        - name: indent-error-flow
+        - name: errorf
+        - name: superfluous-else
+        - name: unused-parameter
+          disabled: true
+        - name: unreachable-code
+        - name: redefines-builtin-id
+    staticcheck:
+      checks:
+        - -ST1000
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - dupl
+          - errcheck
+          - funlen
+          - gocritic
+          - gosec
+        path: _test\.go
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - goimports
+  settings:
+    gofmt:
+      simplify: true
+      rewrite-rules:
+        - pattern: interface{}
+          replacement: any
+        - pattern: a[b:len(a)]
+          replacement: a[b:]
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

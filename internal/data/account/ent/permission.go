@@ -117,7 +117,7 @@ func (*Permission) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Permission fields.
-func (pe *Permission) assignValues(columns []string, values []any) error {
+func (_m *Permission) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -128,68 +128,68 @@ func (pe *Permission) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			pe.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case permission.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				pe.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case permission.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				pe.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case permission.FieldParentID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field parent_id", values[i])
 			} else if value.Valid {
-				pe.ParentID = new(int)
-				*pe.ParentID = int(value.Int64)
+				_m.ParentID = new(int)
+				*_m.ParentID = int(value.Int64)
 			}
 		case permission.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				pe.Name = value.String
+				_m.Name = value.String
 			}
 		case permission.FieldKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field key", values[i])
 			} else if value.Valid {
-				pe.Key = new(string)
-				*pe.Key = value.String
+				_m.Key = new(string)
+				*_m.Key = value.String
 			}
 		case permission.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				pe.Type = permission.Type(value.String)
+				_m.Type = permission.Type(value.String)
 			}
 		case permission.FieldPath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field path", values[i])
 			} else if value.Valid {
-				pe.Path = value.String
+				_m.Path = value.String
 			}
 		case permission.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				pe.Description = value.String
+				_m.Description = value.String
 			}
 		case permission.FieldSort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field sort", values[i])
 			} else if value.Valid {
-				pe.Sort = int(value.Int64)
+				_m.Sort = int(value.Int64)
 			}
 		case permission.FieldAttrs:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field attrs", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &pe.Attrs); err != nil {
+				if err := json.Unmarshal(*value, &_m.Attrs); err != nil {
 					return fmt.Errorf("unmarshal field attrs: %w", err)
 				}
 			}
@@ -197,10 +197,10 @@ func (pe *Permission) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_system", values[i])
 			} else if value.Valid {
-				pe.IsSystem = value.Bool
+				_m.IsSystem = value.Bool
 			}
 		default:
-			pe.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -208,133 +208,133 @@ func (pe *Permission) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Permission.
 // This includes values selected through modifiers, order, etc.
-func (pe *Permission) Value(name string) (ent.Value, error) {
-	return pe.selectValues.Get(name)
+func (_m *Permission) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryRoles queries the "roles" edge of the Permission entity.
-func (pe *Permission) QueryRoles() *TenantRoleQuery {
-	return NewPermissionClient(pe.config).QueryRoles(pe)
+func (_m *Permission) QueryRoles() *TenantRoleQuery {
+	return NewPermissionClient(_m.config).QueryRoles(_m)
 }
 
 // QueryParent queries the "parent" edge of the Permission entity.
-func (pe *Permission) QueryParent() *PermissionQuery {
-	return NewPermissionClient(pe.config).QueryParent(pe)
+func (_m *Permission) QueryParent() *PermissionQuery {
+	return NewPermissionClient(_m.config).QueryParent(_m)
 }
 
 // QueryChildren queries the "children" edge of the Permission entity.
-func (pe *Permission) QueryChildren() *PermissionQuery {
-	return NewPermissionClient(pe.config).QueryChildren(pe)
+func (_m *Permission) QueryChildren() *PermissionQuery {
+	return NewPermissionClient(_m.config).QueryChildren(_m)
 }
 
 // Update returns a builder for updating this Permission.
 // Note that you need to call Permission.Unwrap() before calling this method if this Permission
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (pe *Permission) Update() *PermissionUpdateOne {
-	return NewPermissionClient(pe.config).UpdateOne(pe)
+func (_m *Permission) Update() *PermissionUpdateOne {
+	return NewPermissionClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Permission entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (pe *Permission) Unwrap() *Permission {
-	_tx, ok := pe.config.driver.(*txDriver)
+func (_m *Permission) Unwrap() *Permission {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Permission is not a transactional entity")
 	}
-	pe.config.driver = _tx.drv
-	return pe
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (pe *Permission) String() string {
+func (_m *Permission) String() string {
 	var builder strings.Builder
 	builder.WriteString("Permission(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", pe.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(pe.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(pe.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
-	if v := pe.ParentID; v != nil {
+	if v := _m.ParentID; v != nil {
 		builder.WriteString("parent_id=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(pe.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
-	if v := pe.Key; v != nil {
+	if v := _m.Key; v != nil {
 		builder.WriteString("key=")
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
 	builder.WriteString("type=")
-	builder.WriteString(fmt.Sprintf("%v", pe.Type))
+	builder.WriteString(fmt.Sprintf("%v", _m.Type))
 	builder.WriteString(", ")
 	builder.WriteString("path=")
-	builder.WriteString(pe.Path)
+	builder.WriteString(_m.Path)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(pe.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("sort=")
-	builder.WriteString(fmt.Sprintf("%v", pe.Sort))
+	builder.WriteString(fmt.Sprintf("%v", _m.Sort))
 	builder.WriteString(", ")
 	builder.WriteString("attrs=")
-	builder.WriteString(fmt.Sprintf("%v", pe.Attrs))
+	builder.WriteString(fmt.Sprintf("%v", _m.Attrs))
 	builder.WriteString(", ")
 	builder.WriteString("is_system=")
-	builder.WriteString(fmt.Sprintf("%v", pe.IsSystem))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsSystem))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedRoles returns the Roles named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pe *Permission) NamedRoles(name string) ([]*TenantRole, error) {
-	if pe.Edges.namedRoles == nil {
+func (_m *Permission) NamedRoles(name string) ([]*TenantRole, error) {
+	if _m.Edges.namedRoles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pe.Edges.namedRoles[name]
+	nodes, ok := _m.Edges.namedRoles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pe *Permission) appendNamedRoles(name string, edges ...*TenantRole) {
-	if pe.Edges.namedRoles == nil {
-		pe.Edges.namedRoles = make(map[string][]*TenantRole)
+func (_m *Permission) appendNamedRoles(name string, edges ...*TenantRole) {
+	if _m.Edges.namedRoles == nil {
+		_m.Edges.namedRoles = make(map[string][]*TenantRole)
 	}
 	if len(edges) == 0 {
-		pe.Edges.namedRoles[name] = []*TenantRole{}
+		_m.Edges.namedRoles[name] = []*TenantRole{}
 	} else {
-		pe.Edges.namedRoles[name] = append(pe.Edges.namedRoles[name], edges...)
+		_m.Edges.namedRoles[name] = append(_m.Edges.namedRoles[name], edges...)
 	}
 }
 
 // NamedChildren returns the Children named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (pe *Permission) NamedChildren(name string) ([]*Permission, error) {
-	if pe.Edges.namedChildren == nil {
+func (_m *Permission) NamedChildren(name string) ([]*Permission, error) {
+	if _m.Edges.namedChildren == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := pe.Edges.namedChildren[name]
+	nodes, ok := _m.Edges.namedChildren[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (pe *Permission) appendNamedChildren(name string, edges ...*Permission) {
-	if pe.Edges.namedChildren == nil {
-		pe.Edges.namedChildren = make(map[string][]*Permission)
+func (_m *Permission) appendNamedChildren(name string, edges ...*Permission) {
+	if _m.Edges.namedChildren == nil {
+		_m.Edges.namedChildren = make(map[string][]*Permission)
 	}
 	if len(edges) == 0 {
-		pe.Edges.namedChildren[name] = []*Permission{}
+		_m.Edges.namedChildren[name] = []*Permission{}
 	} else {
-		pe.Edges.namedChildren[name] = append(pe.Edges.namedChildren[name], edges...)
+		_m.Edges.namedChildren[name] = append(_m.Edges.namedChildren[name], edges...)
 	}
 }
 

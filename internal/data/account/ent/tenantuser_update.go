@@ -26,158 +26,158 @@ type TenantUserUpdate struct {
 }
 
 // Where appends a list predicates to the TenantUserUpdate builder.
-func (tuu *TenantUserUpdate) Where(ps ...predicate.TenantUser) *TenantUserUpdate {
-	tuu.mutation.Where(ps...)
-	return tuu
+func (_u *TenantUserUpdate) Where(ps ...predicate.TenantUser) *TenantUserUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetIsOwner sets the "is_owner" field.
-func (tuu *TenantUserUpdate) SetIsOwner(b bool) *TenantUserUpdate {
-	tuu.mutation.SetIsOwner(b)
-	return tuu
+func (_u *TenantUserUpdate) SetIsOwner(v bool) *TenantUserUpdate {
+	_u.mutation.SetIsOwner(v)
+	return _u
 }
 
 // SetNillableIsOwner sets the "is_owner" field if the given value is not nil.
-func (tuu *TenantUserUpdate) SetNillableIsOwner(b *bool) *TenantUserUpdate {
-	if b != nil {
-		tuu.SetIsOwner(*b)
+func (_u *TenantUserUpdate) SetNillableIsOwner(v *bool) *TenantUserUpdate {
+	if v != nil {
+		_u.SetIsOwner(*v)
 	}
-	return tuu
+	return _u
 }
 
 // SetIsActive sets the "is_active" field.
-func (tuu *TenantUserUpdate) SetIsActive(b bool) *TenantUserUpdate {
-	tuu.mutation.SetIsActive(b)
-	return tuu
+func (_u *TenantUserUpdate) SetIsActive(v bool) *TenantUserUpdate {
+	_u.mutation.SetIsActive(v)
+	return _u
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (tuu *TenantUserUpdate) SetNillableIsActive(b *bool) *TenantUserUpdate {
-	if b != nil {
-		tuu.SetIsActive(*b)
+func (_u *TenantUserUpdate) SetNillableIsActive(v *bool) *TenantUserUpdate {
+	if v != nil {
+		_u.SetIsActive(*v)
 	}
-	return tuu
+	return _u
 }
 
 // SetLastLoginTenant sets the "last_login_tenant" field.
-func (tuu *TenantUserUpdate) SetLastLoginTenant(b bool) *TenantUserUpdate {
-	tuu.mutation.SetLastLoginTenant(b)
-	return tuu
+func (_u *TenantUserUpdate) SetLastLoginTenant(v bool) *TenantUserUpdate {
+	_u.mutation.SetLastLoginTenant(v)
+	return _u
 }
 
 // SetNillableLastLoginTenant sets the "last_login_tenant" field if the given value is not nil.
-func (tuu *TenantUserUpdate) SetNillableLastLoginTenant(b *bool) *TenantUserUpdate {
-	if b != nil {
-		tuu.SetLastLoginTenant(*b)
+func (_u *TenantUserUpdate) SetNillableLastLoginTenant(v *bool) *TenantUserUpdate {
+	if v != nil {
+		_u.SetLastLoginTenant(*v)
 	}
-	return tuu
+	return _u
 }
 
 // SetLastLoginAt sets the "last_login_at" field.
-func (tuu *TenantUserUpdate) SetLastLoginAt(t time.Time) *TenantUserUpdate {
-	tuu.mutation.SetLastLoginAt(t)
-	return tuu
+func (_u *TenantUserUpdate) SetLastLoginAt(v time.Time) *TenantUserUpdate {
+	_u.mutation.SetLastLoginAt(v)
+	return _u
 }
 
 // SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
-func (tuu *TenantUserUpdate) SetNillableLastLoginAt(t *time.Time) *TenantUserUpdate {
-	if t != nil {
-		tuu.SetLastLoginAt(*t)
+func (_u *TenantUserUpdate) SetNillableLastLoginAt(v *time.Time) *TenantUserUpdate {
+	if v != nil {
+		_u.SetLastLoginAt(*v)
 	}
-	return tuu
+	return _u
 }
 
 // ClearLastLoginAt clears the value of the "last_login_at" field.
-func (tuu *TenantUserUpdate) ClearLastLoginAt() *TenantUserUpdate {
-	tuu.mutation.ClearLastLoginAt()
-	return tuu
+func (_u *TenantUserUpdate) ClearLastLoginAt() *TenantUserUpdate {
+	_u.mutation.ClearLastLoginAt()
+	return _u
 }
 
 // AddRoleIDs adds the "roles" edge to the TenantRole entity by IDs.
-func (tuu *TenantUserUpdate) AddRoleIDs(ids ...int) *TenantUserUpdate {
-	tuu.mutation.AddRoleIDs(ids...)
-	return tuu
+func (_u *TenantUserUpdate) AddRoleIDs(ids ...int) *TenantUserUpdate {
+	_u.mutation.AddRoleIDs(ids...)
+	return _u
 }
 
 // AddRoles adds the "roles" edges to the TenantRole entity.
-func (tuu *TenantUserUpdate) AddRoles(t ...*TenantRole) *TenantUserUpdate {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUserUpdate) AddRoles(v ...*TenantRole) *TenantUserUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuu.AddRoleIDs(ids...)
+	return _u.AddRoleIDs(ids...)
 }
 
 // AddMembershipIDs adds the "memberships" edge to the Membership entity by IDs.
-func (tuu *TenantUserUpdate) AddMembershipIDs(ids ...int) *TenantUserUpdate {
-	tuu.mutation.AddMembershipIDs(ids...)
-	return tuu
+func (_u *TenantUserUpdate) AddMembershipIDs(ids ...int) *TenantUserUpdate {
+	_u.mutation.AddMembershipIDs(ids...)
+	return _u
 }
 
 // AddMemberships adds the "memberships" edges to the Membership entity.
-func (tuu *TenantUserUpdate) AddMemberships(m ...*Membership) *TenantUserUpdate {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *TenantUserUpdate) AddMemberships(v ...*Membership) *TenantUserUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuu.AddMembershipIDs(ids...)
+	return _u.AddMembershipIDs(ids...)
 }
 
 // Mutation returns the TenantUserMutation object of the builder.
-func (tuu *TenantUserUpdate) Mutation() *TenantUserMutation {
-	return tuu.mutation
+func (_u *TenantUserUpdate) Mutation() *TenantUserMutation {
+	return _u.mutation
 }
 
 // ClearRoles clears all "roles" edges to the TenantRole entity.
-func (tuu *TenantUserUpdate) ClearRoles() *TenantUserUpdate {
-	tuu.mutation.ClearRoles()
-	return tuu
+func (_u *TenantUserUpdate) ClearRoles() *TenantUserUpdate {
+	_u.mutation.ClearRoles()
+	return _u
 }
 
 // RemoveRoleIDs removes the "roles" edge to TenantRole entities by IDs.
-func (tuu *TenantUserUpdate) RemoveRoleIDs(ids ...int) *TenantUserUpdate {
-	tuu.mutation.RemoveRoleIDs(ids...)
-	return tuu
+func (_u *TenantUserUpdate) RemoveRoleIDs(ids ...int) *TenantUserUpdate {
+	_u.mutation.RemoveRoleIDs(ids...)
+	return _u
 }
 
 // RemoveRoles removes "roles" edges to TenantRole entities.
-func (tuu *TenantUserUpdate) RemoveRoles(t ...*TenantRole) *TenantUserUpdate {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUserUpdate) RemoveRoles(v ...*TenantRole) *TenantUserUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuu.RemoveRoleIDs(ids...)
+	return _u.RemoveRoleIDs(ids...)
 }
 
 // ClearMemberships clears all "memberships" edges to the Membership entity.
-func (tuu *TenantUserUpdate) ClearMemberships() *TenantUserUpdate {
-	tuu.mutation.ClearMemberships()
-	return tuu
+func (_u *TenantUserUpdate) ClearMemberships() *TenantUserUpdate {
+	_u.mutation.ClearMemberships()
+	return _u
 }
 
 // RemoveMembershipIDs removes the "memberships" edge to Membership entities by IDs.
-func (tuu *TenantUserUpdate) RemoveMembershipIDs(ids ...int) *TenantUserUpdate {
-	tuu.mutation.RemoveMembershipIDs(ids...)
-	return tuu
+func (_u *TenantUserUpdate) RemoveMembershipIDs(ids ...int) *TenantUserUpdate {
+	_u.mutation.RemoveMembershipIDs(ids...)
+	return _u
 }
 
 // RemoveMemberships removes "memberships" edges to Membership entities.
-func (tuu *TenantUserUpdate) RemoveMemberships(m ...*Membership) *TenantUserUpdate {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *TenantUserUpdate) RemoveMemberships(v ...*Membership) *TenantUserUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuu.RemoveMembershipIDs(ids...)
+	return _u.RemoveMembershipIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tuu *TenantUserUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, tuu.sqlSave, tuu.mutation, tuu.hooks)
+func (_u *TenantUserUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tuu *TenantUserUpdate) SaveX(ctx context.Context) int {
-	affected, err := tuu.Save(ctx)
+func (_u *TenantUserUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -185,63 +185,63 @@ func (tuu *TenantUserUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (tuu *TenantUserUpdate) Exec(ctx context.Context) error {
-	_, err := tuu.Save(ctx)
+func (_u *TenantUserUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tuu *TenantUserUpdate) ExecX(ctx context.Context) {
-	if err := tuu.Exec(ctx); err != nil {
+func (_u *TenantUserUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tuu *TenantUserUpdate) check() error {
-	if tuu.mutation.UserCleared() && len(tuu.mutation.UserIDs()) > 0 {
+func (_u *TenantUserUpdate) check() error {
+	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "TenantUser.user"`)
 	}
-	if tuu.mutation.TenantCleared() && len(tuu.mutation.TenantIDs()) > 0 {
+	if _u.mutation.TenantCleared() && len(_u.mutation.TenantIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "TenantUser.tenant"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tuu *TenantUserUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantUserUpdate {
-	tuu.modifiers = append(tuu.modifiers, modifiers...)
-	return tuu
+func (_u *TenantUserUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantUserUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tuu *TenantUserUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := tuu.check(); err != nil {
-		return n, err
+func (_u *TenantUserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(tenantuser.Table, tenantuser.Columns, sqlgraph.NewFieldSpec(tenantuser.FieldID, field.TypeInt))
-	if ps := tuu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tuu.mutation.IsOwner(); ok {
+	if value, ok := _u.mutation.IsOwner(); ok {
 		_spec.SetField(tenantuser.FieldIsOwner, field.TypeBool, value)
 	}
-	if value, ok := tuu.mutation.IsActive(); ok {
+	if value, ok := _u.mutation.IsActive(); ok {
 		_spec.SetField(tenantuser.FieldIsActive, field.TypeBool, value)
 	}
-	if value, ok := tuu.mutation.LastLoginTenant(); ok {
+	if value, ok := _u.mutation.LastLoginTenant(); ok {
 		_spec.SetField(tenantuser.FieldLastLoginTenant, field.TypeBool, value)
 	}
-	if value, ok := tuu.mutation.LastLoginAt(); ok {
+	if value, ok := _u.mutation.LastLoginAt(); ok {
 		_spec.SetField(tenantuser.FieldLastLoginAt, field.TypeTime, value)
 	}
-	if tuu.mutation.LastLoginAtCleared() {
+	if _u.mutation.LastLoginAtCleared() {
 		_spec.ClearField(tenantuser.FieldLastLoginAt, field.TypeTime)
 	}
-	if tuu.mutation.RolesCleared() {
+	if _u.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -254,7 +254,7 @@ func (tuu *TenantUserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuu.mutation.RemovedRolesIDs(); len(nodes) > 0 && !tuu.mutation.RolesCleared() {
+	if nodes := _u.mutation.RemovedRolesIDs(); len(nodes) > 0 && !_u.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -270,7 +270,7 @@ func (tuu *TenantUserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuu.mutation.RolesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RolesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -286,7 +286,7 @@ func (tuu *TenantUserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tuu.mutation.MembershipsCleared() {
+	if _u.mutation.MembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -299,7 +299,7 @@ func (tuu *TenantUserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuu.mutation.RemovedMembershipsIDs(); len(nodes) > 0 && !tuu.mutation.MembershipsCleared() {
+	if nodes := _u.mutation.RemovedMembershipsIDs(); len(nodes) > 0 && !_u.mutation.MembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -315,7 +315,7 @@ func (tuu *TenantUserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuu.mutation.MembershipsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.MembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -331,8 +331,8 @@ func (tuu *TenantUserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(tuu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, tuu.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{tenantuser.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -340,8 +340,8 @@ func (tuu *TenantUserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	tuu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TenantUserUpdateOne is the builder for updating a single TenantUser entity.
@@ -354,165 +354,165 @@ type TenantUserUpdateOne struct {
 }
 
 // SetIsOwner sets the "is_owner" field.
-func (tuuo *TenantUserUpdateOne) SetIsOwner(b bool) *TenantUserUpdateOne {
-	tuuo.mutation.SetIsOwner(b)
-	return tuuo
+func (_u *TenantUserUpdateOne) SetIsOwner(v bool) *TenantUserUpdateOne {
+	_u.mutation.SetIsOwner(v)
+	return _u
 }
 
 // SetNillableIsOwner sets the "is_owner" field if the given value is not nil.
-func (tuuo *TenantUserUpdateOne) SetNillableIsOwner(b *bool) *TenantUserUpdateOne {
-	if b != nil {
-		tuuo.SetIsOwner(*b)
+func (_u *TenantUserUpdateOne) SetNillableIsOwner(v *bool) *TenantUserUpdateOne {
+	if v != nil {
+		_u.SetIsOwner(*v)
 	}
-	return tuuo
+	return _u
 }
 
 // SetIsActive sets the "is_active" field.
-func (tuuo *TenantUserUpdateOne) SetIsActive(b bool) *TenantUserUpdateOne {
-	tuuo.mutation.SetIsActive(b)
-	return tuuo
+func (_u *TenantUserUpdateOne) SetIsActive(v bool) *TenantUserUpdateOne {
+	_u.mutation.SetIsActive(v)
+	return _u
 }
 
 // SetNillableIsActive sets the "is_active" field if the given value is not nil.
-func (tuuo *TenantUserUpdateOne) SetNillableIsActive(b *bool) *TenantUserUpdateOne {
-	if b != nil {
-		tuuo.SetIsActive(*b)
+func (_u *TenantUserUpdateOne) SetNillableIsActive(v *bool) *TenantUserUpdateOne {
+	if v != nil {
+		_u.SetIsActive(*v)
 	}
-	return tuuo
+	return _u
 }
 
 // SetLastLoginTenant sets the "last_login_tenant" field.
-func (tuuo *TenantUserUpdateOne) SetLastLoginTenant(b bool) *TenantUserUpdateOne {
-	tuuo.mutation.SetLastLoginTenant(b)
-	return tuuo
+func (_u *TenantUserUpdateOne) SetLastLoginTenant(v bool) *TenantUserUpdateOne {
+	_u.mutation.SetLastLoginTenant(v)
+	return _u
 }
 
 // SetNillableLastLoginTenant sets the "last_login_tenant" field if the given value is not nil.
-func (tuuo *TenantUserUpdateOne) SetNillableLastLoginTenant(b *bool) *TenantUserUpdateOne {
-	if b != nil {
-		tuuo.SetLastLoginTenant(*b)
+func (_u *TenantUserUpdateOne) SetNillableLastLoginTenant(v *bool) *TenantUserUpdateOne {
+	if v != nil {
+		_u.SetLastLoginTenant(*v)
 	}
-	return tuuo
+	return _u
 }
 
 // SetLastLoginAt sets the "last_login_at" field.
-func (tuuo *TenantUserUpdateOne) SetLastLoginAt(t time.Time) *TenantUserUpdateOne {
-	tuuo.mutation.SetLastLoginAt(t)
-	return tuuo
+func (_u *TenantUserUpdateOne) SetLastLoginAt(v time.Time) *TenantUserUpdateOne {
+	_u.mutation.SetLastLoginAt(v)
+	return _u
 }
 
 // SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
-func (tuuo *TenantUserUpdateOne) SetNillableLastLoginAt(t *time.Time) *TenantUserUpdateOne {
-	if t != nil {
-		tuuo.SetLastLoginAt(*t)
+func (_u *TenantUserUpdateOne) SetNillableLastLoginAt(v *time.Time) *TenantUserUpdateOne {
+	if v != nil {
+		_u.SetLastLoginAt(*v)
 	}
-	return tuuo
+	return _u
 }
 
 // ClearLastLoginAt clears the value of the "last_login_at" field.
-func (tuuo *TenantUserUpdateOne) ClearLastLoginAt() *TenantUserUpdateOne {
-	tuuo.mutation.ClearLastLoginAt()
-	return tuuo
+func (_u *TenantUserUpdateOne) ClearLastLoginAt() *TenantUserUpdateOne {
+	_u.mutation.ClearLastLoginAt()
+	return _u
 }
 
 // AddRoleIDs adds the "roles" edge to the TenantRole entity by IDs.
-func (tuuo *TenantUserUpdateOne) AddRoleIDs(ids ...int) *TenantUserUpdateOne {
-	tuuo.mutation.AddRoleIDs(ids...)
-	return tuuo
+func (_u *TenantUserUpdateOne) AddRoleIDs(ids ...int) *TenantUserUpdateOne {
+	_u.mutation.AddRoleIDs(ids...)
+	return _u
 }
 
 // AddRoles adds the "roles" edges to the TenantRole entity.
-func (tuuo *TenantUserUpdateOne) AddRoles(t ...*TenantRole) *TenantUserUpdateOne {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUserUpdateOne) AddRoles(v ...*TenantRole) *TenantUserUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuuo.AddRoleIDs(ids...)
+	return _u.AddRoleIDs(ids...)
 }
 
 // AddMembershipIDs adds the "memberships" edge to the Membership entity by IDs.
-func (tuuo *TenantUserUpdateOne) AddMembershipIDs(ids ...int) *TenantUserUpdateOne {
-	tuuo.mutation.AddMembershipIDs(ids...)
-	return tuuo
+func (_u *TenantUserUpdateOne) AddMembershipIDs(ids ...int) *TenantUserUpdateOne {
+	_u.mutation.AddMembershipIDs(ids...)
+	return _u
 }
 
 // AddMemberships adds the "memberships" edges to the Membership entity.
-func (tuuo *TenantUserUpdateOne) AddMemberships(m ...*Membership) *TenantUserUpdateOne {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *TenantUserUpdateOne) AddMemberships(v ...*Membership) *TenantUserUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuuo.AddMembershipIDs(ids...)
+	return _u.AddMembershipIDs(ids...)
 }
 
 // Mutation returns the TenantUserMutation object of the builder.
-func (tuuo *TenantUserUpdateOne) Mutation() *TenantUserMutation {
-	return tuuo.mutation
+func (_u *TenantUserUpdateOne) Mutation() *TenantUserMutation {
+	return _u.mutation
 }
 
 // ClearRoles clears all "roles" edges to the TenantRole entity.
-func (tuuo *TenantUserUpdateOne) ClearRoles() *TenantUserUpdateOne {
-	tuuo.mutation.ClearRoles()
-	return tuuo
+func (_u *TenantUserUpdateOne) ClearRoles() *TenantUserUpdateOne {
+	_u.mutation.ClearRoles()
+	return _u
 }
 
 // RemoveRoleIDs removes the "roles" edge to TenantRole entities by IDs.
-func (tuuo *TenantUserUpdateOne) RemoveRoleIDs(ids ...int) *TenantUserUpdateOne {
-	tuuo.mutation.RemoveRoleIDs(ids...)
-	return tuuo
+func (_u *TenantUserUpdateOne) RemoveRoleIDs(ids ...int) *TenantUserUpdateOne {
+	_u.mutation.RemoveRoleIDs(ids...)
+	return _u
 }
 
 // RemoveRoles removes "roles" edges to TenantRole entities.
-func (tuuo *TenantUserUpdateOne) RemoveRoles(t ...*TenantRole) *TenantUserUpdateOne {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUserUpdateOne) RemoveRoles(v ...*TenantRole) *TenantUserUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuuo.RemoveRoleIDs(ids...)
+	return _u.RemoveRoleIDs(ids...)
 }
 
 // ClearMemberships clears all "memberships" edges to the Membership entity.
-func (tuuo *TenantUserUpdateOne) ClearMemberships() *TenantUserUpdateOne {
-	tuuo.mutation.ClearMemberships()
-	return tuuo
+func (_u *TenantUserUpdateOne) ClearMemberships() *TenantUserUpdateOne {
+	_u.mutation.ClearMemberships()
+	return _u
 }
 
 // RemoveMembershipIDs removes the "memberships" edge to Membership entities by IDs.
-func (tuuo *TenantUserUpdateOne) RemoveMembershipIDs(ids ...int) *TenantUserUpdateOne {
-	tuuo.mutation.RemoveMembershipIDs(ids...)
-	return tuuo
+func (_u *TenantUserUpdateOne) RemoveMembershipIDs(ids ...int) *TenantUserUpdateOne {
+	_u.mutation.RemoveMembershipIDs(ids...)
+	return _u
 }
 
 // RemoveMemberships removes "memberships" edges to Membership entities.
-func (tuuo *TenantUserUpdateOne) RemoveMemberships(m ...*Membership) *TenantUserUpdateOne {
-	ids := make([]int, len(m))
-	for i := range m {
-		ids[i] = m[i].ID
+func (_u *TenantUserUpdateOne) RemoveMemberships(v ...*Membership) *TenantUserUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuuo.RemoveMembershipIDs(ids...)
+	return _u.RemoveMembershipIDs(ids...)
 }
 
 // Where appends a list predicates to the TenantUserUpdate builder.
-func (tuuo *TenantUserUpdateOne) Where(ps ...predicate.TenantUser) *TenantUserUpdateOne {
-	tuuo.mutation.Where(ps...)
-	return tuuo
+func (_u *TenantUserUpdateOne) Where(ps ...predicate.TenantUser) *TenantUserUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tuuo *TenantUserUpdateOne) Select(field string, fields ...string) *TenantUserUpdateOne {
-	tuuo.fields = append([]string{field}, fields...)
-	return tuuo
+func (_u *TenantUserUpdateOne) Select(field string, fields ...string) *TenantUserUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated TenantUser entity.
-func (tuuo *TenantUserUpdateOne) Save(ctx context.Context) (*TenantUser, error) {
-	return withHooks(ctx, tuuo.sqlSave, tuuo.mutation, tuuo.hooks)
+func (_u *TenantUserUpdateOne) Save(ctx context.Context) (*TenantUser, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tuuo *TenantUserUpdateOne) SaveX(ctx context.Context) *TenantUser {
-	node, err := tuuo.Save(ctx)
+func (_u *TenantUserUpdateOne) SaveX(ctx context.Context) *TenantUser {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -520,46 +520,46 @@ func (tuuo *TenantUserUpdateOne) SaveX(ctx context.Context) *TenantUser {
 }
 
 // Exec executes the query on the entity.
-func (tuuo *TenantUserUpdateOne) Exec(ctx context.Context) error {
-	_, err := tuuo.Save(ctx)
+func (_u *TenantUserUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tuuo *TenantUserUpdateOne) ExecX(ctx context.Context) {
-	if err := tuuo.Exec(ctx); err != nil {
+func (_u *TenantUserUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tuuo *TenantUserUpdateOne) check() error {
-	if tuuo.mutation.UserCleared() && len(tuuo.mutation.UserIDs()) > 0 {
+func (_u *TenantUserUpdateOne) check() error {
+	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "TenantUser.user"`)
 	}
-	if tuuo.mutation.TenantCleared() && len(tuuo.mutation.TenantIDs()) > 0 {
+	if _u.mutation.TenantCleared() && len(_u.mutation.TenantIDs()) > 0 {
 		return errors.New(`ent: clearing a required unique edge "TenantUser.tenant"`)
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tuuo *TenantUserUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantUserUpdateOne {
-	tuuo.modifiers = append(tuuo.modifiers, modifiers...)
-	return tuuo
+func (_u *TenantUserUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantUserUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tuuo *TenantUserUpdateOne) sqlSave(ctx context.Context) (_node *TenantUser, err error) {
-	if err := tuuo.check(); err != nil {
+func (_u *TenantUserUpdateOne) sqlSave(ctx context.Context) (_node *TenantUser, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(tenantuser.Table, tenantuser.Columns, sqlgraph.NewFieldSpec(tenantuser.FieldID, field.TypeInt))
-	id, ok := tuuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "TenantUser.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tuuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, tenantuser.FieldID)
 		for _, f := range fields {
@@ -571,29 +571,29 @@ func (tuuo *TenantUserUpdateOne) sqlSave(ctx context.Context) (_node *TenantUser
 			}
 		}
 	}
-	if ps := tuuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := tuuo.mutation.IsOwner(); ok {
+	if value, ok := _u.mutation.IsOwner(); ok {
 		_spec.SetField(tenantuser.FieldIsOwner, field.TypeBool, value)
 	}
-	if value, ok := tuuo.mutation.IsActive(); ok {
+	if value, ok := _u.mutation.IsActive(); ok {
 		_spec.SetField(tenantuser.FieldIsActive, field.TypeBool, value)
 	}
-	if value, ok := tuuo.mutation.LastLoginTenant(); ok {
+	if value, ok := _u.mutation.LastLoginTenant(); ok {
 		_spec.SetField(tenantuser.FieldLastLoginTenant, field.TypeBool, value)
 	}
-	if value, ok := tuuo.mutation.LastLoginAt(); ok {
+	if value, ok := _u.mutation.LastLoginAt(); ok {
 		_spec.SetField(tenantuser.FieldLastLoginAt, field.TypeTime, value)
 	}
-	if tuuo.mutation.LastLoginAtCleared() {
+	if _u.mutation.LastLoginAtCleared() {
 		_spec.ClearField(tenantuser.FieldLastLoginAt, field.TypeTime)
 	}
-	if tuuo.mutation.RolesCleared() {
+	if _u.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -606,7 +606,7 @@ func (tuuo *TenantUserUpdateOne) sqlSave(ctx context.Context) (_node *TenantUser
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuuo.mutation.RemovedRolesIDs(); len(nodes) > 0 && !tuuo.mutation.RolesCleared() {
+	if nodes := _u.mutation.RemovedRolesIDs(); len(nodes) > 0 && !_u.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -622,7 +622,7 @@ func (tuuo *TenantUserUpdateOne) sqlSave(ctx context.Context) (_node *TenantUser
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuuo.mutation.RolesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RolesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
 			Inverse: false,
@@ -638,7 +638,7 @@ func (tuuo *TenantUserUpdateOne) sqlSave(ctx context.Context) (_node *TenantUser
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tuuo.mutation.MembershipsCleared() {
+	if _u.mutation.MembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -651,7 +651,7 @@ func (tuuo *TenantUserUpdateOne) sqlSave(ctx context.Context) (_node *TenantUser
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuuo.mutation.RemovedMembershipsIDs(); len(nodes) > 0 && !tuuo.mutation.MembershipsCleared() {
+	if nodes := _u.mutation.RemovedMembershipsIDs(); len(nodes) > 0 && !_u.mutation.MembershipsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -667,7 +667,7 @@ func (tuuo *TenantUserUpdateOne) sqlSave(ctx context.Context) (_node *TenantUser
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuuo.mutation.MembershipsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.MembershipsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -683,11 +683,11 @@ func (tuuo *TenantUserUpdateOne) sqlSave(ctx context.Context) (_node *TenantUser
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(tuuo.modifiers...)
-	_node = &TenantUser{config: tuuo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &TenantUser{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tuuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{tenantuser.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -695,6 +695,6 @@ func (tuuo *TenantUserUpdateOne) sqlSave(ctx context.Context) (_node *TenantUser
 		}
 		return nil, err
 	}
-	tuuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

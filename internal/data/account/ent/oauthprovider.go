@@ -59,7 +59,7 @@ func (*OAuthProvider) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the OAuthProvider fields.
-func (op *OAuthProvider) assignValues(columns []string, values []any) error {
+func (_m *OAuthProvider) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -70,69 +70,69 @@ func (op *OAuthProvider) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			op.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case oauthprovider.FieldProvider:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field provider", values[i])
 			} else if value.Valid {
-				op.Provider = value.String
+				_m.Provider = value.String
 			}
 		case oauthprovider.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				op.Name = value.String
+				_m.Name = value.String
 			}
 		case oauthprovider.FieldClientID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field client_id", values[i])
 			} else if value.Valid {
-				op.ClientID = value.String
+				_m.ClientID = value.String
 			}
 		case oauthprovider.FieldClientSecret:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field client_secret", values[i])
 			} else if value.Valid {
-				op.ClientSecret = value.String
+				_m.ClientSecret = value.String
 			}
 		case oauthprovider.FieldAuthURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field auth_url", values[i])
 			} else if value.Valid {
-				op.AuthURL = value.String
+				_m.AuthURL = value.String
 			}
 		case oauthprovider.FieldTokenURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field token_url", values[i])
 			} else if value.Valid {
-				op.TokenURL = value.String
+				_m.TokenURL = value.String
 			}
 		case oauthprovider.FieldUserInfoURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_info_url", values[i])
 			} else if value.Valid {
-				op.UserInfoURL = value.String
+				_m.UserInfoURL = value.String
 			}
 		case oauthprovider.FieldRedirectURI:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field redirect_uri", values[i])
 			} else if value.Valid {
-				op.RedirectURI = value.String
+				_m.RedirectURI = value.String
 			}
 		case oauthprovider.FieldScopes:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field scopes", values[i])
 			} else if value.Valid {
-				op.Scopes = value.String
+				_m.Scopes = value.String
 			}
 		case oauthprovider.FieldEnabled:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field enabled", values[i])
 			} else if value.Valid {
-				op.Enabled = value.Bool
+				_m.Enabled = value.Bool
 			}
 		default:
-			op.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -140,61 +140,61 @@ func (op *OAuthProvider) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the OAuthProvider.
 // This includes values selected through modifiers, order, etc.
-func (op *OAuthProvider) Value(name string) (ent.Value, error) {
-	return op.selectValues.Get(name)
+func (_m *OAuthProvider) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // Update returns a builder for updating this OAuthProvider.
 // Note that you need to call OAuthProvider.Unwrap() before calling this method if this OAuthProvider
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (op *OAuthProvider) Update() *OAuthProviderUpdateOne {
-	return NewOAuthProviderClient(op.config).UpdateOne(op)
+func (_m *OAuthProvider) Update() *OAuthProviderUpdateOne {
+	return NewOAuthProviderClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the OAuthProvider entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (op *OAuthProvider) Unwrap() *OAuthProvider {
-	_tx, ok := op.config.driver.(*txDriver)
+func (_m *OAuthProvider) Unwrap() *OAuthProvider {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: OAuthProvider is not a transactional entity")
 	}
-	op.config.driver = _tx.drv
-	return op
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (op *OAuthProvider) String() string {
+func (_m *OAuthProvider) String() string {
 	var builder strings.Builder
 	builder.WriteString("OAuthProvider(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", op.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("provider=")
-	builder.WriteString(op.Provider)
+	builder.WriteString(_m.Provider)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(op.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("client_id=")
-	builder.WriteString(op.ClientID)
+	builder.WriteString(_m.ClientID)
 	builder.WriteString(", ")
 	builder.WriteString("client_secret=<sensitive>")
 	builder.WriteString(", ")
 	builder.WriteString("auth_url=")
-	builder.WriteString(op.AuthURL)
+	builder.WriteString(_m.AuthURL)
 	builder.WriteString(", ")
 	builder.WriteString("token_url=")
-	builder.WriteString(op.TokenURL)
+	builder.WriteString(_m.TokenURL)
 	builder.WriteString(", ")
 	builder.WriteString("user_info_url=")
-	builder.WriteString(op.UserInfoURL)
+	builder.WriteString(_m.UserInfoURL)
 	builder.WriteString(", ")
 	builder.WriteString("redirect_uri=")
-	builder.WriteString(op.RedirectURI)
+	builder.WriteString(_m.RedirectURI)
 	builder.WriteString(", ")
 	builder.WriteString("scopes=")
-	builder.WriteString(op.Scopes)
+	builder.WriteString(_m.Scopes)
 	builder.WriteString(", ")
 	builder.WriteString("enabled=")
-	builder.WriteString(fmt.Sprintf("%v", op.Enabled))
+	builder.WriteString(fmt.Sprintf("%v", _m.Enabled))
 	builder.WriteByte(')')
 	return builder.String()
 }

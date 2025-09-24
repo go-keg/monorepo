@@ -39,44 +39,44 @@ type TenantRoleQuery struct {
 }
 
 // Where adds a new predicate for the TenantRoleQuery builder.
-func (trq *TenantRoleQuery) Where(ps ...predicate.TenantRole) *TenantRoleQuery {
-	trq.predicates = append(trq.predicates, ps...)
-	return trq
+func (_q *TenantRoleQuery) Where(ps ...predicate.TenantRole) *TenantRoleQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (trq *TenantRoleQuery) Limit(limit int) *TenantRoleQuery {
-	trq.ctx.Limit = &limit
-	return trq
+func (_q *TenantRoleQuery) Limit(limit int) *TenantRoleQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (trq *TenantRoleQuery) Offset(offset int) *TenantRoleQuery {
-	trq.ctx.Offset = &offset
-	return trq
+func (_q *TenantRoleQuery) Offset(offset int) *TenantRoleQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (trq *TenantRoleQuery) Unique(unique bool) *TenantRoleQuery {
-	trq.ctx.Unique = &unique
-	return trq
+func (_q *TenantRoleQuery) Unique(unique bool) *TenantRoleQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (trq *TenantRoleQuery) Order(o ...tenantrole.OrderOption) *TenantRoleQuery {
-	trq.order = append(trq.order, o...)
-	return trq
+func (_q *TenantRoleQuery) Order(o ...tenantrole.OrderOption) *TenantRoleQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryPermissions chains the current query on the "permissions" edge.
-func (trq *TenantRoleQuery) QueryPermissions() *PermissionQuery {
-	query := (&PermissionClient{config: trq.config}).Query()
+func (_q *TenantRoleQuery) QueryPermissions() *PermissionQuery {
+	query := (&PermissionClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := trq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := trq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -85,20 +85,20 @@ func (trq *TenantRoleQuery) QueryPermissions() *PermissionQuery {
 			sqlgraph.To(permission.Table, permission.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, tenantrole.PermissionsTable, tenantrole.PermissionsPrimaryKey...),
 		)
-		fromU = sqlgraph.SetNeighbors(trq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryTenantUsers chains the current query on the "tenant_users" edge.
-func (trq *TenantRoleQuery) QueryTenantUsers() *TenantUserQuery {
-	query := (&TenantUserClient{config: trq.config}).Query()
+func (_q *TenantRoleQuery) QueryTenantUsers() *TenantUserQuery {
+	query := (&TenantUserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := trq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := trq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -107,20 +107,20 @@ func (trq *TenantRoleQuery) QueryTenantUsers() *TenantUserQuery {
 			sqlgraph.To(tenantuser.Table, tenantuser.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, tenantrole.TenantUsersTable, tenantrole.TenantUsersPrimaryKey...),
 		)
-		fromU = sqlgraph.SetNeighbors(trq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryTenant chains the current query on the "tenant" edge.
-func (trq *TenantRoleQuery) QueryTenant() *TenantQuery {
-	query := (&TenantClient{config: trq.config}).Query()
+func (_q *TenantRoleQuery) QueryTenant() *TenantQuery {
+	query := (&TenantClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := trq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := trq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -129,7 +129,7 @@ func (trq *TenantRoleQuery) QueryTenant() *TenantQuery {
 			sqlgraph.To(tenant.Table, tenant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, tenantrole.TenantTable, tenantrole.TenantColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(trq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -137,8 +137,8 @@ func (trq *TenantRoleQuery) QueryTenant() *TenantQuery {
 
 // First returns the first TenantRole entity from the query.
 // Returns a *NotFoundError when no TenantRole was found.
-func (trq *TenantRoleQuery) First(ctx context.Context) (*TenantRole, error) {
-	nodes, err := trq.Limit(1).All(setContextOp(ctx, trq.ctx, ent.OpQueryFirst))
+func (_q *TenantRoleQuery) First(ctx context.Context) (*TenantRole, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -149,8 +149,8 @@ func (trq *TenantRoleQuery) First(ctx context.Context) (*TenantRole, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (trq *TenantRoleQuery) FirstX(ctx context.Context) *TenantRole {
-	node, err := trq.First(ctx)
+func (_q *TenantRoleQuery) FirstX(ctx context.Context) *TenantRole {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -159,9 +159,9 @@ func (trq *TenantRoleQuery) FirstX(ctx context.Context) *TenantRole {
 
 // FirstID returns the first TenantRole ID from the query.
 // Returns a *NotFoundError when no TenantRole ID was found.
-func (trq *TenantRoleQuery) FirstID(ctx context.Context) (id int, err error) {
+func (_q *TenantRoleQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = trq.Limit(1).IDs(setContextOp(ctx, trq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -172,8 +172,8 @@ func (trq *TenantRoleQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (trq *TenantRoleQuery) FirstIDX(ctx context.Context) int {
-	id, err := trq.FirstID(ctx)
+func (_q *TenantRoleQuery) FirstIDX(ctx context.Context) int {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -183,8 +183,8 @@ func (trq *TenantRoleQuery) FirstIDX(ctx context.Context) int {
 // Only returns a single TenantRole entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TenantRole entity is found.
 // Returns a *NotFoundError when no TenantRole entities are found.
-func (trq *TenantRoleQuery) Only(ctx context.Context) (*TenantRole, error) {
-	nodes, err := trq.Limit(2).All(setContextOp(ctx, trq.ctx, ent.OpQueryOnly))
+func (_q *TenantRoleQuery) Only(ctx context.Context) (*TenantRole, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -199,8 +199,8 @@ func (trq *TenantRoleQuery) Only(ctx context.Context) (*TenantRole, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (trq *TenantRoleQuery) OnlyX(ctx context.Context) *TenantRole {
-	node, err := trq.Only(ctx)
+func (_q *TenantRoleQuery) OnlyX(ctx context.Context) *TenantRole {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -210,9 +210,9 @@ func (trq *TenantRoleQuery) OnlyX(ctx context.Context) *TenantRole {
 // OnlyID is like Only, but returns the only TenantRole ID in the query.
 // Returns a *NotSingularError when more than one TenantRole ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (trq *TenantRoleQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (_q *TenantRoleQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = trq.Limit(2).IDs(setContextOp(ctx, trq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -227,8 +227,8 @@ func (trq *TenantRoleQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (trq *TenantRoleQuery) OnlyIDX(ctx context.Context) int {
-	id, err := trq.OnlyID(ctx)
+func (_q *TenantRoleQuery) OnlyIDX(ctx context.Context) int {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -236,18 +236,18 @@ func (trq *TenantRoleQuery) OnlyIDX(ctx context.Context) int {
 }
 
 // All executes the query and returns a list of TenantRoles.
-func (trq *TenantRoleQuery) All(ctx context.Context) ([]*TenantRole, error) {
-	ctx = setContextOp(ctx, trq.ctx, ent.OpQueryAll)
-	if err := trq.prepareQuery(ctx); err != nil {
+func (_q *TenantRoleQuery) All(ctx context.Context) ([]*TenantRole, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TenantRole, *TenantRoleQuery]()
-	return withInterceptors[[]*TenantRole](ctx, trq, qr, trq.inters)
+	return withInterceptors[[]*TenantRole](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (trq *TenantRoleQuery) AllX(ctx context.Context) []*TenantRole {
-	nodes, err := trq.All(ctx)
+func (_q *TenantRoleQuery) AllX(ctx context.Context) []*TenantRole {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -255,20 +255,20 @@ func (trq *TenantRoleQuery) AllX(ctx context.Context) []*TenantRole {
 }
 
 // IDs executes the query and returns a list of TenantRole IDs.
-func (trq *TenantRoleQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if trq.ctx.Unique == nil && trq.path != nil {
-		trq.Unique(true)
+func (_q *TenantRoleQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, trq.ctx, ent.OpQueryIDs)
-	if err = trq.Select(tenantrole.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(tenantrole.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (trq *TenantRoleQuery) IDsX(ctx context.Context) []int {
-	ids, err := trq.IDs(ctx)
+func (_q *TenantRoleQuery) IDsX(ctx context.Context) []int {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -276,17 +276,17 @@ func (trq *TenantRoleQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (trq *TenantRoleQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, trq.ctx, ent.OpQueryCount)
-	if err := trq.prepareQuery(ctx); err != nil {
+func (_q *TenantRoleQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, trq, querierCount[*TenantRoleQuery](), trq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TenantRoleQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (trq *TenantRoleQuery) CountX(ctx context.Context) int {
-	count, err := trq.Count(ctx)
+func (_q *TenantRoleQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -294,9 +294,9 @@ func (trq *TenantRoleQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (trq *TenantRoleQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, trq.ctx, ent.OpQueryExist)
-	switch _, err := trq.FirstID(ctx); {
+func (_q *TenantRoleQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -307,8 +307,8 @@ func (trq *TenantRoleQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (trq *TenantRoleQuery) ExistX(ctx context.Context) bool {
-	exist, err := trq.Exist(ctx)
+func (_q *TenantRoleQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -317,57 +317,57 @@ func (trq *TenantRoleQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the TenantRoleQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (trq *TenantRoleQuery) Clone() *TenantRoleQuery {
-	if trq == nil {
+func (_q *TenantRoleQuery) Clone() *TenantRoleQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TenantRoleQuery{
-		config:          trq.config,
-		ctx:             trq.ctx.Clone(),
-		order:           append([]tenantrole.OrderOption{}, trq.order...),
-		inters:          append([]Interceptor{}, trq.inters...),
-		predicates:      append([]predicate.TenantRole{}, trq.predicates...),
-		withPermissions: trq.withPermissions.Clone(),
-		withTenantUsers: trq.withTenantUsers.Clone(),
-		withTenant:      trq.withTenant.Clone(),
+		config:          _q.config,
+		ctx:             _q.ctx.Clone(),
+		order:           append([]tenantrole.OrderOption{}, _q.order...),
+		inters:          append([]Interceptor{}, _q.inters...),
+		predicates:      append([]predicate.TenantRole{}, _q.predicates...),
+		withPermissions: _q.withPermissions.Clone(),
+		withTenantUsers: _q.withTenantUsers.Clone(),
+		withTenant:      _q.withTenant.Clone(),
 		// clone intermediate query.
-		sql:       trq.sql.Clone(),
-		path:      trq.path,
-		modifiers: append([]func(*sql.Selector){}, trq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithPermissions tells the query-builder to eager-load the nodes that are connected to
 // the "permissions" edge. The optional arguments are used to configure the query builder of the edge.
-func (trq *TenantRoleQuery) WithPermissions(opts ...func(*PermissionQuery)) *TenantRoleQuery {
-	query := (&PermissionClient{config: trq.config}).Query()
+func (_q *TenantRoleQuery) WithPermissions(opts ...func(*PermissionQuery)) *TenantRoleQuery {
+	query := (&PermissionClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	trq.withPermissions = query
-	return trq
+	_q.withPermissions = query
+	return _q
 }
 
 // WithTenantUsers tells the query-builder to eager-load the nodes that are connected to
 // the "tenant_users" edge. The optional arguments are used to configure the query builder of the edge.
-func (trq *TenantRoleQuery) WithTenantUsers(opts ...func(*TenantUserQuery)) *TenantRoleQuery {
-	query := (&TenantUserClient{config: trq.config}).Query()
+func (_q *TenantRoleQuery) WithTenantUsers(opts ...func(*TenantUserQuery)) *TenantRoleQuery {
+	query := (&TenantUserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	trq.withTenantUsers = query
-	return trq
+	_q.withTenantUsers = query
+	return _q
 }
 
 // WithTenant tells the query-builder to eager-load the nodes that are connected to
 // the "tenant" edge. The optional arguments are used to configure the query builder of the edge.
-func (trq *TenantRoleQuery) WithTenant(opts ...func(*TenantQuery)) *TenantRoleQuery {
-	query := (&TenantClient{config: trq.config}).Query()
+func (_q *TenantRoleQuery) WithTenant(opts ...func(*TenantQuery)) *TenantRoleQuery {
+	query := (&TenantClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	trq.withTenant = query
-	return trq
+	_q.withTenant = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -384,10 +384,10 @@ func (trq *TenantRoleQuery) WithTenant(opts ...func(*TenantQuery)) *TenantRoleQu
 //		GroupBy(tenantrole.FieldCreatedAt).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (trq *TenantRoleQuery) GroupBy(field string, fields ...string) *TenantRoleGroupBy {
-	trq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TenantRoleGroupBy{build: trq}
-	grbuild.flds = &trq.ctx.Fields
+func (_q *TenantRoleQuery) GroupBy(field string, fields ...string) *TenantRoleGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TenantRoleGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = tenantrole.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -405,119 +405,119 @@ func (trq *TenantRoleQuery) GroupBy(field string, fields ...string) *TenantRoleG
 //	client.TenantRole.Query().
 //		Select(tenantrole.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (trq *TenantRoleQuery) Select(fields ...string) *TenantRoleSelect {
-	trq.ctx.Fields = append(trq.ctx.Fields, fields...)
-	sbuild := &TenantRoleSelect{TenantRoleQuery: trq}
+func (_q *TenantRoleQuery) Select(fields ...string) *TenantRoleSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TenantRoleSelect{TenantRoleQuery: _q}
 	sbuild.label = tenantrole.Label
-	sbuild.flds, sbuild.scan = &trq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TenantRoleSelect configured with the given aggregations.
-func (trq *TenantRoleQuery) Aggregate(fns ...AggregateFunc) *TenantRoleSelect {
-	return trq.Select().Aggregate(fns...)
+func (_q *TenantRoleQuery) Aggregate(fns ...AggregateFunc) *TenantRoleSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (trq *TenantRoleQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range trq.inters {
+func (_q *TenantRoleQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, trq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range trq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !tenantrole.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if trq.path != nil {
-		prev, err := trq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		trq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (trq *TenantRoleQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TenantRole, error) {
+func (_q *TenantRoleQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TenantRole, error) {
 	var (
 		nodes       = []*TenantRole{}
-		_spec       = trq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
-			trq.withPermissions != nil,
-			trq.withTenantUsers != nil,
-			trq.withTenant != nil,
+			_q.withPermissions != nil,
+			_q.withTenantUsers != nil,
+			_q.withTenant != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TenantRole).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TenantRole{config: trq.config}
+		node := &TenantRole{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(trq.modifiers) > 0 {
-		_spec.Modifiers = trq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, trq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := trq.withPermissions; query != nil {
-		if err := trq.loadPermissions(ctx, query, nodes,
+	if query := _q.withPermissions; query != nil {
+		if err := _q.loadPermissions(ctx, query, nodes,
 			func(n *TenantRole) { n.Edges.Permissions = []*Permission{} },
 			func(n *TenantRole, e *Permission) { n.Edges.Permissions = append(n.Edges.Permissions, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := trq.withTenantUsers; query != nil {
-		if err := trq.loadTenantUsers(ctx, query, nodes,
+	if query := _q.withTenantUsers; query != nil {
+		if err := _q.loadTenantUsers(ctx, query, nodes,
 			func(n *TenantRole) { n.Edges.TenantUsers = []*TenantUser{} },
 			func(n *TenantRole, e *TenantUser) { n.Edges.TenantUsers = append(n.Edges.TenantUsers, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := trq.withTenant; query != nil {
-		if err := trq.loadTenant(ctx, query, nodes, nil,
+	if query := _q.withTenant; query != nil {
+		if err := _q.loadTenant(ctx, query, nodes, nil,
 			func(n *TenantRole, e *Tenant) { n.Edges.Tenant = e }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range trq.withNamedPermissions {
-		if err := trq.loadPermissions(ctx, query, nodes,
+	for name, query := range _q.withNamedPermissions {
+		if err := _q.loadPermissions(ctx, query, nodes,
 			func(n *TenantRole) { n.appendNamedPermissions(name) },
 			func(n *TenantRole, e *Permission) { n.appendNamedPermissions(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range trq.withNamedTenantUsers {
-		if err := trq.loadTenantUsers(ctx, query, nodes,
+	for name, query := range _q.withNamedTenantUsers {
+		if err := _q.loadTenantUsers(ctx, query, nodes,
 			func(n *TenantRole) { n.appendNamedTenantUsers(name) },
 			func(n *TenantRole, e *TenantUser) { n.appendNamedTenantUsers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range trq.loadTotal {
-		if err := trq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (trq *TenantRoleQuery) loadPermissions(ctx context.Context, query *PermissionQuery, nodes []*TenantRole, init func(*TenantRole), assign func(*TenantRole, *Permission)) error {
+func (_q *TenantRoleQuery) loadPermissions(ctx context.Context, query *PermissionQuery, nodes []*TenantRole, init func(*TenantRole), assign func(*TenantRole, *Permission)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*TenantRole)
 	nids := make(map[int]map[*TenantRole]struct{})
@@ -578,7 +578,7 @@ func (trq *TenantRoleQuery) loadPermissions(ctx context.Context, query *Permissi
 	}
 	return nil
 }
-func (trq *TenantRoleQuery) loadTenantUsers(ctx context.Context, query *TenantUserQuery, nodes []*TenantRole, init func(*TenantRole), assign func(*TenantRole, *TenantUser)) error {
+func (_q *TenantRoleQuery) loadTenantUsers(ctx context.Context, query *TenantUserQuery, nodes []*TenantRole, init func(*TenantRole), assign func(*TenantRole, *TenantUser)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*TenantRole)
 	nids := make(map[int]map[*TenantRole]struct{})
@@ -639,7 +639,7 @@ func (trq *TenantRoleQuery) loadTenantUsers(ctx context.Context, query *TenantUs
 	}
 	return nil
 }
-func (trq *TenantRoleQuery) loadTenant(ctx context.Context, query *TenantQuery, nodes []*TenantRole, init func(*TenantRole), assign func(*TenantRole, *Tenant)) error {
+func (_q *TenantRoleQuery) loadTenant(ctx context.Context, query *TenantQuery, nodes []*TenantRole, init func(*TenantRole), assign func(*TenantRole, *Tenant)) error {
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*TenantRole)
 	for i := range nodes {
@@ -669,27 +669,27 @@ func (trq *TenantRoleQuery) loadTenant(ctx context.Context, query *TenantQuery, 
 	return nil
 }
 
-func (trq *TenantRoleQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := trq.querySpec()
-	if len(trq.modifiers) > 0 {
-		_spec.Modifiers = trq.modifiers
+func (_q *TenantRoleQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = trq.ctx.Fields
-	if len(trq.ctx.Fields) > 0 {
-		_spec.Unique = trq.ctx.Unique != nil && *trq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, trq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (trq *TenantRoleQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TenantRoleQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(tenantrole.Table, tenantrole.Columns, sqlgraph.NewFieldSpec(tenantrole.FieldID, field.TypeInt))
-	_spec.From = trq.sql
-	if unique := trq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if trq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := trq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, tenantrole.FieldID)
 		for i := range fields {
@@ -697,24 +697,24 @@ func (trq *TenantRoleQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if trq.withTenant != nil {
+		if _q.withTenant != nil {
 			_spec.Node.AddColumnOnce(tenantrole.FieldTenantID)
 		}
 	}
-	if ps := trq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := trq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := trq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := trq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -724,73 +724,73 @@ func (trq *TenantRoleQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (trq *TenantRoleQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(trq.driver.Dialect())
+func (_q *TenantRoleQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(tenantrole.Table)
-	columns := trq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = tenantrole.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if trq.sql != nil {
-		selector = trq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if trq.ctx.Unique != nil && *trq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range trq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range trq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range trq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := trq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := trq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (trq *TenantRoleQuery) Modify(modifiers ...func(s *sql.Selector)) *TenantRoleSelect {
-	trq.modifiers = append(trq.modifiers, modifiers...)
-	return trq.Select()
+func (_q *TenantRoleQuery) Modify(modifiers ...func(s *sql.Selector)) *TenantRoleSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedPermissions tells the query-builder to eager-load the nodes that are connected to the "permissions"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (trq *TenantRoleQuery) WithNamedPermissions(name string, opts ...func(*PermissionQuery)) *TenantRoleQuery {
-	query := (&PermissionClient{config: trq.config}).Query()
+func (_q *TenantRoleQuery) WithNamedPermissions(name string, opts ...func(*PermissionQuery)) *TenantRoleQuery {
+	query := (&PermissionClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if trq.withNamedPermissions == nil {
-		trq.withNamedPermissions = make(map[string]*PermissionQuery)
+	if _q.withNamedPermissions == nil {
+		_q.withNamedPermissions = make(map[string]*PermissionQuery)
 	}
-	trq.withNamedPermissions[name] = query
-	return trq
+	_q.withNamedPermissions[name] = query
+	return _q
 }
 
 // WithNamedTenantUsers tells the query-builder to eager-load the nodes that are connected to the "tenant_users"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (trq *TenantRoleQuery) WithNamedTenantUsers(name string, opts ...func(*TenantUserQuery)) *TenantRoleQuery {
-	query := (&TenantUserClient{config: trq.config}).Query()
+func (_q *TenantRoleQuery) WithNamedTenantUsers(name string, opts ...func(*TenantUserQuery)) *TenantRoleQuery {
+	query := (&TenantUserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if trq.withNamedTenantUsers == nil {
-		trq.withNamedTenantUsers = make(map[string]*TenantUserQuery)
+	if _q.withNamedTenantUsers == nil {
+		_q.withNamedTenantUsers = make(map[string]*TenantUserQuery)
 	}
-	trq.withNamedTenantUsers[name] = query
-	return trq
+	_q.withNamedTenantUsers[name] = query
+	return _q
 }
 
 // TenantRoleGroupBy is the group-by builder for TenantRole entities.
@@ -800,41 +800,41 @@ type TenantRoleGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (trgb *TenantRoleGroupBy) Aggregate(fns ...AggregateFunc) *TenantRoleGroupBy {
-	trgb.fns = append(trgb.fns, fns...)
-	return trgb
+func (_g *TenantRoleGroupBy) Aggregate(fns ...AggregateFunc) *TenantRoleGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (trgb *TenantRoleGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, trgb.build.ctx, ent.OpQueryGroupBy)
-	if err := trgb.build.prepareQuery(ctx); err != nil {
+func (_g *TenantRoleGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TenantRoleQuery, *TenantRoleGroupBy](ctx, trgb.build, trgb, trgb.build.inters, v)
+	return scanWithInterceptors[*TenantRoleQuery, *TenantRoleGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (trgb *TenantRoleGroupBy) sqlScan(ctx context.Context, root *TenantRoleQuery, v any) error {
+func (_g *TenantRoleGroupBy) sqlScan(ctx context.Context, root *TenantRoleQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(trgb.fns))
-	for _, fn := range trgb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*trgb.flds)+len(trgb.fns))
-		for _, f := range *trgb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*trgb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := trgb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -848,27 +848,27 @@ type TenantRoleSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (trs *TenantRoleSelect) Aggregate(fns ...AggregateFunc) *TenantRoleSelect {
-	trs.fns = append(trs.fns, fns...)
-	return trs
+func (_s *TenantRoleSelect) Aggregate(fns ...AggregateFunc) *TenantRoleSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (trs *TenantRoleSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, trs.ctx, ent.OpQuerySelect)
-	if err := trs.prepareQuery(ctx); err != nil {
+func (_s *TenantRoleSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TenantRoleQuery, *TenantRoleSelect](ctx, trs.TenantRoleQuery, trs, trs.inters, v)
+	return scanWithInterceptors[*TenantRoleQuery, *TenantRoleSelect](ctx, _s.TenantRoleQuery, _s, _s.inters, v)
 }
 
-func (trs *TenantRoleSelect) sqlScan(ctx context.Context, root *TenantRoleQuery, v any) error {
+func (_s *TenantRoleSelect) sqlScan(ctx context.Context, root *TenantRoleQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(trs.fns))
-	for _, fn := range trs.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*trs.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -876,7 +876,7 @@ func (trs *TenantRoleSelect) sqlScan(ctx context.Context, root *TenantRoleQuery,
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := trs.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -884,7 +884,7 @@ func (trs *TenantRoleSelect) sqlScan(ctx context.Context, root *TenantRoleQuery,
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (trs *TenantRoleSelect) Modify(modifiers ...func(s *sql.Selector)) *TenantRoleSelect {
-	trs.modifiers = append(trs.modifiers, modifiers...)
-	return trs
+func (_s *TenantRoleSelect) Modify(modifiers ...func(s *sql.Selector)) *TenantRoleSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

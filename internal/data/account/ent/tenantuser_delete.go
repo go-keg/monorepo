@@ -20,56 +20,56 @@ type TenantUserDelete struct {
 }
 
 // Where appends a list predicates to the TenantUserDelete builder.
-func (tud *TenantUserDelete) Where(ps ...predicate.TenantUser) *TenantUserDelete {
-	tud.mutation.Where(ps...)
-	return tud
+func (_d *TenantUserDelete) Where(ps ...predicate.TenantUser) *TenantUserDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (tud *TenantUserDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, tud.sqlExec, tud.mutation, tud.hooks)
+func (_d *TenantUserDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tud *TenantUserDelete) ExecX(ctx context.Context) int {
-	n, err := tud.Exec(ctx)
+func (_d *TenantUserDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (tud *TenantUserDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TenantUserDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(tenantuser.Table, sqlgraph.NewFieldSpec(tenantuser.FieldID, field.TypeInt))
-	if ps := tud.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, tud.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	tud.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // TenantUserDeleteOne is the builder for deleting a single TenantUser entity.
 type TenantUserDeleteOne struct {
-	tud *TenantUserDelete
+	_d *TenantUserDelete
 }
 
 // Where appends a list predicates to the TenantUserDelete builder.
-func (tudo *TenantUserDeleteOne) Where(ps ...predicate.TenantUser) *TenantUserDeleteOne {
-	tudo.tud.mutation.Where(ps...)
-	return tudo
+func (_d *TenantUserDeleteOne) Where(ps ...predicate.TenantUser) *TenantUserDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (tudo *TenantUserDeleteOne) Exec(ctx context.Context) error {
-	n, err := tudo.tud.Exec(ctx)
+func (_d *TenantUserDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (tudo *TenantUserDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tudo *TenantUserDeleteOne) ExecX(ctx context.Context) {
-	if err := tudo.Exec(ctx); err != nil {
+func (_d *TenantUserDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

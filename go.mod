@@ -1,8 +1,6 @@
 module github.com/go-keg/monorepo
 
-go 1.23.4
-
-toolchain go1.23.7
+go 1.25
 
 replace (
 	entgo.io/contrib v0.6.0 => ./third_party/ent-contrib
@@ -12,7 +10,7 @@ replace (
 require (
 	entgo.io/contrib v0.6.0
 	entgo.io/ent v0.14.5
-	github.com/99designs/gqlgen v0.17.68
+	github.com/99designs/gqlgen v0.17.79
 	github.com/IBM/sarama v1.45.1
 	github.com/gin-contrib/sessions v1.0.4
 	github.com/gin-gonic/gin v1.10.1
@@ -22,6 +20,7 @@ require (
 	github.com/go-keg/swagger-api v0.1.5
 	github.com/go-kratos/gateway v0.1.0
 	github.com/go-kratos/kratos/v2 v2.8.4
+	github.com/go-sql-driver/mysql v1.8.1
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/google/wire v0.6.0
 	github.com/gorilla/handlers v1.5.2
@@ -32,14 +31,14 @@ require (
 	github.com/samber/lo v1.50.0
 	github.com/spf13/cast v1.8.0
 	github.com/spf13/cobra v1.9.1
-	github.com/vektah/gqlparser/v2 v2.5.23
+	github.com/vektah/gqlparser/v2 v2.5.30
 	go.opentelemetry.io/otel v1.35.0
 	go.uber.org/automaxprocs v1.6.0
-	golang.org/x/crypto v0.37.0
+	golang.org/x/crypto v0.42.0
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394
 	golang.org/x/oauth2 v0.30.0
-	golang.org/x/sync v0.13.0
-	google.golang.org/protobuf v1.36.6
+	golang.org/x/sync v0.17.0
+	google.golang.org/protobuf v1.36.9
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 )
 
@@ -81,8 +80,7 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.26.0 // indirect
-	github.com/go-sql-driver/mysql v1.8.1 // indirect
-	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
+	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
@@ -176,12 +174,12 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/arch v0.16.0 // indirect
 	golang.org/x/image v0.23.0 // indirect
-	golang.org/x/mod v0.24.0 // indirect
-	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
-	golang.org/x/text v0.24.0 // indirect
+	golang.org/x/mod v0.28.0 // indirect
+	golang.org/x/net v0.44.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
+	golang.org/x/text v0.29.0 // indirect
 	golang.org/x/time v0.6.0 // indirect
-	golang.org/x/tools v0.31.0 // indirect
+	golang.org/x/tools v0.37.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20241007155032-5fefd90f89a9 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240930140551-af27646dc61f // indirect
 	google.golang.org/grpc v1.67.1 // indirect

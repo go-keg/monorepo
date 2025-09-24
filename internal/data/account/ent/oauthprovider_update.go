@@ -23,170 +23,170 @@ type OAuthProviderUpdate struct {
 }
 
 // Where appends a list predicates to the OAuthProviderUpdate builder.
-func (opu *OAuthProviderUpdate) Where(ps ...predicate.OAuthProvider) *OAuthProviderUpdate {
-	opu.mutation.Where(ps...)
-	return opu
+func (_u *OAuthProviderUpdate) Where(ps ...predicate.OAuthProvider) *OAuthProviderUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetProvider sets the "provider" field.
-func (opu *OAuthProviderUpdate) SetProvider(s string) *OAuthProviderUpdate {
-	opu.mutation.SetProvider(s)
-	return opu
+func (_u *OAuthProviderUpdate) SetProvider(v string) *OAuthProviderUpdate {
+	_u.mutation.SetProvider(v)
+	return _u
 }
 
 // SetNillableProvider sets the "provider" field if the given value is not nil.
-func (opu *OAuthProviderUpdate) SetNillableProvider(s *string) *OAuthProviderUpdate {
-	if s != nil {
-		opu.SetProvider(*s)
+func (_u *OAuthProviderUpdate) SetNillableProvider(v *string) *OAuthProviderUpdate {
+	if v != nil {
+		_u.SetProvider(*v)
 	}
-	return opu
+	return _u
 }
 
 // SetName sets the "name" field.
-func (opu *OAuthProviderUpdate) SetName(s string) *OAuthProviderUpdate {
-	opu.mutation.SetName(s)
-	return opu
+func (_u *OAuthProviderUpdate) SetName(v string) *OAuthProviderUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (opu *OAuthProviderUpdate) SetNillableName(s *string) *OAuthProviderUpdate {
-	if s != nil {
-		opu.SetName(*s)
+func (_u *OAuthProviderUpdate) SetNillableName(v *string) *OAuthProviderUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return opu
+	return _u
 }
 
 // SetClientID sets the "client_id" field.
-func (opu *OAuthProviderUpdate) SetClientID(s string) *OAuthProviderUpdate {
-	opu.mutation.SetClientID(s)
-	return opu
+func (_u *OAuthProviderUpdate) SetClientID(v string) *OAuthProviderUpdate {
+	_u.mutation.SetClientID(v)
+	return _u
 }
 
 // SetNillableClientID sets the "client_id" field if the given value is not nil.
-func (opu *OAuthProviderUpdate) SetNillableClientID(s *string) *OAuthProviderUpdate {
-	if s != nil {
-		opu.SetClientID(*s)
+func (_u *OAuthProviderUpdate) SetNillableClientID(v *string) *OAuthProviderUpdate {
+	if v != nil {
+		_u.SetClientID(*v)
 	}
-	return opu
+	return _u
 }
 
 // SetClientSecret sets the "client_secret" field.
-func (opu *OAuthProviderUpdate) SetClientSecret(s string) *OAuthProviderUpdate {
-	opu.mutation.SetClientSecret(s)
-	return opu
+func (_u *OAuthProviderUpdate) SetClientSecret(v string) *OAuthProviderUpdate {
+	_u.mutation.SetClientSecret(v)
+	return _u
 }
 
 // SetNillableClientSecret sets the "client_secret" field if the given value is not nil.
-func (opu *OAuthProviderUpdate) SetNillableClientSecret(s *string) *OAuthProviderUpdate {
-	if s != nil {
-		opu.SetClientSecret(*s)
+func (_u *OAuthProviderUpdate) SetNillableClientSecret(v *string) *OAuthProviderUpdate {
+	if v != nil {
+		_u.SetClientSecret(*v)
 	}
-	return opu
+	return _u
 }
 
 // SetAuthURL sets the "auth_url" field.
-func (opu *OAuthProviderUpdate) SetAuthURL(s string) *OAuthProviderUpdate {
-	opu.mutation.SetAuthURL(s)
-	return opu
+func (_u *OAuthProviderUpdate) SetAuthURL(v string) *OAuthProviderUpdate {
+	_u.mutation.SetAuthURL(v)
+	return _u
 }
 
 // SetNillableAuthURL sets the "auth_url" field if the given value is not nil.
-func (opu *OAuthProviderUpdate) SetNillableAuthURL(s *string) *OAuthProviderUpdate {
-	if s != nil {
-		opu.SetAuthURL(*s)
+func (_u *OAuthProviderUpdate) SetNillableAuthURL(v *string) *OAuthProviderUpdate {
+	if v != nil {
+		_u.SetAuthURL(*v)
 	}
-	return opu
+	return _u
 }
 
 // SetTokenURL sets the "token_url" field.
-func (opu *OAuthProviderUpdate) SetTokenURL(s string) *OAuthProviderUpdate {
-	opu.mutation.SetTokenURL(s)
-	return opu
+func (_u *OAuthProviderUpdate) SetTokenURL(v string) *OAuthProviderUpdate {
+	_u.mutation.SetTokenURL(v)
+	return _u
 }
 
 // SetNillableTokenURL sets the "token_url" field if the given value is not nil.
-func (opu *OAuthProviderUpdate) SetNillableTokenURL(s *string) *OAuthProviderUpdate {
-	if s != nil {
-		opu.SetTokenURL(*s)
+func (_u *OAuthProviderUpdate) SetNillableTokenURL(v *string) *OAuthProviderUpdate {
+	if v != nil {
+		_u.SetTokenURL(*v)
 	}
-	return opu
+	return _u
 }
 
 // SetUserInfoURL sets the "user_info_url" field.
-func (opu *OAuthProviderUpdate) SetUserInfoURL(s string) *OAuthProviderUpdate {
-	opu.mutation.SetUserInfoURL(s)
-	return opu
+func (_u *OAuthProviderUpdate) SetUserInfoURL(v string) *OAuthProviderUpdate {
+	_u.mutation.SetUserInfoURL(v)
+	return _u
 }
 
 // SetNillableUserInfoURL sets the "user_info_url" field if the given value is not nil.
-func (opu *OAuthProviderUpdate) SetNillableUserInfoURL(s *string) *OAuthProviderUpdate {
-	if s != nil {
-		opu.SetUserInfoURL(*s)
+func (_u *OAuthProviderUpdate) SetNillableUserInfoURL(v *string) *OAuthProviderUpdate {
+	if v != nil {
+		_u.SetUserInfoURL(*v)
 	}
-	return opu
+	return _u
 }
 
 // SetRedirectURI sets the "redirect_uri" field.
-func (opu *OAuthProviderUpdate) SetRedirectURI(s string) *OAuthProviderUpdate {
-	opu.mutation.SetRedirectURI(s)
-	return opu
+func (_u *OAuthProviderUpdate) SetRedirectURI(v string) *OAuthProviderUpdate {
+	_u.mutation.SetRedirectURI(v)
+	return _u
 }
 
 // SetNillableRedirectURI sets the "redirect_uri" field if the given value is not nil.
-func (opu *OAuthProviderUpdate) SetNillableRedirectURI(s *string) *OAuthProviderUpdate {
-	if s != nil {
-		opu.SetRedirectURI(*s)
+func (_u *OAuthProviderUpdate) SetNillableRedirectURI(v *string) *OAuthProviderUpdate {
+	if v != nil {
+		_u.SetRedirectURI(*v)
 	}
-	return opu
+	return _u
 }
 
 // SetScopes sets the "scopes" field.
-func (opu *OAuthProviderUpdate) SetScopes(s string) *OAuthProviderUpdate {
-	opu.mutation.SetScopes(s)
-	return opu
+func (_u *OAuthProviderUpdate) SetScopes(v string) *OAuthProviderUpdate {
+	_u.mutation.SetScopes(v)
+	return _u
 }
 
 // SetNillableScopes sets the "scopes" field if the given value is not nil.
-func (opu *OAuthProviderUpdate) SetNillableScopes(s *string) *OAuthProviderUpdate {
-	if s != nil {
-		opu.SetScopes(*s)
+func (_u *OAuthProviderUpdate) SetNillableScopes(v *string) *OAuthProviderUpdate {
+	if v != nil {
+		_u.SetScopes(*v)
 	}
-	return opu
+	return _u
 }
 
 // ClearScopes clears the value of the "scopes" field.
-func (opu *OAuthProviderUpdate) ClearScopes() *OAuthProviderUpdate {
-	opu.mutation.ClearScopes()
-	return opu
+func (_u *OAuthProviderUpdate) ClearScopes() *OAuthProviderUpdate {
+	_u.mutation.ClearScopes()
+	return _u
 }
 
 // SetEnabled sets the "enabled" field.
-func (opu *OAuthProviderUpdate) SetEnabled(b bool) *OAuthProviderUpdate {
-	opu.mutation.SetEnabled(b)
-	return opu
+func (_u *OAuthProviderUpdate) SetEnabled(v bool) *OAuthProviderUpdate {
+	_u.mutation.SetEnabled(v)
+	return _u
 }
 
 // SetNillableEnabled sets the "enabled" field if the given value is not nil.
-func (opu *OAuthProviderUpdate) SetNillableEnabled(b *bool) *OAuthProviderUpdate {
-	if b != nil {
-		opu.SetEnabled(*b)
+func (_u *OAuthProviderUpdate) SetNillableEnabled(v *bool) *OAuthProviderUpdate {
+	if v != nil {
+		_u.SetEnabled(*v)
 	}
-	return opu
+	return _u
 }
 
 // Mutation returns the OAuthProviderMutation object of the builder.
-func (opu *OAuthProviderUpdate) Mutation() *OAuthProviderMutation {
-	return opu.mutation
+func (_u *OAuthProviderUpdate) Mutation() *OAuthProviderMutation {
+	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (opu *OAuthProviderUpdate) Save(ctx context.Context) (int, error) {
-	return withHooks(ctx, opu.sqlSave, opu.mutation, opu.hooks)
+func (_u *OAuthProviderUpdate) Save(ctx context.Context) (int, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (opu *OAuthProviderUpdate) SaveX(ctx context.Context) int {
-	affected, err := opu.Save(ctx)
+func (_u *OAuthProviderUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -194,51 +194,51 @@ func (opu *OAuthProviderUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (opu *OAuthProviderUpdate) Exec(ctx context.Context) error {
-	_, err := opu.Save(ctx)
+func (_u *OAuthProviderUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (opu *OAuthProviderUpdate) ExecX(ctx context.Context) {
-	if err := opu.Exec(ctx); err != nil {
+func (_u *OAuthProviderUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (opu *OAuthProviderUpdate) check() error {
-	if v, ok := opu.mutation.Name(); ok {
+func (_u *OAuthProviderUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := oauthprovider.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.name": %w`, err)}
 		}
 	}
-	if v, ok := opu.mutation.ClientID(); ok {
+	if v, ok := _u.mutation.ClientID(); ok {
 		if err := oauthprovider.ClientIDValidator(v); err != nil {
 			return &ValidationError{Name: "client_id", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.client_id": %w`, err)}
 		}
 	}
-	if v, ok := opu.mutation.ClientSecret(); ok {
+	if v, ok := _u.mutation.ClientSecret(); ok {
 		if err := oauthprovider.ClientSecretValidator(v); err != nil {
 			return &ValidationError{Name: "client_secret", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.client_secret": %w`, err)}
 		}
 	}
-	if v, ok := opu.mutation.AuthURL(); ok {
+	if v, ok := _u.mutation.AuthURL(); ok {
 		if err := oauthprovider.AuthURLValidator(v); err != nil {
 			return &ValidationError{Name: "auth_url", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.auth_url": %w`, err)}
 		}
 	}
-	if v, ok := opu.mutation.TokenURL(); ok {
+	if v, ok := _u.mutation.TokenURL(); ok {
 		if err := oauthprovider.TokenURLValidator(v); err != nil {
 			return &ValidationError{Name: "token_url", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.token_url": %w`, err)}
 		}
 	}
-	if v, ok := opu.mutation.UserInfoURL(); ok {
+	if v, ok := _u.mutation.UserInfoURL(); ok {
 		if err := oauthprovider.UserInfoURLValidator(v); err != nil {
 			return &ValidationError{Name: "user_info_url", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.user_info_url": %w`, err)}
 		}
 	}
-	if v, ok := opu.mutation.RedirectURI(); ok {
+	if v, ok := _u.mutation.RedirectURI(); ok {
 		if err := oauthprovider.RedirectURIValidator(v); err != nil {
 			return &ValidationError{Name: "redirect_uri", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.redirect_uri": %w`, err)}
 		}
@@ -247,58 +247,58 @@ func (opu *OAuthProviderUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (opu *OAuthProviderUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OAuthProviderUpdate {
-	opu.modifiers = append(opu.modifiers, modifiers...)
-	return opu
+func (_u *OAuthProviderUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OAuthProviderUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (opu *OAuthProviderUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := opu.check(); err != nil {
-		return n, err
+func (_u *OAuthProviderUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(oauthprovider.Table, oauthprovider.Columns, sqlgraph.NewFieldSpec(oauthprovider.FieldID, field.TypeInt))
-	if ps := opu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := opu.mutation.Provider(); ok {
+	if value, ok := _u.mutation.Provider(); ok {
 		_spec.SetField(oauthprovider.FieldProvider, field.TypeString, value)
 	}
-	if value, ok := opu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(oauthprovider.FieldName, field.TypeString, value)
 	}
-	if value, ok := opu.mutation.ClientID(); ok {
+	if value, ok := _u.mutation.ClientID(); ok {
 		_spec.SetField(oauthprovider.FieldClientID, field.TypeString, value)
 	}
-	if value, ok := opu.mutation.ClientSecret(); ok {
+	if value, ok := _u.mutation.ClientSecret(); ok {
 		_spec.SetField(oauthprovider.FieldClientSecret, field.TypeString, value)
 	}
-	if value, ok := opu.mutation.AuthURL(); ok {
+	if value, ok := _u.mutation.AuthURL(); ok {
 		_spec.SetField(oauthprovider.FieldAuthURL, field.TypeString, value)
 	}
-	if value, ok := opu.mutation.TokenURL(); ok {
+	if value, ok := _u.mutation.TokenURL(); ok {
 		_spec.SetField(oauthprovider.FieldTokenURL, field.TypeString, value)
 	}
-	if value, ok := opu.mutation.UserInfoURL(); ok {
+	if value, ok := _u.mutation.UserInfoURL(); ok {
 		_spec.SetField(oauthprovider.FieldUserInfoURL, field.TypeString, value)
 	}
-	if value, ok := opu.mutation.RedirectURI(); ok {
+	if value, ok := _u.mutation.RedirectURI(); ok {
 		_spec.SetField(oauthprovider.FieldRedirectURI, field.TypeString, value)
 	}
-	if value, ok := opu.mutation.Scopes(); ok {
+	if value, ok := _u.mutation.Scopes(); ok {
 		_spec.SetField(oauthprovider.FieldScopes, field.TypeString, value)
 	}
-	if opu.mutation.ScopesCleared() {
+	if _u.mutation.ScopesCleared() {
 		_spec.ClearField(oauthprovider.FieldScopes, field.TypeString)
 	}
-	if value, ok := opu.mutation.Enabled(); ok {
+	if value, ok := _u.mutation.Enabled(); ok {
 		_spec.SetField(oauthprovider.FieldEnabled, field.TypeBool, value)
 	}
-	_spec.AddModifiers(opu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, opu.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{oauthprovider.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -306,8 +306,8 @@ func (opu *OAuthProviderUpdate) sqlSave(ctx context.Context) (n int, err error) 
 		}
 		return 0, err
 	}
-	opu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // OAuthProviderUpdateOne is the builder for updating a single OAuthProvider entity.
@@ -320,177 +320,177 @@ type OAuthProviderUpdateOne struct {
 }
 
 // SetProvider sets the "provider" field.
-func (opuo *OAuthProviderUpdateOne) SetProvider(s string) *OAuthProviderUpdateOne {
-	opuo.mutation.SetProvider(s)
-	return opuo
+func (_u *OAuthProviderUpdateOne) SetProvider(v string) *OAuthProviderUpdateOne {
+	_u.mutation.SetProvider(v)
+	return _u
 }
 
 // SetNillableProvider sets the "provider" field if the given value is not nil.
-func (opuo *OAuthProviderUpdateOne) SetNillableProvider(s *string) *OAuthProviderUpdateOne {
-	if s != nil {
-		opuo.SetProvider(*s)
+func (_u *OAuthProviderUpdateOne) SetNillableProvider(v *string) *OAuthProviderUpdateOne {
+	if v != nil {
+		_u.SetProvider(*v)
 	}
-	return opuo
+	return _u
 }
 
 // SetName sets the "name" field.
-func (opuo *OAuthProviderUpdateOne) SetName(s string) *OAuthProviderUpdateOne {
-	opuo.mutation.SetName(s)
-	return opuo
+func (_u *OAuthProviderUpdateOne) SetName(v string) *OAuthProviderUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (opuo *OAuthProviderUpdateOne) SetNillableName(s *string) *OAuthProviderUpdateOne {
-	if s != nil {
-		opuo.SetName(*s)
+func (_u *OAuthProviderUpdateOne) SetNillableName(v *string) *OAuthProviderUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return opuo
+	return _u
 }
 
 // SetClientID sets the "client_id" field.
-func (opuo *OAuthProviderUpdateOne) SetClientID(s string) *OAuthProviderUpdateOne {
-	opuo.mutation.SetClientID(s)
-	return opuo
+func (_u *OAuthProviderUpdateOne) SetClientID(v string) *OAuthProviderUpdateOne {
+	_u.mutation.SetClientID(v)
+	return _u
 }
 
 // SetNillableClientID sets the "client_id" field if the given value is not nil.
-func (opuo *OAuthProviderUpdateOne) SetNillableClientID(s *string) *OAuthProviderUpdateOne {
-	if s != nil {
-		opuo.SetClientID(*s)
+func (_u *OAuthProviderUpdateOne) SetNillableClientID(v *string) *OAuthProviderUpdateOne {
+	if v != nil {
+		_u.SetClientID(*v)
 	}
-	return opuo
+	return _u
 }
 
 // SetClientSecret sets the "client_secret" field.
-func (opuo *OAuthProviderUpdateOne) SetClientSecret(s string) *OAuthProviderUpdateOne {
-	opuo.mutation.SetClientSecret(s)
-	return opuo
+func (_u *OAuthProviderUpdateOne) SetClientSecret(v string) *OAuthProviderUpdateOne {
+	_u.mutation.SetClientSecret(v)
+	return _u
 }
 
 // SetNillableClientSecret sets the "client_secret" field if the given value is not nil.
-func (opuo *OAuthProviderUpdateOne) SetNillableClientSecret(s *string) *OAuthProviderUpdateOne {
-	if s != nil {
-		opuo.SetClientSecret(*s)
+func (_u *OAuthProviderUpdateOne) SetNillableClientSecret(v *string) *OAuthProviderUpdateOne {
+	if v != nil {
+		_u.SetClientSecret(*v)
 	}
-	return opuo
+	return _u
 }
 
 // SetAuthURL sets the "auth_url" field.
-func (opuo *OAuthProviderUpdateOne) SetAuthURL(s string) *OAuthProviderUpdateOne {
-	opuo.mutation.SetAuthURL(s)
-	return opuo
+func (_u *OAuthProviderUpdateOne) SetAuthURL(v string) *OAuthProviderUpdateOne {
+	_u.mutation.SetAuthURL(v)
+	return _u
 }
 
 // SetNillableAuthURL sets the "auth_url" field if the given value is not nil.
-func (opuo *OAuthProviderUpdateOne) SetNillableAuthURL(s *string) *OAuthProviderUpdateOne {
-	if s != nil {
-		opuo.SetAuthURL(*s)
+func (_u *OAuthProviderUpdateOne) SetNillableAuthURL(v *string) *OAuthProviderUpdateOne {
+	if v != nil {
+		_u.SetAuthURL(*v)
 	}
-	return opuo
+	return _u
 }
 
 // SetTokenURL sets the "token_url" field.
-func (opuo *OAuthProviderUpdateOne) SetTokenURL(s string) *OAuthProviderUpdateOne {
-	opuo.mutation.SetTokenURL(s)
-	return opuo
+func (_u *OAuthProviderUpdateOne) SetTokenURL(v string) *OAuthProviderUpdateOne {
+	_u.mutation.SetTokenURL(v)
+	return _u
 }
 
 // SetNillableTokenURL sets the "token_url" field if the given value is not nil.
-func (opuo *OAuthProviderUpdateOne) SetNillableTokenURL(s *string) *OAuthProviderUpdateOne {
-	if s != nil {
-		opuo.SetTokenURL(*s)
+func (_u *OAuthProviderUpdateOne) SetNillableTokenURL(v *string) *OAuthProviderUpdateOne {
+	if v != nil {
+		_u.SetTokenURL(*v)
 	}
-	return opuo
+	return _u
 }
 
 // SetUserInfoURL sets the "user_info_url" field.
-func (opuo *OAuthProviderUpdateOne) SetUserInfoURL(s string) *OAuthProviderUpdateOne {
-	opuo.mutation.SetUserInfoURL(s)
-	return opuo
+func (_u *OAuthProviderUpdateOne) SetUserInfoURL(v string) *OAuthProviderUpdateOne {
+	_u.mutation.SetUserInfoURL(v)
+	return _u
 }
 
 // SetNillableUserInfoURL sets the "user_info_url" field if the given value is not nil.
-func (opuo *OAuthProviderUpdateOne) SetNillableUserInfoURL(s *string) *OAuthProviderUpdateOne {
-	if s != nil {
-		opuo.SetUserInfoURL(*s)
+func (_u *OAuthProviderUpdateOne) SetNillableUserInfoURL(v *string) *OAuthProviderUpdateOne {
+	if v != nil {
+		_u.SetUserInfoURL(*v)
 	}
-	return opuo
+	return _u
 }
 
 // SetRedirectURI sets the "redirect_uri" field.
-func (opuo *OAuthProviderUpdateOne) SetRedirectURI(s string) *OAuthProviderUpdateOne {
-	opuo.mutation.SetRedirectURI(s)
-	return opuo
+func (_u *OAuthProviderUpdateOne) SetRedirectURI(v string) *OAuthProviderUpdateOne {
+	_u.mutation.SetRedirectURI(v)
+	return _u
 }
 
 // SetNillableRedirectURI sets the "redirect_uri" field if the given value is not nil.
-func (opuo *OAuthProviderUpdateOne) SetNillableRedirectURI(s *string) *OAuthProviderUpdateOne {
-	if s != nil {
-		opuo.SetRedirectURI(*s)
+func (_u *OAuthProviderUpdateOne) SetNillableRedirectURI(v *string) *OAuthProviderUpdateOne {
+	if v != nil {
+		_u.SetRedirectURI(*v)
 	}
-	return opuo
+	return _u
 }
 
 // SetScopes sets the "scopes" field.
-func (opuo *OAuthProviderUpdateOne) SetScopes(s string) *OAuthProviderUpdateOne {
-	opuo.mutation.SetScopes(s)
-	return opuo
+func (_u *OAuthProviderUpdateOne) SetScopes(v string) *OAuthProviderUpdateOne {
+	_u.mutation.SetScopes(v)
+	return _u
 }
 
 // SetNillableScopes sets the "scopes" field if the given value is not nil.
-func (opuo *OAuthProviderUpdateOne) SetNillableScopes(s *string) *OAuthProviderUpdateOne {
-	if s != nil {
-		opuo.SetScopes(*s)
+func (_u *OAuthProviderUpdateOne) SetNillableScopes(v *string) *OAuthProviderUpdateOne {
+	if v != nil {
+		_u.SetScopes(*v)
 	}
-	return opuo
+	return _u
 }
 
 // ClearScopes clears the value of the "scopes" field.
-func (opuo *OAuthProviderUpdateOne) ClearScopes() *OAuthProviderUpdateOne {
-	opuo.mutation.ClearScopes()
-	return opuo
+func (_u *OAuthProviderUpdateOne) ClearScopes() *OAuthProviderUpdateOne {
+	_u.mutation.ClearScopes()
+	return _u
 }
 
 // SetEnabled sets the "enabled" field.
-func (opuo *OAuthProviderUpdateOne) SetEnabled(b bool) *OAuthProviderUpdateOne {
-	opuo.mutation.SetEnabled(b)
-	return opuo
+func (_u *OAuthProviderUpdateOne) SetEnabled(v bool) *OAuthProviderUpdateOne {
+	_u.mutation.SetEnabled(v)
+	return _u
 }
 
 // SetNillableEnabled sets the "enabled" field if the given value is not nil.
-func (opuo *OAuthProviderUpdateOne) SetNillableEnabled(b *bool) *OAuthProviderUpdateOne {
-	if b != nil {
-		opuo.SetEnabled(*b)
+func (_u *OAuthProviderUpdateOne) SetNillableEnabled(v *bool) *OAuthProviderUpdateOne {
+	if v != nil {
+		_u.SetEnabled(*v)
 	}
-	return opuo
+	return _u
 }
 
 // Mutation returns the OAuthProviderMutation object of the builder.
-func (opuo *OAuthProviderUpdateOne) Mutation() *OAuthProviderMutation {
-	return opuo.mutation
+func (_u *OAuthProviderUpdateOne) Mutation() *OAuthProviderMutation {
+	return _u.mutation
 }
 
 // Where appends a list predicates to the OAuthProviderUpdate builder.
-func (opuo *OAuthProviderUpdateOne) Where(ps ...predicate.OAuthProvider) *OAuthProviderUpdateOne {
-	opuo.mutation.Where(ps...)
-	return opuo
+func (_u *OAuthProviderUpdateOne) Where(ps ...predicate.OAuthProvider) *OAuthProviderUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (opuo *OAuthProviderUpdateOne) Select(field string, fields ...string) *OAuthProviderUpdateOne {
-	opuo.fields = append([]string{field}, fields...)
-	return opuo
+func (_u *OAuthProviderUpdateOne) Select(field string, fields ...string) *OAuthProviderUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated OAuthProvider entity.
-func (opuo *OAuthProviderUpdateOne) Save(ctx context.Context) (*OAuthProvider, error) {
-	return withHooks(ctx, opuo.sqlSave, opuo.mutation, opuo.hooks)
+func (_u *OAuthProviderUpdateOne) Save(ctx context.Context) (*OAuthProvider, error) {
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (opuo *OAuthProviderUpdateOne) SaveX(ctx context.Context) *OAuthProvider {
-	node, err := opuo.Save(ctx)
+func (_u *OAuthProviderUpdateOne) SaveX(ctx context.Context) *OAuthProvider {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -498,51 +498,51 @@ func (opuo *OAuthProviderUpdateOne) SaveX(ctx context.Context) *OAuthProvider {
 }
 
 // Exec executes the query on the entity.
-func (opuo *OAuthProviderUpdateOne) Exec(ctx context.Context) error {
-	_, err := opuo.Save(ctx)
+func (_u *OAuthProviderUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (opuo *OAuthProviderUpdateOne) ExecX(ctx context.Context) {
-	if err := opuo.Exec(ctx); err != nil {
+func (_u *OAuthProviderUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (opuo *OAuthProviderUpdateOne) check() error {
-	if v, ok := opuo.mutation.Name(); ok {
+func (_u *OAuthProviderUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := oauthprovider.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.name": %w`, err)}
 		}
 	}
-	if v, ok := opuo.mutation.ClientID(); ok {
+	if v, ok := _u.mutation.ClientID(); ok {
 		if err := oauthprovider.ClientIDValidator(v); err != nil {
 			return &ValidationError{Name: "client_id", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.client_id": %w`, err)}
 		}
 	}
-	if v, ok := opuo.mutation.ClientSecret(); ok {
+	if v, ok := _u.mutation.ClientSecret(); ok {
 		if err := oauthprovider.ClientSecretValidator(v); err != nil {
 			return &ValidationError{Name: "client_secret", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.client_secret": %w`, err)}
 		}
 	}
-	if v, ok := opuo.mutation.AuthURL(); ok {
+	if v, ok := _u.mutation.AuthURL(); ok {
 		if err := oauthprovider.AuthURLValidator(v); err != nil {
 			return &ValidationError{Name: "auth_url", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.auth_url": %w`, err)}
 		}
 	}
-	if v, ok := opuo.mutation.TokenURL(); ok {
+	if v, ok := _u.mutation.TokenURL(); ok {
 		if err := oauthprovider.TokenURLValidator(v); err != nil {
 			return &ValidationError{Name: "token_url", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.token_url": %w`, err)}
 		}
 	}
-	if v, ok := opuo.mutation.UserInfoURL(); ok {
+	if v, ok := _u.mutation.UserInfoURL(); ok {
 		if err := oauthprovider.UserInfoURLValidator(v); err != nil {
 			return &ValidationError{Name: "user_info_url", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.user_info_url": %w`, err)}
 		}
 	}
-	if v, ok := opuo.mutation.RedirectURI(); ok {
+	if v, ok := _u.mutation.RedirectURI(); ok {
 		if err := oauthprovider.RedirectURIValidator(v); err != nil {
 			return &ValidationError{Name: "redirect_uri", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.redirect_uri": %w`, err)}
 		}
@@ -551,22 +551,22 @@ func (opuo *OAuthProviderUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (opuo *OAuthProviderUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OAuthProviderUpdateOne {
-	opuo.modifiers = append(opuo.modifiers, modifiers...)
-	return opuo
+func (_u *OAuthProviderUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OAuthProviderUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (opuo *OAuthProviderUpdateOne) sqlSave(ctx context.Context) (_node *OAuthProvider, err error) {
-	if err := opuo.check(); err != nil {
+func (_u *OAuthProviderUpdateOne) sqlSave(ctx context.Context) (_node *OAuthProvider, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(oauthprovider.Table, oauthprovider.Columns, sqlgraph.NewFieldSpec(oauthprovider.FieldID, field.TypeInt))
-	id, ok := opuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "OAuthProvider.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := opuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, oauthprovider.FieldID)
 		for _, f := range fields {
@@ -578,51 +578,51 @@ func (opuo *OAuthProviderUpdateOne) sqlSave(ctx context.Context) (_node *OAuthPr
 			}
 		}
 	}
-	if ps := opuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if value, ok := opuo.mutation.Provider(); ok {
+	if value, ok := _u.mutation.Provider(); ok {
 		_spec.SetField(oauthprovider.FieldProvider, field.TypeString, value)
 	}
-	if value, ok := opuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(oauthprovider.FieldName, field.TypeString, value)
 	}
-	if value, ok := opuo.mutation.ClientID(); ok {
+	if value, ok := _u.mutation.ClientID(); ok {
 		_spec.SetField(oauthprovider.FieldClientID, field.TypeString, value)
 	}
-	if value, ok := opuo.mutation.ClientSecret(); ok {
+	if value, ok := _u.mutation.ClientSecret(); ok {
 		_spec.SetField(oauthprovider.FieldClientSecret, field.TypeString, value)
 	}
-	if value, ok := opuo.mutation.AuthURL(); ok {
+	if value, ok := _u.mutation.AuthURL(); ok {
 		_spec.SetField(oauthprovider.FieldAuthURL, field.TypeString, value)
 	}
-	if value, ok := opuo.mutation.TokenURL(); ok {
+	if value, ok := _u.mutation.TokenURL(); ok {
 		_spec.SetField(oauthprovider.FieldTokenURL, field.TypeString, value)
 	}
-	if value, ok := opuo.mutation.UserInfoURL(); ok {
+	if value, ok := _u.mutation.UserInfoURL(); ok {
 		_spec.SetField(oauthprovider.FieldUserInfoURL, field.TypeString, value)
 	}
-	if value, ok := opuo.mutation.RedirectURI(); ok {
+	if value, ok := _u.mutation.RedirectURI(); ok {
 		_spec.SetField(oauthprovider.FieldRedirectURI, field.TypeString, value)
 	}
-	if value, ok := opuo.mutation.Scopes(); ok {
+	if value, ok := _u.mutation.Scopes(); ok {
 		_spec.SetField(oauthprovider.FieldScopes, field.TypeString, value)
 	}
-	if opuo.mutation.ScopesCleared() {
+	if _u.mutation.ScopesCleared() {
 		_spec.ClearField(oauthprovider.FieldScopes, field.TypeString)
 	}
-	if value, ok := opuo.mutation.Enabled(); ok {
+	if value, ok := _u.mutation.Enabled(); ok {
 		_spec.SetField(oauthprovider.FieldEnabled, field.TypeBool, value)
 	}
-	_spec.AddModifiers(opuo.modifiers...)
-	_node = &OAuthProvider{config: opuo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &OAuthProvider{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, opuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{oauthprovider.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -630,6 +630,6 @@ func (opuo *OAuthProviderUpdateOne) sqlSave(ctx context.Context) (_node *OAuthPr
 		}
 		return nil, err
 	}
-	opuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

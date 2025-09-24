@@ -28,198 +28,198 @@ type TenantUpdate struct {
 }
 
 // Where appends a list predicates to the TenantUpdate builder.
-func (tu *TenantUpdate) Where(ps ...predicate.Tenant) *TenantUpdate {
-	tu.mutation.Where(ps...)
-	return tu
+func (_u *TenantUpdate) Where(ps ...predicate.Tenant) *TenantUpdate {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tu *TenantUpdate) SetUpdatedAt(t time.Time) *TenantUpdate {
-	tu.mutation.SetUpdatedAt(t)
-	return tu
+func (_u *TenantUpdate) SetUpdatedAt(v time.Time) *TenantUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (tu *TenantUpdate) ClearUpdatedAt() *TenantUpdate {
-	tu.mutation.ClearUpdatedAt()
-	return tu
+func (_u *TenantUpdate) ClearUpdatedAt() *TenantUpdate {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (tu *TenantUpdate) SetName(s string) *TenantUpdate {
-	tu.mutation.SetName(s)
-	return tu
+func (_u *TenantUpdate) SetName(v string) *TenantUpdate {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (tu *TenantUpdate) SetNillableName(s *string) *TenantUpdate {
-	if s != nil {
-		tu.SetName(*s)
+func (_u *TenantUpdate) SetNillableName(v *string) *TenantUpdate {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return tu
+	return _u
 }
 
 // SetMaxUsers sets the "max_users" field.
-func (tu *TenantUpdate) SetMaxUsers(i int) *TenantUpdate {
-	tu.mutation.ResetMaxUsers()
-	tu.mutation.SetMaxUsers(i)
-	return tu
+func (_u *TenantUpdate) SetMaxUsers(v int) *TenantUpdate {
+	_u.mutation.ResetMaxUsers()
+	_u.mutation.SetMaxUsers(v)
+	return _u
 }
 
 // SetNillableMaxUsers sets the "max_users" field if the given value is not nil.
-func (tu *TenantUpdate) SetNillableMaxUsers(i *int) *TenantUpdate {
-	if i != nil {
-		tu.SetMaxUsers(*i)
+func (_u *TenantUpdate) SetNillableMaxUsers(v *int) *TenantUpdate {
+	if v != nil {
+		_u.SetMaxUsers(*v)
 	}
-	return tu
+	return _u
 }
 
-// AddMaxUsers adds i to the "max_users" field.
-func (tu *TenantUpdate) AddMaxUsers(i int) *TenantUpdate {
-	tu.mutation.AddMaxUsers(i)
-	return tu
+// AddMaxUsers adds value to the "max_users" field.
+func (_u *TenantUpdate) AddMaxUsers(v int) *TenantUpdate {
+	_u.mutation.AddMaxUsers(v)
+	return _u
 }
 
 // SetFeatures sets the "features" field.
-func (tu *TenantUpdate) SetFeatures(s []string) *TenantUpdate {
-	tu.mutation.SetFeatures(s)
-	return tu
+func (_u *TenantUpdate) SetFeatures(v []string) *TenantUpdate {
+	_u.mutation.SetFeatures(v)
+	return _u
 }
 
-// AppendFeatures appends s to the "features" field.
-func (tu *TenantUpdate) AppendFeatures(s []string) *TenantUpdate {
-	tu.mutation.AppendFeatures(s)
-	return tu
+// AppendFeatures appends value to the "features" field.
+func (_u *TenantUpdate) AppendFeatures(v []string) *TenantUpdate {
+	_u.mutation.AppendFeatures(v)
+	return _u
 }
 
 // ClearFeatures clears the value of the "features" field.
-func (tu *TenantUpdate) ClearFeatures() *TenantUpdate {
-	tu.mutation.ClearFeatures()
-	return tu
+func (_u *TenantUpdate) ClearFeatures() *TenantUpdate {
+	_u.mutation.ClearFeatures()
+	return _u
 }
 
 // AddTenantUserIDs adds the "tenant_users" edge to the TenantUser entity by IDs.
-func (tu *TenantUpdate) AddTenantUserIDs(ids ...int) *TenantUpdate {
-	tu.mutation.AddTenantUserIDs(ids...)
-	return tu
+func (_u *TenantUpdate) AddTenantUserIDs(ids ...int) *TenantUpdate {
+	_u.mutation.AddTenantUserIDs(ids...)
+	return _u
 }
 
 // AddTenantUsers adds the "tenant_users" edges to the TenantUser entity.
-func (tu *TenantUpdate) AddTenantUsers(t ...*TenantUser) *TenantUpdate {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUpdate) AddTenantUsers(v ...*TenantUser) *TenantUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tu.AddTenantUserIDs(ids...)
+	return _u.AddTenantUserIDs(ids...)
 }
 
 // AddRoleIDs adds the "roles" edge to the TenantRole entity by IDs.
-func (tu *TenantUpdate) AddRoleIDs(ids ...int) *TenantUpdate {
-	tu.mutation.AddRoleIDs(ids...)
-	return tu
+func (_u *TenantUpdate) AddRoleIDs(ids ...int) *TenantUpdate {
+	_u.mutation.AddRoleIDs(ids...)
+	return _u
 }
 
 // AddRoles adds the "roles" edges to the TenantRole entity.
-func (tu *TenantUpdate) AddRoles(t ...*TenantRole) *TenantUpdate {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUpdate) AddRoles(v ...*TenantRole) *TenantUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tu.AddRoleIDs(ids...)
+	return _u.AddRoleIDs(ids...)
 }
 
 // AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
-func (tu *TenantUpdate) AddOrganizationIDs(ids ...int) *TenantUpdate {
-	tu.mutation.AddOrganizationIDs(ids...)
-	return tu
+func (_u *TenantUpdate) AddOrganizationIDs(ids ...int) *TenantUpdate {
+	_u.mutation.AddOrganizationIDs(ids...)
+	return _u
 }
 
 // AddOrganizations adds the "organizations" edges to the Organization entity.
-func (tu *TenantUpdate) AddOrganizations(o ...*Organization) *TenantUpdate {
-	ids := make([]int, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *TenantUpdate) AddOrganizations(v ...*Organization) *TenantUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tu.AddOrganizationIDs(ids...)
+	return _u.AddOrganizationIDs(ids...)
 }
 
 // Mutation returns the TenantMutation object of the builder.
-func (tu *TenantUpdate) Mutation() *TenantMutation {
-	return tu.mutation
+func (_u *TenantUpdate) Mutation() *TenantMutation {
+	return _u.mutation
 }
 
 // ClearTenantUsers clears all "tenant_users" edges to the TenantUser entity.
-func (tu *TenantUpdate) ClearTenantUsers() *TenantUpdate {
-	tu.mutation.ClearTenantUsers()
-	return tu
+func (_u *TenantUpdate) ClearTenantUsers() *TenantUpdate {
+	_u.mutation.ClearTenantUsers()
+	return _u
 }
 
 // RemoveTenantUserIDs removes the "tenant_users" edge to TenantUser entities by IDs.
-func (tu *TenantUpdate) RemoveTenantUserIDs(ids ...int) *TenantUpdate {
-	tu.mutation.RemoveTenantUserIDs(ids...)
-	return tu
+func (_u *TenantUpdate) RemoveTenantUserIDs(ids ...int) *TenantUpdate {
+	_u.mutation.RemoveTenantUserIDs(ids...)
+	return _u
 }
 
 // RemoveTenantUsers removes "tenant_users" edges to TenantUser entities.
-func (tu *TenantUpdate) RemoveTenantUsers(t ...*TenantUser) *TenantUpdate {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUpdate) RemoveTenantUsers(v ...*TenantUser) *TenantUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tu.RemoveTenantUserIDs(ids...)
+	return _u.RemoveTenantUserIDs(ids...)
 }
 
 // ClearRoles clears all "roles" edges to the TenantRole entity.
-func (tu *TenantUpdate) ClearRoles() *TenantUpdate {
-	tu.mutation.ClearRoles()
-	return tu
+func (_u *TenantUpdate) ClearRoles() *TenantUpdate {
+	_u.mutation.ClearRoles()
+	return _u
 }
 
 // RemoveRoleIDs removes the "roles" edge to TenantRole entities by IDs.
-func (tu *TenantUpdate) RemoveRoleIDs(ids ...int) *TenantUpdate {
-	tu.mutation.RemoveRoleIDs(ids...)
-	return tu
+func (_u *TenantUpdate) RemoveRoleIDs(ids ...int) *TenantUpdate {
+	_u.mutation.RemoveRoleIDs(ids...)
+	return _u
 }
 
 // RemoveRoles removes "roles" edges to TenantRole entities.
-func (tu *TenantUpdate) RemoveRoles(t ...*TenantRole) *TenantUpdate {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUpdate) RemoveRoles(v ...*TenantRole) *TenantUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tu.RemoveRoleIDs(ids...)
+	return _u.RemoveRoleIDs(ids...)
 }
 
 // ClearOrganizations clears all "organizations" edges to the Organization entity.
-func (tu *TenantUpdate) ClearOrganizations() *TenantUpdate {
-	tu.mutation.ClearOrganizations()
-	return tu
+func (_u *TenantUpdate) ClearOrganizations() *TenantUpdate {
+	_u.mutation.ClearOrganizations()
+	return _u
 }
 
 // RemoveOrganizationIDs removes the "organizations" edge to Organization entities by IDs.
-func (tu *TenantUpdate) RemoveOrganizationIDs(ids ...int) *TenantUpdate {
-	tu.mutation.RemoveOrganizationIDs(ids...)
-	return tu
+func (_u *TenantUpdate) RemoveOrganizationIDs(ids ...int) *TenantUpdate {
+	_u.mutation.RemoveOrganizationIDs(ids...)
+	return _u
 }
 
 // RemoveOrganizations removes "organizations" edges to Organization entities.
-func (tu *TenantUpdate) RemoveOrganizations(o ...*Organization) *TenantUpdate {
-	ids := make([]int, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *TenantUpdate) RemoveOrganizations(v ...*Organization) *TenantUpdate {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tu.RemoveOrganizationIDs(ids...)
+	return _u.RemoveOrganizationIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (tu *TenantUpdate) Save(ctx context.Context) (int, error) {
-	tu.defaults()
-	return withHooks(ctx, tu.sqlSave, tu.mutation, tu.hooks)
+func (_u *TenantUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tu *TenantUpdate) SaveX(ctx context.Context) int {
-	affected, err := tu.Save(ctx)
+func (_u *TenantUpdate) SaveX(ctx context.Context) int {
+	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -227,29 +227,29 @@ func (tu *TenantUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (tu *TenantUpdate) Exec(ctx context.Context) error {
-	_, err := tu.Save(ctx)
+func (_u *TenantUpdate) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tu *TenantUpdate) ExecX(ctx context.Context) {
-	if err := tu.Exec(ctx); err != nil {
+func (_u *TenantUpdate) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tu *TenantUpdate) defaults() {
-	if _, ok := tu.mutation.UpdatedAt(); !ok && !tu.mutation.UpdatedAtCleared() {
+func (_u *TenantUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		v := tenant.UpdateDefaultUpdatedAt()
-		tu.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tu *TenantUpdate) check() error {
-	if v, ok := tu.mutation.Name(); ok {
+func (_u *TenantUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := tenant.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Tenant.name": %w`, err)}
 		}
@@ -258,53 +258,53 @@ func (tu *TenantUpdate) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tu *TenantUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantUpdate {
-	tu.modifiers = append(tu.modifiers, modifiers...)
-	return tu
+func (_u *TenantUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantUpdate {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	if err := tu.check(); err != nil {
-		return n, err
+func (_u *TenantUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(tenant.Table, tenant.Columns, sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt))
-	if ps := tu.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tu.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(tenant.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := tu.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(tenant.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if tu.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(tenant.FieldUpdatedAt, field.TypeTime)
 	}
-	if value, ok := tu.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(tenant.FieldName, field.TypeString, value)
 	}
-	if value, ok := tu.mutation.MaxUsers(); ok {
+	if value, ok := _u.mutation.MaxUsers(); ok {
 		_spec.SetField(tenant.FieldMaxUsers, field.TypeInt, value)
 	}
-	if value, ok := tu.mutation.AddedMaxUsers(); ok {
+	if value, ok := _u.mutation.AddedMaxUsers(); ok {
 		_spec.AddField(tenant.FieldMaxUsers, field.TypeInt, value)
 	}
-	if value, ok := tu.mutation.Features(); ok {
+	if value, ok := _u.mutation.Features(); ok {
 		_spec.SetField(tenant.FieldFeatures, field.TypeJSON, value)
 	}
-	if value, ok := tu.mutation.AppendedFeatures(); ok {
+	if value, ok := _u.mutation.AppendedFeatures(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, tenant.FieldFeatures, value)
 		})
 	}
-	if tu.mutation.FeaturesCleared() {
+	if _u.mutation.FeaturesCleared() {
 		_spec.ClearField(tenant.FieldFeatures, field.TypeJSON)
 	}
-	if tu.mutation.TenantUsersCleared() {
+	if _u.mutation.TenantUsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -317,7 +317,7 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.RemovedTenantUsersIDs(); len(nodes) > 0 && !tu.mutation.TenantUsersCleared() {
+	if nodes := _u.mutation.RemovedTenantUsersIDs(); len(nodes) > 0 && !_u.mutation.TenantUsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -333,7 +333,7 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.TenantUsersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TenantUsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -349,7 +349,7 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tu.mutation.RolesCleared() {
+	if _u.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -362,7 +362,7 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.RemovedRolesIDs(); len(nodes) > 0 && !tu.mutation.RolesCleared() {
+	if nodes := _u.mutation.RemovedRolesIDs(); len(nodes) > 0 && !_u.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -378,7 +378,7 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.RolesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RolesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -394,7 +394,7 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tu.mutation.OrganizationsCleared() {
+	if _u.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -407,7 +407,7 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !tu.mutation.OrganizationsCleared() {
+	if nodes := _u.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !_u.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -423,7 +423,7 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tu.mutation.OrganizationsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrganizationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -439,8 +439,8 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(tu.modifiers...)
-	if n, err = sqlgraph.UpdateNodes(ctx, tu.driver, _spec); err != nil {
+	_spec.AddModifiers(_u.modifiers...)
+	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{tenant.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -448,8 +448,8 @@ func (tu *TenantUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		return 0, err
 	}
-	tu.mutation.done = true
-	return n, nil
+	_u.mutation.done = true
+	return _node, nil
 }
 
 // TenantUpdateOne is the builder for updating a single Tenant entity.
@@ -462,205 +462,205 @@ type TenantUpdateOne struct {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (tuo *TenantUpdateOne) SetUpdatedAt(t time.Time) *TenantUpdateOne {
-	tuo.mutation.SetUpdatedAt(t)
-	return tuo
+func (_u *TenantUpdateOne) SetUpdatedAt(v time.Time) *TenantUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (tuo *TenantUpdateOne) ClearUpdatedAt() *TenantUpdateOne {
-	tuo.mutation.ClearUpdatedAt()
-	return tuo
+func (_u *TenantUpdateOne) ClearUpdatedAt() *TenantUpdateOne {
+	_u.mutation.ClearUpdatedAt()
+	return _u
 }
 
 // SetName sets the "name" field.
-func (tuo *TenantUpdateOne) SetName(s string) *TenantUpdateOne {
-	tuo.mutation.SetName(s)
-	return tuo
+func (_u *TenantUpdateOne) SetName(v string) *TenantUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
 }
 
 // SetNillableName sets the "name" field if the given value is not nil.
-func (tuo *TenantUpdateOne) SetNillableName(s *string) *TenantUpdateOne {
-	if s != nil {
-		tuo.SetName(*s)
+func (_u *TenantUpdateOne) SetNillableName(v *string) *TenantUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
 	}
-	return tuo
+	return _u
 }
 
 // SetMaxUsers sets the "max_users" field.
-func (tuo *TenantUpdateOne) SetMaxUsers(i int) *TenantUpdateOne {
-	tuo.mutation.ResetMaxUsers()
-	tuo.mutation.SetMaxUsers(i)
-	return tuo
+func (_u *TenantUpdateOne) SetMaxUsers(v int) *TenantUpdateOne {
+	_u.mutation.ResetMaxUsers()
+	_u.mutation.SetMaxUsers(v)
+	return _u
 }
 
 // SetNillableMaxUsers sets the "max_users" field if the given value is not nil.
-func (tuo *TenantUpdateOne) SetNillableMaxUsers(i *int) *TenantUpdateOne {
-	if i != nil {
-		tuo.SetMaxUsers(*i)
+func (_u *TenantUpdateOne) SetNillableMaxUsers(v *int) *TenantUpdateOne {
+	if v != nil {
+		_u.SetMaxUsers(*v)
 	}
-	return tuo
+	return _u
 }
 
-// AddMaxUsers adds i to the "max_users" field.
-func (tuo *TenantUpdateOne) AddMaxUsers(i int) *TenantUpdateOne {
-	tuo.mutation.AddMaxUsers(i)
-	return tuo
+// AddMaxUsers adds value to the "max_users" field.
+func (_u *TenantUpdateOne) AddMaxUsers(v int) *TenantUpdateOne {
+	_u.mutation.AddMaxUsers(v)
+	return _u
 }
 
 // SetFeatures sets the "features" field.
-func (tuo *TenantUpdateOne) SetFeatures(s []string) *TenantUpdateOne {
-	tuo.mutation.SetFeatures(s)
-	return tuo
+func (_u *TenantUpdateOne) SetFeatures(v []string) *TenantUpdateOne {
+	_u.mutation.SetFeatures(v)
+	return _u
 }
 
-// AppendFeatures appends s to the "features" field.
-func (tuo *TenantUpdateOne) AppendFeatures(s []string) *TenantUpdateOne {
-	tuo.mutation.AppendFeatures(s)
-	return tuo
+// AppendFeatures appends value to the "features" field.
+func (_u *TenantUpdateOne) AppendFeatures(v []string) *TenantUpdateOne {
+	_u.mutation.AppendFeatures(v)
+	return _u
 }
 
 // ClearFeatures clears the value of the "features" field.
-func (tuo *TenantUpdateOne) ClearFeatures() *TenantUpdateOne {
-	tuo.mutation.ClearFeatures()
-	return tuo
+func (_u *TenantUpdateOne) ClearFeatures() *TenantUpdateOne {
+	_u.mutation.ClearFeatures()
+	return _u
 }
 
 // AddTenantUserIDs adds the "tenant_users" edge to the TenantUser entity by IDs.
-func (tuo *TenantUpdateOne) AddTenantUserIDs(ids ...int) *TenantUpdateOne {
-	tuo.mutation.AddTenantUserIDs(ids...)
-	return tuo
+func (_u *TenantUpdateOne) AddTenantUserIDs(ids ...int) *TenantUpdateOne {
+	_u.mutation.AddTenantUserIDs(ids...)
+	return _u
 }
 
 // AddTenantUsers adds the "tenant_users" edges to the TenantUser entity.
-func (tuo *TenantUpdateOne) AddTenantUsers(t ...*TenantUser) *TenantUpdateOne {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUpdateOne) AddTenantUsers(v ...*TenantUser) *TenantUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuo.AddTenantUserIDs(ids...)
+	return _u.AddTenantUserIDs(ids...)
 }
 
 // AddRoleIDs adds the "roles" edge to the TenantRole entity by IDs.
-func (tuo *TenantUpdateOne) AddRoleIDs(ids ...int) *TenantUpdateOne {
-	tuo.mutation.AddRoleIDs(ids...)
-	return tuo
+func (_u *TenantUpdateOne) AddRoleIDs(ids ...int) *TenantUpdateOne {
+	_u.mutation.AddRoleIDs(ids...)
+	return _u
 }
 
 // AddRoles adds the "roles" edges to the TenantRole entity.
-func (tuo *TenantUpdateOne) AddRoles(t ...*TenantRole) *TenantUpdateOne {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUpdateOne) AddRoles(v ...*TenantRole) *TenantUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuo.AddRoleIDs(ids...)
+	return _u.AddRoleIDs(ids...)
 }
 
 // AddOrganizationIDs adds the "organizations" edge to the Organization entity by IDs.
-func (tuo *TenantUpdateOne) AddOrganizationIDs(ids ...int) *TenantUpdateOne {
-	tuo.mutation.AddOrganizationIDs(ids...)
-	return tuo
+func (_u *TenantUpdateOne) AddOrganizationIDs(ids ...int) *TenantUpdateOne {
+	_u.mutation.AddOrganizationIDs(ids...)
+	return _u
 }
 
 // AddOrganizations adds the "organizations" edges to the Organization entity.
-func (tuo *TenantUpdateOne) AddOrganizations(o ...*Organization) *TenantUpdateOne {
-	ids := make([]int, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *TenantUpdateOne) AddOrganizations(v ...*Organization) *TenantUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuo.AddOrganizationIDs(ids...)
+	return _u.AddOrganizationIDs(ids...)
 }
 
 // Mutation returns the TenantMutation object of the builder.
-func (tuo *TenantUpdateOne) Mutation() *TenantMutation {
-	return tuo.mutation
+func (_u *TenantUpdateOne) Mutation() *TenantMutation {
+	return _u.mutation
 }
 
 // ClearTenantUsers clears all "tenant_users" edges to the TenantUser entity.
-func (tuo *TenantUpdateOne) ClearTenantUsers() *TenantUpdateOne {
-	tuo.mutation.ClearTenantUsers()
-	return tuo
+func (_u *TenantUpdateOne) ClearTenantUsers() *TenantUpdateOne {
+	_u.mutation.ClearTenantUsers()
+	return _u
 }
 
 // RemoveTenantUserIDs removes the "tenant_users" edge to TenantUser entities by IDs.
-func (tuo *TenantUpdateOne) RemoveTenantUserIDs(ids ...int) *TenantUpdateOne {
-	tuo.mutation.RemoveTenantUserIDs(ids...)
-	return tuo
+func (_u *TenantUpdateOne) RemoveTenantUserIDs(ids ...int) *TenantUpdateOne {
+	_u.mutation.RemoveTenantUserIDs(ids...)
+	return _u
 }
 
 // RemoveTenantUsers removes "tenant_users" edges to TenantUser entities.
-func (tuo *TenantUpdateOne) RemoveTenantUsers(t ...*TenantUser) *TenantUpdateOne {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUpdateOne) RemoveTenantUsers(v ...*TenantUser) *TenantUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuo.RemoveTenantUserIDs(ids...)
+	return _u.RemoveTenantUserIDs(ids...)
 }
 
 // ClearRoles clears all "roles" edges to the TenantRole entity.
-func (tuo *TenantUpdateOne) ClearRoles() *TenantUpdateOne {
-	tuo.mutation.ClearRoles()
-	return tuo
+func (_u *TenantUpdateOne) ClearRoles() *TenantUpdateOne {
+	_u.mutation.ClearRoles()
+	return _u
 }
 
 // RemoveRoleIDs removes the "roles" edge to TenantRole entities by IDs.
-func (tuo *TenantUpdateOne) RemoveRoleIDs(ids ...int) *TenantUpdateOne {
-	tuo.mutation.RemoveRoleIDs(ids...)
-	return tuo
+func (_u *TenantUpdateOne) RemoveRoleIDs(ids ...int) *TenantUpdateOne {
+	_u.mutation.RemoveRoleIDs(ids...)
+	return _u
 }
 
 // RemoveRoles removes "roles" edges to TenantRole entities.
-func (tuo *TenantUpdateOne) RemoveRoles(t ...*TenantRole) *TenantUpdateOne {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
+func (_u *TenantUpdateOne) RemoveRoles(v ...*TenantRole) *TenantUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuo.RemoveRoleIDs(ids...)
+	return _u.RemoveRoleIDs(ids...)
 }
 
 // ClearOrganizations clears all "organizations" edges to the Organization entity.
-func (tuo *TenantUpdateOne) ClearOrganizations() *TenantUpdateOne {
-	tuo.mutation.ClearOrganizations()
-	return tuo
+func (_u *TenantUpdateOne) ClearOrganizations() *TenantUpdateOne {
+	_u.mutation.ClearOrganizations()
+	return _u
 }
 
 // RemoveOrganizationIDs removes the "organizations" edge to Organization entities by IDs.
-func (tuo *TenantUpdateOne) RemoveOrganizationIDs(ids ...int) *TenantUpdateOne {
-	tuo.mutation.RemoveOrganizationIDs(ids...)
-	return tuo
+func (_u *TenantUpdateOne) RemoveOrganizationIDs(ids ...int) *TenantUpdateOne {
+	_u.mutation.RemoveOrganizationIDs(ids...)
+	return _u
 }
 
 // RemoveOrganizations removes "organizations" edges to Organization entities.
-func (tuo *TenantUpdateOne) RemoveOrganizations(o ...*Organization) *TenantUpdateOne {
-	ids := make([]int, len(o))
-	for i := range o {
-		ids[i] = o[i].ID
+func (_u *TenantUpdateOne) RemoveOrganizations(v ...*Organization) *TenantUpdateOne {
+	ids := make([]int, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return tuo.RemoveOrganizationIDs(ids...)
+	return _u.RemoveOrganizationIDs(ids...)
 }
 
 // Where appends a list predicates to the TenantUpdate builder.
-func (tuo *TenantUpdateOne) Where(ps ...predicate.Tenant) *TenantUpdateOne {
-	tuo.mutation.Where(ps...)
-	return tuo
+func (_u *TenantUpdateOne) Where(ps ...predicate.Tenant) *TenantUpdateOne {
+	_u.mutation.Where(ps...)
+	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (tuo *TenantUpdateOne) Select(field string, fields ...string) *TenantUpdateOne {
-	tuo.fields = append([]string{field}, fields...)
-	return tuo
+func (_u *TenantUpdateOne) Select(field string, fields ...string) *TenantUpdateOne {
+	_u.fields = append([]string{field}, fields...)
+	return _u
 }
 
 // Save executes the query and returns the updated Tenant entity.
-func (tuo *TenantUpdateOne) Save(ctx context.Context) (*Tenant, error) {
-	tuo.defaults()
-	return withHooks(ctx, tuo.sqlSave, tuo.mutation, tuo.hooks)
+func (_u *TenantUpdateOne) Save(ctx context.Context) (*Tenant, error) {
+	_u.defaults()
+	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (tuo *TenantUpdateOne) SaveX(ctx context.Context) *Tenant {
-	node, err := tuo.Save(ctx)
+func (_u *TenantUpdateOne) SaveX(ctx context.Context) *Tenant {
+	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -668,29 +668,29 @@ func (tuo *TenantUpdateOne) SaveX(ctx context.Context) *Tenant {
 }
 
 // Exec executes the query on the entity.
-func (tuo *TenantUpdateOne) Exec(ctx context.Context) error {
-	_, err := tuo.Save(ctx)
+func (_u *TenantUpdateOne) Exec(ctx context.Context) error {
+	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (tuo *TenantUpdateOne) ExecX(ctx context.Context) {
-	if err := tuo.Exec(ctx); err != nil {
+func (_u *TenantUpdateOne) ExecX(ctx context.Context) {
+	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (tuo *TenantUpdateOne) defaults() {
-	if _, ok := tuo.mutation.UpdatedAt(); !ok && !tuo.mutation.UpdatedAtCleared() {
+func (_u *TenantUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		v := tenant.UpdateDefaultUpdatedAt()
-		tuo.mutation.SetUpdatedAt(v)
+		_u.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (tuo *TenantUpdateOne) check() error {
-	if v, ok := tuo.mutation.Name(); ok {
+func (_u *TenantUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
 		if err := tenant.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Tenant.name": %w`, err)}
 		}
@@ -699,22 +699,22 @@ func (tuo *TenantUpdateOne) check() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (tuo *TenantUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantUpdateOne {
-	tuo.modifiers = append(tuo.modifiers, modifiers...)
-	return tuo
+func (_u *TenantUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TenantUpdateOne {
+	_u.modifiers = append(_u.modifiers, modifiers...)
+	return _u
 }
 
-func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err error) {
-	if err := tuo.check(); err != nil {
+func (_u *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err error) {
+	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(tenant.Table, tenant.Columns, sqlgraph.NewFieldSpec(tenant.FieldID, field.TypeInt))
-	id, ok := tuo.mutation.ID()
+	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Tenant.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
-	if fields := tuo.fields; len(fields) > 0 {
+	if fields := _u.fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, tenant.FieldID)
 		for _, f := range fields {
@@ -726,43 +726,43 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 			}
 		}
 	}
-	if ps := tuo.mutation.predicates; len(ps) > 0 {
+	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if tuo.mutation.CreatedAtCleared() {
+	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(tenant.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := tuo.mutation.UpdatedAt(); ok {
+	if value, ok := _u.mutation.UpdatedAt(); ok {
 		_spec.SetField(tenant.FieldUpdatedAt, field.TypeTime, value)
 	}
-	if tuo.mutation.UpdatedAtCleared() {
+	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(tenant.FieldUpdatedAt, field.TypeTime)
 	}
-	if value, ok := tuo.mutation.Name(); ok {
+	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(tenant.FieldName, field.TypeString, value)
 	}
-	if value, ok := tuo.mutation.MaxUsers(); ok {
+	if value, ok := _u.mutation.MaxUsers(); ok {
 		_spec.SetField(tenant.FieldMaxUsers, field.TypeInt, value)
 	}
-	if value, ok := tuo.mutation.AddedMaxUsers(); ok {
+	if value, ok := _u.mutation.AddedMaxUsers(); ok {
 		_spec.AddField(tenant.FieldMaxUsers, field.TypeInt, value)
 	}
-	if value, ok := tuo.mutation.Features(); ok {
+	if value, ok := _u.mutation.Features(); ok {
 		_spec.SetField(tenant.FieldFeatures, field.TypeJSON, value)
 	}
-	if value, ok := tuo.mutation.AppendedFeatures(); ok {
+	if value, ok := _u.mutation.AppendedFeatures(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
 			sqljson.Append(u, tenant.FieldFeatures, value)
 		})
 	}
-	if tuo.mutation.FeaturesCleared() {
+	if _u.mutation.FeaturesCleared() {
 		_spec.ClearField(tenant.FieldFeatures, field.TypeJSON)
 	}
-	if tuo.mutation.TenantUsersCleared() {
+	if _u.mutation.TenantUsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -775,7 +775,7 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.RemovedTenantUsersIDs(); len(nodes) > 0 && !tuo.mutation.TenantUsersCleared() {
+	if nodes := _u.mutation.RemovedTenantUsersIDs(); len(nodes) > 0 && !_u.mutation.TenantUsersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -791,7 +791,7 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.TenantUsersIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TenantUsersIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -807,7 +807,7 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tuo.mutation.RolesCleared() {
+	if _u.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -820,7 +820,7 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.RemovedRolesIDs(); len(nodes) > 0 && !tuo.mutation.RolesCleared() {
+	if nodes := _u.mutation.RemovedRolesIDs(); len(nodes) > 0 && !_u.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -836,7 +836,7 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.RolesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RolesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -852,7 +852,7 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if tuo.mutation.OrganizationsCleared() {
+	if _u.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -865,7 +865,7 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !tuo.mutation.OrganizationsCleared() {
+	if nodes := _u.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !_u.mutation.OrganizationsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -881,7 +881,7 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := tuo.mutation.OrganizationsIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.OrganizationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
@@ -897,11 +897,11 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.AddModifiers(tuo.modifiers...)
-	_node = &Tenant{config: tuo.config}
+	_spec.AddModifiers(_u.modifiers...)
+	_node = &Tenant{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
-	if err = sqlgraph.UpdateNode(ctx, tuo.driver, _spec); err != nil {
+	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{tenant.Label}
 		} else if sqlgraph.IsConstraintError(err) {
@@ -909,6 +909,6 @@ func (tuo *TenantUpdateOne) sqlSave(ctx context.Context) (_node *Tenant, err err
 		}
 		return nil, err
 	}
-	tuo.mutation.done = true
+	_u.mutation.done = true
 	return _node, nil
 }

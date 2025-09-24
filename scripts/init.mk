@@ -21,5 +21,4 @@ init:
 	go mod tidy
 	go mod download
 	cp .env.example .env
-	cp .env.k8s.example .env.k8s
 	cp deploy/components/.env.example deploy/components/.env

@@ -15,6 +15,32 @@ keg (short for Kratos, Ent, and GraphQL) is a highly modular monorepo structure 
 * GraphQL Support: First-class GraphQL support for defining, querying, and mutating data.
 * Monorepo Structure: Centralized codebase for better dependency management and shared utilities across services.
 
+## 🚀 Quickstart
+1. clone
+    ```shell
+    git clone --recursive https://github.com/go-keg/monorepo.git
+    ```
+
+2. makefile
+    ```shell
+    make init
+    ```
+
+3. run account service
+
+    create database
+   ```shell
+   # 迁移数据库（可选）
+   go run ./cmd/account migrate
+   # 填充默认数据（可选）
+   go run ./cmd/account seeds 
+   # 启动服务
+   go run ./cmd/account
+   ```
+   
+4. [graphql playground](http://127.0.0.1:8080/graphql-ui)
+
+
 ## 📂 Project Structure
 ```
 .

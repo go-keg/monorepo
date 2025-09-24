@@ -75,7 +75,6 @@ var permissions = []*ent.Permission{
 }
 
 func SeedPermissions(ctx context.Context, client *ent.Client) error {
-
 	bulk := lo.Map(permissions, func(item *ent.Permission, index int) *ent.PermissionCreate {
 		return client.Permission.Create().SetID(item.ID).
 			SetName(item.Name).

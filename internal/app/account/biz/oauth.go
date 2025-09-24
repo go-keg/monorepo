@@ -29,7 +29,7 @@ type GoogleUserInfo struct {
 
 func (r GoogleUserInfo) Map() map[string]any {
 	data, _ := json.Marshal(r)
-	var result map[string]interface{}
+	var result map[string]any
 	_ = json.Unmarshal(data, &result)
 	return result
 }

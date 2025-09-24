@@ -41,44 +41,44 @@ type TenantUserQuery struct {
 }
 
 // Where adds a new predicate for the TenantUserQuery builder.
-func (tuq *TenantUserQuery) Where(ps ...predicate.TenantUser) *TenantUserQuery {
-	tuq.predicates = append(tuq.predicates, ps...)
-	return tuq
+func (_q *TenantUserQuery) Where(ps ...predicate.TenantUser) *TenantUserQuery {
+	_q.predicates = append(_q.predicates, ps...)
+	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (tuq *TenantUserQuery) Limit(limit int) *TenantUserQuery {
-	tuq.ctx.Limit = &limit
-	return tuq
+func (_q *TenantUserQuery) Limit(limit int) *TenantUserQuery {
+	_q.ctx.Limit = &limit
+	return _q
 }
 
 // Offset to start from.
-func (tuq *TenantUserQuery) Offset(offset int) *TenantUserQuery {
-	tuq.ctx.Offset = &offset
-	return tuq
+func (_q *TenantUserQuery) Offset(offset int) *TenantUserQuery {
+	_q.ctx.Offset = &offset
+	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (tuq *TenantUserQuery) Unique(unique bool) *TenantUserQuery {
-	tuq.ctx.Unique = &unique
-	return tuq
+func (_q *TenantUserQuery) Unique(unique bool) *TenantUserQuery {
+	_q.ctx.Unique = &unique
+	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (tuq *TenantUserQuery) Order(o ...tenantuser.OrderOption) *TenantUserQuery {
-	tuq.order = append(tuq.order, o...)
-	return tuq
+func (_q *TenantUserQuery) Order(o ...tenantuser.OrderOption) *TenantUserQuery {
+	_q.order = append(_q.order, o...)
+	return _q
 }
 
 // QueryUser chains the current query on the "user" edge.
-func (tuq *TenantUserQuery) QueryUser() *UserQuery {
-	query := (&UserClient{config: tuq.config}).Query()
+func (_q *TenantUserQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tuq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tuq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -87,20 +87,20 @@ func (tuq *TenantUserQuery) QueryUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, tenantuser.UserTable, tenantuser.UserColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(tuq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryTenant chains the current query on the "tenant" edge.
-func (tuq *TenantUserQuery) QueryTenant() *TenantQuery {
-	query := (&TenantClient{config: tuq.config}).Query()
+func (_q *TenantUserQuery) QueryTenant() *TenantQuery {
+	query := (&TenantClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tuq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tuq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -109,20 +109,20 @@ func (tuq *TenantUserQuery) QueryTenant() *TenantQuery {
 			sqlgraph.To(tenant.Table, tenant.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, tenantuser.TenantTable, tenantuser.TenantColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(tuq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryRoles chains the current query on the "roles" edge.
-func (tuq *TenantUserQuery) QueryRoles() *TenantRoleQuery {
-	query := (&TenantRoleClient{config: tuq.config}).Query()
+func (_q *TenantUserQuery) QueryRoles() *TenantRoleQuery {
+	query := (&TenantRoleClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tuq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tuq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -131,20 +131,20 @@ func (tuq *TenantUserQuery) QueryRoles() *TenantRoleQuery {
 			sqlgraph.To(tenantrole.Table, tenantrole.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, tenantuser.RolesTable, tenantuser.RolesPrimaryKey...),
 		)
-		fromU = sqlgraph.SetNeighbors(tuq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
 // QueryMemberships chains the current query on the "memberships" edge.
-func (tuq *TenantUserQuery) QueryMemberships() *MembershipQuery {
-	query := (&MembershipClient{config: tuq.config}).Query()
+func (_q *TenantUserQuery) QueryMemberships() *MembershipQuery {
+	query := (&MembershipClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := tuq.prepareQuery(ctx); err != nil {
+		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
 		}
-		selector := tuq.sqlQuery(ctx)
+		selector := _q.sqlQuery(ctx)
 		if err := selector.Err(); err != nil {
 			return nil, err
 		}
@@ -153,7 +153,7 @@ func (tuq *TenantUserQuery) QueryMemberships() *MembershipQuery {
 			sqlgraph.To(membership.Table, membership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, tenantuser.MembershipsTable, tenantuser.MembershipsColumn),
 		)
-		fromU = sqlgraph.SetNeighbors(tuq.driver.Dialect(), step)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
@@ -161,8 +161,8 @@ func (tuq *TenantUserQuery) QueryMemberships() *MembershipQuery {
 
 // First returns the first TenantUser entity from the query.
 // Returns a *NotFoundError when no TenantUser was found.
-func (tuq *TenantUserQuery) First(ctx context.Context) (*TenantUser, error) {
-	nodes, err := tuq.Limit(1).All(setContextOp(ctx, tuq.ctx, ent.OpQueryFirst))
+func (_q *TenantUserQuery) First(ctx context.Context) (*TenantUser, error) {
+	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
 	}
@@ -173,8 +173,8 @@ func (tuq *TenantUserQuery) First(ctx context.Context) (*TenantUser, error) {
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (tuq *TenantUserQuery) FirstX(ctx context.Context) *TenantUser {
-	node, err := tuq.First(ctx)
+func (_q *TenantUserQuery) FirstX(ctx context.Context) *TenantUser {
+	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -183,9 +183,9 @@ func (tuq *TenantUserQuery) FirstX(ctx context.Context) *TenantUser {
 
 // FirstID returns the first TenantUser ID from the query.
 // Returns a *NotFoundError when no TenantUser ID was found.
-func (tuq *TenantUserQuery) FirstID(ctx context.Context) (id int, err error) {
+func (_q *TenantUserQuery) FirstID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = tuq.Limit(1).IDs(setContextOp(ctx, tuq.ctx, ent.OpQueryFirstID)); err != nil {
+	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
 	if len(ids) == 0 {
@@ -196,8 +196,8 @@ func (tuq *TenantUserQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (tuq *TenantUserQuery) FirstIDX(ctx context.Context) int {
-	id, err := tuq.FirstID(ctx)
+func (_q *TenantUserQuery) FirstIDX(ctx context.Context) int {
+	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
 	}
@@ -207,8 +207,8 @@ func (tuq *TenantUserQuery) FirstIDX(ctx context.Context) int {
 // Only returns a single TenantUser entity found by the query, ensuring it only returns one.
 // Returns a *NotSingularError when more than one TenantUser entity is found.
 // Returns a *NotFoundError when no TenantUser entities are found.
-func (tuq *TenantUserQuery) Only(ctx context.Context) (*TenantUser, error) {
-	nodes, err := tuq.Limit(2).All(setContextOp(ctx, tuq.ctx, ent.OpQueryOnly))
+func (_q *TenantUserQuery) Only(ctx context.Context) (*TenantUser, error) {
+	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
 	}
@@ -223,8 +223,8 @@ func (tuq *TenantUserQuery) Only(ctx context.Context) (*TenantUser, error) {
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (tuq *TenantUserQuery) OnlyX(ctx context.Context) *TenantUser {
-	node, err := tuq.Only(ctx)
+func (_q *TenantUserQuery) OnlyX(ctx context.Context) *TenantUser {
+	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -234,9 +234,9 @@ func (tuq *TenantUserQuery) OnlyX(ctx context.Context) *TenantUser {
 // OnlyID is like Only, but returns the only TenantUser ID in the query.
 // Returns a *NotSingularError when more than one TenantUser ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (tuq *TenantUserQuery) OnlyID(ctx context.Context) (id int, err error) {
+func (_q *TenantUserQuery) OnlyID(ctx context.Context) (id int, err error) {
 	var ids []int
-	if ids, err = tuq.Limit(2).IDs(setContextOp(ctx, tuq.ctx, ent.OpQueryOnlyID)); err != nil {
+	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
 	switch len(ids) {
@@ -251,8 +251,8 @@ func (tuq *TenantUserQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (tuq *TenantUserQuery) OnlyIDX(ctx context.Context) int {
-	id, err := tuq.OnlyID(ctx)
+func (_q *TenantUserQuery) OnlyIDX(ctx context.Context) int {
+	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -260,18 +260,18 @@ func (tuq *TenantUserQuery) OnlyIDX(ctx context.Context) int {
 }
 
 // All executes the query and returns a list of TenantUsers.
-func (tuq *TenantUserQuery) All(ctx context.Context) ([]*TenantUser, error) {
-	ctx = setContextOp(ctx, tuq.ctx, ent.OpQueryAll)
-	if err := tuq.prepareQuery(ctx); err != nil {
+func (_q *TenantUserQuery) All(ctx context.Context) ([]*TenantUser, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
 	qr := querierAll[[]*TenantUser, *TenantUserQuery]()
-	return withInterceptors[[]*TenantUser](ctx, tuq, qr, tuq.inters)
+	return withInterceptors[[]*TenantUser](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (tuq *TenantUserQuery) AllX(ctx context.Context) []*TenantUser {
-	nodes, err := tuq.All(ctx)
+func (_q *TenantUserQuery) AllX(ctx context.Context) []*TenantUser {
+	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -279,20 +279,20 @@ func (tuq *TenantUserQuery) AllX(ctx context.Context) []*TenantUser {
 }
 
 // IDs executes the query and returns a list of TenantUser IDs.
-func (tuq *TenantUserQuery) IDs(ctx context.Context) (ids []int, err error) {
-	if tuq.ctx.Unique == nil && tuq.path != nil {
-		tuq.Unique(true)
+func (_q *TenantUserQuery) IDs(ctx context.Context) (ids []int, err error) {
+	if _q.ctx.Unique == nil && _q.path != nil {
+		_q.Unique(true)
 	}
-	ctx = setContextOp(ctx, tuq.ctx, ent.OpQueryIDs)
-	if err = tuq.Select(tenantuser.FieldID).Scan(ctx, &ids); err != nil {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryIDs)
+	if err = _q.Select(tenantuser.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
 	return ids, nil
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (tuq *TenantUserQuery) IDsX(ctx context.Context) []int {
-	ids, err := tuq.IDs(ctx)
+func (_q *TenantUserQuery) IDsX(ctx context.Context) []int {
+	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -300,17 +300,17 @@ func (tuq *TenantUserQuery) IDsX(ctx context.Context) []int {
 }
 
 // Count returns the count of the given query.
-func (tuq *TenantUserQuery) Count(ctx context.Context) (int, error) {
-	ctx = setContextOp(ctx, tuq.ctx, ent.OpQueryCount)
-	if err := tuq.prepareQuery(ctx); err != nil {
+func (_q *TenantUserQuery) Count(ctx context.Context) (int, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
+	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, tuq, querierCount[*TenantUserQuery](), tuq.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TenantUserQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (tuq *TenantUserQuery) CountX(ctx context.Context) int {
-	count, err := tuq.Count(ctx)
+func (_q *TenantUserQuery) CountX(ctx context.Context) int {
+	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -318,9 +318,9 @@ func (tuq *TenantUserQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (tuq *TenantUserQuery) Exist(ctx context.Context) (bool, error) {
-	ctx = setContextOp(ctx, tuq.ctx, ent.OpQueryExist)
-	switch _, err := tuq.FirstID(ctx); {
+func (_q *TenantUserQuery) Exist(ctx context.Context) (bool, error) {
+	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
+	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
 		return false, nil
 	case err != nil:
@@ -331,8 +331,8 @@ func (tuq *TenantUserQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (tuq *TenantUserQuery) ExistX(ctx context.Context) bool {
-	exist, err := tuq.Exist(ctx)
+func (_q *TenantUserQuery) ExistX(ctx context.Context) bool {
+	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -341,69 +341,69 @@ func (tuq *TenantUserQuery) ExistX(ctx context.Context) bool {
 
 // Clone returns a duplicate of the TenantUserQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (tuq *TenantUserQuery) Clone() *TenantUserQuery {
-	if tuq == nil {
+func (_q *TenantUserQuery) Clone() *TenantUserQuery {
+	if _q == nil {
 		return nil
 	}
 	return &TenantUserQuery{
-		config:          tuq.config,
-		ctx:             tuq.ctx.Clone(),
-		order:           append([]tenantuser.OrderOption{}, tuq.order...),
-		inters:          append([]Interceptor{}, tuq.inters...),
-		predicates:      append([]predicate.TenantUser{}, tuq.predicates...),
-		withUser:        tuq.withUser.Clone(),
-		withTenant:      tuq.withTenant.Clone(),
-		withRoles:       tuq.withRoles.Clone(),
-		withMemberships: tuq.withMemberships.Clone(),
+		config:          _q.config,
+		ctx:             _q.ctx.Clone(),
+		order:           append([]tenantuser.OrderOption{}, _q.order...),
+		inters:          append([]Interceptor{}, _q.inters...),
+		predicates:      append([]predicate.TenantUser{}, _q.predicates...),
+		withUser:        _q.withUser.Clone(),
+		withTenant:      _q.withTenant.Clone(),
+		withRoles:       _q.withRoles.Clone(),
+		withMemberships: _q.withMemberships.Clone(),
 		// clone intermediate query.
-		sql:       tuq.sql.Clone(),
-		path:      tuq.path,
-		modifiers: append([]func(*sql.Selector){}, tuq.modifiers...),
+		sql:       _q.sql.Clone(),
+		path:      _q.path,
+		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
 }
 
 // WithUser tells the query-builder to eager-load the nodes that are connected to
 // the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (tuq *TenantUserQuery) WithUser(opts ...func(*UserQuery)) *TenantUserQuery {
-	query := (&UserClient{config: tuq.config}).Query()
+func (_q *TenantUserQuery) WithUser(opts ...func(*UserQuery)) *TenantUserQuery {
+	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tuq.withUser = query
-	return tuq
+	_q.withUser = query
+	return _q
 }
 
 // WithTenant tells the query-builder to eager-load the nodes that are connected to
 // the "tenant" edge. The optional arguments are used to configure the query builder of the edge.
-func (tuq *TenantUserQuery) WithTenant(opts ...func(*TenantQuery)) *TenantUserQuery {
-	query := (&TenantClient{config: tuq.config}).Query()
+func (_q *TenantUserQuery) WithTenant(opts ...func(*TenantQuery)) *TenantUserQuery {
+	query := (&TenantClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tuq.withTenant = query
-	return tuq
+	_q.withTenant = query
+	return _q
 }
 
 // WithRoles tells the query-builder to eager-load the nodes that are connected to
 // the "roles" edge. The optional arguments are used to configure the query builder of the edge.
-func (tuq *TenantUserQuery) WithRoles(opts ...func(*TenantRoleQuery)) *TenantUserQuery {
-	query := (&TenantRoleClient{config: tuq.config}).Query()
+func (_q *TenantUserQuery) WithRoles(opts ...func(*TenantRoleQuery)) *TenantUserQuery {
+	query := (&TenantRoleClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tuq.withRoles = query
-	return tuq
+	_q.withRoles = query
+	return _q
 }
 
 // WithMemberships tells the query-builder to eager-load the nodes that are connected to
 // the "memberships" edge. The optional arguments are used to configure the query builder of the edge.
-func (tuq *TenantUserQuery) WithMemberships(opts ...func(*MembershipQuery)) *TenantUserQuery {
-	query := (&MembershipClient{config: tuq.config}).Query()
+func (_q *TenantUserQuery) WithMemberships(opts ...func(*MembershipQuery)) *TenantUserQuery {
+	query := (&MembershipClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	tuq.withMemberships = query
-	return tuq
+	_q.withMemberships = query
+	return _q
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -420,10 +420,10 @@ func (tuq *TenantUserQuery) WithMemberships(opts ...func(*MembershipQuery)) *Ten
 //		GroupBy(tenantuser.FieldTenantID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
-func (tuq *TenantUserQuery) GroupBy(field string, fields ...string) *TenantUserGroupBy {
-	tuq.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TenantUserGroupBy{build: tuq}
-	grbuild.flds = &tuq.ctx.Fields
+func (_q *TenantUserQuery) GroupBy(field string, fields ...string) *TenantUserGroupBy {
+	_q.ctx.Fields = append([]string{field}, fields...)
+	grbuild := &TenantUserGroupBy{build: _q}
+	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = tenantuser.Label
 	grbuild.scan = grbuild.Scan
 	return grbuild
@@ -441,126 +441,126 @@ func (tuq *TenantUserQuery) GroupBy(field string, fields ...string) *TenantUserG
 //	client.TenantUser.Query().
 //		Select(tenantuser.FieldTenantID).
 //		Scan(ctx, &v)
-func (tuq *TenantUserQuery) Select(fields ...string) *TenantUserSelect {
-	tuq.ctx.Fields = append(tuq.ctx.Fields, fields...)
-	sbuild := &TenantUserSelect{TenantUserQuery: tuq}
+func (_q *TenantUserQuery) Select(fields ...string) *TenantUserSelect {
+	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
+	sbuild := &TenantUserSelect{TenantUserQuery: _q}
 	sbuild.label = tenantuser.Label
-	sbuild.flds, sbuild.scan = &tuq.ctx.Fields, sbuild.Scan
+	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
 // Aggregate returns a TenantUserSelect configured with the given aggregations.
-func (tuq *TenantUserQuery) Aggregate(fns ...AggregateFunc) *TenantUserSelect {
-	return tuq.Select().Aggregate(fns...)
+func (_q *TenantUserQuery) Aggregate(fns ...AggregateFunc) *TenantUserSelect {
+	return _q.Select().Aggregate(fns...)
 }
 
-func (tuq *TenantUserQuery) prepareQuery(ctx context.Context) error {
-	for _, inter := range tuq.inters {
+func (_q *TenantUserQuery) prepareQuery(ctx context.Context) error {
+	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("ent: uninitialized interceptor (forgotten import ent/runtime?)")
 		}
 		if trv, ok := inter.(Traverser); ok {
-			if err := trv.Traverse(ctx, tuq); err != nil {
+			if err := trv.Traverse(ctx, _q); err != nil {
 				return err
 			}
 		}
 	}
-	for _, f := range tuq.ctx.Fields {
+	for _, f := range _q.ctx.Fields {
 		if !tenantuser.ValidColumn(f) {
 			return &ValidationError{Name: f, err: fmt.Errorf("ent: invalid field %q for query", f)}
 		}
 	}
-	if tuq.path != nil {
-		prev, err := tuq.path(ctx)
+	if _q.path != nil {
+		prev, err := _q.path(ctx)
 		if err != nil {
 			return err
 		}
-		tuq.sql = prev
+		_q.sql = prev
 	}
 	return nil
 }
 
-func (tuq *TenantUserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TenantUser, error) {
+func (_q *TenantUserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TenantUser, error) {
 	var (
 		nodes       = []*TenantUser{}
-		_spec       = tuq.querySpec()
+		_spec       = _q.querySpec()
 		loadedTypes = [4]bool{
-			tuq.withUser != nil,
-			tuq.withTenant != nil,
-			tuq.withRoles != nil,
-			tuq.withMemberships != nil,
+			_q.withUser != nil,
+			_q.withTenant != nil,
+			_q.withRoles != nil,
+			_q.withMemberships != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TenantUser).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TenantUser{config: tuq.config}
+		node := &TenantUser{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	if len(tuq.modifiers) > 0 {
-		_spec.Modifiers = tuq.modifiers
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
-	if err := sqlgraph.QueryNodes(ctx, tuq.driver, _spec); err != nil {
+	if err := sqlgraph.QueryNodes(ctx, _q.driver, _spec); err != nil {
 		return nil, err
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := tuq.withUser; query != nil {
-		if err := tuq.loadUser(ctx, query, nodes, nil,
+	if query := _q.withUser; query != nil {
+		if err := _q.loadUser(ctx, query, nodes, nil,
 			func(n *TenantUser, e *User) { n.Edges.User = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tuq.withTenant; query != nil {
-		if err := tuq.loadTenant(ctx, query, nodes, nil,
+	if query := _q.withTenant; query != nil {
+		if err := _q.loadTenant(ctx, query, nodes, nil,
 			func(n *TenantUser, e *Tenant) { n.Edges.Tenant = e }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tuq.withRoles; query != nil {
-		if err := tuq.loadRoles(ctx, query, nodes,
+	if query := _q.withRoles; query != nil {
+		if err := _q.loadRoles(ctx, query, nodes,
 			func(n *TenantUser) { n.Edges.Roles = []*TenantRole{} },
 			func(n *TenantUser, e *TenantRole) { n.Edges.Roles = append(n.Edges.Roles, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := tuq.withMemberships; query != nil {
-		if err := tuq.loadMemberships(ctx, query, nodes,
+	if query := _q.withMemberships; query != nil {
+		if err := _q.loadMemberships(ctx, query, nodes,
 			func(n *TenantUser) { n.Edges.Memberships = []*Membership{} },
 			func(n *TenantUser, e *Membership) { n.Edges.Memberships = append(n.Edges.Memberships, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tuq.withNamedRoles {
-		if err := tuq.loadRoles(ctx, query, nodes,
+	for name, query := range _q.withNamedRoles {
+		if err := _q.loadRoles(ctx, query, nodes,
 			func(n *TenantUser) { n.appendNamedRoles(name) },
 			func(n *TenantUser, e *TenantRole) { n.appendNamedRoles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for name, query := range tuq.withNamedMemberships {
-		if err := tuq.loadMemberships(ctx, query, nodes,
+	for name, query := range _q.withNamedMemberships {
+		if err := _q.loadMemberships(ctx, query, nodes,
 			func(n *TenantUser) { n.appendNamedMemberships(name) },
 			func(n *TenantUser, e *Membership) { n.appendNamedMemberships(name, e) }); err != nil {
 			return nil, err
 		}
 	}
-	for i := range tuq.loadTotal {
-		if err := tuq.loadTotal[i](ctx, nodes); err != nil {
+	for i := range _q.loadTotal {
+		if err := _q.loadTotal[i](ctx, nodes); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (tuq *TenantUserQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*TenantUser, init func(*TenantUser), assign func(*TenantUser, *User)) error {
+func (_q *TenantUserQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*TenantUser, init func(*TenantUser), assign func(*TenantUser, *User)) error {
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*TenantUser)
 	for i := range nodes {
@@ -589,7 +589,7 @@ func (tuq *TenantUserQuery) loadUser(ctx context.Context, query *UserQuery, node
 	}
 	return nil
 }
-func (tuq *TenantUserQuery) loadTenant(ctx context.Context, query *TenantQuery, nodes []*TenantUser, init func(*TenantUser), assign func(*TenantUser, *Tenant)) error {
+func (_q *TenantUserQuery) loadTenant(ctx context.Context, query *TenantQuery, nodes []*TenantUser, init func(*TenantUser), assign func(*TenantUser, *Tenant)) error {
 	ids := make([]int, 0, len(nodes))
 	nodeids := make(map[int][]*TenantUser)
 	for i := range nodes {
@@ -618,7 +618,7 @@ func (tuq *TenantUserQuery) loadTenant(ctx context.Context, query *TenantQuery, 
 	}
 	return nil
 }
-func (tuq *TenantUserQuery) loadRoles(ctx context.Context, query *TenantRoleQuery, nodes []*TenantUser, init func(*TenantUser), assign func(*TenantUser, *TenantRole)) error {
+func (_q *TenantUserQuery) loadRoles(ctx context.Context, query *TenantRoleQuery, nodes []*TenantUser, init func(*TenantUser), assign func(*TenantUser, *TenantRole)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[int]*TenantUser)
 	nids := make(map[int]map[*TenantUser]struct{})
@@ -679,7 +679,7 @@ func (tuq *TenantUserQuery) loadRoles(ctx context.Context, query *TenantRoleQuer
 	}
 	return nil
 }
-func (tuq *TenantUserQuery) loadMemberships(ctx context.Context, query *MembershipQuery, nodes []*TenantUser, init func(*TenantUser), assign func(*TenantUser, *Membership)) error {
+func (_q *TenantUserQuery) loadMemberships(ctx context.Context, query *MembershipQuery, nodes []*TenantUser, init func(*TenantUser), assign func(*TenantUser, *Membership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*TenantUser)
 	for i := range nodes {
@@ -710,27 +710,27 @@ func (tuq *TenantUserQuery) loadMemberships(ctx context.Context, query *Membersh
 	return nil
 }
 
-func (tuq *TenantUserQuery) sqlCount(ctx context.Context) (int, error) {
-	_spec := tuq.querySpec()
-	if len(tuq.modifiers) > 0 {
-		_spec.Modifiers = tuq.modifiers
+func (_q *TenantUserQuery) sqlCount(ctx context.Context) (int, error) {
+	_spec := _q.querySpec()
+	if len(_q.modifiers) > 0 {
+		_spec.Modifiers = _q.modifiers
 	}
-	_spec.Node.Columns = tuq.ctx.Fields
-	if len(tuq.ctx.Fields) > 0 {
-		_spec.Unique = tuq.ctx.Unique != nil && *tuq.ctx.Unique
+	_spec.Node.Columns = _q.ctx.Fields
+	if len(_q.ctx.Fields) > 0 {
+		_spec.Unique = _q.ctx.Unique != nil && *_q.ctx.Unique
 	}
-	return sqlgraph.CountNodes(ctx, tuq.driver, _spec)
+	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (tuq *TenantUserQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TenantUserQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(tenantuser.Table, tenantuser.Columns, sqlgraph.NewFieldSpec(tenantuser.FieldID, field.TypeInt))
-	_spec.From = tuq.sql
-	if unique := tuq.ctx.Unique; unique != nil {
+	_spec.From = _q.sql
+	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
-	} else if tuq.path != nil {
+	} else if _q.path != nil {
 		_spec.Unique = true
 	}
-	if fields := tuq.ctx.Fields; len(fields) > 0 {
+	if fields := _q.ctx.Fields; len(fields) > 0 {
 		_spec.Node.Columns = make([]string, 0, len(fields))
 		_spec.Node.Columns = append(_spec.Node.Columns, tenantuser.FieldID)
 		for i := range fields {
@@ -738,27 +738,27 @@ func (tuq *TenantUserQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if tuq.withUser != nil {
+		if _q.withUser != nil {
 			_spec.Node.AddColumnOnce(tenantuser.FieldUserID)
 		}
-		if tuq.withTenant != nil {
+		if _q.withTenant != nil {
 			_spec.Node.AddColumnOnce(tenantuser.FieldTenantID)
 		}
 	}
-	if ps := tuq.predicates; len(ps) > 0 {
+	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	if limit := tuq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		_spec.Limit = *limit
 	}
-	if offset := tuq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		_spec.Offset = *offset
 	}
-	if ps := tuq.order; len(ps) > 0 {
+	if ps := _q.order; len(ps) > 0 {
 		_spec.Order = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
@@ -768,73 +768,73 @@ func (tuq *TenantUserQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (tuq *TenantUserQuery) sqlQuery(ctx context.Context) *sql.Selector {
-	builder := sql.Dialect(tuq.driver.Dialect())
+func (_q *TenantUserQuery) sqlQuery(ctx context.Context) *sql.Selector {
+	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(tenantuser.Table)
-	columns := tuq.ctx.Fields
+	columns := _q.ctx.Fields
 	if len(columns) == 0 {
 		columns = tenantuser.Columns
 	}
 	selector := builder.Select(t1.Columns(columns...)...).From(t1)
-	if tuq.sql != nil {
-		selector = tuq.sql
+	if _q.sql != nil {
+		selector = _q.sql
 		selector.Select(selector.Columns(columns...)...)
 	}
-	if tuq.ctx.Unique != nil && *tuq.ctx.Unique {
+	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	for _, m := range tuq.modifiers {
+	for _, m := range _q.modifiers {
 		m(selector)
 	}
-	for _, p := range tuq.predicates {
+	for _, p := range _q.predicates {
 		p(selector)
 	}
-	for _, p := range tuq.order {
+	for _, p := range _q.order {
 		p(selector)
 	}
-	if offset := tuq.ctx.Offset; offset != nil {
+	if offset := _q.ctx.Offset; offset != nil {
 		// limit is mandatory for offset clause. We start
 		// with default value, and override it below if needed.
 		selector.Offset(*offset).Limit(math.MaxInt32)
 	}
-	if limit := tuq.ctx.Limit; limit != nil {
+	if limit := _q.ctx.Limit; limit != nil {
 		selector.Limit(*limit)
 	}
 	return selector
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tuq *TenantUserQuery) Modify(modifiers ...func(s *sql.Selector)) *TenantUserSelect {
-	tuq.modifiers = append(tuq.modifiers, modifiers...)
-	return tuq.Select()
+func (_q *TenantUserQuery) Modify(modifiers ...func(s *sql.Selector)) *TenantUserSelect {
+	_q.modifiers = append(_q.modifiers, modifiers...)
+	return _q.Select()
 }
 
 // WithNamedRoles tells the query-builder to eager-load the nodes that are connected to the "roles"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tuq *TenantUserQuery) WithNamedRoles(name string, opts ...func(*TenantRoleQuery)) *TenantUserQuery {
-	query := (&TenantRoleClient{config: tuq.config}).Query()
+func (_q *TenantUserQuery) WithNamedRoles(name string, opts ...func(*TenantRoleQuery)) *TenantUserQuery {
+	query := (&TenantRoleClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tuq.withNamedRoles == nil {
-		tuq.withNamedRoles = make(map[string]*TenantRoleQuery)
+	if _q.withNamedRoles == nil {
+		_q.withNamedRoles = make(map[string]*TenantRoleQuery)
 	}
-	tuq.withNamedRoles[name] = query
-	return tuq
+	_q.withNamedRoles[name] = query
+	return _q
 }
 
 // WithNamedMemberships tells the query-builder to eager-load the nodes that are connected to the "memberships"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (tuq *TenantUserQuery) WithNamedMemberships(name string, opts ...func(*MembershipQuery)) *TenantUserQuery {
-	query := (&MembershipClient{config: tuq.config}).Query()
+func (_q *TenantUserQuery) WithNamedMemberships(name string, opts ...func(*MembershipQuery)) *TenantUserQuery {
+	query := (&MembershipClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if tuq.withNamedMemberships == nil {
-		tuq.withNamedMemberships = make(map[string]*MembershipQuery)
+	if _q.withNamedMemberships == nil {
+		_q.withNamedMemberships = make(map[string]*MembershipQuery)
 	}
-	tuq.withNamedMemberships[name] = query
-	return tuq
+	_q.withNamedMemberships[name] = query
+	return _q
 }
 
 // TenantUserGroupBy is the group-by builder for TenantUser entities.
@@ -844,41 +844,41 @@ type TenantUserGroupBy struct {
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (tugb *TenantUserGroupBy) Aggregate(fns ...AggregateFunc) *TenantUserGroupBy {
-	tugb.fns = append(tugb.fns, fns...)
-	return tugb
+func (_g *TenantUserGroupBy) Aggregate(fns ...AggregateFunc) *TenantUserGroupBy {
+	_g.fns = append(_g.fns, fns...)
+	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tugb *TenantUserGroupBy) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tugb.build.ctx, ent.OpQueryGroupBy)
-	if err := tugb.build.prepareQuery(ctx); err != nil {
+func (_g *TenantUserGroupBy) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
+	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TenantUserQuery, *TenantUserGroupBy](ctx, tugb.build, tugb, tugb.build.inters, v)
+	return scanWithInterceptors[*TenantUserQuery, *TenantUserGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (tugb *TenantUserGroupBy) sqlScan(ctx context.Context, root *TenantUserQuery, v any) error {
+func (_g *TenantUserGroupBy) sqlScan(ctx context.Context, root *TenantUserQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
-	aggregation := make([]string, 0, len(tugb.fns))
-	for _, fn := range tugb.fns {
+	aggregation := make([]string, 0, len(_g.fns))
+	for _, fn := range _g.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
 	if len(selector.SelectedColumns()) == 0 {
-		columns := make([]string, 0, len(*tugb.flds)+len(tugb.fns))
-		for _, f := range *tugb.flds {
+		columns := make([]string, 0, len(*_g.flds)+len(_g.fns))
+		for _, f := range *_g.flds {
 			columns = append(columns, selector.C(f))
 		}
 		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
-	selector.GroupBy(selector.Columns(*tugb.flds...)...)
+	selector.GroupBy(selector.Columns(*_g.flds...)...)
 	if err := selector.Err(); err != nil {
 		return err
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tugb.build.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _g.build.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -892,27 +892,27 @@ type TenantUserSelect struct {
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (tus *TenantUserSelect) Aggregate(fns ...AggregateFunc) *TenantUserSelect {
-	tus.fns = append(tus.fns, fns...)
-	return tus
+func (_s *TenantUserSelect) Aggregate(fns ...AggregateFunc) *TenantUserSelect {
+	_s.fns = append(_s.fns, fns...)
+	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (tus *TenantUserSelect) Scan(ctx context.Context, v any) error {
-	ctx = setContextOp(ctx, tus.ctx, ent.OpQuerySelect)
-	if err := tus.prepareQuery(ctx); err != nil {
+func (_s *TenantUserSelect) Scan(ctx context.Context, v any) error {
+	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
+	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TenantUserQuery, *TenantUserSelect](ctx, tus.TenantUserQuery, tus, tus.inters, v)
+	return scanWithInterceptors[*TenantUserQuery, *TenantUserSelect](ctx, _s.TenantUserQuery, _s, _s.inters, v)
 }
 
-func (tus *TenantUserSelect) sqlScan(ctx context.Context, root *TenantUserQuery, v any) error {
+func (_s *TenantUserSelect) sqlScan(ctx context.Context, root *TenantUserQuery, v any) error {
 	selector := root.sqlQuery(ctx)
-	aggregation := make([]string, 0, len(tus.fns))
-	for _, fn := range tus.fns {
+	aggregation := make([]string, 0, len(_s.fns))
+	for _, fn := range _s.fns {
 		aggregation = append(aggregation, fn(selector))
 	}
-	switch n := len(*tus.selector.flds); {
+	switch n := len(*_s.selector.flds); {
 	case n == 0 && len(aggregation) > 0:
 		selector.Select(aggregation...)
 	case n != 0 && len(aggregation) > 0:
@@ -920,7 +920,7 @@ func (tus *TenantUserSelect) sqlScan(ctx context.Context, root *TenantUserQuery,
 	}
 	rows := &sql.Rows{}
 	query, args := selector.Query()
-	if err := tus.driver.Query(ctx, query, args, rows); err != nil {
+	if err := _s.driver.Query(ctx, query, args, rows); err != nil {
 		return err
 	}
 	defer rows.Close()
@@ -928,7 +928,7 @@ func (tus *TenantUserSelect) sqlScan(ctx context.Context, root *TenantUserQuery,
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (tus *TenantUserSelect) Modify(modifiers ...func(s *sql.Selector)) *TenantUserSelect {
-	tus.modifiers = append(tus.modifiers, modifiers...)
-	return tus
+func (_s *TenantUserSelect) Modify(modifiers ...func(s *sql.Selector)) *TenantUserSelect {
+	_s.modifiers = append(_s.modifiers, modifiers...)
+	return _s
 }

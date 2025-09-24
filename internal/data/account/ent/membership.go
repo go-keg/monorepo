@@ -90,7 +90,7 @@ func (*Membership) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the Membership fields.
-func (m *Membership) assignValues(columns []string, values []any) error {
+func (_m *Membership) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -101,39 +101,39 @@ func (m *Membership) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			m.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case membership.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				m.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case membership.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				m.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case membership.FieldOrganizationID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field organization_id", values[i])
 			} else if value.Valid {
-				m.OrganizationID = int(value.Int64)
+				_m.OrganizationID = int(value.Int64)
 			}
 		case membership.FieldTenantUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field tenant_user_id", values[i])
 			} else if value.Valid {
-				m.TenantUserID = int(value.Int64)
+				_m.TenantUserID = int(value.Int64)
 			}
 		case membership.FieldIsLeader:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_leader", values[i])
 			} else if value.Valid {
-				m.IsLeader = value.Bool
+				_m.IsLeader = value.Bool
 			}
 		default:
-			m.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -141,57 +141,57 @@ func (m *Membership) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the Membership.
 // This includes values selected through modifiers, order, etc.
-func (m *Membership) Value(name string) (ent.Value, error) {
-	return m.selectValues.Get(name)
+func (_m *Membership) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryTenantUser queries the "tenant_user" edge of the Membership entity.
-func (m *Membership) QueryTenantUser() *TenantUserQuery {
-	return NewMembershipClient(m.config).QueryTenantUser(m)
+func (_m *Membership) QueryTenantUser() *TenantUserQuery {
+	return NewMembershipClient(_m.config).QueryTenantUser(_m)
 }
 
 // QueryOrganization queries the "organization" edge of the Membership entity.
-func (m *Membership) QueryOrganization() *OrganizationQuery {
-	return NewMembershipClient(m.config).QueryOrganization(m)
+func (_m *Membership) QueryOrganization() *OrganizationQuery {
+	return NewMembershipClient(_m.config).QueryOrganization(_m)
 }
 
 // Update returns a builder for updating this Membership.
 // Note that you need to call Membership.Unwrap() before calling this method if this Membership
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (m *Membership) Update() *MembershipUpdateOne {
-	return NewMembershipClient(m.config).UpdateOne(m)
+func (_m *Membership) Update() *MembershipUpdateOne {
+	return NewMembershipClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the Membership entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (m *Membership) Unwrap() *Membership {
-	_tx, ok := m.config.driver.(*txDriver)
+func (_m *Membership) Unwrap() *Membership {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: Membership is not a transactional entity")
 	}
-	m.config.driver = _tx.drv
-	return m
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (m *Membership) String() string {
+func (_m *Membership) String() string {
 	var builder strings.Builder
 	builder.WriteString("Membership(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(m.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(m.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("organization_id=")
-	builder.WriteString(fmt.Sprintf("%v", m.OrganizationID))
+	builder.WriteString(fmt.Sprintf("%v", _m.OrganizationID))
 	builder.WriteString(", ")
 	builder.WriteString("tenant_user_id=")
-	builder.WriteString(fmt.Sprintf("%v", m.TenantUserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.TenantUserID))
 	builder.WriteString(", ")
 	builder.WriteString("is_leader=")
-	builder.WriteString(fmt.Sprintf("%v", m.IsLeader))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsLeader))
 	builder.WriteByte(')')
 	return builder.String()
 }

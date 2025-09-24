@@ -22,95 +22,95 @@ type OAuthProviderCreate struct {
 }
 
 // SetProvider sets the "provider" field.
-func (opc *OAuthProviderCreate) SetProvider(s string) *OAuthProviderCreate {
-	opc.mutation.SetProvider(s)
-	return opc
+func (_c *OAuthProviderCreate) SetProvider(v string) *OAuthProviderCreate {
+	_c.mutation.SetProvider(v)
+	return _c
 }
 
 // SetName sets the "name" field.
-func (opc *OAuthProviderCreate) SetName(s string) *OAuthProviderCreate {
-	opc.mutation.SetName(s)
-	return opc
+func (_c *OAuthProviderCreate) SetName(v string) *OAuthProviderCreate {
+	_c.mutation.SetName(v)
+	return _c
 }
 
 // SetClientID sets the "client_id" field.
-func (opc *OAuthProviderCreate) SetClientID(s string) *OAuthProviderCreate {
-	opc.mutation.SetClientID(s)
-	return opc
+func (_c *OAuthProviderCreate) SetClientID(v string) *OAuthProviderCreate {
+	_c.mutation.SetClientID(v)
+	return _c
 }
 
 // SetClientSecret sets the "client_secret" field.
-func (opc *OAuthProviderCreate) SetClientSecret(s string) *OAuthProviderCreate {
-	opc.mutation.SetClientSecret(s)
-	return opc
+func (_c *OAuthProviderCreate) SetClientSecret(v string) *OAuthProviderCreate {
+	_c.mutation.SetClientSecret(v)
+	return _c
 }
 
 // SetAuthURL sets the "auth_url" field.
-func (opc *OAuthProviderCreate) SetAuthURL(s string) *OAuthProviderCreate {
-	opc.mutation.SetAuthURL(s)
-	return opc
+func (_c *OAuthProviderCreate) SetAuthURL(v string) *OAuthProviderCreate {
+	_c.mutation.SetAuthURL(v)
+	return _c
 }
 
 // SetTokenURL sets the "token_url" field.
-func (opc *OAuthProviderCreate) SetTokenURL(s string) *OAuthProviderCreate {
-	opc.mutation.SetTokenURL(s)
-	return opc
+func (_c *OAuthProviderCreate) SetTokenURL(v string) *OAuthProviderCreate {
+	_c.mutation.SetTokenURL(v)
+	return _c
 }
 
 // SetUserInfoURL sets the "user_info_url" field.
-func (opc *OAuthProviderCreate) SetUserInfoURL(s string) *OAuthProviderCreate {
-	opc.mutation.SetUserInfoURL(s)
-	return opc
+func (_c *OAuthProviderCreate) SetUserInfoURL(v string) *OAuthProviderCreate {
+	_c.mutation.SetUserInfoURL(v)
+	return _c
 }
 
 // SetRedirectURI sets the "redirect_uri" field.
-func (opc *OAuthProviderCreate) SetRedirectURI(s string) *OAuthProviderCreate {
-	opc.mutation.SetRedirectURI(s)
-	return opc
+func (_c *OAuthProviderCreate) SetRedirectURI(v string) *OAuthProviderCreate {
+	_c.mutation.SetRedirectURI(v)
+	return _c
 }
 
 // SetScopes sets the "scopes" field.
-func (opc *OAuthProviderCreate) SetScopes(s string) *OAuthProviderCreate {
-	opc.mutation.SetScopes(s)
-	return opc
+func (_c *OAuthProviderCreate) SetScopes(v string) *OAuthProviderCreate {
+	_c.mutation.SetScopes(v)
+	return _c
 }
 
 // SetNillableScopes sets the "scopes" field if the given value is not nil.
-func (opc *OAuthProviderCreate) SetNillableScopes(s *string) *OAuthProviderCreate {
-	if s != nil {
-		opc.SetScopes(*s)
+func (_c *OAuthProviderCreate) SetNillableScopes(v *string) *OAuthProviderCreate {
+	if v != nil {
+		_c.SetScopes(*v)
 	}
-	return opc
+	return _c
 }
 
 // SetEnabled sets the "enabled" field.
-func (opc *OAuthProviderCreate) SetEnabled(b bool) *OAuthProviderCreate {
-	opc.mutation.SetEnabled(b)
-	return opc
+func (_c *OAuthProviderCreate) SetEnabled(v bool) *OAuthProviderCreate {
+	_c.mutation.SetEnabled(v)
+	return _c
 }
 
 // SetNillableEnabled sets the "enabled" field if the given value is not nil.
-func (opc *OAuthProviderCreate) SetNillableEnabled(b *bool) *OAuthProviderCreate {
-	if b != nil {
-		opc.SetEnabled(*b)
+func (_c *OAuthProviderCreate) SetNillableEnabled(v *bool) *OAuthProviderCreate {
+	if v != nil {
+		_c.SetEnabled(*v)
 	}
-	return opc
+	return _c
 }
 
 // Mutation returns the OAuthProviderMutation object of the builder.
-func (opc *OAuthProviderCreate) Mutation() *OAuthProviderMutation {
-	return opc.mutation
+func (_c *OAuthProviderCreate) Mutation() *OAuthProviderMutation {
+	return _c.mutation
 }
 
 // Save creates the OAuthProvider in the database.
-func (opc *OAuthProviderCreate) Save(ctx context.Context) (*OAuthProvider, error) {
-	opc.defaults()
-	return withHooks(ctx, opc.sqlSave, opc.mutation, opc.hooks)
+func (_c *OAuthProviderCreate) Save(ctx context.Context) (*OAuthProvider, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (opc *OAuthProviderCreate) SaveX(ctx context.Context) *OAuthProvider {
-	v, err := opc.Save(ctx)
+func (_c *OAuthProviderCreate) SaveX(ctx context.Context) *OAuthProvider {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -118,99 +118,99 @@ func (opc *OAuthProviderCreate) SaveX(ctx context.Context) *OAuthProvider {
 }
 
 // Exec executes the query.
-func (opc *OAuthProviderCreate) Exec(ctx context.Context) error {
-	_, err := opc.Save(ctx)
+func (_c *OAuthProviderCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (opc *OAuthProviderCreate) ExecX(ctx context.Context) {
-	if err := opc.Exec(ctx); err != nil {
+func (_c *OAuthProviderCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (opc *OAuthProviderCreate) defaults() {
-	if _, ok := opc.mutation.Enabled(); !ok {
+func (_c *OAuthProviderCreate) defaults() {
+	if _, ok := _c.mutation.Enabled(); !ok {
 		v := oauthprovider.DefaultEnabled
-		opc.mutation.SetEnabled(v)
+		_c.mutation.SetEnabled(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (opc *OAuthProviderCreate) check() error {
-	if _, ok := opc.mutation.Provider(); !ok {
+func (_c *OAuthProviderCreate) check() error {
+	if _, ok := _c.mutation.Provider(); !ok {
 		return &ValidationError{Name: "provider", err: errors.New(`ent: missing required field "OAuthProvider.provider"`)}
 	}
-	if _, ok := opc.mutation.Name(); !ok {
+	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "OAuthProvider.name"`)}
 	}
-	if v, ok := opc.mutation.Name(); ok {
+	if v, ok := _c.mutation.Name(); ok {
 		if err := oauthprovider.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.name": %w`, err)}
 		}
 	}
-	if _, ok := opc.mutation.ClientID(); !ok {
+	if _, ok := _c.mutation.ClientID(); !ok {
 		return &ValidationError{Name: "client_id", err: errors.New(`ent: missing required field "OAuthProvider.client_id"`)}
 	}
-	if v, ok := opc.mutation.ClientID(); ok {
+	if v, ok := _c.mutation.ClientID(); ok {
 		if err := oauthprovider.ClientIDValidator(v); err != nil {
 			return &ValidationError{Name: "client_id", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.client_id": %w`, err)}
 		}
 	}
-	if _, ok := opc.mutation.ClientSecret(); !ok {
+	if _, ok := _c.mutation.ClientSecret(); !ok {
 		return &ValidationError{Name: "client_secret", err: errors.New(`ent: missing required field "OAuthProvider.client_secret"`)}
 	}
-	if v, ok := opc.mutation.ClientSecret(); ok {
+	if v, ok := _c.mutation.ClientSecret(); ok {
 		if err := oauthprovider.ClientSecretValidator(v); err != nil {
 			return &ValidationError{Name: "client_secret", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.client_secret": %w`, err)}
 		}
 	}
-	if _, ok := opc.mutation.AuthURL(); !ok {
+	if _, ok := _c.mutation.AuthURL(); !ok {
 		return &ValidationError{Name: "auth_url", err: errors.New(`ent: missing required field "OAuthProvider.auth_url"`)}
 	}
-	if v, ok := opc.mutation.AuthURL(); ok {
+	if v, ok := _c.mutation.AuthURL(); ok {
 		if err := oauthprovider.AuthURLValidator(v); err != nil {
 			return &ValidationError{Name: "auth_url", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.auth_url": %w`, err)}
 		}
 	}
-	if _, ok := opc.mutation.TokenURL(); !ok {
+	if _, ok := _c.mutation.TokenURL(); !ok {
 		return &ValidationError{Name: "token_url", err: errors.New(`ent: missing required field "OAuthProvider.token_url"`)}
 	}
-	if v, ok := opc.mutation.TokenURL(); ok {
+	if v, ok := _c.mutation.TokenURL(); ok {
 		if err := oauthprovider.TokenURLValidator(v); err != nil {
 			return &ValidationError{Name: "token_url", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.token_url": %w`, err)}
 		}
 	}
-	if _, ok := opc.mutation.UserInfoURL(); !ok {
+	if _, ok := _c.mutation.UserInfoURL(); !ok {
 		return &ValidationError{Name: "user_info_url", err: errors.New(`ent: missing required field "OAuthProvider.user_info_url"`)}
 	}
-	if v, ok := opc.mutation.UserInfoURL(); ok {
+	if v, ok := _c.mutation.UserInfoURL(); ok {
 		if err := oauthprovider.UserInfoURLValidator(v); err != nil {
 			return &ValidationError{Name: "user_info_url", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.user_info_url": %w`, err)}
 		}
 	}
-	if _, ok := opc.mutation.RedirectURI(); !ok {
+	if _, ok := _c.mutation.RedirectURI(); !ok {
 		return &ValidationError{Name: "redirect_uri", err: errors.New(`ent: missing required field "OAuthProvider.redirect_uri"`)}
 	}
-	if v, ok := opc.mutation.RedirectURI(); ok {
+	if v, ok := _c.mutation.RedirectURI(); ok {
 		if err := oauthprovider.RedirectURIValidator(v); err != nil {
 			return &ValidationError{Name: "redirect_uri", err: fmt.Errorf(`ent: validator failed for field "OAuthProvider.redirect_uri": %w`, err)}
 		}
 	}
-	if _, ok := opc.mutation.Enabled(); !ok {
+	if _, ok := _c.mutation.Enabled(); !ok {
 		return &ValidationError{Name: "enabled", err: errors.New(`ent: missing required field "OAuthProvider.enabled"`)}
 	}
 	return nil
 }
 
-func (opc *OAuthProviderCreate) sqlSave(ctx context.Context) (*OAuthProvider, error) {
-	if err := opc.check(); err != nil {
+func (_c *OAuthProviderCreate) sqlSave(ctx context.Context) (*OAuthProvider, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := opc.createSpec()
-	if err := sqlgraph.CreateNode(ctx, opc.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -218,54 +218,54 @@ func (opc *OAuthProviderCreate) sqlSave(ctx context.Context) (*OAuthProvider, er
 	}
 	id := _spec.ID.Value.(int64)
 	_node.ID = int(id)
-	opc.mutation.id = &_node.ID
-	opc.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (opc *OAuthProviderCreate) createSpec() (*OAuthProvider, *sqlgraph.CreateSpec) {
+func (_c *OAuthProviderCreate) createSpec() (*OAuthProvider, *sqlgraph.CreateSpec) {
 	var (
-		_node = &OAuthProvider{config: opc.config}
+		_node = &OAuthProvider{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(oauthprovider.Table, sqlgraph.NewFieldSpec(oauthprovider.FieldID, field.TypeInt))
 	)
-	_spec.OnConflict = opc.conflict
-	if value, ok := opc.mutation.Provider(); ok {
+	_spec.OnConflict = _c.conflict
+	if value, ok := _c.mutation.Provider(); ok {
 		_spec.SetField(oauthprovider.FieldProvider, field.TypeString, value)
 		_node.Provider = value
 	}
-	if value, ok := opc.mutation.Name(); ok {
+	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(oauthprovider.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
-	if value, ok := opc.mutation.ClientID(); ok {
+	if value, ok := _c.mutation.ClientID(); ok {
 		_spec.SetField(oauthprovider.FieldClientID, field.TypeString, value)
 		_node.ClientID = value
 	}
-	if value, ok := opc.mutation.ClientSecret(); ok {
+	if value, ok := _c.mutation.ClientSecret(); ok {
 		_spec.SetField(oauthprovider.FieldClientSecret, field.TypeString, value)
 		_node.ClientSecret = value
 	}
-	if value, ok := opc.mutation.AuthURL(); ok {
+	if value, ok := _c.mutation.AuthURL(); ok {
 		_spec.SetField(oauthprovider.FieldAuthURL, field.TypeString, value)
 		_node.AuthURL = value
 	}
-	if value, ok := opc.mutation.TokenURL(); ok {
+	if value, ok := _c.mutation.TokenURL(); ok {
 		_spec.SetField(oauthprovider.FieldTokenURL, field.TypeString, value)
 		_node.TokenURL = value
 	}
-	if value, ok := opc.mutation.UserInfoURL(); ok {
+	if value, ok := _c.mutation.UserInfoURL(); ok {
 		_spec.SetField(oauthprovider.FieldUserInfoURL, field.TypeString, value)
 		_node.UserInfoURL = value
 	}
-	if value, ok := opc.mutation.RedirectURI(); ok {
+	if value, ok := _c.mutation.RedirectURI(); ok {
 		_spec.SetField(oauthprovider.FieldRedirectURI, field.TypeString, value)
 		_node.RedirectURI = value
 	}
-	if value, ok := opc.mutation.Scopes(); ok {
+	if value, ok := _c.mutation.Scopes(); ok {
 		_spec.SetField(oauthprovider.FieldScopes, field.TypeString, value)
 		_node.Scopes = value
 	}
-	if value, ok := opc.mutation.Enabled(); ok {
+	if value, ok := _c.mutation.Enabled(); ok {
 		_spec.SetField(oauthprovider.FieldEnabled, field.TypeBool, value)
 		_node.Enabled = value
 	}
@@ -288,10 +288,10 @@ func (opc *OAuthProviderCreate) createSpec() (*OAuthProvider, *sqlgraph.CreateSp
 //			SetProvider(v+v).
 //		}).
 //		Exec(ctx)
-func (opc *OAuthProviderCreate) OnConflict(opts ...sql.ConflictOption) *OAuthProviderUpsertOne {
-	opc.conflict = opts
+func (_c *OAuthProviderCreate) OnConflict(opts ...sql.ConflictOption) *OAuthProviderUpsertOne {
+	_c.conflict = opts
 	return &OAuthProviderUpsertOne{
-		create: opc,
+		create: _c,
 	}
 }
 
@@ -301,10 +301,10 @@ func (opc *OAuthProviderCreate) OnConflict(opts ...sql.ConflictOption) *OAuthPro
 //	client.OAuthProvider.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
-func (opc *OAuthProviderCreate) OnConflictColumns(columns ...string) *OAuthProviderUpsertOne {
-	opc.conflict = append(opc.conflict, sql.ConflictColumns(columns...))
+func (_c *OAuthProviderCreate) OnConflictColumns(columns ...string) *OAuthProviderUpsertOne {
+	_c.conflict = append(_c.conflict, sql.ConflictColumns(columns...))
 	return &OAuthProviderUpsertOne{
-		create: opc,
+		create: _c,
 	}
 }
 
@@ -676,16 +676,16 @@ type OAuthProviderCreateBulk struct {
 }
 
 // Save creates the OAuthProvider entities in the database.
-func (opcb *OAuthProviderCreateBulk) Save(ctx context.Context) ([]*OAuthProvider, error) {
-	if opcb.err != nil {
-		return nil, opcb.err
+func (_c *OAuthProviderCreateBulk) Save(ctx context.Context) ([]*OAuthProvider, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(opcb.builders))
-	nodes := make([]*OAuthProvider, len(opcb.builders))
-	mutators := make([]Mutator, len(opcb.builders))
-	for i := range opcb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*OAuthProvider, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := opcb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*OAuthProviderMutation)
@@ -699,12 +699,12 @@ func (opcb *OAuthProviderCreateBulk) Save(ctx context.Context) ([]*OAuthProvider
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, opcb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
-					spec.OnConflict = opcb.conflict
+					spec.OnConflict = _c.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, opcb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -728,7 +728,7 @@ func (opcb *OAuthProviderCreateBulk) Save(ctx context.Context) ([]*OAuthProvider
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, opcb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -736,8 +736,8 @@ func (opcb *OAuthProviderCreateBulk) Save(ctx context.Context) ([]*OAuthProvider
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (opcb *OAuthProviderCreateBulk) SaveX(ctx context.Context) []*OAuthProvider {
-	v, err := opcb.Save(ctx)
+func (_c *OAuthProviderCreateBulk) SaveX(ctx context.Context) []*OAuthProvider {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -745,14 +745,14 @@ func (opcb *OAuthProviderCreateBulk) SaveX(ctx context.Context) []*OAuthProvider
 }
 
 // Exec executes the query.
-func (opcb *OAuthProviderCreateBulk) Exec(ctx context.Context) error {
-	_, err := opcb.Save(ctx)
+func (_c *OAuthProviderCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (opcb *OAuthProviderCreateBulk) ExecX(ctx context.Context) {
-	if err := opcb.Exec(ctx); err != nil {
+func (_c *OAuthProviderCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
@@ -772,10 +772,10 @@ func (opcb *OAuthProviderCreateBulk) ExecX(ctx context.Context) {
 //			SetProvider(v+v).
 //		}).
 //		Exec(ctx)
-func (opcb *OAuthProviderCreateBulk) OnConflict(opts ...sql.ConflictOption) *OAuthProviderUpsertBulk {
-	opcb.conflict = opts
+func (_c *OAuthProviderCreateBulk) OnConflict(opts ...sql.ConflictOption) *OAuthProviderUpsertBulk {
+	_c.conflict = opts
 	return &OAuthProviderUpsertBulk{
-		create: opcb,
+		create: _c,
 	}
 }
 
@@ -785,10 +785,10 @@ func (opcb *OAuthProviderCreateBulk) OnConflict(opts ...sql.ConflictOption) *OAu
 //	client.OAuthProvider.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
-func (opcb *OAuthProviderCreateBulk) OnConflictColumns(columns ...string) *OAuthProviderUpsertBulk {
-	opcb.conflict = append(opcb.conflict, sql.ConflictColumns(columns...))
+func (_c *OAuthProviderCreateBulk) OnConflictColumns(columns ...string) *OAuthProviderUpsertBulk {
+	_c.conflict = append(_c.conflict, sql.ConflictColumns(columns...))
 	return &OAuthProviderUpsertBulk{
-		create: opcb,
+		create: _c,
 	}
 }
 

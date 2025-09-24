@@ -20,56 +20,56 @@ type OAuthAccountDelete struct {
 }
 
 // Where appends a list predicates to the OAuthAccountDelete builder.
-func (oad *OAuthAccountDelete) Where(ps ...predicate.OAuthAccount) *OAuthAccountDelete {
-	oad.mutation.Where(ps...)
-	return oad
+func (_d *OAuthAccountDelete) Where(ps ...predicate.OAuthAccount) *OAuthAccountDelete {
+	_d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (oad *OAuthAccountDelete) Exec(ctx context.Context) (int, error) {
-	return withHooks(ctx, oad.sqlExec, oad.mutation, oad.hooks)
+func (_d *OAuthAccountDelete) Exec(ctx context.Context) (int, error) {
+	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oad *OAuthAccountDelete) ExecX(ctx context.Context) int {
-	n, err := oad.Exec(ctx)
+func (_d *OAuthAccountDelete) ExecX(ctx context.Context) int {
+	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (oad *OAuthAccountDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *OAuthAccountDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(oauthaccount.Table, sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeInt))
-	if ps := oad.mutation.predicates; len(ps) > 0 {
+	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	affected, err := sqlgraph.DeleteNodes(ctx, oad.driver, _spec)
+	affected, err := sqlgraph.DeleteNodes(ctx, _d.driver, _spec)
 	if err != nil && sqlgraph.IsConstraintError(err) {
 		err = &ConstraintError{msg: err.Error(), wrap: err}
 	}
-	oad.mutation.done = true
+	_d.mutation.done = true
 	return affected, err
 }
 
 // OAuthAccountDeleteOne is the builder for deleting a single OAuthAccount entity.
 type OAuthAccountDeleteOne struct {
-	oad *OAuthAccountDelete
+	_d *OAuthAccountDelete
 }
 
 // Where appends a list predicates to the OAuthAccountDelete builder.
-func (oado *OAuthAccountDeleteOne) Where(ps ...predicate.OAuthAccount) *OAuthAccountDeleteOne {
-	oado.oad.mutation.Where(ps...)
-	return oado
+func (_d *OAuthAccountDeleteOne) Where(ps ...predicate.OAuthAccount) *OAuthAccountDeleteOne {
+	_d._d.mutation.Where(ps...)
+	return _d
 }
 
 // Exec executes the deletion query.
-func (oado *OAuthAccountDeleteOne) Exec(ctx context.Context) error {
-	n, err := oado.oad.Exec(ctx)
+func (_d *OAuthAccountDeleteOne) Exec(ctx context.Context) error {
+	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
@@ -81,8 +81,8 @@ func (oado *OAuthAccountDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oado *OAuthAccountDeleteOne) ExecX(ctx context.Context) {
-	if err := oado.Exec(ctx); err != nil {
+func (_d *OAuthAccountDeleteOne) ExecX(ctx context.Context) {
+	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}
 }

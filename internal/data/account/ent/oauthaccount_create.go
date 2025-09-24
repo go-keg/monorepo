@@ -24,118 +24,118 @@ type OAuthAccountCreate struct {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (oac *OAuthAccountCreate) SetCreatedAt(t time.Time) *OAuthAccountCreate {
-	oac.mutation.SetCreatedAt(t)
-	return oac
+func (_c *OAuthAccountCreate) SetCreatedAt(v time.Time) *OAuthAccountCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (oac *OAuthAccountCreate) SetNillableCreatedAt(t *time.Time) *OAuthAccountCreate {
-	if t != nil {
-		oac.SetCreatedAt(*t)
+func (_c *OAuthAccountCreate) SetNillableCreatedAt(v *time.Time) *OAuthAccountCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
 	}
-	return oac
+	return _c
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (oac *OAuthAccountCreate) SetUpdatedAt(t time.Time) *OAuthAccountCreate {
-	oac.mutation.SetUpdatedAt(t)
-	return oac
+func (_c *OAuthAccountCreate) SetUpdatedAt(v time.Time) *OAuthAccountCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (oac *OAuthAccountCreate) SetNillableUpdatedAt(t *time.Time) *OAuthAccountCreate {
-	if t != nil {
-		oac.SetUpdatedAt(*t)
+func (_c *OAuthAccountCreate) SetNillableUpdatedAt(v *time.Time) *OAuthAccountCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
 	}
-	return oac
+	return _c
 }
 
 // SetUserID sets the "user_id" field.
-func (oac *OAuthAccountCreate) SetUserID(i int) *OAuthAccountCreate {
-	oac.mutation.SetUserID(i)
-	return oac
+func (_c *OAuthAccountCreate) SetUserID(v int) *OAuthAccountCreate {
+	_c.mutation.SetUserID(v)
+	return _c
 }
 
 // SetProvider sets the "provider" field.
-func (oac *OAuthAccountCreate) SetProvider(s string) *OAuthAccountCreate {
-	oac.mutation.SetProvider(s)
-	return oac
+func (_c *OAuthAccountCreate) SetProvider(v string) *OAuthAccountCreate {
+	_c.mutation.SetProvider(v)
+	return _c
 }
 
 // SetProviderUserID sets the "provider_user_id" field.
-func (oac *OAuthAccountCreate) SetProviderUserID(s string) *OAuthAccountCreate {
-	oac.mutation.SetProviderUserID(s)
-	return oac
+func (_c *OAuthAccountCreate) SetProviderUserID(v string) *OAuthAccountCreate {
+	_c.mutation.SetProviderUserID(v)
+	return _c
 }
 
 // SetAccessToken sets the "access_token" field.
-func (oac *OAuthAccountCreate) SetAccessToken(s string) *OAuthAccountCreate {
-	oac.mutation.SetAccessToken(s)
-	return oac
+func (_c *OAuthAccountCreate) SetAccessToken(v string) *OAuthAccountCreate {
+	_c.mutation.SetAccessToken(v)
+	return _c
 }
 
 // SetNillableAccessToken sets the "access_token" field if the given value is not nil.
-func (oac *OAuthAccountCreate) SetNillableAccessToken(s *string) *OAuthAccountCreate {
-	if s != nil {
-		oac.SetAccessToken(*s)
+func (_c *OAuthAccountCreate) SetNillableAccessToken(v *string) *OAuthAccountCreate {
+	if v != nil {
+		_c.SetAccessToken(*v)
 	}
-	return oac
+	return _c
 }
 
 // SetRefreshToken sets the "refresh_token" field.
-func (oac *OAuthAccountCreate) SetRefreshToken(s string) *OAuthAccountCreate {
-	oac.mutation.SetRefreshToken(s)
-	return oac
+func (_c *OAuthAccountCreate) SetRefreshToken(v string) *OAuthAccountCreate {
+	_c.mutation.SetRefreshToken(v)
+	return _c
 }
 
 // SetNillableRefreshToken sets the "refresh_token" field if the given value is not nil.
-func (oac *OAuthAccountCreate) SetNillableRefreshToken(s *string) *OAuthAccountCreate {
-	if s != nil {
-		oac.SetRefreshToken(*s)
+func (_c *OAuthAccountCreate) SetNillableRefreshToken(v *string) *OAuthAccountCreate {
+	if v != nil {
+		_c.SetRefreshToken(*v)
 	}
-	return oac
+	return _c
 }
 
 // SetTokenExpiry sets the "token_expiry" field.
-func (oac *OAuthAccountCreate) SetTokenExpiry(t time.Time) *OAuthAccountCreate {
-	oac.mutation.SetTokenExpiry(t)
-	return oac
+func (_c *OAuthAccountCreate) SetTokenExpiry(v time.Time) *OAuthAccountCreate {
+	_c.mutation.SetTokenExpiry(v)
+	return _c
 }
 
 // SetNillableTokenExpiry sets the "token_expiry" field if the given value is not nil.
-func (oac *OAuthAccountCreate) SetNillableTokenExpiry(t *time.Time) *OAuthAccountCreate {
-	if t != nil {
-		oac.SetTokenExpiry(*t)
+func (_c *OAuthAccountCreate) SetNillableTokenExpiry(v *time.Time) *OAuthAccountCreate {
+	if v != nil {
+		_c.SetTokenExpiry(*v)
 	}
-	return oac
+	return _c
 }
 
 // SetProfile sets the "profile" field.
-func (oac *OAuthAccountCreate) SetProfile(m map[string]interface{}) *OAuthAccountCreate {
-	oac.mutation.SetProfile(m)
-	return oac
+func (_c *OAuthAccountCreate) SetProfile(v map[string]interface{}) *OAuthAccountCreate {
+	_c.mutation.SetProfile(v)
+	return _c
 }
 
 // SetUser sets the "user" edge to the User entity.
-func (oac *OAuthAccountCreate) SetUser(u *User) *OAuthAccountCreate {
-	return oac.SetUserID(u.ID)
+func (_c *OAuthAccountCreate) SetUser(v *User) *OAuthAccountCreate {
+	return _c.SetUserID(v.ID)
 }
 
 // Mutation returns the OAuthAccountMutation object of the builder.
-func (oac *OAuthAccountCreate) Mutation() *OAuthAccountMutation {
-	return oac.mutation
+func (_c *OAuthAccountCreate) Mutation() *OAuthAccountMutation {
+	return _c.mutation
 }
 
 // Save creates the OAuthAccount in the database.
-func (oac *OAuthAccountCreate) Save(ctx context.Context) (*OAuthAccount, error) {
-	oac.defaults()
-	return withHooks(ctx, oac.sqlSave, oac.mutation, oac.hooks)
+func (_c *OAuthAccountCreate) Save(ctx context.Context) (*OAuthAccount, error) {
+	_c.defaults()
+	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (oac *OAuthAccountCreate) SaveX(ctx context.Context) *OAuthAccount {
-	v, err := oac.Save(ctx)
+func (_c *OAuthAccountCreate) SaveX(ctx context.Context) *OAuthAccount {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -143,58 +143,58 @@ func (oac *OAuthAccountCreate) SaveX(ctx context.Context) *OAuthAccount {
 }
 
 // Exec executes the query.
-func (oac *OAuthAccountCreate) Exec(ctx context.Context) error {
-	_, err := oac.Save(ctx)
+func (_c *OAuthAccountCreate) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oac *OAuthAccountCreate) ExecX(ctx context.Context) {
-	if err := oac.Exec(ctx); err != nil {
+func (_c *OAuthAccountCreate) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (oac *OAuthAccountCreate) defaults() {
-	if _, ok := oac.mutation.CreatedAt(); !ok {
+func (_c *OAuthAccountCreate) defaults() {
+	if _, ok := _c.mutation.CreatedAt(); !ok {
 		v := oauthaccount.DefaultCreatedAt()
-		oac.mutation.SetCreatedAt(v)
+		_c.mutation.SetCreatedAt(v)
 	}
-	if _, ok := oac.mutation.UpdatedAt(); !ok {
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
 		v := oauthaccount.DefaultUpdatedAt()
-		oac.mutation.SetUpdatedAt(v)
+		_c.mutation.SetUpdatedAt(v)
 	}
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (oac *OAuthAccountCreate) check() error {
-	if _, ok := oac.mutation.UserID(); !ok {
+func (_c *OAuthAccountCreate) check() error {
+	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "OAuthAccount.user_id"`)}
 	}
-	if _, ok := oac.mutation.Provider(); !ok {
+	if _, ok := _c.mutation.Provider(); !ok {
 		return &ValidationError{Name: "provider", err: errors.New(`ent: missing required field "OAuthAccount.provider"`)}
 	}
-	if v, ok := oac.mutation.Provider(); ok {
+	if v, ok := _c.mutation.Provider(); ok {
 		if err := oauthaccount.ProviderValidator(v); err != nil {
 			return &ValidationError{Name: "provider", err: fmt.Errorf(`ent: validator failed for field "OAuthAccount.provider": %w`, err)}
 		}
 	}
-	if _, ok := oac.mutation.ProviderUserID(); !ok {
+	if _, ok := _c.mutation.ProviderUserID(); !ok {
 		return &ValidationError{Name: "provider_user_id", err: errors.New(`ent: missing required field "OAuthAccount.provider_user_id"`)}
 	}
-	if len(oac.mutation.UserIDs()) == 0 {
+	if len(_c.mutation.UserIDs()) == 0 {
 		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "OAuthAccount.user"`)}
 	}
 	return nil
 }
 
-func (oac *OAuthAccountCreate) sqlSave(ctx context.Context) (*OAuthAccount, error) {
-	if err := oac.check(); err != nil {
+func (_c *OAuthAccountCreate) sqlSave(ctx context.Context) (*OAuthAccount, error) {
+	if err := _c.check(); err != nil {
 		return nil, err
 	}
-	_node, _spec := oac.createSpec()
-	if err := sqlgraph.CreateNode(ctx, oac.driver, _spec); err != nil {
+	_node, _spec := _c.createSpec()
+	if err := sqlgraph.CreateNode(ctx, _c.driver, _spec); err != nil {
 		if sqlgraph.IsConstraintError(err) {
 			err = &ConstraintError{msg: err.Error(), wrap: err}
 		}
@@ -202,50 +202,50 @@ func (oac *OAuthAccountCreate) sqlSave(ctx context.Context) (*OAuthAccount, erro
 	}
 	id := _spec.ID.Value.(int64)
 	_node.ID = int(id)
-	oac.mutation.id = &_node.ID
-	oac.mutation.done = true
+	_c.mutation.id = &_node.ID
+	_c.mutation.done = true
 	return _node, nil
 }
 
-func (oac *OAuthAccountCreate) createSpec() (*OAuthAccount, *sqlgraph.CreateSpec) {
+func (_c *OAuthAccountCreate) createSpec() (*OAuthAccount, *sqlgraph.CreateSpec) {
 	var (
-		_node = &OAuthAccount{config: oac.config}
+		_node = &OAuthAccount{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(oauthaccount.Table, sqlgraph.NewFieldSpec(oauthaccount.FieldID, field.TypeInt))
 	)
-	_spec.OnConflict = oac.conflict
-	if value, ok := oac.mutation.CreatedAt(); ok {
+	_spec.OnConflict = _c.conflict
+	if value, ok := _c.mutation.CreatedAt(); ok {
 		_spec.SetField(oauthaccount.FieldCreatedAt, field.TypeTime, value)
 		_node.CreatedAt = value
 	}
-	if value, ok := oac.mutation.UpdatedAt(); ok {
+	if value, ok := _c.mutation.UpdatedAt(); ok {
 		_spec.SetField(oauthaccount.FieldUpdatedAt, field.TypeTime, value)
 		_node.UpdatedAt = value
 	}
-	if value, ok := oac.mutation.Provider(); ok {
+	if value, ok := _c.mutation.Provider(); ok {
 		_spec.SetField(oauthaccount.FieldProvider, field.TypeString, value)
 		_node.Provider = value
 	}
-	if value, ok := oac.mutation.ProviderUserID(); ok {
+	if value, ok := _c.mutation.ProviderUserID(); ok {
 		_spec.SetField(oauthaccount.FieldProviderUserID, field.TypeString, value)
 		_node.ProviderUserID = value
 	}
-	if value, ok := oac.mutation.AccessToken(); ok {
+	if value, ok := _c.mutation.AccessToken(); ok {
 		_spec.SetField(oauthaccount.FieldAccessToken, field.TypeString, value)
 		_node.AccessToken = value
 	}
-	if value, ok := oac.mutation.RefreshToken(); ok {
+	if value, ok := _c.mutation.RefreshToken(); ok {
 		_spec.SetField(oauthaccount.FieldRefreshToken, field.TypeString, value)
 		_node.RefreshToken = value
 	}
-	if value, ok := oac.mutation.TokenExpiry(); ok {
+	if value, ok := _c.mutation.TokenExpiry(); ok {
 		_spec.SetField(oauthaccount.FieldTokenExpiry, field.TypeTime, value)
 		_node.TokenExpiry = value
 	}
-	if value, ok := oac.mutation.Profile(); ok {
+	if value, ok := _c.mutation.Profile(); ok {
 		_spec.SetField(oauthaccount.FieldProfile, field.TypeJSON, value)
 		_node.Profile = value
 	}
-	if nodes := oac.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: true,
@@ -281,10 +281,10 @@ func (oac *OAuthAccountCreate) createSpec() (*OAuthAccount, *sqlgraph.CreateSpec
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
-func (oac *OAuthAccountCreate) OnConflict(opts ...sql.ConflictOption) *OAuthAccountUpsertOne {
-	oac.conflict = opts
+func (_c *OAuthAccountCreate) OnConflict(opts ...sql.ConflictOption) *OAuthAccountUpsertOne {
+	_c.conflict = opts
 	return &OAuthAccountUpsertOne{
-		create: oac,
+		create: _c,
 	}
 }
 
@@ -294,10 +294,10 @@ func (oac *OAuthAccountCreate) OnConflict(opts ...sql.ConflictOption) *OAuthAcco
 //	client.OAuthAccount.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
-func (oac *OAuthAccountCreate) OnConflictColumns(columns ...string) *OAuthAccountUpsertOne {
-	oac.conflict = append(oac.conflict, sql.ConflictColumns(columns...))
+func (_c *OAuthAccountCreate) OnConflictColumns(columns ...string) *OAuthAccountUpsertOne {
+	_c.conflict = append(_c.conflict, sql.ConflictColumns(columns...))
 	return &OAuthAccountUpsertOne{
-		create: oac,
+		create: _c,
 	}
 }
 
@@ -674,16 +674,16 @@ type OAuthAccountCreateBulk struct {
 }
 
 // Save creates the OAuthAccount entities in the database.
-func (oacb *OAuthAccountCreateBulk) Save(ctx context.Context) ([]*OAuthAccount, error) {
-	if oacb.err != nil {
-		return nil, oacb.err
+func (_c *OAuthAccountCreateBulk) Save(ctx context.Context) ([]*OAuthAccount, error) {
+	if _c.err != nil {
+		return nil, _c.err
 	}
-	specs := make([]*sqlgraph.CreateSpec, len(oacb.builders))
-	nodes := make([]*OAuthAccount, len(oacb.builders))
-	mutators := make([]Mutator, len(oacb.builders))
-	for i := range oacb.builders {
+	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
+	nodes := make([]*OAuthAccount, len(_c.builders))
+	mutators := make([]Mutator, len(_c.builders))
+	for i := range _c.builders {
 		func(i int, root context.Context) {
-			builder := oacb.builders[i]
+			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*OAuthAccountMutation)
@@ -697,12 +697,12 @@ func (oacb *OAuthAccountCreateBulk) Save(ctx context.Context) ([]*OAuthAccount, 
 				var err error
 				nodes[i], specs[i] = builder.createSpec()
 				if i < len(mutators)-1 {
-					_, err = mutators[i+1].Mutate(root, oacb.builders[i+1].mutation)
+					_, err = mutators[i+1].Mutate(root, _c.builders[i+1].mutation)
 				} else {
 					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
-					spec.OnConflict = oacb.conflict
+					spec.OnConflict = _c.conflict
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, oacb.driver, spec); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, _c.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{msg: err.Error(), wrap: err}
 						}
@@ -726,7 +726,7 @@ func (oacb *OAuthAccountCreateBulk) Save(ctx context.Context) ([]*OAuthAccount, 
 		}(i, ctx)
 	}
 	if len(mutators) > 0 {
-		if _, err := mutators[0].Mutate(ctx, oacb.builders[0].mutation); err != nil {
+		if _, err := mutators[0].Mutate(ctx, _c.builders[0].mutation); err != nil {
 			return nil, err
 		}
 	}
@@ -734,8 +734,8 @@ func (oacb *OAuthAccountCreateBulk) Save(ctx context.Context) ([]*OAuthAccount, 
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (oacb *OAuthAccountCreateBulk) SaveX(ctx context.Context) []*OAuthAccount {
-	v, err := oacb.Save(ctx)
+func (_c *OAuthAccountCreateBulk) SaveX(ctx context.Context) []*OAuthAccount {
+	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -743,14 +743,14 @@ func (oacb *OAuthAccountCreateBulk) SaveX(ctx context.Context) []*OAuthAccount {
 }
 
 // Exec executes the query.
-func (oacb *OAuthAccountCreateBulk) Exec(ctx context.Context) error {
-	_, err := oacb.Save(ctx)
+func (_c *OAuthAccountCreateBulk) Exec(ctx context.Context) error {
+	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (oacb *OAuthAccountCreateBulk) ExecX(ctx context.Context) {
-	if err := oacb.Exec(ctx); err != nil {
+func (_c *OAuthAccountCreateBulk) ExecX(ctx context.Context) {
+	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
@@ -770,10 +770,10 @@ func (oacb *OAuthAccountCreateBulk) ExecX(ctx context.Context) {
 //			SetCreatedAt(v+v).
 //		}).
 //		Exec(ctx)
-func (oacb *OAuthAccountCreateBulk) OnConflict(opts ...sql.ConflictOption) *OAuthAccountUpsertBulk {
-	oacb.conflict = opts
+func (_c *OAuthAccountCreateBulk) OnConflict(opts ...sql.ConflictOption) *OAuthAccountUpsertBulk {
+	_c.conflict = opts
 	return &OAuthAccountUpsertBulk{
-		create: oacb,
+		create: _c,
 	}
 }
 
@@ -783,10 +783,10 @@ func (oacb *OAuthAccountCreateBulk) OnConflict(opts ...sql.ConflictOption) *OAut
 //	client.OAuthAccount.Create().
 //		OnConflict(sql.ConflictColumns(columns...)).
 //		Exec(ctx)
-func (oacb *OAuthAccountCreateBulk) OnConflictColumns(columns ...string) *OAuthAccountUpsertBulk {
-	oacb.conflict = append(oacb.conflict, sql.ConflictColumns(columns...))
+func (_c *OAuthAccountCreateBulk) OnConflictColumns(columns ...string) *OAuthAccountUpsertBulk {
+	_c.conflict = append(_c.conflict, sql.ConflictColumns(columns...))
 	return &OAuthAccountUpsertBulk{
-		create: oacb,
+		create: _c,
 	}
 }
 

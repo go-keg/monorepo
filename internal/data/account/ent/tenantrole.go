@@ -103,7 +103,7 @@ func (*TenantRole) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TenantRole fields.
-func (tr *TenantRole) assignValues(columns []string, values []any) error {
+func (_m *TenantRole) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -114,45 +114,45 @@ func (tr *TenantRole) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			tr.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case tenantrole.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				tr.CreatedAt = value.Time
+				_m.CreatedAt = value.Time
 			}
 		case tenantrole.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				tr.UpdatedAt = value.Time
+				_m.UpdatedAt = value.Time
 			}
 		case tenantrole.FieldTenantID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
 			} else if value.Valid {
-				tr.TenantID = int(value.Int64)
+				_m.TenantID = int(value.Int64)
 			}
 		case tenantrole.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
 			} else if value.Valid {
-				tr.Name = value.String
+				_m.Name = value.String
 			}
 		case tenantrole.FieldDescription:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
-				tr.Description = value.String
+				_m.Description = value.String
 			}
 		case tenantrole.FieldSort:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field sort", values[i])
 			} else if value.Valid {
-				tr.Sort = int(value.Int64)
+				_m.Sort = int(value.Int64)
 			}
 		default:
-			tr.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -160,114 +160,114 @@ func (tr *TenantRole) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TenantRole.
 // This includes values selected through modifiers, order, etc.
-func (tr *TenantRole) Value(name string) (ent.Value, error) {
-	return tr.selectValues.Get(name)
+func (_m *TenantRole) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryPermissions queries the "permissions" edge of the TenantRole entity.
-func (tr *TenantRole) QueryPermissions() *PermissionQuery {
-	return NewTenantRoleClient(tr.config).QueryPermissions(tr)
+func (_m *TenantRole) QueryPermissions() *PermissionQuery {
+	return NewTenantRoleClient(_m.config).QueryPermissions(_m)
 }
 
 // QueryTenantUsers queries the "tenant_users" edge of the TenantRole entity.
-func (tr *TenantRole) QueryTenantUsers() *TenantUserQuery {
-	return NewTenantRoleClient(tr.config).QueryTenantUsers(tr)
+func (_m *TenantRole) QueryTenantUsers() *TenantUserQuery {
+	return NewTenantRoleClient(_m.config).QueryTenantUsers(_m)
 }
 
 // QueryTenant queries the "tenant" edge of the TenantRole entity.
-func (tr *TenantRole) QueryTenant() *TenantQuery {
-	return NewTenantRoleClient(tr.config).QueryTenant(tr)
+func (_m *TenantRole) QueryTenant() *TenantQuery {
+	return NewTenantRoleClient(_m.config).QueryTenant(_m)
 }
 
 // Update returns a builder for updating this TenantRole.
 // Note that you need to call TenantRole.Unwrap() before calling this method if this TenantRole
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tr *TenantRole) Update() *TenantRoleUpdateOne {
-	return NewTenantRoleClient(tr.config).UpdateOne(tr)
+func (_m *TenantRole) Update() *TenantRoleUpdateOne {
+	return NewTenantRoleClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TenantRole entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tr *TenantRole) Unwrap() *TenantRole {
-	_tx, ok := tr.config.driver.(*txDriver)
+func (_m *TenantRole) Unwrap() *TenantRole {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: TenantRole is not a transactional entity")
 	}
-	tr.config.driver = _tx.drv
-	return tr
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tr *TenantRole) String() string {
+func (_m *TenantRole) String() string {
 	var builder strings.Builder
 	builder.WriteString("TenantRole(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tr.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
-	builder.WriteString(tr.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(tr.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("tenant_id=")
-	builder.WriteString(fmt.Sprintf("%v", tr.TenantID))
+	builder.WriteString(fmt.Sprintf("%v", _m.TenantID))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
-	builder.WriteString(tr.Name)
+	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
 	builder.WriteString("description=")
-	builder.WriteString(tr.Description)
+	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
 	builder.WriteString("sort=")
-	builder.WriteString(fmt.Sprintf("%v", tr.Sort))
+	builder.WriteString(fmt.Sprintf("%v", _m.Sort))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedPermissions returns the Permissions named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (tr *TenantRole) NamedPermissions(name string) ([]*Permission, error) {
-	if tr.Edges.namedPermissions == nil {
+func (_m *TenantRole) NamedPermissions(name string) ([]*Permission, error) {
+	if _m.Edges.namedPermissions == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := tr.Edges.namedPermissions[name]
+	nodes, ok := _m.Edges.namedPermissions[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (tr *TenantRole) appendNamedPermissions(name string, edges ...*Permission) {
-	if tr.Edges.namedPermissions == nil {
-		tr.Edges.namedPermissions = make(map[string][]*Permission)
+func (_m *TenantRole) appendNamedPermissions(name string, edges ...*Permission) {
+	if _m.Edges.namedPermissions == nil {
+		_m.Edges.namedPermissions = make(map[string][]*Permission)
 	}
 	if len(edges) == 0 {
-		tr.Edges.namedPermissions[name] = []*Permission{}
+		_m.Edges.namedPermissions[name] = []*Permission{}
 	} else {
-		tr.Edges.namedPermissions[name] = append(tr.Edges.namedPermissions[name], edges...)
+		_m.Edges.namedPermissions[name] = append(_m.Edges.namedPermissions[name], edges...)
 	}
 }
 
 // NamedTenantUsers returns the TenantUsers named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (tr *TenantRole) NamedTenantUsers(name string) ([]*TenantUser, error) {
-	if tr.Edges.namedTenantUsers == nil {
+func (_m *TenantRole) NamedTenantUsers(name string) ([]*TenantUser, error) {
+	if _m.Edges.namedTenantUsers == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := tr.Edges.namedTenantUsers[name]
+	nodes, ok := _m.Edges.namedTenantUsers[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (tr *TenantRole) appendNamedTenantUsers(name string, edges ...*TenantUser) {
-	if tr.Edges.namedTenantUsers == nil {
-		tr.Edges.namedTenantUsers = make(map[string][]*TenantUser)
+func (_m *TenantRole) appendNamedTenantUsers(name string, edges ...*TenantUser) {
+	if _m.Edges.namedTenantUsers == nil {
+		_m.Edges.namedTenantUsers = make(map[string][]*TenantUser)
 	}
 	if len(edges) == 0 {
-		tr.Edges.namedTenantUsers[name] = []*TenantUser{}
+		_m.Edges.namedTenantUsers[name] = []*TenantUser{}
 	} else {
-		tr.Edges.namedTenantUsers[name] = append(tr.Edges.namedTenantUsers[name], edges...)
+		_m.Edges.namedTenantUsers[name] = append(_m.Edges.namedTenantUsers[name], edges...)
 	}
 }
 

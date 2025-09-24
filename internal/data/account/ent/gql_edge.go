@@ -8,178 +8,178 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
-func (m *Membership) TenantUser(ctx context.Context) (*TenantUser, error) {
-	result, err := m.Edges.TenantUserOrErr()
+func (_m *Membership) TenantUser(ctx context.Context) (*TenantUser, error) {
+	result, err := _m.Edges.TenantUserOrErr()
 	if IsNotLoaded(err) {
-		result, err = m.QueryTenantUser().Only(ctx)
+		result, err = _m.QueryTenantUser().Only(ctx)
 	}
 	return result, err
 }
 
-func (m *Membership) Organization(ctx context.Context) (*Organization, error) {
-	result, err := m.Edges.OrganizationOrErr()
+func (_m *Membership) Organization(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OrganizationOrErr()
 	if IsNotLoaded(err) {
-		result, err = m.QueryOrganization().Only(ctx)
+		result, err = _m.QueryOrganization().Only(ctx)
 	}
 	return result, err
 }
 
-func (oa *OAuthAccount) User(ctx context.Context) (*User, error) {
-	result, err := oa.Edges.UserOrErr()
+func (_m *OAuthAccount) User(ctx context.Context) (*User, error) {
+	result, err := _m.Edges.UserOrErr()
 	if IsNotLoaded(err) {
-		result, err = oa.QueryUser().Only(ctx)
+		result, err = _m.QueryUser().Only(ctx)
 	}
 	return result, err
 }
 
-func (o *Organization) Parent(ctx context.Context) (*Organization, error) {
-	result, err := o.Edges.ParentOrErr()
+func (_m *Organization) Parent(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.ParentOrErr()
 	if IsNotLoaded(err) {
-		result, err = o.QueryParent().Only(ctx)
+		result, err = _m.QueryParent().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (o *Organization) Children(ctx context.Context) (result []*Organization, err error) {
+func (_m *Organization) Children(ctx context.Context) (result []*Organization, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedChildren(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = _m.NamedChildren(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = o.Edges.ChildrenOrErr()
+		result, err = _m.Edges.ChildrenOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = o.QueryChildren().All(ctx)
+		result, err = _m.QueryChildren().All(ctx)
 	}
 	return result, err
 }
 
-func (o *Organization) Memberships(ctx context.Context) (result []*Membership, err error) {
+func (_m *Organization) Memberships(ctx context.Context) (result []*Membership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = o.NamedMemberships(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = _m.NamedMemberships(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = o.Edges.MembershipsOrErr()
+		result, err = _m.Edges.MembershipsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = o.QueryMemberships().All(ctx)
+		result, err = _m.QueryMemberships().All(ctx)
 	}
 	return result, err
 }
 
-func (pe *Permission) Parent(ctx context.Context) (*Permission, error) {
-	result, err := pe.Edges.ParentOrErr()
+func (_m *Permission) Parent(ctx context.Context) (*Permission, error) {
+	result, err := _m.Edges.ParentOrErr()
 	if IsNotLoaded(err) {
-		result, err = pe.QueryParent().Only(ctx)
+		result, err = _m.QueryParent().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
 
-func (pe *Permission) Children(ctx context.Context) (result []*Permission, err error) {
+func (_m *Permission) Children(ctx context.Context) (result []*Permission, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = pe.NamedChildren(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = _m.NamedChildren(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = pe.Edges.ChildrenOrErr()
+		result, err = _m.Edges.ChildrenOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = pe.QueryChildren().All(ctx)
+		result, err = _m.QueryChildren().All(ctx)
 	}
 	return result, err
 }
 
-func (t *Tenant) TenantUsers(ctx context.Context) (result []*TenantUser, err error) {
+func (_m *Tenant) TenantUsers(ctx context.Context) (result []*TenantUser, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = t.NamedTenantUsers(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = _m.NamedTenantUsers(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = t.Edges.TenantUsersOrErr()
+		result, err = _m.Edges.TenantUsersOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = t.QueryTenantUsers().All(ctx)
+		result, err = _m.QueryTenantUsers().All(ctx)
 	}
 	return result, err
 }
 
-func (t *Tenant) Roles(ctx context.Context) (result []*TenantRole, err error) {
+func (_m *Tenant) Roles(ctx context.Context) (result []*TenantRole, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = t.NamedRoles(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = _m.NamedRoles(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = t.Edges.RolesOrErr()
+		result, err = _m.Edges.RolesOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = t.QueryRoles().All(ctx)
+		result, err = _m.QueryRoles().All(ctx)
 	}
 	return result, err
 }
 
-func (t *Tenant) Organizations(ctx context.Context) (result []*Organization, err error) {
+func (_m *Tenant) Organizations(ctx context.Context) (result []*Organization, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = t.NamedOrganizations(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = _m.NamedOrganizations(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = t.Edges.OrganizationsOrErr()
+		result, err = _m.Edges.OrganizationsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = t.QueryOrganizations().All(ctx)
+		result, err = _m.QueryOrganizations().All(ctx)
 	}
 	return result, err
 }
 
-func (tr *TenantRole) Permissions(ctx context.Context) (result []*Permission, err error) {
+func (_m *TenantRole) Permissions(ctx context.Context) (result []*Permission, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = tr.NamedPermissions(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = _m.NamedPermissions(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = tr.Edges.PermissionsOrErr()
+		result, err = _m.Edges.PermissionsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = tr.QueryPermissions().All(ctx)
+		result, err = _m.QueryPermissions().All(ctx)
 	}
 	return result, err
 }
 
-func (tu *TenantUser) User(ctx context.Context) (*User, error) {
-	result, err := tu.Edges.UserOrErr()
+func (_m *TenantUser) User(ctx context.Context) (*User, error) {
+	result, err := _m.Edges.UserOrErr()
 	if IsNotLoaded(err) {
-		result, err = tu.QueryUser().Only(ctx)
+		result, err = _m.QueryUser().Only(ctx)
 	}
 	return result, err
 }
 
-func (tu *TenantUser) Tenant(ctx context.Context) (*Tenant, error) {
-	result, err := tu.Edges.TenantOrErr()
+func (_m *TenantUser) Tenant(ctx context.Context) (*Tenant, error) {
+	result, err := _m.Edges.TenantOrErr()
 	if IsNotLoaded(err) {
-		result, err = tu.QueryTenant().Only(ctx)
+		result, err = _m.QueryTenant().Only(ctx)
 	}
 	return result, err
 }
 
-func (tu *TenantUser) Roles(ctx context.Context) (result []*TenantRole, err error) {
+func (_m *TenantUser) Roles(ctx context.Context) (result []*TenantRole, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = tu.NamedRoles(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = _m.NamedRoles(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = tu.Edges.RolesOrErr()
+		result, err = _m.Edges.RolesOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = tu.QueryRoles().All(ctx)
+		result, err = _m.QueryRoles().All(ctx)
 	}
 	return result, err
 }
 
-func (tu *TenantUser) Memberships(ctx context.Context) (result []*Membership, err error) {
+func (_m *TenantUser) Memberships(ctx context.Context) (result []*Membership, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = tu.NamedMemberships(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = _m.NamedMemberships(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = tu.Edges.MembershipsOrErr()
+		result, err = _m.Edges.MembershipsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = tu.QueryMemberships().All(ctx)
+		result, err = _m.QueryMemberships().All(ctx)
 	}
 	return result, err
 }
 
-func (u *User) OauthAccounts(ctx context.Context) (result []*OAuthAccount, err error) {
+func (_m *User) OauthAccounts(ctx context.Context) (result []*OAuthAccount, err error) {
 	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = u.NamedOauthAccounts(graphql.GetFieldContext(ctx).Field.Alias)
+		result, err = _m.NamedOauthAccounts(graphql.GetFieldContext(ctx).Field.Alias)
 	} else {
-		result, err = u.Edges.OauthAccountsOrErr()
+		result, err = _m.Edges.OauthAccountsOrErr()
 	}
 	if IsNotLoaded(err) {
-		result, err = u.QueryOauthAccounts().All(ctx)
+		result, err = _m.QueryOauthAccounts().All(ctx)
 	}
 	return result, err
 }

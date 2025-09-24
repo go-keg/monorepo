@@ -117,7 +117,7 @@ func (*TenantUser) scanValues(columns []string) ([]any, error) {
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
 // to the TenantUser fields.
-func (tu *TenantUser) assignValues(columns []string, values []any) error {
+func (_m *TenantUser) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -128,45 +128,45 @@ func (tu *TenantUser) assignValues(columns []string, values []any) error {
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			tu.ID = int(value.Int64)
+			_m.ID = int(value.Int64)
 		case tenantuser.FieldTenantID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field tenant_id", values[i])
 			} else if value.Valid {
-				tu.TenantID = int(value.Int64)
+				_m.TenantID = int(value.Int64)
 			}
 		case tenantuser.FieldUserID:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value.Valid {
-				tu.UserID = int(value.Int64)
+				_m.UserID = int(value.Int64)
 			}
 		case tenantuser.FieldIsOwner:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_owner", values[i])
 			} else if value.Valid {
-				tu.IsOwner = value.Bool
+				_m.IsOwner = value.Bool
 			}
 		case tenantuser.FieldIsActive:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field is_active", values[i])
 			} else if value.Valid {
-				tu.IsActive = value.Bool
+				_m.IsActive = value.Bool
 			}
 		case tenantuser.FieldLastLoginTenant:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field last_login_tenant", values[i])
 			} else if value.Valid {
-				tu.LastLoginTenant = value.Bool
+				_m.LastLoginTenant = value.Bool
 			}
 		case tenantuser.FieldLastLoginAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_login_at", values[i])
 			} else if value.Valid {
-				tu.LastLoginAt = value.Time
+				_m.LastLoginAt = value.Time
 			}
 		default:
-			tu.selectValues.Set(columns[i], values[i])
+			_m.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
@@ -174,119 +174,119 @@ func (tu *TenantUser) assignValues(columns []string, values []any) error {
 
 // Value returns the ent.Value that was dynamically selected and assigned to the TenantUser.
 // This includes values selected through modifiers, order, etc.
-func (tu *TenantUser) Value(name string) (ent.Value, error) {
-	return tu.selectValues.Get(name)
+func (_m *TenantUser) Value(name string) (ent.Value, error) {
+	return _m.selectValues.Get(name)
 }
 
 // QueryUser queries the "user" edge of the TenantUser entity.
-func (tu *TenantUser) QueryUser() *UserQuery {
-	return NewTenantUserClient(tu.config).QueryUser(tu)
+func (_m *TenantUser) QueryUser() *UserQuery {
+	return NewTenantUserClient(_m.config).QueryUser(_m)
 }
 
 // QueryTenant queries the "tenant" edge of the TenantUser entity.
-func (tu *TenantUser) QueryTenant() *TenantQuery {
-	return NewTenantUserClient(tu.config).QueryTenant(tu)
+func (_m *TenantUser) QueryTenant() *TenantQuery {
+	return NewTenantUserClient(_m.config).QueryTenant(_m)
 }
 
 // QueryRoles queries the "roles" edge of the TenantUser entity.
-func (tu *TenantUser) QueryRoles() *TenantRoleQuery {
-	return NewTenantUserClient(tu.config).QueryRoles(tu)
+func (_m *TenantUser) QueryRoles() *TenantRoleQuery {
+	return NewTenantUserClient(_m.config).QueryRoles(_m)
 }
 
 // QueryMemberships queries the "memberships" edge of the TenantUser entity.
-func (tu *TenantUser) QueryMemberships() *MembershipQuery {
-	return NewTenantUserClient(tu.config).QueryMemberships(tu)
+func (_m *TenantUser) QueryMemberships() *MembershipQuery {
+	return NewTenantUserClient(_m.config).QueryMemberships(_m)
 }
 
 // Update returns a builder for updating this TenantUser.
 // Note that you need to call TenantUser.Unwrap() before calling this method if this TenantUser
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (tu *TenantUser) Update() *TenantUserUpdateOne {
-	return NewTenantUserClient(tu.config).UpdateOne(tu)
+func (_m *TenantUser) Update() *TenantUserUpdateOne {
+	return NewTenantUserClient(_m.config).UpdateOne(_m)
 }
 
 // Unwrap unwraps the TenantUser entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (tu *TenantUser) Unwrap() *TenantUser {
-	_tx, ok := tu.config.driver.(*txDriver)
+func (_m *TenantUser) Unwrap() *TenantUser {
+	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
 		panic("ent: TenantUser is not a transactional entity")
 	}
-	tu.config.driver = _tx.drv
-	return tu
+	_m.config.driver = _tx.drv
+	return _m
 }
 
 // String implements the fmt.Stringer.
-func (tu *TenantUser) String() string {
+func (_m *TenantUser) String() string {
 	var builder strings.Builder
 	builder.WriteString("TenantUser(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", tu.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("tenant_id=")
-	builder.WriteString(fmt.Sprintf("%v", tu.TenantID))
+	builder.WriteString(fmt.Sprintf("%v", _m.TenantID))
 	builder.WriteString(", ")
 	builder.WriteString("user_id=")
-	builder.WriteString(fmt.Sprintf("%v", tu.UserID))
+	builder.WriteString(fmt.Sprintf("%v", _m.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("is_owner=")
-	builder.WriteString(fmt.Sprintf("%v", tu.IsOwner))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsOwner))
 	builder.WriteString(", ")
 	builder.WriteString("is_active=")
-	builder.WriteString(fmt.Sprintf("%v", tu.IsActive))
+	builder.WriteString(fmt.Sprintf("%v", _m.IsActive))
 	builder.WriteString(", ")
 	builder.WriteString("last_login_tenant=")
-	builder.WriteString(fmt.Sprintf("%v", tu.LastLoginTenant))
+	builder.WriteString(fmt.Sprintf("%v", _m.LastLoginTenant))
 	builder.WriteString(", ")
 	builder.WriteString("last_login_at=")
-	builder.WriteString(tu.LastLoginAt.Format(time.ANSIC))
+	builder.WriteString(_m.LastLoginAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
 // NamedRoles returns the Roles named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (tu *TenantUser) NamedRoles(name string) ([]*TenantRole, error) {
-	if tu.Edges.namedRoles == nil {
+func (_m *TenantUser) NamedRoles(name string) ([]*TenantRole, error) {
+	if _m.Edges.namedRoles == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := tu.Edges.namedRoles[name]
+	nodes, ok := _m.Edges.namedRoles[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (tu *TenantUser) appendNamedRoles(name string, edges ...*TenantRole) {
-	if tu.Edges.namedRoles == nil {
-		tu.Edges.namedRoles = make(map[string][]*TenantRole)
+func (_m *TenantUser) appendNamedRoles(name string, edges ...*TenantRole) {
+	if _m.Edges.namedRoles == nil {
+		_m.Edges.namedRoles = make(map[string][]*TenantRole)
 	}
 	if len(edges) == 0 {
-		tu.Edges.namedRoles[name] = []*TenantRole{}
+		_m.Edges.namedRoles[name] = []*TenantRole{}
 	} else {
-		tu.Edges.namedRoles[name] = append(tu.Edges.namedRoles[name], edges...)
+		_m.Edges.namedRoles[name] = append(_m.Edges.namedRoles[name], edges...)
 	}
 }
 
 // NamedMemberships returns the Memberships named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (tu *TenantUser) NamedMemberships(name string) ([]*Membership, error) {
-	if tu.Edges.namedMemberships == nil {
+func (_m *TenantUser) NamedMemberships(name string) ([]*Membership, error) {
+	if _m.Edges.namedMemberships == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := tu.Edges.namedMemberships[name]
+	nodes, ok := _m.Edges.namedMemberships[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (tu *TenantUser) appendNamedMemberships(name string, edges ...*Membership) {
-	if tu.Edges.namedMemberships == nil {
-		tu.Edges.namedMemberships = make(map[string][]*Membership)
+func (_m *TenantUser) appendNamedMemberships(name string, edges ...*Membership) {
+	if _m.Edges.namedMemberships == nil {
+		_m.Edges.namedMemberships = make(map[string][]*Membership)
 	}
 	if len(edges) == 0 {
-		tu.Edges.namedMemberships[name] = []*Membership{}
+		_m.Edges.namedMemberships[name] = []*Membership{}
 	} else {
-		tu.Edges.namedMemberships[name] = append(tu.Edges.namedMemberships[name], edges...)
+		_m.Edges.namedMemberships[name] = append(_m.Edges.namedMemberships[name], edges...)
 	}
 }
 

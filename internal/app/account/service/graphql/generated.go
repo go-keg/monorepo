@@ -49,6 +49,7 @@ type ResolverRoot interface {
 	Organization() OrganizationResolver
 	Permission() PermissionResolver
 	Query() QueryResolver
+	Subscription() SubscriptionResolver
 	TenantUser() TenantUserResolver
 	User() UserResolver
 }
@@ -86,6 +87,16 @@ type ComplexityRoot struct {
 		UpdatedAt      func(childComplexity int) int
 	}
 
+	Message struct {
+		Content     func(childComplexity int) int
+		ContentType func(childComplexity int) int
+		CreatedAt   func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Metadata    func(childComplexity int) int
+		Sender      func(childComplexity int) int
+		Type        func(childComplexity int) int
+	}
+
 	Mutation struct {
 		CreateMembership    func(childComplexity int, input ent.CreateMembershipInput) int
 		CreateOrganization  func(childComplexity int, input ent.CreateOrganizationInput) int
@@ -101,7 +112,11 @@ type ComplexityRoot struct {
 		DeleteUser          func(childComplexity int, id int) int
 		ForgetPassword      func(childComplexity int, email string, code string, password string) int
 		LinkGoogleAccount   func(childComplexity int, state string, code string) int
+		Login               func(childComplexity int, email string, password string, captchaID *string, captchaValue *string) int
+		Refresh             func(childComplexity int) int
 		ResetPassword       func(childComplexity int, oldPassword string, password string) int
+		SendMessage         func(childComplexity int, input model.SendMessageInput) int
+		SendVerifyCode      func(childComplexity int, email string, verifyType model.VerifyCodeType) int
 		UnlinkGoogleAccount func(childComplexity int) int
 		UpdateMembership    func(childComplexity int, id int, input ent.UpdateMembershipInput) int
 		UpdateOrganization  func(childComplexity int, id int, input ent.UpdateOrganizationInput) int
@@ -200,18 +215,19 @@ type ComplexityRoot struct {
 		Captcha             func(childComplexity int) int
 		GoogleOAuthLogin    func(childComplexity int, state string, code string) int
 		GoogleOAuthRegister func(childComplexity int, state string, code string) int
-		Login               func(childComplexity int, email string, password string, captchaID *string, captchaValue *string) int
 		Node                func(childComplexity int, id int) int
 		Nodes               func(childComplexity int, ids []int) int
 		PermissionList      func(childComplexity int, offset int, limit int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) int
 		Permissions         func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.PermissionOrder, where *ent.PermissionWhereInput) int
 		Profile             func(childComplexity int) int
-		Refresh             func(childComplexity int) int
-		SendVerifyCode      func(childComplexity int, email string, verifyType model.VerifyCodeType) int
 		TenantRoleList      func(childComplexity int, offset int, limit int, orderBy *ent.TenantRoleOrder, where *ent.TenantRoleWhereInput) int
 		TenantRoles         func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.TenantRoleOrder, where *ent.TenantRoleWhereInput) int
 		UserList            func(childComplexity int, offset int, limit int, orderBy *ent.UserOrder, where *ent.UserWhereInput) int
 		Users               func(childComplexity int, after *entgql.Cursor[int], first *int, before *entgql.Cursor[int], last *int, orderBy *ent.UserOrder, where *ent.UserWhereInput) int
+	}
+
+	Subscription struct {
+		MessageReceived func(childComplexity int) int
 	}
 
 	Tenant struct {
@@ -302,6 +318,9 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
+	Login(ctx context.Context, email string, password string, captchaID *string, captchaValue *string) (*model.LoginReply, error)
+	Refresh(ctx context.Context) (*model.LoginReply, error)
+	SendVerifyCode(ctx context.Context, email string, verifyType model.VerifyCodeType) (bool, error)
 	ResetPassword(ctx context.Context, oldPassword string, password string) (bool, error)
 	ForgetPassword(ctx context.Context, email string, code string, password string) (bool, error)
 	UpdateProfile(ctx context.Context, input model.UpdateProfileInput) (*ent.User, error)
@@ -325,6 +344,7 @@ type MutationResolver interface {
 	CreateTenantRole(ctx context.Context, input ent.CreateTenantRoleInput) (*ent.TenantRole, error)
 	UpdateTenantRole(ctx context.Context, id int, input ent.UpdateTenantRoleInput) (*ent.TenantRole, error)
 	DeleteTenantRole(ctx context.Context, id int) (bool, error)
+	SendMessage(ctx context.Context, input model.SendMessageInput) (*model.Message, error)
 }
 type OrganizationResolver interface {
 	ChildrenCount(ctx context.Context, obj *ent.Organization) (int, error)
@@ -344,11 +364,11 @@ type QueryResolver interface {
 	UserList(ctx context.Context, offset int, limit int, orderBy *ent.UserOrder, where *ent.UserWhereInput) (*ent.UserList, error)
 	GoogleOAuthLogin(ctx context.Context, state string, code string) (*model.LoginReply, error)
 	GoogleOAuthRegister(ctx context.Context, state string, code string) (*model.LoginReply, error)
-	Login(ctx context.Context, email string, password string, captchaID *string, captchaValue *string) (*model.LoginReply, error)
 	Profile(ctx context.Context) (*ent.User, error)
-	Refresh(ctx context.Context) (*model.LoginReply, error)
-	SendVerifyCode(ctx context.Context, email string, verifyType model.VerifyCodeType) (bool, error)
 	Captcha(ctx context.Context) (*model.CaptchaReply, error)
+}
+type SubscriptionResolver interface {
+	MessageReceived(ctx context.Context) (<-chan *model.Message, error)
 }
 type TenantUserResolver interface {
 	RoleCount(ctx context.Context, obj *ent.TenantUser) (int, error)
@@ -457,6 +477,49 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Membership.UpdatedAt(childComplexity), true
+
+	case "Message.content":
+		if e.complexity.Message.Content == nil {
+			break
+		}
+
+		return e.complexity.Message.Content(childComplexity), true
+	case "Message.contentType":
+		if e.complexity.Message.ContentType == nil {
+			break
+		}
+
+		return e.complexity.Message.ContentType(childComplexity), true
+	case "Message.createdAt":
+		if e.complexity.Message.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Message.CreatedAt(childComplexity), true
+	case "Message.id":
+		if e.complexity.Message.ID == nil {
+			break
+		}
+
+		return e.complexity.Message.ID(childComplexity), true
+	case "Message.metadata":
+		if e.complexity.Message.Metadata == nil {
+			break
+		}
+
+		return e.complexity.Message.Metadata(childComplexity), true
+	case "Message.sender":
+		if e.complexity.Message.Sender == nil {
+			break
+		}
+
+		return e.complexity.Message.Sender(childComplexity), true
+	case "Message.type":
+		if e.complexity.Message.Type == nil {
+			break
+		}
+
+		return e.complexity.Message.Type(childComplexity), true
 
 	case "Mutation.createMembership":
 		if e.complexity.Mutation.CreateMembership == nil {
@@ -612,6 +675,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.LinkGoogleAccount(childComplexity, args["state"].(string), args["code"].(string)), true
+	case "Mutation.login":
+		if e.complexity.Mutation.Login == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_login_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.Login(childComplexity, args["email"].(string), args["password"].(string), args["captchaId"].(*string), args["captchaValue"].(*string)), true
+	case "Mutation.refresh":
+		if e.complexity.Mutation.Refresh == nil {
+			break
+		}
+
+		return e.complexity.Mutation.Refresh(childComplexity), true
 	case "Mutation.resetPassword":
 		if e.complexity.Mutation.ResetPassword == nil {
 			break
@@ -623,6 +703,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.ResetPassword(childComplexity, args["oldPassword"].(string), args["password"].(string)), true
+	case "Mutation.sendMessage":
+		if e.complexity.Mutation.SendMessage == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendMessage_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.SendMessage(childComplexity, args["input"].(model.SendMessageInput)), true
+	case "Mutation.sendVerifyCode":
+		if e.complexity.Mutation.SendVerifyCode == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendVerifyCode_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.SendVerifyCode(childComplexity, args["email"].(string), args["verifyType"].(model.VerifyCodeType)), true
 	case "Mutation.unlinkGoogleAccount":
 		if e.complexity.Mutation.UnlinkGoogleAccount == nil {
 			break
@@ -1103,17 +1205,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.GoogleOAuthRegister(childComplexity, args["state"].(string), args["code"].(string)), true
-	case "Query.login":
-		if e.complexity.Query.Login == nil {
-			break
-		}
-
-		args, err := ec.field_Query_login_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.Login(childComplexity, args["email"].(string), args["password"].(string), args["captchaId"].(*string), args["captchaValue"].(*string)), true
 	case "Query.node":
 		if e.complexity.Query.Node == nil {
 			break
@@ -1164,23 +1255,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Profile(childComplexity), true
-	case "Query.refresh":
-		if e.complexity.Query.Refresh == nil {
-			break
-		}
-
-		return e.complexity.Query.Refresh(childComplexity), true
-	case "Query.sendVerifyCode":
-		if e.complexity.Query.SendVerifyCode == nil {
-			break
-		}
-
-		args, err := ec.field_Query_sendVerifyCode_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.SendVerifyCode(childComplexity, args["email"].(string), args["verifyType"].(model.VerifyCodeType)), true
 	case "Query.tenantRoleList":
 		if e.complexity.Query.TenantRoleList == nil {
 			break
@@ -1225,6 +1299,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Users(childComplexity, args["after"].(*entgql.Cursor[int]), args["first"].(*int), args["before"].(*entgql.Cursor[int]), args["last"].(*int), args["orderBy"].(*ent.UserOrder), args["where"].(*ent.UserWhereInput)), true
+
+	case "Subscription.messageReceived":
+		if e.complexity.Subscription.MessageReceived == nil {
+			break
+		}
+
+		return e.complexity.Subscription.MessageReceived(childComplexity), true
 
 	case "Tenant.createdAt":
 		if e.complexity.Tenant.CreatedAt == nil {
@@ -1600,6 +1681,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputOrganizationWhereInput,
 		ec.unmarshalInputPermissionOrder,
 		ec.unmarshalInputPermissionWhereInput,
+		ec.unmarshalInputSendMessageInput,
 		ec.unmarshalInputTenantOrder,
 		ec.unmarshalInputTenantRoleOrder,
 		ec.unmarshalInputTenantRoleWhereInput,
@@ -1663,6 +1745,23 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 				Data: buf.Bytes(),
 			}
 		}
+	case ast.Subscription:
+		next := ec._Subscription(ctx, opCtx.Operation.SelectionSet)
+
+		var buf bytes.Buffer
+		return func(ctx context.Context) *graphql.Response {
+			buf.Reset()
+			data := next(ctx)
+
+			if data == nil {
+				return nil
+			}
+			data.MarshalGQL(&buf)
+
+			return &graphql.Response{
+				Data: buf.Bytes(),
+			}
+		}
 
 	default:
 		return graphql.OneShot(graphql.ErrorResponse(ctx, "unsupported GraphQL operation"))
@@ -1710,7 +1809,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(ec.Schema(), ec.Schema().Types[name]), nil
 }
 
-//go:embed "admin.graphql" "definitions.graphql" "ent.graphql" "oauth.graphql" "organization.graphql" "role.graphql" "user.graphql"
+//go:embed "admin.graphql" "definitions.graphql" "ent.graphql" "oauth.graphql" "organization.graphql" "role.graphql" "subscribe.graphql" "user.graphql"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -1728,6 +1827,7 @@ var sources = []*ast.Source{
 	{Name: "oauth.graphql", Input: sourceData("oauth.graphql"), BuiltIn: false},
 	{Name: "organization.graphql", Input: sourceData("organization.graphql"), BuiltIn: false},
 	{Name: "role.graphql", Input: sourceData("role.graphql"), BuiltIn: false},
+	{Name: "subscribe.graphql", Input: sourceData("subscribe.graphql"), BuiltIn: false},
 	{Name: "user.graphql", Input: sourceData("user.graphql"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -1960,6 +2060,32 @@ func (ec *executionContext) field_Mutation_linkGoogleAccount_args(ctx context.Co
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_login_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email", ec.unmarshalNString2string)
+	if err != nil {
+		return nil, err
+	}
+	args["email"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "password", ec.unmarshalNString2string)
+	if err != nil {
+		return nil, err
+	}
+	args["password"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "captchaId", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["captchaId"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "captchaValue", ec.unmarshalOString2ᚖstring)
+	if err != nil {
+		return nil, err
+	}
+	args["captchaValue"] = arg3
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_resetPassword_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1973,6 +2099,33 @@ func (ec *executionContext) field_Mutation_resetPassword_args(ctx context.Contex
 		return nil, err
 	}
 	args["password"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_sendMessage_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNSendMessageInput2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐSendMessageInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_sendVerifyCode_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email", ec.unmarshalNString2string)
+	if err != nil {
+		return nil, err
+	}
+	args["email"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "verifyType", ec.unmarshalNVerifyCodeType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐVerifyCodeType)
+	if err != nil {
+		return nil, err
+	}
+	args["verifyType"] = arg1
 	return args, nil
 }
 
@@ -2126,32 +2279,6 @@ func (ec *executionContext) field_Query_googleOAuthRegister_args(ctx context.Con
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_login_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email", ec.unmarshalNString2string)
-	if err != nil {
-		return nil, err
-	}
-	args["email"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "password", ec.unmarshalNString2string)
-	if err != nil {
-		return nil, err
-	}
-	args["password"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "captchaId", ec.unmarshalOString2ᚖstring)
-	if err != nil {
-		return nil, err
-	}
-	args["captchaId"] = arg2
-	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "captchaValue", ec.unmarshalOString2ᚖstring)
-	if err != nil {
-		return nil, err
-	}
-	args["captchaValue"] = arg3
-	return args, nil
-}
-
 func (ec *executionContext) field_Query_node_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2233,22 +2360,6 @@ func (ec *executionContext) field_Query_permissions_args(ctx context.Context, ra
 		return nil, err
 	}
 	args["where"] = arg5
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_sendVerifyCode_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email", ec.unmarshalNString2string)
-	if err != nil {
-		return nil, err
-	}
-	args["email"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "verifyType", ec.unmarshalNVerifyCodeType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐVerifyCodeType)
-	if err != nil {
-		return nil, err
-	}
-	args["verifyType"] = arg1
 	return args, nil
 }
 
@@ -2445,7 +2556,9 @@ func (ec *executionContext) _CaptchaReply_id(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_CaptchaReply_id,
-		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -2472,7 +2585,9 @@ func (ec *executionContext) _CaptchaReply_captcha(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_CaptchaReply_captcha,
-		func(ctx context.Context) (any, error) { return obj.Captcha, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Captcha, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -2499,7 +2614,9 @@ func (ec *executionContext) _LoginReply_token(ctx context.Context, field graphql
 		ec.OperationContext,
 		field,
 		ec.fieldContext_LoginReply_token,
-		func(ctx context.Context) (any, error) { return obj.Token, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Token, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -2526,7 +2643,9 @@ func (ec *executionContext) _LoginReply_exp(ctx context.Context, field graphql.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_LoginReply_exp,
-		func(ctx context.Context) (any, error) { return obj.Exp, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Exp, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -2553,7 +2672,9 @@ func (ec *executionContext) _LoginReply_user(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_LoginReply_user,
-		func(ctx context.Context) (any, error) { return obj.User, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.User, nil
+		},
 		nil,
 		ec.marshalNUser2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUser,
 		true,
@@ -2602,7 +2723,9 @@ func (ec *executionContext) _Membership_id(ctx context.Context, field graphql.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Membership_id,
-		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -2629,7 +2752,9 @@ func (ec *executionContext) _Membership_createdAt(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Membership_createdAt,
-		func(ctx context.Context) (any, error) { return obj.CreatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -2656,7 +2781,9 @@ func (ec *executionContext) _Membership_updatedAt(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Membership_updatedAt,
-		func(ctx context.Context) (any, error) { return obj.UpdatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -2683,7 +2810,9 @@ func (ec *executionContext) _Membership_organizationID(ctx context.Context, fiel
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Membership_organizationID,
-		func(ctx context.Context) (any, error) { return obj.OrganizationID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.OrganizationID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -2710,7 +2839,9 @@ func (ec *executionContext) _Membership_tenantUserID(ctx context.Context, field 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Membership_tenantUserID,
-		func(ctx context.Context) (any, error) { return obj.TenantUserID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TenantUserID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -2737,7 +2868,9 @@ func (ec *executionContext) _Membership_isLeader(ctx context.Context, field grap
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Membership_isLeader,
-		func(ctx context.Context) (any, error) { return obj.IsLeader, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.IsLeader, nil
+		},
 		nil,
 		ec.marshalNBoolean2bool,
 		true,
@@ -2870,6 +3003,349 @@ func (ec *executionContext) fieldContext_Membership_organization(_ context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Message_id(ctx context.Context, field graphql.CollectedField, obj *model.Message) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Message_id,
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		ec.marshalNID2int,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Message_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Message",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Message_sender(ctx context.Context, field graphql.CollectedField, obj *model.Message) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Message_sender,
+		func(ctx context.Context) (any, error) {
+			return obj.Sender, nil
+		},
+		nil,
+		ec.marshalOID2ᚖint,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Message_sender(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Message",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Message_type(ctx context.Context, field graphql.CollectedField, obj *model.Message) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Message_type,
+		func(ctx context.Context) (any, error) {
+			return obj.Type, nil
+		},
+		nil,
+		ec.marshalNMessageType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessageType,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Message_type(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Message",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type MessageType does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Message_content(ctx context.Context, field graphql.CollectedField, obj *model.Message) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Message_content,
+		func(ctx context.Context) (any, error) {
+			return obj.Content, nil
+		},
+		nil,
+		ec.marshalNString2string,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Message_content(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Message",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Message_contentType(ctx context.Context, field graphql.CollectedField, obj *model.Message) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Message_contentType,
+		func(ctx context.Context) (any, error) {
+			return obj.ContentType, nil
+		},
+		nil,
+		ec.marshalNMessageContentType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessageContentType,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Message_contentType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Message",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type MessageContentType does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Message_metadata(ctx context.Context, field graphql.CollectedField, obj *model.Message) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Message_metadata,
+		func(ctx context.Context) (any, error) {
+			return obj.Metadata, nil
+		},
+		nil,
+		ec.marshalOMap2map,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_Message_metadata(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Message",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Map does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Message_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Message) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Message_createdAt,
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		ec.marshalNTime2timeᚐTime,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Message_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Message",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Time does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_login(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_login,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().Login(ctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["captchaId"].(*string), fc.Args["captchaValue"].(*string))
+		},
+		nil,
+		ec.marshalNLoginReply2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐLoginReply,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_login(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "token":
+				return ec.fieldContext_LoginReply_token(ctx, field)
+			case "exp":
+				return ec.fieldContext_LoginReply_exp(ctx, field)
+			case "user":
+				return ec.fieldContext_LoginReply_user(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type LoginReply", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_login_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_refresh(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_refresh,
+		func(ctx context.Context) (any, error) {
+			return ec.resolvers.Mutation().Refresh(ctx)
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.directives.Login == nil {
+					var zeroVal *model.LoginReply
+					return zeroVal, errors.New("directive login is not implemented")
+				}
+				return ec.directives.Login(ctx, nil, directive0)
+			}
+
+			next = directive1
+			return next
+		},
+		ec.marshalNLoginReply2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐLoginReply,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_refresh(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "token":
+				return ec.fieldContext_LoginReply_token(ctx, field)
+			case "exp":
+				return ec.fieldContext_LoginReply_exp(ctx, field)
+			case "user":
+				return ec.fieldContext_LoginReply_user(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type LoginReply", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_sendVerifyCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_sendVerifyCode,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().SendVerifyCode(ctx, fc.Args["email"].(string), fc.Args["verifyType"].(model.VerifyCodeType))
+		},
+		nil,
+		ec.marshalNBoolean2bool,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_sendVerifyCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_sendVerifyCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_resetPassword(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -2877,10 +3353,11 @@ func (ec *executionContext) _Mutation_resetPassword(ctx context.Context, field g
 		field,
 		ec.fieldContext_Mutation_resetPassword,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().ResetPassword(ctx, fc.Args["oldPassword"].(string), fc.Args["password"].(string))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().ResetPassword(ctx, fc.Args["oldPassword"].(string), fc.Args["password"].(string))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				if ec.directives.Login == nil {
@@ -2890,19 +3367,9 @@ func (ec *executionContext) _Mutation_resetPassword(ctx context.Context, field g
 				return ec.directives.Login(ctx, nil, directive0)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(bool); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNBoolean2bool,
 		true,
 		true,
@@ -2981,10 +3448,11 @@ func (ec *executionContext) _Mutation_updateProfile(ctx context.Context, field g
 		field,
 		ec.fieldContext_Mutation_updateProfile,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().UpdateProfile(ctx, fc.Args["input"].(model.UpdateProfileInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateProfile(ctx, fc.Args["input"].(model.UpdateProfileInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				if ec.directives.Login == nil {
@@ -2994,19 +3462,9 @@ func (ec *executionContext) _Mutation_updateProfile(ctx context.Context, field g
 				return ec.directives.Login(ctx, nil, directive0)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.User); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.User`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNUser2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUser,
 		true,
 		true,
@@ -3066,10 +3524,11 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 		field,
 		ec.fieldContext_Mutation_createUser,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().CreateUser(ctx, fc.Args["input"].(ent.CreateUserInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateUser(ctx, fc.Args["input"].(ent.CreateUserInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				role, err := ec.unmarshalOUserRole2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐUserRoleᚄ(ctx, []any{"SystemAdmin"})
@@ -3084,19 +3543,9 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 				return ec.directives.HasRole(ctx, nil, directive0, role)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.User); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.User`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNUser2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUser,
 		true,
 		true,
@@ -3156,10 +3605,11 @@ func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field grap
 		field,
 		ec.fieldContext_Mutation_updateUser,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().UpdateUser(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateUserInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateUser(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateUserInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				role, err := ec.unmarshalOUserRole2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐUserRoleᚄ(ctx, []any{"SystemAdmin"})
@@ -3174,19 +3624,9 @@ func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field grap
 				return ec.directives.HasRole(ctx, nil, directive0, role)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.User); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.User`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNUser2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUser,
 		true,
 		true,
@@ -3246,10 +3686,11 @@ func (ec *executionContext) _Mutation_deleteUser(ctx context.Context, field grap
 		field,
 		ec.fieldContext_Mutation_deleteUser,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().DeleteUser(ctx, fc.Args["id"].(int))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteUser(ctx, fc.Args["id"].(int))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				role, err := ec.unmarshalOUserRole2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐUserRoleᚄ(ctx, []any{"SystemAdmin"})
@@ -3264,19 +3705,9 @@ func (ec *executionContext) _Mutation_deleteUser(ctx context.Context, field grap
 				return ec.directives.HasRole(ctx, nil, directive0, role)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(bool); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNBoolean2bool,
 		true,
 		true,
@@ -3314,10 +3745,11 @@ func (ec *executionContext) _Mutation_createPermission(ctx context.Context, fiel
 		field,
 		ec.fieldContext_Mutation_createPermission,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().CreatePermission(ctx, fc.Args["input"].(ent.CreatePermissionInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreatePermission(ctx, fc.Args["input"].(ent.CreatePermissionInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				role, err := ec.unmarshalOUserRole2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐUserRoleᚄ(ctx, []any{"SystemAdmin"})
@@ -3332,19 +3764,9 @@ func (ec *executionContext) _Mutation_createPermission(ctx context.Context, fiel
 				return ec.directives.HasRole(ctx, nil, directive0, role)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.Permission); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.Permission`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNPermission2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermission,
 		true,
 		true,
@@ -3414,10 +3836,11 @@ func (ec *executionContext) _Mutation_updatePermission(ctx context.Context, fiel
 		field,
 		ec.fieldContext_Mutation_updatePermission,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().UpdatePermission(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdatePermissionInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdatePermission(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdatePermissionInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				role, err := ec.unmarshalOUserRole2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐUserRoleᚄ(ctx, []any{"SystemAdmin"})
@@ -3432,19 +3855,9 @@ func (ec *executionContext) _Mutation_updatePermission(ctx context.Context, fiel
 				return ec.directives.HasRole(ctx, nil, directive0, role)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.Permission); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.Permission`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNPermission2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermission,
 		true,
 		true,
@@ -3514,10 +3927,11 @@ func (ec *executionContext) _Mutation_deletePermission(ctx context.Context, fiel
 		field,
 		ec.fieldContext_Mutation_deletePermission,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().DeletePermission(ctx, fc.Args["id"].(int))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeletePermission(ctx, fc.Args["id"].(int))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				role, err := ec.unmarshalOUserRole2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐUserRoleᚄ(ctx, []any{"SystemAdmin"})
@@ -3532,19 +3946,9 @@ func (ec *executionContext) _Mutation_deletePermission(ctx context.Context, fiel
 				return ec.directives.HasRole(ctx, nil, directive0, role)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(bool); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNBoolean2bool,
 		true,
 		true,
@@ -3582,10 +3986,11 @@ func (ec *executionContext) _Mutation_createTenant(ctx context.Context, field gr
 		field,
 		ec.fieldContext_Mutation_createTenant,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().CreateTenant(ctx, fc.Args["input"].(ent.CreateTenantInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateTenant(ctx, fc.Args["input"].(ent.CreateTenantInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				role, err := ec.unmarshalOUserRole2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐUserRoleᚄ(ctx, []any{"SystemAdmin"})
@@ -3600,19 +4005,9 @@ func (ec *executionContext) _Mutation_createTenant(ctx context.Context, field gr
 				return ec.directives.HasRole(ctx, nil, directive0, role)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.Tenant); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.Tenant`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNTenant2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenant,
 		true,
 		true,
@@ -3670,10 +4065,11 @@ func (ec *executionContext) _Mutation_updateTenant(ctx context.Context, field gr
 		field,
 		ec.fieldContext_Mutation_updateTenant,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().UpdateTenant(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateTenantInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateTenant(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateTenantInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				role, err := ec.unmarshalOUserRole2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐUserRoleᚄ(ctx, []any{"SystemAdmin"})
@@ -3688,19 +4084,9 @@ func (ec *executionContext) _Mutation_updateTenant(ctx context.Context, field gr
 				return ec.directives.HasRole(ctx, nil, directive0, role)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.Tenant); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.Tenant`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNTenant2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenant,
 		true,
 		true,
@@ -3758,10 +4144,11 @@ func (ec *executionContext) _Mutation_deleteTenant(ctx context.Context, field gr
 		field,
 		ec.fieldContext_Mutation_deleteTenant,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().DeleteTenant(ctx, fc.Args["id"].(int))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteTenant(ctx, fc.Args["id"].(int))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				role, err := ec.unmarshalOUserRole2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐUserRoleᚄ(ctx, []any{"SystemAdmin"})
@@ -3776,19 +4163,9 @@ func (ec *executionContext) _Mutation_deleteTenant(ctx context.Context, field gr
 				return ec.directives.HasRole(ctx, nil, directive0, role)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(bool); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNBoolean2bool,
 		true,
 		true,
@@ -3826,10 +4203,11 @@ func (ec *executionContext) _Mutation_linkGoogleAccount(ctx context.Context, fie
 		field,
 		ec.fieldContext_Mutation_linkGoogleAccount,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().LinkGoogleAccount(ctx, fc.Args["state"].(string), fc.Args["code"].(string))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().LinkGoogleAccount(ctx, fc.Args["state"].(string), fc.Args["code"].(string))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				if ec.directives.Login == nil {
@@ -3839,19 +4217,9 @@ func (ec *executionContext) _Mutation_linkGoogleAccount(ctx context.Context, fie
 				return ec.directives.Login(ctx, nil, directive0)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(bool); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNBoolean2bool,
 		true,
 		true,
@@ -3889,10 +4257,10 @@ func (ec *executionContext) _Mutation_unlinkGoogleAccount(ctx context.Context, f
 		field,
 		ec.fieldContext_Mutation_unlinkGoogleAccount,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-
-				return ec.resolvers.Mutation().UnlinkGoogleAccount(ctx)
-			}
+			return ec.resolvers.Mutation().UnlinkGoogleAccount(ctx)
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				if ec.directives.Login == nil {
@@ -3902,19 +4270,9 @@ func (ec *executionContext) _Mutation_unlinkGoogleAccount(ctx context.Context, f
 				return ec.directives.Login(ctx, nil, directive0)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(bool); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNBoolean2bool,
 		true,
 		true,
@@ -3941,10 +4299,11 @@ func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, fi
 		field,
 		ec.fieldContext_Mutation_createOrganization,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().CreateOrganization(ctx, fc.Args["input"].(ent.CreateOrganizationInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateOrganization(ctx, fc.Args["input"].(ent.CreateOrganizationInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				key, err := ec.unmarshalNString2string(ctx, "manage_organization")
@@ -3959,19 +4318,9 @@ func (ec *executionContext) _Mutation_createOrganization(ctx context.Context, fi
 				return ec.directives.HasPermission(ctx, nil, directive0, key)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.Organization); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.Organization`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNOrganization2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐOrganization,
 		true,
 		true,
@@ -4035,10 +4384,11 @@ func (ec *executionContext) _Mutation_updateOrganization(ctx context.Context, fi
 		field,
 		ec.fieldContext_Mutation_updateOrganization,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().UpdateOrganization(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateOrganizationInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateOrganization(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateOrganizationInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				key, err := ec.unmarshalNString2string(ctx, "manage_organization")
@@ -4053,19 +4403,9 @@ func (ec *executionContext) _Mutation_updateOrganization(ctx context.Context, fi
 				return ec.directives.HasPermission(ctx, nil, directive0, key)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.Organization); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.Organization`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNOrganization2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐOrganization,
 		true,
 		true,
@@ -4129,10 +4469,11 @@ func (ec *executionContext) _Mutation_deleteOrganization(ctx context.Context, fi
 		field,
 		ec.fieldContext_Mutation_deleteOrganization,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().DeleteOrganization(ctx, fc.Args["id"].(int))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteOrganization(ctx, fc.Args["id"].(int))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				key, err := ec.unmarshalNString2string(ctx, "manage_organization")
@@ -4147,19 +4488,9 @@ func (ec *executionContext) _Mutation_deleteOrganization(ctx context.Context, fi
 				return ec.directives.HasPermission(ctx, nil, directive0, key)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(bool); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNBoolean2bool,
 		true,
 		true,
@@ -4197,10 +4528,11 @@ func (ec *executionContext) _Mutation_createMembership(ctx context.Context, fiel
 		field,
 		ec.fieldContext_Mutation_createMembership,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().CreateMembership(ctx, fc.Args["input"].(ent.CreateMembershipInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateMembership(ctx, fc.Args["input"].(ent.CreateMembershipInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				key, err := ec.unmarshalNString2string(ctx, "manage_organization")
@@ -4215,19 +4547,9 @@ func (ec *executionContext) _Mutation_createMembership(ctx context.Context, fiel
 				return ec.directives.HasPermission(ctx, nil, directive0, key)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.Membership); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.Membership`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNMembership2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐMembership,
 		true,
 		true,
@@ -4283,10 +4605,11 @@ func (ec *executionContext) _Mutation_updateMembership(ctx context.Context, fiel
 		field,
 		ec.fieldContext_Mutation_updateMembership,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().UpdateMembership(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateMembershipInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateMembership(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateMembershipInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				key, err := ec.unmarshalNString2string(ctx, "manage_organization")
@@ -4301,19 +4624,9 @@ func (ec *executionContext) _Mutation_updateMembership(ctx context.Context, fiel
 				return ec.directives.HasPermission(ctx, nil, directive0, key)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.Membership); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.Membership`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNMembership2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐMembership,
 		true,
 		true,
@@ -4369,10 +4682,11 @@ func (ec *executionContext) _Mutation_deleteMembership(ctx context.Context, fiel
 		field,
 		ec.fieldContext_Mutation_deleteMembership,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().DeleteMembership(ctx, fc.Args["id"].(int))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteMembership(ctx, fc.Args["id"].(int))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				key, err := ec.unmarshalNString2string(ctx, "manage_organization")
@@ -4387,19 +4701,9 @@ func (ec *executionContext) _Mutation_deleteMembership(ctx context.Context, fiel
 				return ec.directives.HasPermission(ctx, nil, directive0, key)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(bool); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNBoolean2bool,
 		true,
 		true,
@@ -4437,10 +4741,11 @@ func (ec *executionContext) _Mutation_createTenantRole(ctx context.Context, fiel
 		field,
 		ec.fieldContext_Mutation_createTenantRole,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().CreateTenantRole(ctx, fc.Args["input"].(ent.CreateTenantRoleInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().CreateTenantRole(ctx, fc.Args["input"].(ent.CreateTenantRoleInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				key, err := ec.unmarshalNString2string(ctx, "manage_tenant_role")
@@ -4455,19 +4760,9 @@ func (ec *executionContext) _Mutation_createTenantRole(ctx context.Context, fiel
 				return ec.directives.HasPermission(ctx, nil, directive0, key)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.TenantRole); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.TenantRole`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNTenantRole2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRole,
 		true,
 		true,
@@ -4523,10 +4818,11 @@ func (ec *executionContext) _Mutation_updateTenantRole(ctx context.Context, fiel
 		field,
 		ec.fieldContext_Mutation_updateTenantRole,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().UpdateTenantRole(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateTenantRoleInput))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateTenantRole(ctx, fc.Args["id"].(int), fc.Args["input"].(ent.UpdateTenantRoleInput))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				key, err := ec.unmarshalNString2string(ctx, "manage_tenant_role")
@@ -4541,19 +4837,9 @@ func (ec *executionContext) _Mutation_updateTenantRole(ctx context.Context, fiel
 				return ec.directives.HasPermission(ctx, nil, directive0, key)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.TenantRole); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.TenantRole`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNTenantRole2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRole,
 		true,
 		true,
@@ -4609,10 +4895,11 @@ func (ec *executionContext) _Mutation_deleteTenantRole(ctx context.Context, fiel
 		field,
 		ec.fieldContext_Mutation_deleteTenantRole,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-				fc := graphql.GetFieldContext(ctx)
-				return ec.resolvers.Mutation().DeleteTenantRole(ctx, fc.Args["id"].(int))
-			}
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().DeleteTenantRole(ctx, fc.Args["id"].(int))
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				key, err := ec.unmarshalNString2string(ctx, "manage_tenant_role")
@@ -4627,19 +4914,9 @@ func (ec *executionContext) _Mutation_deleteTenantRole(ctx context.Context, fiel
 				return ec.directives.HasPermission(ctx, nil, directive0, key)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(bool); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNBoolean2bool,
 		true,
 		true,
@@ -4670,13 +4947,72 @@ func (ec *executionContext) fieldContext_Mutation_deleteTenantRole(ctx context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_sendMessage(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_sendMessage,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().SendMessage(ctx, fc.Args["input"].(model.SendMessageInput))
+		},
+		nil,
+		ec.marshalNMessage2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessage,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_sendMessage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Message_id(ctx, field)
+			case "sender":
+				return ec.fieldContext_Message_sender(ctx, field)
+			case "type":
+				return ec.fieldContext_Message_type(ctx, field)
+			case "content":
+				return ec.fieldContext_Message_content(ctx, field)
+			case "contentType":
+				return ec.fieldContext_Message_contentType(ctx, field)
+			case "metadata":
+				return ec.fieldContext_Message_metadata(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Message_createdAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Message", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_sendMessage_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _OAuthAccount_id(ctx context.Context, field graphql.CollectedField, obj *ent.OAuthAccount) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthAccount_id,
-		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -4703,7 +5039,9 @@ func (ec *executionContext) _OAuthAccount_createdAt(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthAccount_createdAt,
-		func(ctx context.Context) (any, error) { return obj.CreatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -4730,7 +5068,9 @@ func (ec *executionContext) _OAuthAccount_updatedAt(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthAccount_updatedAt,
-		func(ctx context.Context) (any, error) { return obj.UpdatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -4757,7 +5097,9 @@ func (ec *executionContext) _OAuthAccount_userID(ctx context.Context, field grap
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthAccount_userID,
-		func(ctx context.Context) (any, error) { return obj.UserID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UserID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -4784,7 +5126,9 @@ func (ec *executionContext) _OAuthAccount_provider(ctx context.Context, field gr
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthAccount_provider,
-		func(ctx context.Context) (any, error) { return obj.Provider, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Provider, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -4811,7 +5155,9 @@ func (ec *executionContext) _OAuthAccount_providerUserID(ctx context.Context, fi
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthAccount_providerUserID,
-		func(ctx context.Context) (any, error) { return obj.ProviderUserID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ProviderUserID, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -4838,7 +5184,9 @@ func (ec *executionContext) _OAuthAccount_accessToken(ctx context.Context, field
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthAccount_accessToken,
-		func(ctx context.Context) (any, error) { return obj.AccessToken, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.AccessToken, nil
+		},
 		nil,
 		ec.marshalOString2string,
 		true,
@@ -4865,7 +5213,9 @@ func (ec *executionContext) _OAuthAccount_refreshToken(ctx context.Context, fiel
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthAccount_refreshToken,
-		func(ctx context.Context) (any, error) { return obj.RefreshToken, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.RefreshToken, nil
+		},
 		nil,
 		ec.marshalOString2string,
 		true,
@@ -4892,7 +5242,9 @@ func (ec *executionContext) _OAuthAccount_tokenExpiry(ctx context.Context, field
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthAccount_tokenExpiry,
-		func(ctx context.Context) (any, error) { return obj.TokenExpiry, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TokenExpiry, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -4919,7 +5271,9 @@ func (ec *executionContext) _OAuthAccount_profile(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthAccount_profile,
-		func(ctx context.Context) (any, error) { return obj.Profile, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Profile, nil
+		},
 		nil,
 		ec.marshalOMap2map,
 		true,
@@ -4997,7 +5351,9 @@ func (ec *executionContext) _OAuthProvider_id(ctx context.Context, field graphql
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthProvider_id,
-		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -5024,7 +5380,9 @@ func (ec *executionContext) _OAuthProvider_provider(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthProvider_provider,
-		func(ctx context.Context) (any, error) { return obj.Provider, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Provider, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -5051,7 +5409,9 @@ func (ec *executionContext) _OAuthProvider_name(ctx context.Context, field graph
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthProvider_name,
-		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -5078,7 +5438,9 @@ func (ec *executionContext) _OAuthProvider_clientID(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthProvider_clientID,
-		func(ctx context.Context) (any, error) { return obj.ClientID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ClientID, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -5105,7 +5467,9 @@ func (ec *executionContext) _OAuthProvider_authURL(ctx context.Context, field gr
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthProvider_authURL,
-		func(ctx context.Context) (any, error) { return obj.AuthURL, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.AuthURL, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -5132,7 +5496,9 @@ func (ec *executionContext) _OAuthProvider_tokenURL(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthProvider_tokenURL,
-		func(ctx context.Context) (any, error) { return obj.TokenURL, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TokenURL, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -5159,7 +5525,9 @@ func (ec *executionContext) _OAuthProvider_userInfoURL(ctx context.Context, fiel
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthProvider_userInfoURL,
-		func(ctx context.Context) (any, error) { return obj.UserInfoURL, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UserInfoURL, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -5186,7 +5554,9 @@ func (ec *executionContext) _OAuthProvider_redirectURI(ctx context.Context, fiel
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthProvider_redirectURI,
-		func(ctx context.Context) (any, error) { return obj.RedirectURI, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.RedirectURI, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -5213,7 +5583,9 @@ func (ec *executionContext) _OAuthProvider_scopes(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthProvider_scopes,
-		func(ctx context.Context) (any, error) { return obj.Scopes, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Scopes, nil
+		},
 		nil,
 		ec.marshalOString2string,
 		true,
@@ -5240,7 +5612,9 @@ func (ec *executionContext) _OAuthProvider_enabled(ctx context.Context, field gr
 		ec.OperationContext,
 		field,
 		ec.fieldContext_OAuthProvider_enabled,
-		func(ctx context.Context) (any, error) { return obj.Enabled, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Enabled, nil
+		},
 		nil,
 		ec.marshalNBoolean2bool,
 		true,
@@ -5267,7 +5641,9 @@ func (ec *executionContext) _Organization_id(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Organization_id,
-		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -5294,7 +5670,9 @@ func (ec *executionContext) _Organization_createdAt(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Organization_createdAt,
-		func(ctx context.Context) (any, error) { return obj.CreatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -5321,7 +5699,9 @@ func (ec *executionContext) _Organization_updatedAt(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Organization_updatedAt,
-		func(ctx context.Context) (any, error) { return obj.UpdatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -5348,7 +5728,9 @@ func (ec *executionContext) _Organization_tenantID(ctx context.Context, field gr
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Organization_tenantID,
-		func(ctx context.Context) (any, error) { return obj.TenantID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TenantID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -5375,7 +5757,9 @@ func (ec *executionContext) _Organization_name(ctx context.Context, field graphq
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Organization_name,
-		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -5402,7 +5786,9 @@ func (ec *executionContext) _Organization_parentID(ctx context.Context, field gr
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Organization_parentID,
-		func(ctx context.Context) (any, error) { return obj.ParentID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ParentID, nil
+		},
 		nil,
 		ec.marshalOID2ᚖint,
 		true,
@@ -5429,7 +5815,9 @@ func (ec *executionContext) _Organization_type(ctx context.Context, field graphq
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Organization_type,
-		func(ctx context.Context) (any, error) { return obj.Type, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Type, nil
+		},
 		nil,
 		ec.marshalNOrganizationType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚋorganizationᚐType,
 		true,
@@ -5671,7 +6059,9 @@ func (ec *executionContext) _PageInfo_hasNextPage(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PageInfo_hasNextPage,
-		func(ctx context.Context) (any, error) { return obj.HasNextPage, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.HasNextPage, nil
+		},
 		nil,
 		ec.marshalNBoolean2bool,
 		true,
@@ -5698,7 +6088,9 @@ func (ec *executionContext) _PageInfo_hasPreviousPage(ctx context.Context, field
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PageInfo_hasPreviousPage,
-		func(ctx context.Context) (any, error) { return obj.HasPreviousPage, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.HasPreviousPage, nil
+		},
 		nil,
 		ec.marshalNBoolean2bool,
 		true,
@@ -5725,7 +6117,9 @@ func (ec *executionContext) _PageInfo_startCursor(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PageInfo_startCursor,
-		func(ctx context.Context) (any, error) { return obj.StartCursor, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.StartCursor, nil
+		},
 		nil,
 		ec.marshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor,
 		true,
@@ -5752,7 +6146,9 @@ func (ec *executionContext) _PageInfo_endCursor(ctx context.Context, field graph
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PageInfo_endCursor,
-		func(ctx context.Context) (any, error) { return obj.EndCursor, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.EndCursor, nil
+		},
 		nil,
 		ec.marshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor,
 		true,
@@ -5779,7 +6175,9 @@ func (ec *executionContext) _Permission_id(ctx context.Context, field graphql.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_id,
-		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -5806,7 +6204,9 @@ func (ec *executionContext) _Permission_createdAt(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_createdAt,
-		func(ctx context.Context) (any, error) { return obj.CreatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -5833,7 +6233,9 @@ func (ec *executionContext) _Permission_updatedAt(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_updatedAt,
-		func(ctx context.Context) (any, error) { return obj.UpdatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -5860,7 +6262,9 @@ func (ec *executionContext) _Permission_parentID(ctx context.Context, field grap
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_parentID,
-		func(ctx context.Context) (any, error) { return obj.ParentID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ParentID, nil
+		},
 		nil,
 		ec.marshalOID2ᚖint,
 		true,
@@ -5887,7 +6291,9 @@ func (ec *executionContext) _Permission_name(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_name,
-		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -5914,7 +6320,9 @@ func (ec *executionContext) _Permission_key(ctx context.Context, field graphql.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_key,
-		func(ctx context.Context) (any, error) { return obj.Key, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Key, nil
+		},
 		nil,
 		ec.marshalOString2ᚖstring,
 		true,
@@ -5941,7 +6349,9 @@ func (ec *executionContext) _Permission_type(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_type,
-		func(ctx context.Context) (any, error) { return obj.Type, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Type, nil
+		},
 		nil,
 		ec.marshalNPermissionType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚋpermissionᚐType,
 		true,
@@ -5968,7 +6378,9 @@ func (ec *executionContext) _Permission_path(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_path,
-		func(ctx context.Context) (any, error) { return obj.Path, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Path, nil
+		},
 		nil,
 		ec.marshalOString2string,
 		true,
@@ -5995,7 +6407,9 @@ func (ec *executionContext) _Permission_description(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_description,
-		func(ctx context.Context) (any, error) { return obj.Description, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Description, nil
+		},
 		nil,
 		ec.marshalOString2string,
 		true,
@@ -6022,7 +6436,9 @@ func (ec *executionContext) _Permission_sort(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_sort,
-		func(ctx context.Context) (any, error) { return obj.Sort, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Sort, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -6049,7 +6465,9 @@ func (ec *executionContext) _Permission_attrs(ctx context.Context, field graphql
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_attrs,
-		func(ctx context.Context) (any, error) { return obj.Attrs, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Attrs, nil
+		},
 		nil,
 		ec.marshalOMap2map,
 		true,
@@ -6076,7 +6494,9 @@ func (ec *executionContext) _Permission_isSystem(ctx context.Context, field grap
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Permission_isSystem,
-		func(ctx context.Context) (any, error) { return obj.IsSystem, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.IsSystem, nil
+		},
 		nil,
 		ec.marshalNBoolean2bool,
 		true,
@@ -6254,7 +6674,9 @@ func (ec *executionContext) _PermissionConnection_edges(ctx context.Context, fie
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PermissionConnection_edges,
-		func(ctx context.Context) (any, error) { return obj.Edges, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
 		nil,
 		ec.marshalOPermissionEdge2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermissionEdge,
 		true,
@@ -6287,7 +6709,9 @@ func (ec *executionContext) _PermissionConnection_nodes(ctx context.Context, fie
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PermissionConnection_nodes,
-		func(ctx context.Context) (any, error) { return obj.Nodes, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Nodes, nil
+		},
 		nil,
 		ec.marshalOPermission2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermission,
 		true,
@@ -6346,7 +6770,9 @@ func (ec *executionContext) _PermissionConnection_pageInfo(ctx context.Context, 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PermissionConnection_pageInfo,
-		func(ctx context.Context) (any, error) { return obj.PageInfo, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
 		nil,
 		ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo,
 		true,
@@ -6383,7 +6809,9 @@ func (ec *executionContext) _PermissionConnection_totalCount(ctx context.Context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PermissionConnection_totalCount,
-		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -6410,11 +6838,13 @@ func (ec *executionContext) _PermissionEdge_node(ctx context.Context, field grap
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PermissionEdge_node,
-		func(ctx context.Context) (any, error) { return obj.Node, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
 		nil,
-		ec.marshalOPermission2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermission,
+		ec.marshalNPermission2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermission,
 		true,
-		false,
+		true,
 	)
 }
 
@@ -6469,7 +6899,9 @@ func (ec *executionContext) _PermissionEdge_cursor(ctx context.Context, field gr
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PermissionEdge_cursor,
-		func(ctx context.Context) (any, error) { return obj.Cursor, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
 		nil,
 		ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor,
 		true,
@@ -6496,9 +6928,11 @@ func (ec *executionContext) _PermissionList_nodes(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PermissionList_nodes,
-		func(ctx context.Context) (any, error) { return obj.Nodes, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Nodes, nil
+		},
 		nil,
-		ec.marshalOPermission2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermission,
+		ec.marshalOPermission2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermissionᚄ,
 		true,
 		false,
 	)
@@ -6555,7 +6989,9 @@ func (ec *executionContext) _PermissionList_totalCount(ctx context.Context, fiel
 		ec.OperationContext,
 		field,
 		ec.fieldContext_PermissionList_totalCount,
-		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -7050,55 +7486,6 @@ func (ec *executionContext) fieldContext_Query_googleOAuthRegister(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_login(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		ec.fieldContext_Query_login,
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Query().Login(ctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["captchaId"].(*string), fc.Args["captchaValue"].(*string))
-		},
-		nil,
-		ec.marshalNLoginReply2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐLoginReply,
-		true,
-		true,
-	)
-}
-
-func (ec *executionContext) fieldContext_Query_login(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "token":
-				return ec.fieldContext_LoginReply_token(ctx, field)
-			case "exp":
-				return ec.fieldContext_LoginReply_exp(ctx, field)
-			case "user":
-				return ec.fieldContext_LoginReply_user(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type LoginReply", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_login_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Query_profile(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -7106,10 +7493,10 @@ func (ec *executionContext) _Query_profile(ctx context.Context, field graphql.Co
 		field,
 		ec.fieldContext_Query_profile,
 		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-
-				return ec.resolvers.Query().Profile(ctx)
-			}
+			return ec.resolvers.Query().Profile(ctx)
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
 
 			directive1 := func(ctx context.Context) (any, error) {
 				if ec.directives.Login == nil {
@@ -7119,19 +7506,9 @@ func (ec *executionContext) _Query_profile(ctx context.Context, field graphql.Co
 				return ec.directives.Login(ctx, nil, directive0)
 			}
 
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*ent.User); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/data/account/ent.User`, tmp)
+			next = directive1
+			return next
 		},
-		nil,
 		ec.marshalNUser2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUser,
 		true,
 		true,
@@ -7169,107 +7546,6 @@ func (ec *executionContext) fieldContext_Query_profile(_ context.Context, field 
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_refresh(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		ec.fieldContext_Query_refresh,
-		func(ctx context.Context) (any, error) {
-			directive0 := func(ctx context.Context) (any, error) {
-
-				return ec.resolvers.Query().Refresh(ctx)
-			}
-
-			directive1 := func(ctx context.Context) (any, error) {
-				if ec.directives.Login == nil {
-					var zeroVal *model.LoginReply
-					return zeroVal, errors.New("directive login is not implemented")
-				}
-				return ec.directives.Login(ctx, nil, directive0)
-			}
-
-			tmp, err := directive1(ctx)
-			if err != nil {
-				return nil, graphql.ErrorOnPath(ctx, err)
-			}
-			if tmp == nil {
-				return nil, nil
-			}
-			if data, ok := tmp.(*model.LoginReply); ok {
-				return data, nil
-			}
-			return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/go-keg/monorepo/internal/app/account/service/graphql/model.LoginReply`, tmp)
-		},
-		nil,
-		ec.marshalNLoginReply2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐLoginReply,
-		true,
-		true,
-	)
-}
-
-func (ec *executionContext) fieldContext_Query_refresh(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "token":
-				return ec.fieldContext_LoginReply_token(ctx, field)
-			case "exp":
-				return ec.fieldContext_LoginReply_exp(ctx, field)
-			case "user":
-				return ec.fieldContext_LoginReply_user(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type LoginReply", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Query_sendVerifyCode(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		ec.fieldContext_Query_sendVerifyCode,
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Query().SendVerifyCode(ctx, fc.Args["email"].(string), fc.Args["verifyType"].(model.VerifyCodeType))
-		},
-		nil,
-		ec.marshalNBoolean2bool,
-		true,
-		true,
-	)
-}
-
-func (ec *executionContext) fieldContext_Query_sendVerifyCode(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Boolean does not have child fields")
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_sendVerifyCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
 	}
 	return fc, nil
 }
@@ -7417,13 +7693,60 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 	return fc, nil
 }
 
+func (ec *executionContext) _Subscription_messageReceived(ctx context.Context, field graphql.CollectedField) (ret func(ctx context.Context) graphql.Marshaler) {
+	return graphql.ResolveFieldStream(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Subscription_messageReceived,
+		func(ctx context.Context) (any, error) {
+			return ec.resolvers.Subscription().MessageReceived(ctx)
+		},
+		nil,
+		ec.marshalNMessage2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessage,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Subscription_messageReceived(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Subscription",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Message_id(ctx, field)
+			case "sender":
+				return ec.fieldContext_Message_sender(ctx, field)
+			case "type":
+				return ec.fieldContext_Message_type(ctx, field)
+			case "content":
+				return ec.fieldContext_Message_content(ctx, field)
+			case "contentType":
+				return ec.fieldContext_Message_contentType(ctx, field)
+			case "metadata":
+				return ec.fieldContext_Message_metadata(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Message_createdAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Message", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Tenant_id(ctx context.Context, field graphql.CollectedField, obj *ent.Tenant) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Tenant_id,
-		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -7450,7 +7773,9 @@ func (ec *executionContext) _Tenant_createdAt(ctx context.Context, field graphql
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Tenant_createdAt,
-		func(ctx context.Context) (any, error) { return obj.CreatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -7477,7 +7802,9 @@ func (ec *executionContext) _Tenant_updatedAt(ctx context.Context, field graphql
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Tenant_updatedAt,
-		func(ctx context.Context) (any, error) { return obj.UpdatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -7504,7 +7831,9 @@ func (ec *executionContext) _Tenant_name(ctx context.Context, field graphql.Coll
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Tenant_name,
-		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -7531,7 +7860,9 @@ func (ec *executionContext) _Tenant_maxUsers(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Tenant_maxUsers,
-		func(ctx context.Context) (any, error) { return obj.MaxUsers, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.MaxUsers, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -7558,7 +7889,9 @@ func (ec *executionContext) _Tenant_features(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_Tenant_features,
-		func(ctx context.Context) (any, error) { return obj.Features, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Features, nil
+		},
 		nil,
 		ec.marshalOString2ᚕstringᚄ,
 		true,
@@ -7744,7 +8077,9 @@ func (ec *executionContext) _TenantRole_id(ctx context.Context, field graphql.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRole_id,
-		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -7771,7 +8106,9 @@ func (ec *executionContext) _TenantRole_createdAt(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRole_createdAt,
-		func(ctx context.Context) (any, error) { return obj.CreatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -7798,7 +8135,9 @@ func (ec *executionContext) _TenantRole_updatedAt(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRole_updatedAt,
-		func(ctx context.Context) (any, error) { return obj.UpdatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -7825,7 +8164,9 @@ func (ec *executionContext) _TenantRole_tenantID(ctx context.Context, field grap
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRole_tenantID,
-		func(ctx context.Context) (any, error) { return obj.TenantID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TenantID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -7852,7 +8193,9 @@ func (ec *executionContext) _TenantRole_name(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRole_name,
-		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -7879,7 +8222,9 @@ func (ec *executionContext) _TenantRole_description(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRole_description,
-		func(ctx context.Context) (any, error) { return obj.Description, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Description, nil
+		},
 		nil,
 		ec.marshalOString2string,
 		true,
@@ -7906,7 +8251,9 @@ func (ec *executionContext) _TenantRole_sort(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRole_sort,
-		func(ctx context.Context) (any, error) { return obj.Sort, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Sort, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -7994,7 +8341,9 @@ func (ec *executionContext) _TenantRoleConnection_edges(ctx context.Context, fie
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRoleConnection_edges,
-		func(ctx context.Context) (any, error) { return obj.Edges, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
 		nil,
 		ec.marshalOTenantRoleEdge2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRoleEdge,
 		true,
@@ -8027,7 +8376,9 @@ func (ec *executionContext) _TenantRoleConnection_nodes(ctx context.Context, fie
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRoleConnection_nodes,
-		func(ctx context.Context) (any, error) { return obj.Nodes, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Nodes, nil
+		},
 		nil,
 		ec.marshalOTenantRole2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRole,
 		true,
@@ -8072,7 +8423,9 @@ func (ec *executionContext) _TenantRoleConnection_pageInfo(ctx context.Context, 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRoleConnection_pageInfo,
-		func(ctx context.Context) (any, error) { return obj.PageInfo, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
 		nil,
 		ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo,
 		true,
@@ -8109,7 +8462,9 @@ func (ec *executionContext) _TenantRoleConnection_totalCount(ctx context.Context
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRoleConnection_totalCount,
-		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -8136,11 +8491,13 @@ func (ec *executionContext) _TenantRoleEdge_node(ctx context.Context, field grap
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRoleEdge_node,
-		func(ctx context.Context) (any, error) { return obj.Node, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
 		nil,
-		ec.marshalOTenantRole2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRole,
+		ec.marshalNTenantRole2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRole,
 		true,
-		false,
+		true,
 	)
 }
 
@@ -8181,7 +8538,9 @@ func (ec *executionContext) _TenantRoleEdge_cursor(ctx context.Context, field gr
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRoleEdge_cursor,
-		func(ctx context.Context) (any, error) { return obj.Cursor, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
 		nil,
 		ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor,
 		true,
@@ -8208,9 +8567,11 @@ func (ec *executionContext) _TenantRoleList_nodes(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRoleList_nodes,
-		func(ctx context.Context) (any, error) { return obj.Nodes, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Nodes, nil
+		},
 		nil,
-		ec.marshalOTenantRole2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRole,
+		ec.marshalOTenantRole2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐTenantRoleᚄ,
 		true,
 		false,
 	)
@@ -8253,7 +8614,9 @@ func (ec *executionContext) _TenantRoleList_totalCount(ctx context.Context, fiel
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantRoleList_totalCount,
-		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -8280,7 +8643,9 @@ func (ec *executionContext) _TenantUser_id(ctx context.Context, field graphql.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantUser_id,
-		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -8307,7 +8672,9 @@ func (ec *executionContext) _TenantUser_tenantID(ctx context.Context, field grap
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantUser_tenantID,
-		func(ctx context.Context) (any, error) { return obj.TenantID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TenantID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -8334,7 +8701,9 @@ func (ec *executionContext) _TenantUser_userID(ctx context.Context, field graphq
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantUser_userID,
-		func(ctx context.Context) (any, error) { return obj.UserID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UserID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -8361,7 +8730,9 @@ func (ec *executionContext) _TenantUser_isOwner(ctx context.Context, field graph
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantUser_isOwner,
-		func(ctx context.Context) (any, error) { return obj.IsOwner, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.IsOwner, nil
+		},
 		nil,
 		ec.marshalNBoolean2bool,
 		true,
@@ -8388,7 +8759,9 @@ func (ec *executionContext) _TenantUser_isActive(ctx context.Context, field grap
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantUser_isActive,
-		func(ctx context.Context) (any, error) { return obj.IsActive, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.IsActive, nil
+		},
 		nil,
 		ec.marshalNBoolean2bool,
 		true,
@@ -8415,7 +8788,9 @@ func (ec *executionContext) _TenantUser_lastLoginTenant(ctx context.Context, fie
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantUser_lastLoginTenant,
-		func(ctx context.Context) (any, error) { return obj.LastLoginTenant, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.LastLoginTenant, nil
+		},
 		nil,
 		ec.marshalNBoolean2bool,
 		true,
@@ -8442,7 +8817,9 @@ func (ec *executionContext) _TenantUser_lastLoginAt(ctx context.Context, field g
 		ec.OperationContext,
 		field,
 		ec.fieldContext_TenantUser_lastLoginAt,
-		func(ctx context.Context) (any, error) { return obj.LastLoginAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.LastLoginAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -8753,7 +9130,9 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 		ec.OperationContext,
 		field,
 		ec.fieldContext_User_id,
-		func(ctx context.Context) (any, error) { return obj.ID, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
 		nil,
 		ec.marshalNID2int,
 		true,
@@ -8780,7 +9159,9 @@ func (ec *executionContext) _User_createdAt(ctx context.Context, field graphql.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_User_createdAt,
-		func(ctx context.Context) (any, error) { return obj.CreatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -8807,7 +9188,9 @@ func (ec *executionContext) _User_updatedAt(ctx context.Context, field graphql.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_User_updatedAt,
-		func(ctx context.Context) (any, error) { return obj.UpdatedAt, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
 		nil,
 		ec.marshalOTime2timeᚐTime,
 		true,
@@ -8834,7 +9217,9 @@ func (ec *executionContext) _User_email(ctx context.Context, field graphql.Colle
 		ec.OperationContext,
 		field,
 		ec.fieldContext_User_email,
-		func(ctx context.Context) (any, error) { return obj.Email, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Email, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -8861,7 +9246,9 @@ func (ec *executionContext) _User_nickname(ctx context.Context, field graphql.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_User_nickname,
-		func(ctx context.Context) (any, error) { return obj.Nickname, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Nickname, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -8888,7 +9275,9 @@ func (ec *executionContext) _User_avatar(ctx context.Context, field graphql.Coll
 		ec.OperationContext,
 		field,
 		ec.fieldContext_User_avatar,
-		func(ctx context.Context) (any, error) { return obj.Avatar, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Avatar, nil
+		},
 		nil,
 		ec.marshalOString2string,
 		true,
@@ -8915,7 +9304,9 @@ func (ec *executionContext) _User_status(ctx context.Context, field graphql.Coll
 		ec.OperationContext,
 		field,
 		ec.fieldContext_User_status,
-		func(ctx context.Context) (any, error) { return obj.Status, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Status, nil
+		},
 		nil,
 		ec.marshalNUserStatus2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚋuserᚐStatus,
 		true,
@@ -8942,7 +9333,9 @@ func (ec *executionContext) _User_isAdmin(ctx context.Context, field graphql.Col
 		ec.OperationContext,
 		field,
 		ec.fieldContext_User_isAdmin,
-		func(ctx context.Context) (any, error) { return obj.IsAdmin, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.IsAdmin, nil
+		},
 		nil,
 		ec.marshalNBoolean2bool,
 		true,
@@ -9091,7 +9484,9 @@ func (ec *executionContext) _UserConnection_edges(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserConnection_edges,
-		func(ctx context.Context) (any, error) { return obj.Edges, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
 		nil,
 		ec.marshalOUserEdge2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUserEdge,
 		true,
@@ -9124,7 +9519,9 @@ func (ec *executionContext) _UserConnection_nodes(ctx context.Context, field gra
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserConnection_nodes,
-		func(ctx context.Context) (any, error) { return obj.Nodes, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Nodes, nil
+		},
 		nil,
 		ec.marshalOUser2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUser,
 		true,
@@ -9173,7 +9570,9 @@ func (ec *executionContext) _UserConnection_pageInfo(ctx context.Context, field 
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserConnection_pageInfo,
-		func(ctx context.Context) (any, error) { return obj.PageInfo, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
 		nil,
 		ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo,
 		true,
@@ -9210,7 +9609,9 @@ func (ec *executionContext) _UserConnection_totalCount(ctx context.Context, fiel
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserConnection_totalCount,
-		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -9237,11 +9638,13 @@ func (ec *executionContext) _UserEdge_node(ctx context.Context, field graphql.Co
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserEdge_node,
-		func(ctx context.Context) (any, error) { return obj.Node, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
 		nil,
-		ec.marshalOUser2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUser,
+		ec.marshalNUser2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUser,
 		true,
-		false,
+		true,
 	)
 }
 
@@ -9286,7 +9689,9 @@ func (ec *executionContext) _UserEdge_cursor(ctx context.Context, field graphql.
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserEdge_cursor,
-		func(ctx context.Context) (any, error) { return obj.Cursor, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
 		nil,
 		ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor,
 		true,
@@ -9313,9 +9718,11 @@ func (ec *executionContext) _UserList_nodes(ctx context.Context, field graphql.C
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserList_nodes,
-		func(ctx context.Context) (any, error) { return obj.Nodes, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Nodes, nil
+		},
 		nil,
-		ec.marshalOUser2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUser,
+		ec.marshalOUser2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUserᚄ,
 		true,
 		false,
 	)
@@ -9362,7 +9769,9 @@ func (ec *executionContext) _UserList_totalCount(ctx context.Context, field grap
 		ec.OperationContext,
 		field,
 		ec.fieldContext_UserList_totalCount,
-		func(ctx context.Context) (any, error) { return obj.TotalCount, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
 		nil,
 		ec.marshalNInt2int,
 		true,
@@ -9389,7 +9798,9 @@ func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql
 		ec.OperationContext,
 		field,
 		ec.fieldContext___Directive_name,
-		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -9445,7 +9856,9 @@ func (ec *executionContext) ___Directive_isRepeatable(ctx context.Context, field
 		ec.OperationContext,
 		field,
 		ec.fieldContext___Directive_isRepeatable,
-		func(ctx context.Context) (any, error) { return obj.IsRepeatable, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.IsRepeatable, nil
+		},
 		nil,
 		ec.marshalNBoolean2bool,
 		true,
@@ -9472,7 +9885,9 @@ func (ec *executionContext) ___Directive_locations(ctx context.Context, field gr
 		ec.OperationContext,
 		field,
 		ec.fieldContext___Directive_locations,
-		func(ctx context.Context) (any, error) { return obj.Locations, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Locations, nil
+		},
 		nil,
 		ec.marshalN__DirectiveLocation2ᚕstringᚄ,
 		true,
@@ -9499,7 +9914,9 @@ func (ec *executionContext) ___Directive_args(ctx context.Context, field graphql
 		ec.OperationContext,
 		field,
 		ec.fieldContext___Directive_args,
-		func(ctx context.Context) (any, error) { return obj.Args, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Args, nil
+		},
 		nil,
 		ec.marshalN__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValueᚄ,
 		true,
@@ -9551,7 +9968,9 @@ func (ec *executionContext) ___EnumValue_name(ctx context.Context, field graphql
 		ec.OperationContext,
 		field,
 		ec.fieldContext___EnumValue_name,
-		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -9665,7 +10084,9 @@ func (ec *executionContext) ___Field_name(ctx context.Context, field graphql.Col
 		ec.OperationContext,
 		field,
 		ec.fieldContext___Field_name,
-		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -9721,7 +10142,9 @@ func (ec *executionContext) ___Field_args(ctx context.Context, field graphql.Col
 		ec.OperationContext,
 		field,
 		ec.fieldContext___Field_args,
-		func(ctx context.Context) (any, error) { return obj.Args, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Args, nil
+		},
 		nil,
 		ec.marshalN__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValueᚄ,
 		true,
@@ -9773,7 +10196,9 @@ func (ec *executionContext) ___Field_type(ctx context.Context, field graphql.Col
 		ec.OperationContext,
 		field,
 		ec.fieldContext___Field_type,
-		func(ctx context.Context) (any, error) { return obj.Type, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Type, nil
+		},
 		nil,
 		ec.marshalN__Type2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐType,
 		true,
@@ -9882,7 +10307,9 @@ func (ec *executionContext) ___InputValue_name(ctx context.Context, field graphq
 		ec.OperationContext,
 		field,
 		ec.fieldContext___InputValue_name,
-		func(ctx context.Context) (any, error) { return obj.Name, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Name, nil
+		},
 		nil,
 		ec.marshalNString2string,
 		true,
@@ -9938,7 +10365,9 @@ func (ec *executionContext) ___InputValue_type(ctx context.Context, field graphq
 		ec.OperationContext,
 		field,
 		ec.fieldContext___InputValue_type,
-		func(ctx context.Context) (any, error) { return obj.Type, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.Type, nil
+		},
 		nil,
 		ec.marshalN__Type2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐType,
 		true,
@@ -9989,7 +10418,9 @@ func (ec *executionContext) ___InputValue_defaultValue(ctx context.Context, fiel
 		ec.OperationContext,
 		field,
 		ec.fieldContext___InputValue_defaultValue,
-		func(ctx context.Context) (any, error) { return obj.DefaultValue, nil },
+		func(ctx context.Context) (any, error) {
+			return obj.DefaultValue, nil
+		},
 		nil,
 		ec.marshalOString2ᚖstring,
 		true,
@@ -14490,6 +14921,68 @@ func (ec *executionContext) unmarshalInputPermissionWhereInput(ctx context.Conte
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputSendMessageInput(ctx context.Context, obj any) (model.SendMessageInput, error) {
+	var it model.SendMessageInput
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["type"]; !present {
+		asMap["type"] = "SYSTEM"
+	}
+	if _, present := asMap["contentType"]; !present {
+		asMap["contentType"] = "TEXT"
+	}
+
+	fieldsInOrder := [...]string{"sender", "type", "content", "contentType", "metadata"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "sender":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sender"))
+			data, err := ec.unmarshalOID2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Sender = data
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNMessageType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessageType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "content":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("content"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Content = data
+		case "contentType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("contentType"))
+			data, err := ec.unmarshalNMessageContentType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessageContentType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ContentType = data
+		case "metadata":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("metadata"))
+			data, err := ec.unmarshalOMap2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Metadata = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputTenantOrder(ctx context.Context, obj any) (ent.TenantOrder, error) {
 	var it ent.TenantOrder
 	asMap := map[string]any{}
@@ -17209,6 +17702,69 @@ func (ec *executionContext) _Membership(ctx context.Context, sel ast.SelectionSe
 	return out
 }
 
+var messageImplementors = []string{"Message"}
+
+func (ec *executionContext) _Message(ctx context.Context, sel ast.SelectionSet, obj *model.Message) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, messageImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Message")
+		case "id":
+			out.Values[i] = ec._Message_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "sender":
+			out.Values[i] = ec._Message_sender(ctx, field, obj)
+		case "type":
+			out.Values[i] = ec._Message_type(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "content":
+			out.Values[i] = ec._Message_content(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "contentType":
+			out.Values[i] = ec._Message_contentType(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "metadata":
+			out.Values[i] = ec._Message_metadata(ctx, field, obj)
+		case "createdAt":
+			out.Values[i] = ec._Message_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var mutationImplementors = []string{"Mutation"}
 
 func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -17228,6 +17784,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
+		case "login":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_login(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "refresh":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_refresh(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "sendVerifyCode":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_sendVerifyCode(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "resetPassword":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_resetPassword(ctx, field)
@@ -17385,6 +17962,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteTenantRole":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteTenantRole(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "sendMessage":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_sendMessage(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -18110,6 +18694,9 @@ func (ec *executionContext) _PermissionEdge(ctx context.Context, sel ast.Selecti
 			out.Values[i] = graphql.MarshalString("PermissionEdge")
 		case "node":
 			out.Values[i] = ec._PermissionEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "cursor":
 			out.Values[i] = ec._PermissionEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -18415,28 +19002,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "login":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_login(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "profile":
 			field := field
 
@@ -18447,50 +19012,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_profile(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "refresh":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_refresh(ctx, field)
-				if res == graphql.Null {
-					atomic.AddUint32(&fs.Invalids, 1)
-				}
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx,
-					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-			}
-
-			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
-		case "sendVerifyCode":
-			field := field
-
-			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_sendVerifyCode(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -18554,6 +19075,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	}
 
 	return out
+}
+
+var subscriptionImplementors = []string{"Subscription"}
+
+func (ec *executionContext) _Subscription(ctx context.Context, sel ast.SelectionSet) func(ctx context.Context) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, subscriptionImplementors)
+	ctx = graphql.WithFieldContext(ctx, &graphql.FieldContext{
+		Object: "Subscription",
+	})
+	if len(fields) != 1 {
+		ec.Errorf(ctx, "must subscribe to exactly one stream")
+		return nil
+	}
+
+	switch fields[0].Name {
+	case "messageReceived":
+		return ec._Subscription_messageReceived(ctx, fields[0])
+	default:
+		panic("unknown field " + strconv.Quote(fields[0].Name))
+	}
 }
 
 var tenantImplementors = []string{"Tenant", "Node"}
@@ -18864,6 +19405,9 @@ func (ec *executionContext) _TenantRoleEdge(ctx context.Context, sel ast.Selecti
 			out.Values[i] = graphql.MarshalString("TenantRoleEdge")
 		case "node":
 			out.Values[i] = ec._TenantRoleEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "cursor":
 			out.Values[i] = ec._TenantRoleEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -19398,6 +19942,9 @@ func (ec *executionContext) _UserEdge(ctx context.Context, sel ast.SelectionSet,
 			out.Values[i] = graphql.MarshalString("UserEdge")
 		case "node":
 			out.Values[i] = ec._UserEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "cursor":
 			out.Values[i] = ec._UserEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -19983,6 +20530,40 @@ func (ec *executionContext) unmarshalNMembershipWhereInput2ᚖgithubᚗcomᚋgo�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNMessage2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessage(ctx context.Context, sel ast.SelectionSet, v model.Message) graphql.Marshaler {
+	return ec._Message(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNMessage2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessage(ctx context.Context, sel ast.SelectionSet, v *model.Message) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._Message(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNMessageContentType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessageContentType(ctx context.Context, v any) (model.MessageContentType, error) {
+	var res model.MessageContentType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMessageContentType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessageContentType(ctx context.Context, sel ast.SelectionSet, v model.MessageContentType) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNMessageType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessageType(ctx context.Context, v any) (model.MessageType, error) {
+	var res model.MessageType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNMessageType2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐMessageType(ctx context.Context, sel ast.SelectionSet, v model.MessageType) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) marshalNNode2ᚕgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐNoder(ctx context.Context, sel ast.SelectionSet, v []ent.Noder) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
@@ -20187,6 +20768,11 @@ func (ec *executionContext) marshalNPermissionType2githubᚗcomᚋgoᚑkegᚋmon
 func (ec *executionContext) unmarshalNPermissionWhereInput2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐPermissionWhereInput(ctx context.Context, v any) (*ent.PermissionWhereInput, error) {
 	res, err := ec.unmarshalInputPermissionWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNSendMessageInput2githubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋappᚋaccountᚋserviceᚋgraphqlᚋmodelᚐSendMessageInput(ctx context.Context, v any) (model.SendMessageInput, error) {
+	res, err := ec.unmarshalInputSendMessageInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
@@ -21930,6 +22516,53 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorep
 
 	}
 	wg.Wait()
+
+	return ret
+}
+
+func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*ent.User) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋgoᚑkegᚋmonorepoᚋinternalᚋdataᚋaccountᚋentᚐUser(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
 
 	return ret
 }

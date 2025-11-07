@@ -9,6 +9,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/go-keg/keg/contrib/cache"
 	"github.com/go-keg/keg/contrib/gql"
+	"github.com/go-keg/keg/contrib/gql/pubsub"
 	zlog "github.com/go-keg/keg/contrib/log"
 	"github.com/go-keg/monorepo/internal/app/account/biz"
 	"github.com/go-keg/monorepo/internal/app/account/server/auth"
@@ -31,6 +32,7 @@ type Resolver struct {
 	userRepo    biz.UserRepo
 	captcha     *base64Captcha.Captcha
 	oauth       *biz.OAuthUseCase
+	pubSub      *pubsub.PubSub[*model.Message]
 }
 
 func NewResolver(
@@ -60,7 +62,8 @@ func NewResolver(
 				nil),
 			base64Captcha.DefaultMemStore,
 		),
-		oauth: oauth,
+		oauth:  oauth,
+		pubSub: pubsub.New[*model.Message](),
 	}
 }
 

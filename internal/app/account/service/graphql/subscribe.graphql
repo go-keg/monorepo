@@ -1,0 +1,46 @@
+type Subscription {
+    messageReceived: Message!
+}
+
+extend type Mutation {
+    sendMessage(input: SendMessageInput!): Message!
+}
+
+"""
+消息类型
+"""
+enum MessageType {
+    SYSTEM
+    DIRECT
+}
+"""
+消息内容类型
+"""
+enum MessageContentType{
+    TEXT
+    IMAGE
+    FILE
+    SYSTEM
+    CUSTOM
+}
+
+"""
+消息实体
+"""
+type Message {
+    id: ID!
+    sender: ID
+    type: MessageType!
+    content: String!
+    contentType: MessageContentType!
+    metadata: Map
+    createdAt: Time!
+}
+
+input SendMessageInput {
+    sender: ID
+    type: MessageType!=SYSTEM
+    content: String!
+    contentType: MessageContentType!=TEXT
+    metadata: Map
+}

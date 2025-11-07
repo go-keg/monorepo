@@ -4,8 +4,10 @@ import (
 	"fmt"
 	nethttp "net/http"
 	"os"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -21,6 +23,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/gorilla/handlers"
+	"github.com/gorilla/websocket"
 	"github.com/samber/lo"
 	"github.com/spf13/cast"
 	"golang.org/x/oauth2"
@@ -42,7 +45,14 @@ func NewHTTPServer(
 		handlers.AllowedOrigins([]string{"*"}),
 	)))...)
 	// graphql
-	gqlSrv := gql.NewServer(schema)
+	gqlSrv := gql.NewServer(schema, gql.WithWebsocket(transport.Websocket{
+		KeepAlivePingInterval: 10 * time.Second,
+		Upgrader: websocket.Upgrader{
+			CheckOrigin: func(r *nethttp.Request) bool {
+				return true
+			},
+		},
+	}))
 	loader := dataloader.NewDataLoader(client)
 	srv.Handle("/query", auth.Middleware(cfg.Key, client, dataloader.Middleware(loader, gqlSrv)))
 	srv.HandlePrefix("/auth/google/", HandleGoogle(oauth, oauthUc, ur, uc))

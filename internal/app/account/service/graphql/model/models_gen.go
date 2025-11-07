@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+	"time"
 
 	"github.com/go-keg/monorepo/internal/data/account/ent"
 )
@@ -23,10 +24,150 @@ type LoginReply struct {
 	User *ent.User `json:"user"`
 }
 
+// 消息实体
+type Message struct {
+	ID          int                `json:"id"`
+	Sender      *int               `json:"sender,omitempty"`
+	Type        MessageType        `json:"type"`
+	Content     string             `json:"content"`
+	ContentType MessageContentType `json:"contentType"`
+	Metadata    map[string]any     `json:"metadata,omitempty"`
+	CreatedAt   time.Time          `json:"createdAt"`
+}
+
+type SendMessageInput struct {
+	Sender      *int               `json:"sender,omitempty"`
+	Type        MessageType        `json:"type"`
+	Content     string             `json:"content"`
+	ContentType MessageContentType `json:"contentType"`
+	Metadata    map[string]any     `json:"metadata,omitempty"`
+}
+
+type Subscription struct {
+}
+
 type UpdateProfileInput struct {
 	Nickname *string `json:"nickname,omitempty"`
 	Avatar   *string `json:"avatar,omitempty"`
 	Mobile   *string `json:"mobile,omitempty"`
+}
+
+// 消息内容类型
+type MessageContentType string
+
+const (
+	MessageContentTypeText   MessageContentType = "TEXT"
+	MessageContentTypeImage  MessageContentType = "IMAGE"
+	MessageContentTypeFile   MessageContentType = "FILE"
+	MessageContentTypeSystem MessageContentType = "SYSTEM"
+	MessageContentTypeCustom MessageContentType = "CUSTOM"
+)
+
+var AllMessageContentType = []MessageContentType{
+	MessageContentTypeText,
+	MessageContentTypeImage,
+	MessageContentTypeFile,
+	MessageContentTypeSystem,
+	MessageContentTypeCustom,
+}
+
+func (e MessageContentType) IsValid() bool {
+	switch e {
+	case MessageContentTypeText, MessageContentTypeImage, MessageContentTypeFile, MessageContentTypeSystem, MessageContentTypeCustom:
+		return true
+	}
+	return false
+}
+
+func (e MessageContentType) String() string {
+	return string(e)
+}
+
+func (e *MessageContentType) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = MessageContentType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid MessageContentType", str)
+	}
+	return nil
+}
+
+func (e MessageContentType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *MessageContentType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e MessageContentType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// 消息类型
+type MessageType string
+
+const (
+	MessageTypeSystem MessageType = "SYSTEM"
+	MessageTypeDirect MessageType = "DIRECT"
+)
+
+var AllMessageType = []MessageType{
+	MessageTypeSystem,
+	MessageTypeDirect,
+}
+
+func (e MessageType) IsValid() bool {
+	switch e {
+	case MessageTypeSystem, MessageTypeDirect:
+		return true
+	}
+	return false
+}
+
+func (e MessageType) String() string {
+	return string(e)
+}
+
+func (e *MessageType) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = MessageType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid MessageType", str)
+	}
+	return nil
+}
+
+func (e MessageType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *MessageType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e MessageType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 // 用户角色类型

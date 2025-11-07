@@ -792,7 +792,7 @@ type PermissionEdge {
   """
   The item at the end of the edge.
   """
-  node: Permission
+  node: Permission!
   """
   A cursor for use in pagination.
   """
@@ -805,7 +805,7 @@ type PermissionList {
   """
   A list of nodes.
   """
-  nodes: [Permission]
+  nodes: [Permission!]
   """
   Identifies the total count of items in the connection.
   """
@@ -1271,7 +1271,7 @@ type TenantRoleEdge {
   """
   The item at the end of the edge.
   """
-  node: TenantRole
+  node: TenantRole!
   """
   A cursor for use in pagination.
   """
@@ -1284,7 +1284,7 @@ type TenantRoleList {
   """
   A list of nodes.
   """
-  nodes: [TenantRole]
+  nodes: [TenantRole!]
   """
   Identifies the total count of items in the connection.
   """
@@ -1741,7 +1741,7 @@ type UserEdge {
   """
   The item at the end of the edge.
   """
-  node: User
+  node: User!
   """
   A cursor for use in pagination.
   """
@@ -1754,7 +1754,7 @@ type UserList {
   """
   A list of nodes.
   """
-  nodes: [User]
+  nodes: [User!]
   """
   Identifies the total count of items in the connection.
   """

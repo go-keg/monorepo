@@ -1,19 +1,19 @@
 extend type Query {
-    """登陆"""
-    login(email: String!, password: String!, captchaId: String, captchaValue: String): LoginReply!
     """个人信息"""
     profile: User! @login
-    """刷新token"""
-    refresh: LoginReply! @login
-    """发送验证码"""
-    sendVerifyCode(email: String!, verifyType: VerifyCodeType!): Boolean!
-
     """获取验证码"""
     captcha: CaptchaReply!
 }
 
 
 type Mutation {
+    """登陆"""
+    login(email: String!, password: String!, captchaId: String, captchaValue: String): LoginReply!
+    """刷新token"""
+    refresh: LoginReply! @login
+    """发送验证码"""
+    sendVerifyCode(email: String!, verifyType: VerifyCodeType!): Boolean!
+
     """重置密码"""
     resetPassword(oldPassword: String!, password: String!): Boolean! @login
     """忘记密码"""

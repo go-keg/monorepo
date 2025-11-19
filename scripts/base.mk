@@ -17,6 +17,7 @@ generate:
 %.gen:
 	$(eval SERVICE:= $*)
 	go generate ./cmd/$(SERVICE)/main.go
+	go generate ./internal/app/$(SERVICE)/service/graphql/generate.go
 
 %.build:
 	$(eval SERVICE:= $*)
@@ -54,6 +55,12 @@ generate:
 
 %.deploy:
 	$(eval SERVICE:= $*)
+	@$(MAKE) $(SERVICE).publish
+	@keg k8s deployment update-image -n $(SERVICE) -t $(BUILD_TAG)
+
+%.deploy.gen:
+	$(eval SERVICE:= $*)
+	@$(MAKE) $(SERVICE).gen
 	@$(MAKE) $(SERVICE).publish
 	@keg k8s deployment update-image -n $(SERVICE) -t $(BUILD_TAG)
 

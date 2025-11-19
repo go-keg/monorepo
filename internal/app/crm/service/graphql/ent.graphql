@@ -39,10 +39,6 @@ type ContactConnection {
   """
   edges: [ContactEdge]
   """
-  A list of nodes.
-  """
-  nodes: [Contact]
-  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -58,7 +54,7 @@ type ContactEdge {
   """
   The item at the end of the edge.
   """
-  node: Contact
+  node: Contact!
   """
   A cursor for use in pagination.
   """
@@ -71,7 +67,7 @@ type ContactList {
   """
   A list of nodes.
   """
-  nodes: [Contact]
+  nodes: [Contact!]
   """
   Identifies the total count of items in the connection.
   """
@@ -282,10 +278,6 @@ type ContractConnection {
   """
   edges: [ContractEdge]
   """
-  A list of nodes.
-  """
-  nodes: [Contract]
-  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -301,7 +293,7 @@ type ContractEdge {
   """
   The item at the end of the edge.
   """
-  node: Contract
+  node: Contract!
   """
   A cursor for use in pagination.
   """
@@ -314,7 +306,7 @@ type ContractList {
   """
   A list of nodes.
   """
-  nodes: [Contract]
+  nodes: [Contract!]
   """
   Identifies the total count of items in the connection.
   """
@@ -720,10 +712,6 @@ type CustomerConnection {
   """
   edges: [CustomerEdge]
   """
-  A list of nodes.
-  """
-  nodes: [Customer]
-  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -739,7 +727,7 @@ type CustomerEdge {
   """
   The item at the end of the edge.
   """
-  node: Customer
+  node: Customer!
   """
   A cursor for use in pagination.
   """
@@ -752,7 +740,7 @@ type CustomerList {
   """
   A list of nodes.
   """
-  nodes: [Customer]
+  nodes: [Customer!]
   """
   Identifies the total count of items in the connection.
   """
@@ -968,10 +956,6 @@ type FollowUpConnection {
   """
   edges: [FollowUpEdge]
   """
-  A list of nodes.
-  """
-  nodes: [FollowUp]
-  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -987,7 +971,7 @@ type FollowUpEdge {
   """
   The item at the end of the edge.
   """
-  node: FollowUp
+  node: FollowUp!
   """
   A cursor for use in pagination.
   """
@@ -1000,7 +984,7 @@ type FollowUpList {
   """
   A list of nodes.
   """
-  nodes: [FollowUp]
+  nodes: [FollowUp!]
   """
   Identifies the total count of items in the connection.
   """

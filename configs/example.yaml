@@ -1,7 +1,6 @@
 key: "${APP_KEY}"
-name: "${ACCOUNT_APP_NAME}"
 trace:
-  endpoint: ""
+  endpoint: "${TRACE_ENDPOINT_URL}"
 server:
   http:
     network: tcp
@@ -10,7 +9,7 @@ server:
 data:
   database:
     driver: "mysql"
-    dsn: "${ACCOUNT_DB_DSN}"
+    dsn: "${EXAMPLE_DB_DSN}"
   kafka:
     addrs: "${KAFKA_ADDRS}"
 
@@ -21,7 +20,7 @@ oAuth:
     clientSecret: "${GOOGLE_OAUTH_CLIENT_SECRET}"
 
 kafkaConsumerGroup:
-  groupId: golang-admin
+  groupId: golang-example
   topics:
     - test
 email:
@@ -30,7 +29,7 @@ email:
   username: "${EMAIL_USERNAME}"
   password: "${EMAIL_PASSWORD}"
   from: "${EMAIL_FROM}"
-  
+
 log:
   dir: "./logs/"
   level: "debug"

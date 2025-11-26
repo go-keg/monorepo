@@ -22,7 +22,7 @@ import (
 
 var (
 	// Name is the name of the compiled software.
-	Name = "account"
+	Name = "example"
 	// Version is the version of the compiled software.
 	Version = "latest"
 
@@ -36,7 +36,7 @@ var (
 
 func init() {
 	rootCmd.AddCommand(migrate.Cmd, seeds.Cmd)
-	rootCmd.PersistentFlags().String("conf", "./configs/account.yaml", "config path, eg: -conf config.yaml")
+	rootCmd.PersistentFlags().String("conf", "./configs/example.yaml", "config path, eg: -conf config.yaml")
 	rootCmd.PersistentFlags().String("env", "", "environment, eg: -env prod")
 }
 

@@ -25,5 +25,4 @@ init:
 	$(MAKE) codegen
 
 codegen:
-	go generate ./internal/app/account/service/graphql/generate.go
-	go generate ./internal/app/crm/service/graphql/generate.go
+	go generate ./internal/app/example/service/graphql/generate.go

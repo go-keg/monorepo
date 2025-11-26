@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/go-keg/keg/contrib/ent/mixin"
-	mixin2 "github.com/go-keg/monorepo/internal/data/mixin"
+	mixin2 "github.com/go-keg/monorepo/internal/data/shared/mixin"
 )
 
 // FollowUp holds the schema definition for the FollowUp entity.

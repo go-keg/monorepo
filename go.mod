@@ -1,25 +1,26 @@
 module github.com/go-keg/monorepo
 
-go 1.25
+go 1.25.0
 
 replace (
-	entgo.io/contrib v0.6.0 => ./third_party/ent-contrib
+	entgo.io/contrib v0.7.0 => ./third_party/ent-contrib
 	github.com/go-kratos/gateway v0.1.0 => ./third_party/gateway
 )
 
 require (
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.5
-	github.com/99designs/gqlgen v0.17.83
+	github.com/99designs/gqlgen v0.17.84
 	github.com/IBM/sarama v1.46.3
 	github.com/gin-contrib/sessions v1.0.4
 	github.com/gin-gonic/gin v1.11.0
 	github.com/go-keg/apis v0.1.1
 	github.com/go-keg/go-job v0.3.2
-	github.com/go-keg/keg v0.2.21
+	github.com/go-keg/keg v0.2.23
 	github.com/go-keg/swagger-api v0.1.5
 	github.com/go-kratos/gateway v0.1.0
 	github.com/go-kratos/kratos/v2 v2.9.1
+	github.com/go-viper/mapstructure/v2 v2.4.0
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/google/wire v0.7.0
 	github.com/gorilla/handlers v1.5.2
@@ -29,13 +30,14 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/mojocn/base64Captcha v1.3.8
 	github.com/samber/lo v1.52.0
+	github.com/sony/sonyflake v1.3.0
 	github.com/spf13/cast v1.10.0
 	github.com/spf13/cobra v1.10.1
 	github.com/vektah/gqlparser/v2 v2.5.31
 	go.opentelemetry.io/otel v1.38.0
 	go.uber.org/automaxprocs v1.6.0
-	golang.org/x/crypto v0.44.0
-	golang.org/x/exp v0.0.0-20251113190631-e25ba8c21ef6
+	golang.org/x/crypto v0.45.0
+	golang.org/x/exp v0.0.0-20251125195548-87e1e737ad39
 	golang.org/x/oauth2 v0.33.0
 	golang.org/x/sync v0.18.0
 	google.golang.org/protobuf v1.36.10
@@ -82,7 +84,6 @@ require (
 	github.com/go-playground/validator/v10 v10.27.0 // indirect
 	github.com/go-sql-driver/mysql v1.9.3 // indirect
 	github.com/go-test/deep v1.0.8 // indirect
-	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/goccy/go-yaml v1.18.0 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect

@@ -26,20 +26,16 @@ keg (short for Kratos, Ent, and GraphQL) is a highly modular monorepo structure 
     make init
     ```
 
-3. run account service
+3. run example service
 
-    create database
    ```shell
-   # 迁移数据库（可选）
-   go run ./cmd/account migrate
-   # 填充默认数据（可选）
-   go run ./cmd/account seeds 
-   # 启动服务
-   go run ./cmd/account
+   # Database migration (optional)
+   go run ./cmd/example migrate
+   # Fill in default data (optional)
+   go run ./cmd/example seeds 
+   # start service
+   go run ./cmd/example
    ```
-   
-4. [graphql playground](http://127.0.0.1:8080/graphql-ui)
-
 
 ## 📂 Project Structure
 ```
@@ -47,32 +43,32 @@ keg (short for Kratos, Ent, and GraphQL) is a highly modular monorepo structure 
 ├── Makefile
 ├── bin
 ├── cmd
-│   ├── admin # admin service (example)
+│   ├── example # example service
 │   │   ├── main.go
 │   │   ├── wire.go
 │   │   └── wire_gen.go
 │   └── gateway # kratos-gateway
 │       └── main.go
 ├── configs
-│   ├── admin.yaml
+│   ├── example.yaml
 │   └── gateway.yaml
 ├── deploy
 │   ├── components
 │   │   └── docker-compose.yaml
 │   ├── build
 │   │   ├── Dockerfile
-│   │   ├── admin
-│   │   │   └── Dockerfile # Dockerfile for admin service
+│   │   ├── example
+│   │   │   └── Dockerfile # Dockerfile for example service
 │   │   └── common
 │   │       └── Dockerfile # common Dockerfile for all services
 │   └── kubernetes # k8s deployment template files
-│       ├── admin.yaml
+│       ├── example.yaml
 │       ├── configmap.yaml
 │       ├── gateway.yaml
 │       └── output # k8s deployment files output directory
 ├── internal
 │   ├── app
-│   │   ├── admin
+│   │   ├── example
 │   │   │   ├── biz
 │   │   │   ├── cmd
 │   │   │   ├── conf
@@ -103,11 +99,11 @@ keg (short for Kratos, Ent, and GraphQL) is a highly modular monorepo structure 
 │   └── pkg
 │       └── auth
 │           └── auth.go
-├── keg.yaml # keg 配置文件
+├── keg.yaml
 ├── logs
 ├── scripts
 │   ├── base.mk
 │   ├── compose.mk
 │   └── init.mk
-└── website
+└── third_party
 ```

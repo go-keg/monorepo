@@ -773,6 +773,10 @@ type PermissionConnection {
   """
   edges: [PermissionEdge]
   """
+  A list of nodes.
+  """
+  nodes: [Permission]
+  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -1248,6 +1252,10 @@ type TenantRoleConnection {
   """
   edges: [TenantRoleEdge]
   """
+  A list of nodes.
+  """
+  nodes: [TenantRole]
+  """
   Information to aid in pagination.
   """
   pageInfo: PageInfo!
@@ -1713,6 +1721,10 @@ type UserConnection {
   A list of edges.
   """
   edges: [UserEdge]
+  """
+  A list of nodes.
+  """
+  nodes: [User]
   """
   Information to aid in pagination.
   """

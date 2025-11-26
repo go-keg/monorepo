@@ -47,7 +47,6 @@ func (r Daily) Run(ctx context.Context) error {
 		// if err != nil {
 		// 	return err
 		// }
-		fmt.Println(messages)
 		startID = accounts[len(accounts)-1].ID
 	}
 	return nil

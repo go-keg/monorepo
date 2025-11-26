@@ -17,7 +17,7 @@ generate:
 %.gen:
 	$(eval SERVICE:= $*)
 	go generate ./cmd/$(SERVICE)/main.go
-	go generate ./internal/app/$(SERVICE)/service/graphql/generate.go
+	GOWORK=off go generate ./internal/app/$(SERVICE)/service/graphql/generate.go
 
 %.build:
 	$(eval SERVICE:= $*)
@@ -53,20 +53,29 @@ generate:
 	docker tag $(SERVICE):$(BUILD_TAG) $(IMAGE_REGISTRY)/$(SERVICE):$(BUILD_TAG)
 	docker push $(IMAGE_REGISTRY)/$(SERVICE):$(BUILD_TAG)
 
+%.apply_config:
+	$(eval SERVICE:= $*)
+	@keg k8s configmap apply -n golang-$(SERVICE)-config -f ./configs/$(SERVICE).yaml
+
 %.deploy:
 	$(eval SERVICE:= $*)
 	@$(MAKE) $(SERVICE).publish
-	@keg k8s deployment update-image -n $(SERVICE) -t $(BUILD_TAG)
+	@$(MAKE) $(SERVICE).deploy.only
 
 %.deploy.gen:
 	$(eval SERVICE:= $*)
 	@$(MAKE) $(SERVICE).gen
-	@$(MAKE) $(SERVICE).publish
-	@keg k8s deployment update-image -n $(SERVICE) -t $(BUILD_TAG)
+	@$(MAKE) $(SERVICE).deploy
+
+%.deploy.config:
+	$(eval SERVICE:= $*)
+	@$(MAKE) $(SERVICE).apply_config
+	@$(MAKE) $(SERVICE).deploy
 
 %.deploy.only:
 	$(eval SERVICE:= $*)
-	@keg k8s deployment update-image -n $(SERVICE) -t $(BUILD_TAG)
+	@keg k8s deployment update-image -n golang-$(SERVICE) -t $(BUILD_TAG)
+	@echo "date: $(shell date "+%Y-%m-%d %H:%M:%S")"
 
 %.deploy_all_in_one:
 	$(eval SERVICE:= $*)

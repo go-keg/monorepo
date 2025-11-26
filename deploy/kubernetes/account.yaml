@@ -29,6 +29,14 @@ spec:
           envFrom:
             - configMapRef:
                 name: monorepo-env
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/configs
+              readOnly: true
+      volumes:
+        - name: config-volume
+          configMap:
+            name: golang-account-config
 
 ---
 apiVersion: v1

@@ -1,4 +1,3 @@
-
 ARG IMAGE=ubuntu:latest
 FROM ${IMAGE}
 

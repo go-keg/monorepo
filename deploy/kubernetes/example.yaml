@@ -2,26 +2,26 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: golang-account
+    app: golang-example
     lang: golang
-  name: golang-account
+  name: golang-example
   namespace: ${NAMESPACE}
 spec:
   replicas: ${DEFAULT_REPLICAS}
   selector:
     matchLabels:
-      app: golang-account
+      app: golang-example
       lang: golang
   template:
     metadata:
       labels:
-        app: golang-account
+        app: golang-example
         lang: golang
     spec:
       containers:
-        - image: ${IMAGE_REGISTRY}/golang-account:${IMAGE_VERSION}
+        - image: ${IMAGE_REGISTRY}/golang-example:${IMAGE_VERSION}
           imagePullPolicy: ${IMAGE_PULL_POLICY}
-          name: golang-account
+          name: golang-example
           resources:
             requests:
               cpu: ${RESOURCES_REQUESTS_CPU}
@@ -36,16 +36,16 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: golang-account-config
+            name: golang-example-config
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: account-svc
+    app: example-svc
     lang: golang
-  name: golang-account-svc
+  name: golang-example-svc
   namespace: ${NAMESPACE}
 spec:
   ports:
@@ -54,6 +54,6 @@ spec:
       protocol: TCP
       targetPort: 8080
   selector:
-    app: golang-account
+    app: golang-example
     lang: golang
   type: ClusterIP
